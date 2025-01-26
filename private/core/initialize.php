@@ -14,10 +14,16 @@ error_log("Session state in initialize.php:");
 error_log("Session ID: " . session_id());
 error_log("Session Data: " . print_r($_SESSION, true));
 
-// Load class definitions manually
-foreach(glob(PRIVATE_PATH . '/classes/*.class.php') as $file) {
-    require_once($file);
-}
+// Custom autoloader for FlavorConnect classes
+spl_autoload_register(function($class) {
+    // Convert class name to filename (e.g., DatabaseObject -> database_object.class.php)
+    $class = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $class));
+    $class_file = PRIVATE_PATH . '/classes/' . $class . '.class.php';
+    
+    if(file_exists($class_file)) {
+        require_once($class_file);
+    }
+});
 
 // Load core functions
 require_once(PRIVATE_PATH . '/core/functions.php');
