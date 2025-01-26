@@ -1,0 +1,28 @@
+/* Footer Grid Layout */
+footer {
+    display: grid;
+    grid-template-areas:
+        "info links social"
+        "copyright copyright copyright";
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 2rem;
+    width: 100%;
+}
+
+.footer-info {
+    grid-area: info;
+}
+
+.footer-links {
+    grid-area: links;
+}
+
+.footer-social {
+    grid-area: social;
+}
+
+.footer-copyright {
+    grid-area: copyright;
+    text-align: center;
+}
