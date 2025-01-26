@@ -1,0 +1,23 @@
+/* Main Grid Layout */
+body {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    margin: 0;
+}
+
+header {
+    grid-area: header;
+}
+
+.main-content {
+    grid-area: main;
+}
+
+footer {
+    grid-area: footer;
+}
