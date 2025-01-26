@@ -4,7 +4,7 @@ CREATE DATABASE flavorconnect;
 USE flavorconnect;
 
 -- Create user and grant privileges
-CREATE USER IF NOT EXISTS 'hcvaughn'@'localhost' IDENTIFIED BY 'Divided4union';
+CREATE USER IF NOT EXISTS 'hcvaughn'@'localhost' IDENTIFIED BY '@connect4Establish';
 GRANT ALL PRIVILEGES ON flavorconnect.* TO 'hcvaughn'@'localhost';
 FLUSH PRIVILEGES;
 
