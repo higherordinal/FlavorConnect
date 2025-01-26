@@ -1,0 +1,32 @@
+/* Home Page Grid Layout */
+.home-content {
+    display: grid;
+    grid-template-areas:
+        "hero"
+        "cta"
+        "featured";
+    gap: 4rem;
+    width: 100%;
+}
+
+.hero-section {
+    grid-area: hero;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.cta-section {
+    grid-area: cta;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.featured-recipes {
+    grid-area: featured;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
