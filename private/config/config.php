@@ -6,7 +6,7 @@
 // Database Configuration - Local Development
 define('DB_HOST', 'localhost');
 define('DB_USER', 'hcvaughn');
-define('DB_PASS', 'Divided4union');
+define('DB_PASS', '@connect4Establish');
 define('DB_NAME', 'flavorconnect');
 
 // Path Configuration
