@@ -1,42 +1,34 @@
+/* Member Header Specific Styles */
 .header-grid {
-    display: grid;
     grid-template-areas: "logo nav user";
-    grid-template-columns: auto 1fr auto;
-    gap: 2rem;
-    align-items: center;
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-.logo {
-    grid-area: logo;
-}
-
-.main-nav {
-    grid-area: nav;
 }
 
 .user-section {
     grid-area: user;
 }
 
-.main-nav ul {
+.user-menu-button {
+    background: none;
+    border: none;
+    color: var(--light-gray);
     display: grid;
     grid-auto-flow: column;
-    gap: 2rem;
-    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
 }
 
-.dropdown {
-    position: relative;
+.user-menu-button:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
-.dropdown-content {
-    position: absolute;
-    right: 0;
-    min-width: 200px;
-    z-index: 1000;
+.user-menu-button img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
 }
 
 @media (max-width: 768px) {
@@ -45,16 +37,9 @@
             "logo"
             "nav"
             "user";
-        grid-template-columns: 1fr;
-        gap: 1rem;
     }
 
-    .main-nav ul {
-        grid-auto-flow: row;
-        gap: 1rem;
-    }
-
-    .dropdown-content {
-        position: static;
+    .user-section {
+        justify-self: center;
     }
 }

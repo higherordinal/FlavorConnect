@@ -1,37 +1,20 @@
+/* Public Header Specific Styles */
 .header-grid {
-    display: grid;
     grid-template-areas: "logo nav auth";
-    grid-template-columns: auto 1fr auto;
-    gap: 2rem;
-    align-items: center;
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 0 1rem;
-}
-
-.logo {
-    grid-area: logo;
-}
-
-.main-nav {
-    grid-area: nav;
 }
 
 .auth-section {
     grid-area: auth;
 }
 
-.main-nav ul {
-    display: grid;
-    grid-auto-flow: column;
-    gap: 2rem;
-    justify-content: center;
-}
-
 .auth-buttons {
     display: grid;
     grid-auto-flow: column;
-    gap: 1rem;
+    gap: var(--spacing-md);
+}
+
+.auth-buttons .btn {
+    white-space: nowrap;
 }
 
 @media (max-width: 768px) {
@@ -40,12 +23,10 @@
             "logo"
             "nav"
             "auth";
-        grid-template-columns: 1fr;
-        gap: 1rem;
     }
 
-    .main-nav ul {
+    .auth-buttons {
         grid-auto-flow: row;
-        gap: 1rem;
+        justify-content: center;
     }
 }

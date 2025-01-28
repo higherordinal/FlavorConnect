@@ -1,0 +1,215 @@
+/* Global CSS Variables and Base Styles for FlavorConnect */
+
+/* CSS Variables */
+:root {
+    /* Colors */
+    --primary-color: #0a1a29;
+    --secondary-color: #E74C3C;
+    --accent-color: #3498DB;
+    --accent-color-dark: #2980B9;
+    --background-color: #F5F6FA;
+    --text-color: #2C3E50;
+    --light-gray: #ECF0F1;
+    --dark-gray: #7F8C8D;
+    --success-color: #27AE60;
+    --error-color: #C0392B;
+    --warning-color: #F1C40F;
+
+    /* Typography */
+    --font-primary: 'Roboto', sans-serif;
+    --font-secondary: 'Open Sans', sans-serif;
+    --font-size-small: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-large: 1.25rem;
+    --font-size-xlarge: 1.5rem;
+    --font-size-xxlarge: 2rem;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+
+    /* Border Radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --border-radius-xl: 16px;
+
+    /* Box Shadow */
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-secondary);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: var(--font-size-xxlarge); }
+h2 { font-size: var(--font-size-xlarge); }
+h3 { font-size: var(--font-size-large); }
+h4 { font-size: var(--font-size-base); }
+
+p { margin-bottom: var(--spacing-md); }
+
+/* Links */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--primary-color);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn:hover {
+    filter: brightness(110%);
+}
+
+/* Form Elements */
+input, select, textarea {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+label {
+    display: block;
+    margin-bottom: var(--spacing-xs);
+    font-weight: 500;
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+
+.p-1 { padding: var(--spacing-sm); }
+.p-2 { padding: var(--spacing-md); }
+.p-3 { padding: var(--spacing-lg); }
+
+.hidden { display: none !important; }
+.visible { display: block !important; }
+
+/* Status Colors */
+.text-success { color: var(--success-color); }
+.text-error { color: var(--error-color); }
+.text-warning { color: var(--warning-color); }
+
+.bg-success { background-color: var(--success-color); }
+.bg-error { background-color: var(--error-color); }
+.bg-warning { background-color: var(--warning-color); }
+
+/* Card Style */
+.card {
+    background-color: white;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.card-header {
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--light-gray);
+    padding-bottom: var(--spacing-sm);
+}
+
+/* Alert/Message Styles */
+.alert {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.alert-success {
+    background-color: rgba(39, 174, 96, 0.1);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.alert-error {
+    background-color: rgba(192, 57, 43, 0.1);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.alert-warning {
+    background-color: rgba(241, 196, 15, 0.1);
+    color: var(--warning-color);
+    border: 1px solid var(--warning-color);
+}

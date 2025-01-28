@@ -8,11 +8,13 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlavorConnect - <?php echo h($page_title); ?></title>
+    
     <!-- Base Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/base.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/layout.css'); ?>">
     
     <!-- Component Styles -->
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer-grid.css'); ?>">
     
