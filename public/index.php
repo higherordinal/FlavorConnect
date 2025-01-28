@@ -2,7 +2,7 @@
 require_once('../private/initialize.php');
 $page_title = 'Welcome to FlavorConnect';
 
-if(is_logged_in()) {
+if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
 } else {
     include(SHARED_PATH . '/public_header.php');
@@ -37,7 +37,7 @@ if(is_logged_in()) {
             <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn-text">Explore Now</a>
         </div>
         <div class="cta-card">
-            <?php if (!is_logged_in()) { ?>
+            <?php if (!$session->is_logged_in()) { ?>
                 <h3>Join Our Community</h3>
                 <p>Create an account to share recipes and connect with food lovers.</p>
                 <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn-text">Sign Up Now</a>

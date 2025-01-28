@@ -11,6 +11,8 @@ class Session {
     private $username;
     /** @var bool Whether the user is an admin */
     private $is_admin;
+    /** @var bool Whether the user is a super admin */
+    private $is_super_admin;
     /** @var string|null Flash message to display */
     public $message;
     /** @var string|null Type of flash message (success, error, warning) */
@@ -41,15 +43,18 @@ class Session {
             session_regenerate_id();
             $_SESSION['user_id'] = $user->user_id;
             $_SESSION['username'] = $user->username;
-            $_SESSION['is_admin'] = ($user->user_level === 'a');
+            $_SESSION['is_admin'] = ($user->user_level === 'a' || $user->user_level === 's');
+            $_SESSION['is_super_admin'] = ($user->user_level === 's');
             $this->user_id = $user->user_id;
             $this->username = $user->username;
-            $this->is_admin = ($user->user_level === 'a');
+            $this->is_admin = ($user->user_level === 'a' || $user->user_level === 's');
+            $this->is_super_admin = ($user->user_level === 's');
             error_log("User logged in: " . print_r($_SESSION, true));
             error_log("Session object state after login:");
             error_log("user_id: " . $this->user_id);
             error_log("username: " . $this->username);
             error_log("is_admin: " . ($this->is_admin ? "true" : "false"));
+            error_log("is_super_admin: " . ($this->is_super_admin ? "true" : "false"));
         }
         return true;
     }
@@ -68,10 +73,18 @@ class Session {
 
     /**
      * Checks if current user is an admin
-     * @return bool True if user is admin
+     * @return bool True if user is admin or super admin
      */
     public function is_admin() {
         return isset($this->is_admin) && $this->is_admin === true;
+    }
+
+    /**
+     * Checks if current user is a super admin
+     * @return bool True if user is super admin
+     */
+    public function is_super_admin() {
+        return isset($this->is_super_admin) && $this->is_super_admin === true;
     }
 
     /**
@@ -90,9 +103,11 @@ class Session {
         unset($_SESSION['user_id']);
         unset($_SESSION['username']);
         unset($_SESSION['is_admin']);
+        unset($_SESSION['is_super_admin']);
         unset($this->user_id);
         unset($this->username);
         unset($this->is_admin);
+        unset($this->is_super_admin);
         error_log("User logged out: " . print_r($_SESSION, true));
         return true;
     }
@@ -142,6 +157,40 @@ class Session {
     }
 
     /**
+     * Requires login for accessing protected pages
+     * Redirects to login page if user is not logged in
+     * @return void
+     */
+    public function require_login() {
+        if(!$this->is_logged_in()) {
+            $this->message('You must log in first.');
+            redirect_to(url_for('/public/auth/login.php'));
+        }
+    }
+
+    /**
+     * Requires admin privileges for accessing protected pages
+     * Redirects to home page if user is not an admin
+     * @return void
+     */
+    public function require_admin() {
+        if(!$this->is_admin()) {
+            redirect_to(url_for('/index.php'));
+        }
+    }
+
+    /**
+     * Requires super admin privileges for accessing protected pages
+     * Redirects to home page if user is not a super admin
+     * @return void
+     */
+    public function require_super_admin() {
+        if(!$this->is_super_admin()) {
+            redirect_to(url_for('/index.php'));
+        }
+    }
+
+    /**
      * Checks and loads stored login data from session into object properties
      * Retrieves user_id, username, and is_admin status from $_SESSION
      * Logs debug information about the session state
@@ -155,10 +204,12 @@ class Session {
             $this->user_id = $_SESSION['user_id'];
             $this->username = $_SESSION['username'];
             $this->is_admin = $_SESSION['is_admin'];
+            $this->is_super_admin = $_SESSION['is_super_admin'];
             error_log("Restored session values:");
             error_log("user_id: " . $this->user_id);
             error_log("username: " . $this->username);
             error_log("is_admin: " . ($this->is_admin ? "true" : "false"));
+            error_log("is_super_admin: " . ($this->is_super_admin ? "true" : "false"));
         }
     }
 
