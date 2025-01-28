@@ -4,8 +4,8 @@
 :root {
     /* Colors */
     --primary-color: #0a1a29;
-    --secondary-color: #E74C3C;
-    --accent-color: #3498DB;
+    --secondary-color: #3498DB;
+    --accent-color: #F1C40F;
     --accent-color-dark: #2980B9;
     --background-color: #F5F6FA;
     --text-color: #2C3E50;
@@ -13,7 +13,7 @@
     --dark-gray: #7F8C8D;
     --success-color: #27AE60;
     --error-color: #C0392B;
-    --warning-color: #F1C40F;
+    --warning-color: #E74C3C;
 
     /* Typography */
     --font-primary: 'Roboto', sans-serif;
