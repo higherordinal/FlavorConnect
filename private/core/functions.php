@@ -87,45 +87,10 @@ if(!function_exists('money_format')) {
  * @return string The current page name
  */
 function current_page() {
-  $this_page = basename($_SERVER['SCRIPT_NAME']);
+  $this_page = $_SERVER['SCRIPT_NAME'];
+  $bits = explode('/', $this_page);
+  $this_page = end($bits);
   return $this_page;
-}
-
-/**
- * Get all required CSS files for the current page
- * @return array Array of CSS file paths
- */
-function get_css_files() {
-    $css_files = [
-        // Base styles (always loaded)
-        '/assets/css/base.css',
-        '/assets/css/layout.css',
-        
-        // Layout grids (always loaded)
-        '/assets/css/layout/header-grid.css',
-        '/assets/css/layout/footer-grid.css'
-    ];
-    
-    // Add page-specific grid if it exists
-    $current_page = current_page();
-    $page_grid = "/assets/css/layout/{$current_page}-grid.css";
-    if(file_exists(PUBLIC_PATH . $page_grid)) {
-        $css_files[] = $page_grid;
-    }
-    
-    return $css_files;
-}
-
-/**
- * Generate HTML for loading all required CSS files
- * @return string HTML string with CSS link tags
- */
-function load_css() {
-    $css_html = '';
-    foreach(get_css_files() as $css_file) {
-        $css_html .= '<link rel="stylesheet" href="' . url_for($css_file) . '">' . "\n";
-    }
-    return $css_html;
 }
 
 ?>
