@@ -59,16 +59,13 @@ CREATE TABLE recipe (
     type_id INT UNSIGNED,
     style_id INT UNSIGNED,
     diet_id INT UNSIGNED,
-    prep_hours INT DEFAULT 0,
-    prep_minutes INT DEFAULT 0,
-    cook_hours INT DEFAULT 0,
-    cook_minutes INT DEFAULT 0,
+    prep_time INT DEFAULT 0,
+    cook_time INT DEFAULT 0,
     video_url VARCHAR(255),
     img_file_path VARCHAR(255),
     alt_text VARCHAR(255),
     is_featured BOOLEAN DEFAULT FALSE,
-    created_date DATE DEFAULT CURRENT_DATE,
-    created_time TIME DEFAULT CURRENT_TIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES user_account(user_id) ON DELETE CASCADE,
     FOREIGN KEY (type_id) REFERENCES recipe_type(type_id) ON DELETE SET NULL,
     FOREIGN KEY (style_id) REFERENCES recipe_style(style_id) ON DELETE SET NULL,
@@ -138,8 +135,7 @@ CREATE TABLE recipe_comment (
     recipe_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     comment_text VARCHAR(255) NOT NULL,
-    created_date DATE DEFAULT CURRENT_DATE,
-    created_time TIME DEFAULT CURRENT_TIME,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user_account(user_id) ON DELETE CASCADE,
     INDEX idx_comment_recipe (recipe_id)
@@ -160,7 +156,7 @@ CREATE TABLE recipe_rating (
 CREATE TABLE user_favorite (
     user_id INT UNSIGNED NOT NULL,
     recipe_id INT UNSIGNED NOT NULL,
-    added_date DATE DEFAULT CURRENT_DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (user_id, recipe_id),
     FOREIGN KEY (user_id) REFERENCES user_account(user_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
@@ -202,45 +198,45 @@ INSERT INTO tag (name, user_id) VALUES
 ('Dessert', 3);
 
 -- Insert sample recipes
-INSERT INTO recipe (user_id, title, description, type_id, style_id, diet_id, prep_hours, prep_minutes, cook_hours, cook_minutes, is_featured) VALUES
+INSERT INTO recipe (user_id, title, description, type_id, style_id, diet_id, prep_time, cook_time, is_featured) VALUES
 ((SELECT user_id FROM user_account WHERE username = 'chef_maria'), 
  'Classic Spaghetti Carbonara', 'Traditional Italian pasta dish with eggs, cheese, pancetta, and black pepper', 
    (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
    (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
-   NULL, 0, 15, 0, 20, TRUE),
+   NULL, 15, 20, TRUE),
    
 ((SELECT user_id FROM user_account WHERE username = 'home_cook'), 
  'Breakfast Burrito', 'Hearty breakfast wrapped in a warm tortilla',
    (SELECT type_id FROM recipe_type WHERE name = 'Breakfast'),
    (SELECT style_id FROM recipe_style WHERE name = 'Mexican'),
-   NULL, 0, 10, 0, 15, FALSE),
+   NULL, 10, 15, FALSE),
    
 ((SELECT user_id FROM user_account WHERE username = 'admin_chef'), 
  'Vegetarian Buddha Bowl', 'Nutritious bowl filled with grains, vegetables, and tahini dressing',
    (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
    NULL,
    (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   0, 20, 0, 25, TRUE),
+   20, 25, TRUE),
    
 ((SELECT user_id FROM user_account WHERE username = 'foodie_jane'), 
  'Quick Chocolate Mug Cake', '5-minute microwave chocolate cake in a mug',
    (SELECT type_id FROM recipe_type WHERE name = 'Dessert'),
    NULL,
-   NULL, 0, 5, 0, 2, FALSE),
+   NULL, 5, 2, FALSE),
    
 ((SELECT user_id FROM user_account WHERE username = 'super_admin'), 
  'Mediterranean Quinoa Salad', 'Fresh and healthy quinoa salad with Mediterranean flavors',
    (SELECT type_id FROM recipe_type WHERE name = 'Salad'),
    (SELECT style_id FROM recipe_style WHERE name = 'Mediterranean'),
    (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   0, 15, 0, 20, TRUE),
+   15, 20, TRUE),
    
 ((SELECT user_id FROM user_account WHERE username = 'admin_chef'), 
  'Classic Margherita Pizza', 'Simple and delicious traditional Italian pizza',
    (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
    (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
    (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   0, 30, 0, 15, TRUE);
+   30, 15, TRUE);
 
 -- Tag the recipes
 INSERT INTO recipe_tag (recipe_id, tag_id) VALUES
