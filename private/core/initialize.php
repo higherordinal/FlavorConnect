@@ -16,8 +16,7 @@ error_log("Session Data: " . print_r($_SESSION, true));
 
 // Custom autoloader for FlavorConnect classes
 spl_autoload_register(function($class) {
-    // Convert class name to filename (e.g., DatabaseObject -> database_object.class.php)
-    $class = strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $class));
+    // Keep the original class name for the file
     $class_file = PRIVATE_PATH . '/classes/' . $class . '.class.php';
     
     if(file_exists($class_file)) {
