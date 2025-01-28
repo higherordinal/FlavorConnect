@@ -68,7 +68,7 @@ class Recipe extends DatabaseObject {
      */
     public function style() {
         if($this->style_id) {
-            return RecipeAttribute::find_by_id($this->style_id);
+            return RecipeAttribute::find_one($this->style_id, 'style');
         }
         return null;
     }
@@ -79,7 +79,7 @@ class Recipe extends DatabaseObject {
      */
     public function diet() {
         if($this->diet_id) {
-            return RecipeAttribute::find_by_id($this->diet_id);
+            return RecipeAttribute::find_one($this->diet_id, 'diet');
         }
         return null;
     }
@@ -90,7 +90,7 @@ class Recipe extends DatabaseObject {
      */
     public function type() {
         if($this->type_id) {
-            return RecipeAttribute::find_by_id($this->type_id);
+            return RecipeAttribute::find_one($this->type_id, 'type');
         }
         return null;
     }
@@ -352,6 +352,73 @@ class Recipe extends DatabaseObject {
             $object_array[] = parent::instantiate($record);
         }
         return $object_array;
+    }
+
+    /**
+     * Gets the total time (prep + cook) in a human-readable format
+     * @return string Total time in format "X hr Y min"
+     */
+    public function get_total_time_display() {
+        return $this->format_time($this->prep_time + $this->cook_time);
+    }
+
+    /**
+     * Gets the prep time in a human-readable format
+     * @return string Prep time in format "X hr Y min"
+     */
+    public function get_prep_time_display() {
+        return $this->format_time($this->prep_time);
+    }
+
+    /**
+     * Gets the cook time in a human-readable format
+     * @return string Cook time in format "X hr Y min"
+     */
+    public function get_cook_time_display() {
+        return $this->format_time($this->cook_time);
+    }
+
+    /**
+     * Formats time in seconds to a human-readable string
+     * @param int $seconds Time in seconds
+     * @return string Formatted time string (e.g., "2 hr 30 min" or "45 min")
+     */
+    private function format_time($seconds) {
+        if ($seconds < 60) {
+            return "1 min"; // Round up to 1 minute if less than 60 seconds
+        }
+
+        $hours = floor($seconds / 3600);
+        $minutes = floor(($seconds % 3600) / 60);
+
+        if ($hours > 0) {
+            return $hours . " hr" . ($hours > 1 ? "s" : "") . 
+                   ($minutes > 0 ? " " . $minutes . " min" : "");
+        } else {
+            return $minutes . " min";
+        }
+    }
+
+    /**
+     * Converts hours and minutes to seconds
+     * @param int $hours Number of hours
+     * @param int $minutes Number of minutes
+     * @return int Total seconds
+     */
+    public static function time_to_seconds($hours, $minutes) {
+        return ($hours * 3600) + ($minutes * 60);
+    }
+
+    /**
+     * Converts seconds to hours and minutes
+     * @param int $seconds Number of seconds
+     * @return array Associative array with 'hours' and 'minutes' keys
+     */
+    public static function seconds_to_time($seconds) {
+        return [
+            'hours' => floor($seconds / 3600),
+            'minutes' => floor(($seconds % 3600) / 60)
+        ];
     }
 }
 ?>

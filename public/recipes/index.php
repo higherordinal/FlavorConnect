@@ -1,9 +1,9 @@
 <?php
 require_once('../../private/config/config.php');
 require_once(PRIVATE_PATH . '/core/initialize.php');
-// require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
+require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 
-$page_title = 'Recipe Gallery';
+$page_title = 'Recipes';
 $page_style = 'recipe-gallery';
 $scripts = ['recipe-favorites']; // Load recipe-favorites.js
 
@@ -29,9 +29,9 @@ $current_page = max(1, (int)$current_page);
 $per_page = 12;
 
 // Get filter options
-// $styles = RecipeAttribute::find_by_type('style');
-// $diets = RecipeAttribute::find_by_type('diet');
-//$types = RecipeAttribute::find_by_type('type');
+$styles = RecipeAttribute::find_by_type('style');
+$diets = RecipeAttribute::find_by_type('diet');
+$types = RecipeAttribute::find_by_type('type');
 
 // Calculate offset
 $offset = ($current_page - 1) * $per_page;
@@ -51,7 +51,7 @@ if ($current_page > $total_pages) {
 
 <div class="recipe-gallery">
     <div class="gallery-header">
-        <h1 class="gallery-title">Recipe Gallery</h1>
+        <h1 class="gallery-title">Recipes</h1>
         
         <form class="search-form" action="<?php echo url_for('/recipes/index.php'); ?>" method="GET">
             <div class="search-bar">
@@ -182,13 +182,17 @@ if ($current_page > $total_pages) {
                         <h2 class="recipe-title"><?php echo h($recipe->title); ?></h2>
                         
                         <div class="recipe-meta">
-                            <span><i class="far fa-clock"></i> <?php 
-                            $total_minutes = ($recipe->prep_hours * 60 + $recipe->prep_minutes) + 
-                                           ($recipe->cook_hours * 60 + $recipe->cook_minutes);
-                            echo h($total_minutes); ?> mins</span>
-                            <?php if($style = $recipe->style()) { ?>
-                                <span><i class="fas fa-utensils"></i> <?php echo h($style->name); ?></span>
-                            <?php } ?>
+                            <span class="rating">
+                                <?php 
+                                    $rating = $recipe->get_average_rating();
+                                    echo str_repeat('★', round($rating));
+                                    echo str_repeat('☆', 5 - round($rating));
+                                    echo " (" . $recipe->rating_count() . ")";
+                                ?>
+                            </span>
+                            <span class="time">
+                                <?php echo $recipe->get_total_time_display(); ?>
+                            </span>
                         </div>
 
                         <div class="recipe-tags">
