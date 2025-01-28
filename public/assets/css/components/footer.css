@@ -1,3 +1,4 @@
+/* Footer Layout */
 footer {
     display: grid;
     grid-template-areas:
@@ -7,21 +8,110 @@ footer {
     grid-template-rows: auto auto;
     gap: 2rem;
     width: 100%;
+    padding: 3rem 2rem;
+    background-color: var(--primary-color);
+    color: var(--light-gray);
 }
 
-.footer-info {
+footer .footer-info {
     grid-area: info;
+    display: grid;
+    gap: 1rem;
 }
 
-.footer-links {
+footer .footer-info h3 {
+    color: var(--light-gray);
+    margin: 0 0 1rem 0;
+}
+
+footer .footer-info address {
+    font-style: normal;
+    line-height: 1.5;
+    color: var(--dark-gray);
+}
+
+footer .footer-links {
     grid-area: links;
+    display: grid;
+    gap: 0.5rem;
 }
 
-.footer-social {
+footer .footer-links h3 {
+    color: var(--light-gray);
+    margin: 0 0 1rem 0;
+}
+
+footer .footer-links nav ul {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer .footer-links a {
+    color: var(--light-gray);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer .footer-links a:hover {
+    color: var(--accent-color);
+}
+
+footer .footer-social {
     grid-area: social;
+    display: grid;
+    gap: 0.5rem;
 }
 
-.footer-copyright {
+footer .footer-social h3 {
+    color: var(--light-gray);
+    margin: 0 0 1rem 0;
+}
+
+footer .footer-social ul {
+    display: grid;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer .footer-social a {
+    color: var(--light-gray);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer .footer-social a:hover {
+    color: var(--accent-color);
+}
+
+footer .footer-copyright {
     grid-area: copyright;
     text-align: center;
+    padding-top: 2rem;
+    margin-top: 1rem;
+    border-top: 1px solid var(--dark-gray);
+    color: var(--dark-gray);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    footer {
+        grid-template-areas:
+            "info"
+            "links"
+            "social"
+            "copyright";
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    footer .footer-links nav ul,
+    footer .footer-social ul {
+        justify-items: center;
+    }
 }
