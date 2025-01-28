@@ -1,0 +1,60 @@
+.header-grid {
+    display: grid;
+    grid-template-areas: "logo nav user";
+    grid-template-columns: auto 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.logo {
+    grid-area: logo;
+}
+
+.main-nav {
+    grid-area: nav;
+}
+
+.user-section {
+    grid-area: user;
+}
+
+.main-nav ul {
+    display: grid;
+    grid-auto-flow: column;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content {
+    position: absolute;
+    right: 0;
+    min-width: 200px;
+    z-index: 1000;
+}
+
+@media (max-width: 768px) {
+    .header-grid {
+        grid-template-areas:
+            "logo"
+            "nav"
+            "user";
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .main-nav ul {
+        grid-auto-flow: row;
+        gap: 1rem;
+    }
+
+    .dropdown-content {
+        position: static;
+    }
+}

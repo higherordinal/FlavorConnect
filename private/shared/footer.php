@@ -16,8 +16,6 @@
             <nav>
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>">Home</a></li>
-                    <li><a href="<?php echo url_for('/restaurants/index.php'); ?>">Restaurants</a></li>
-                    <li><a href="<?php echo url_for('/reviews/index.php'); ?>">Reviews</a></li>
                     <li><a href="<?php echo url_for('/about.php'); ?>">About Us</a></li>
                     <li><a href="<?php echo url_for('/contact.php'); ?>">Contact</a></li>
                 </ul>
