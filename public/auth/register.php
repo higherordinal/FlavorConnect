@@ -1,6 +1,46 @@
 <?php
 require_once('../../private/initialize.php');
+require_once('../../private/validation_functions.php');
 $page_title = 'Register';
+
+$errors = [];
+$username = '';
+$first_name = '';
+$last_name = '';
+$email = '';
+
+if(is_post_request()) {
+    // Get form data
+    $args = [];
+    $args['username'] = $_POST['username'] ?? '';
+    $args['first_name'] = $_POST['first_name'] ?? '';
+    $args['last_name'] = $_POST['last_name'] ?? '';
+    $args['email'] = $_POST['email'] ?? '';
+    $args['password'] = $_POST['password'] ?? '';
+    $args['confirm_password'] = $_POST['confirm_password'] ?? '';
+
+    // Store values for form repopulation
+    $username = $args['username'];
+    $first_name = $args['first_name'];
+    $last_name = $args['last_name'];
+    $email = $args['email'];
+
+    // Validate all fields
+    $errors = validate_user($args);
+
+    // If no errors, create user
+    if(empty($errors)) {
+        $user = new User($args);
+        if($user->save()) {
+            $session->message("Registration successful! Please log in.", "success");
+            redirect_to(url_for('/auth/login.php'));
+        } else {
+            // Get any additional validation errors from user object
+            $errors = array_merge($errors, $user->errors);
+        }
+    }
+}
+
 include(SHARED_PATH . '/public_header.php');
 ?>
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/register.css'); ?>">
