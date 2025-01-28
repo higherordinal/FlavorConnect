@@ -40,7 +40,6 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     <li><a href="<?php echo url_for('/index.php'); ?>">Home</a></li>
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>">Recipes</a></li>
                     <li><a href="<?php echo url_for('/about.php'); ?>">About</a></li>
-                    <li><a href="<?php echo url_for('/contact.php'); ?>">Contact</a></li>
                 </ul>
             </nav>
 

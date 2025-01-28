@@ -17,7 +17,6 @@
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>">Home</a></li>
                     <li><a href="<?php echo url_for('/about.php'); ?>">About Us</a></li>
-                    <li><a href="<?php echo url_for('/contact.php'); ?>">Contact</a></li>
                 </ul>
             </nav>
         </div>

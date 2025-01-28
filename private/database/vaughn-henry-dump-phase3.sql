@@ -203,40 +203,40 @@ INSERT INTO recipe (user_id, title, description, type_id, style_id, diet_id, pre
  'Classic Spaghetti Carbonara', 'Traditional Italian pasta dish with eggs, cheese, pancetta, and black pepper', 
    (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
    (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
-   NULL, 15, 20, TRUE),
+   NULL, 900, 1200, TRUE),
    
 ((SELECT user_id FROM user_account WHERE username = 'home_cook'), 
  'Breakfast Burrito', 'Hearty breakfast wrapped in a warm tortilla',
    (SELECT type_id FROM recipe_type WHERE name = 'Breakfast'),
    (SELECT style_id FROM recipe_style WHERE name = 'Mexican'),
-   NULL, 10, 15, FALSE),
+   NULL, 600, 900, FALSE),
    
 ((SELECT user_id FROM user_account WHERE username = 'admin_chef'), 
  'Vegetarian Buddha Bowl', 'Nutritious bowl filled with grains, vegetables, and tahini dressing',
    (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
    NULL,
    (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   20, 25, TRUE),
+   1200, 1500, TRUE),
    
 ((SELECT user_id FROM user_account WHERE username = 'foodie_jane'), 
  'Quick Chocolate Mug Cake', '5-minute microwave chocolate cake in a mug',
    (SELECT type_id FROM recipe_type WHERE name = 'Dessert'),
    NULL,
-   NULL, 5, 2, FALSE),
+   NULL, 300, 120, FALSE),
    
 ((SELECT user_id FROM user_account WHERE username = 'super_admin'), 
  'Mediterranean Quinoa Salad', 'Fresh and healthy quinoa salad with Mediterranean flavors',
    (SELECT type_id FROM recipe_type WHERE name = 'Salad'),
    (SELECT style_id FROM recipe_style WHERE name = 'Mediterranean'),
    (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   15, 20, TRUE),
+   900, 1200, TRUE),
    
 ((SELECT user_id FROM user_account WHERE username = 'admin_chef'), 
  'Classic Margherita Pizza', 'Simple and delicious traditional Italian pizza',
    (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
    (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
    (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   30, 15, TRUE);
+   1800, 900, TRUE);
 
 -- Tag the recipes
 INSERT INTO recipe_tag (recipe_id, tag_id) VALUES
