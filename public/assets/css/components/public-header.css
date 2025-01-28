@@ -1,4 +1,4 @@
-/* Public Header Specific Styles */
+/* Public Header Specific Styles & Layout */
 .header-grid {
     grid-template-areas: "logo nav auth";
 }

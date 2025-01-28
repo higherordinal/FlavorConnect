@@ -18,7 +18,7 @@ define('UPLOADS_PATH', PUBLIC_PATH . '/uploads');
 define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 
 // URL Configuration
-define('WWW_ROOT', '/project/public');  // Base URL for the application
+define('WWW_ROOT', '/FlavorConnect/public');  // Base URL for the application
 
 // Upload Settings
 define('MAX_FILE_SIZE', 5242880);  // 5MB in bytes

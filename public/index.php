@@ -1,5 +1,5 @@
 <?php
-require_once('../private/initialize.php');
+require_once('../private/core/initialize.php');
 $page_title = 'Welcome to FlavorConnect';
 
 if($session->is_logged_in()) {
