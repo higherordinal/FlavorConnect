@@ -1,6 +1,38 @@
 <?php
 require_once('../../private/initialize.php');
+require_once('../../private/validation_functions.php');
 $page_title = 'Login';
+
+$errors = [];
+$username = '';
+
+if(is_post_request()) {
+    $args = [];
+    $args['username'] = $_POST['username'] ?? '';
+    $args['password'] = $_POST['password'] ?? '';
+
+    // Store username for form repopulation
+    $username = $args['username'];
+
+    // Basic validations
+    $errors = validate_login($args);
+
+    // If no errors, try to login
+    if(empty($errors)) {
+        $user = User::find_by_username($args['username']);
+        if($user && $user->verify_password($args['password'])) {
+            if($user->is_active) {
+                $session->login($user);
+                redirect_to(url_for('/index.php'));
+            } else {
+                $errors['account'] = "Your account has been deactivated. Please contact an administrator.";
+            }
+        } else {
+            $errors['login'] = "Invalid username or password.";
+        }
+    }
+}
+
 include(SHARED_PATH . '/public_header.php');
 ?>
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/login.css'); ?>">

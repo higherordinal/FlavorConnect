@@ -250,3 +250,21 @@ function validate_user($user_data, $current_id="0") {
 
     return $errors;
 }
+
+/**
+ * Validates login form data
+ * @param array $login_data The login data to validate
+ * @return array Array of validation errors
+ */
+function validate_login($login_data) {
+    $errors = [];
+
+    if(is_blank($login_data['username'])) {
+        $errors['username'] = "Username cannot be blank.";
+    }
+    if(is_blank($login_data['password'])) {
+        $errors['password'] = "Password cannot be blank.";
+    }
+
+    return $errors;
+}
