@@ -16,18 +16,19 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <!-- Component Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer-grid.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
     
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css'); ?>">
     <?php } ?>
 </head>
 <body>
-    <header class="main-header">
+    <header class="header">
         <div class="header-grid">
             <!-- Logo and Site Name -->
             <div class="logo">
                 <a href="<?php echo url_for('/dashboard.php'); ?>">
+                    <span class="logo-the">The</span>
                     <h1>FlavorConnect</h1>
                 </a>
             </div>
@@ -38,7 +39,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     <li><a href="<?php echo url_for('/dashboard.php'); ?>">Dashboard</a></li>
                     <li><a href="<?php echo url_for('/recipes/my-recipes.php'); ?>">My Recipes</a></li>
                     <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>">Favorites</a></li>
-                    <li><a href="<?php echo url_for('/recipes/create.php'); ?>">Create Recipe</a></li>
+                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>">Create Recipe</a></li>
                     <?php 
                     // Using cached admin status from session for performance
                     if($session->is_admin()) { 
@@ -50,19 +51,17 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
 
             <!-- User Section -->
             <div class="user-section">
-                <div class="dropdown">
-                    <button class="profile-button">
-                        <?php 
-                        $user = User::find_by_id($session->user_id);
-                        echo h($user->first_name);
-                        ?>
-                        <span class="arrow-down">▼</span>
-                    </button>
-                    <div class="dropdown-content">
-                        <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
-                        <a href="<?php echo url_for('/settings.php'); ?>">Settings</a>
-                        <a href="<?php echo url_for('/logout.php'); ?>">Logout</a>
-                    </div>
+                <button class="user-menu-button">
+                    <?php 
+                    $user = User::find_by_id($session->user_id);
+                    echo '<img src="' . url_for('/assets/images/avatars/default.png') . '" alt="Profile">';
+                    ?>
+                    <span><?php echo h($user->first_name); ?></span>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
+                    <a href="<?php echo url_for('/settings.php'); ?>">Settings</a>
+                    <a href="<?php echo url_for('/logout.php'); ?>">Logout</a>
                 </div>
             </div>
         </div>
