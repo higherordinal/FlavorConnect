@@ -9,9 +9,9 @@ class Session {
     private $user_id;
     /** @var string|null Username of the logged in user */
     private $username;
-    /** @var bool Whether the user is an admin */
+    /** @var bool Whether the user has admin privileges (cached from User) */
     private $is_admin;
-    /** @var bool Whether the user is a super admin */
+    /** @var bool Whether the user has super admin privileges (cached from User) */
     private $is_super_admin;
     /** @var string|null Flash message to display */
     public $message;
@@ -43,12 +43,12 @@ class Session {
             session_regenerate_id();
             $_SESSION['user_id'] = $user->user_id;
             $_SESSION['username'] = $user->username;
-            $_SESSION['is_admin'] = ($user->user_level === 'a' || $user->user_level === 's');
-            $_SESSION['is_super_admin'] = ($user->user_level === 's');
+            $_SESSION['is_admin'] = $user->is_admin();
+            $_SESSION['is_super_admin'] = $user->is_super_admin();
             $this->user_id = $user->user_id;
             $this->username = $user->username;
-            $this->is_admin = ($user->user_level === 'a' || $user->user_level === 's');
-            $this->is_super_admin = ($user->user_level === 's');
+            $this->is_admin = $user->is_admin();
+            $this->is_super_admin = $user->is_super_admin();
             error_log("User logged in: " . print_r($_SESSION, true));
             error_log("Session object state after login:");
             error_log("user_id: " . $this->user_id);
@@ -72,16 +72,20 @@ class Session {
     }
 
     /**
-     * Checks if current user is an admin
-     * @return bool True if user is admin or super admin
+     * Gets the cached admin status for the current session
+     * This is a performance optimization to avoid database lookups
+     * For authoritative admin check, use User::is_admin() instead
+     * @return bool True if user has admin privileges in current session
      */
     public function is_admin() {
         return isset($this->is_admin) && $this->is_admin === true;
     }
 
     /**
-     * Checks if current user is a super admin
-     * @return bool True if user is super admin
+     * Gets the cached super admin status for the current session
+     * This is a performance optimization to avoid database lookups
+     * For authoritative super admin check, use User::is_super_admin() instead
+     * @return bool True if user has super admin privileges in current session
      */
     public function is_super_admin() {
         return isset($this->is_super_admin) && $this->is_super_admin === true;
@@ -113,93 +117,27 @@ class Session {
     }
 
     /**
-     * Gets the current user's username
-     * @return string Username or empty string if not logged in
+     * Sets a message to be displayed to the user
+     * @param string $msg Message to display
+     * @param string $type Type of message (success, error, warning)
      */
-    public function get_username() {
-        return $this->username ?? '';
-    }
-
-    /**
-     * Sets or gets a flash message
-     * @param string $msg Optional message to set
-     * @return string|null Current message or null if none
-     */
-    public function message($msg="") {
+    public function message($msg="", $type="success") {
         if(!empty($msg)) {
-            // Set message
+            // Then this is a "set" message
             $_SESSION['message'] = $msg;
-            return true;
+            $_SESSION['message_type'] = $type;
         } else {
-            // Get message
-            $msg = $_SESSION['message'] ?? "";
-            unset($_SESSION['message']);
-            return $msg;
-        }
-    }
-
-    /**
-     * Sets the type of flash message
-     * @param string $type Message type (success, error, warning)
-     */
-    public function set_message_type($type) {
-        $_SESSION['message_type'] = $type;
-    }
-
-    /**
-     * Gets and clears the current message type
-     * @return string Message type or empty string if none
-     */
-    public function message_type() {
-        $type = $_SESSION['message_type'] ?? "";
-        unset($_SESSION['message_type']);
-        return $type;
-    }
-
-    /**
-     * Requires login for accessing protected pages
-     * Redirects to login page if user is not logged in
-     * @return void
-     */
-    public function require_login() {
-        if(!$this->is_logged_in()) {
-            $this->message('You must log in first.');
-            redirect_to(url_for('/public/auth/login.php'));
-        }
-    }
-
-    /**
-     * Requires admin privileges for accessing protected pages
-     * Redirects to home page if user is not an admin
-     * @return void
-     */
-    public function require_admin() {
-        if(!$this->is_admin()) {
-            redirect_to(url_for('/index.php'));
-        }
-    }
-
-    /**
-     * Requires super admin privileges for accessing protected pages
-     * Redirects to home page if user is not a super admin
-     * @return void
-     */
-    public function require_super_admin() {
-        if(!$this->is_super_admin()) {
-            redirect_to(url_for('/index.php'));
+            // Then this is a "get" message
+            return $this->message;
         }
     }
 
     /**
      * Checks and loads stored login data from session into object properties
-     * Retrieves user_id, username, and is_admin status from $_SESSION
+     * Retrieves user_id, username, and admin status from $_SESSION
      * Logs debug information about the session state
-     * @access private
-     * @return void
      */
     private function check_stored_login() {
-        error_log("Checking stored login");
-        error_log("Session data before check: " . print_r($_SESSION, true));
         if(isset($_SESSION['user_id'])) {
             $this->user_id = $_SESSION['user_id'];
             $this->username = $_SESSION['username'];
@@ -214,20 +152,16 @@ class Session {
     }
 
     /**
-     * Checks for stored flash message and loads it into the session
+     * Checks for and loads any stored message
      */
     private function check_message() {
         if(isset($_SESSION['message'])) {
             $this->message = $_SESSION['message'];
-            unset($_SESSION['message']);
-        } else {
-            $this->message = '';
-        }
-
-        if(isset($_SESSION['message_type'])) {
             $this->message_type = $_SESSION['message_type'];
+            unset($_SESSION['message']);
             unset($_SESSION['message_type']);
         } else {
+            $this->message = '';
             $this->message_type = '';
         }
     }

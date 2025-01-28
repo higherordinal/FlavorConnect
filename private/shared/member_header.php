@@ -37,7 +37,10 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     <li><a href="<?php echo url_for('/recipes/my-recipes.php'); ?>">My Recipes</a></li>
                     <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>">Favorites</a></li>
                     <li><a href="<?php echo url_for('/recipes/create.php'); ?>">Create Recipe</a></li>
-                    <?php if($session->is_admin()) { ?>
+                    <?php 
+                    // Using cached admin status from session for performance
+                    if($session->is_admin()) { 
+                    ?>
                     <li><a href="<?php echo url_for('/admin/index.php'); ?>">Admin</a></li>
                     <?php } ?>
                 </ul>
