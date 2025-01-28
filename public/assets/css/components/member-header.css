@@ -1,4 +1,4 @@
-/* Member Header Specific Styles */
+/* Member Header Specific Styles & Layout */
 .header-grid {
     grid-template-areas: "logo nav user";
 }
