@@ -1,6 +1,7 @@
 <?php
-require_once('../../private/initialize.php');
-require_once('../../private/validation_functions.php');
+require_once('../../private/config/config.php');
+require_once(PRIVATE_PATH . '/core/initialize.php');
+
 $page_title = 'Login';
 
 $errors = [];
@@ -41,7 +42,7 @@ include(SHARED_PATH . '/public_header.php');
     <h1>Login</h1>
     
     <?php echo display_errors($errors); ?>
-    <?php echo display_message($session->message); ?>
+    <?php echo display_session_message(); ?>
 
     <form action="<?php echo url_for('/auth/login.php'); ?>" method="post">
         <div>

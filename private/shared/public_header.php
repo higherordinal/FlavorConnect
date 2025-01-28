@@ -16,18 +16,19 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <!-- Component Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/public-header.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer-grid.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
     
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css'); ?>">
     <?php } ?>
 </head>
 <body>
-    <header class="main-header">
+    <header class="header">
         <div class="header-grid">
             <!-- Logo and Site Name -->
             <div class="logo">
                 <a href="<?php echo url_for('/index.php'); ?>">
+                    <span class="logo-the">The</span>
                     <h1>FlavorConnect</h1>
                 </a>
             </div>
@@ -36,7 +37,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
             <nav class="main-nav">
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>">Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/browse.php'); ?>">Browse Recipes</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>">Recipes</a></li>
                     <li><a href="<?php echo url_for('/about.php'); ?>">About</a></li>
                     <li><a href="<?php echo url_for('/contact.php'); ?>">Contact</a></li>
                 </ul>
@@ -45,8 +46,8 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
             <!-- Authentication Section -->
             <div class="auth-section">
                 <div class="auth-buttons">
-                    <a href="<?php echo url_for('/login.php'); ?>" class="login-button">Login</a>
-                    <a href="<?php echo url_for('/signup.php'); ?>" class="signup-button">Sign Up</a>
+                    <a href="<?php echo url_for('/auth/login.php'); ?>" class="btn btn-outline">Login</a>
+                    <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn btn-primary">Sign Up</a>
                 </div>
             </div>
         </div>
