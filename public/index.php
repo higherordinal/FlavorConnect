@@ -15,7 +15,7 @@ if($session->is_logged_in()) {
             <h1>Discover Your Next Favorite Recipe</h1>
             <p class="hero-text">Connect with food enthusiasts, share your culinary creations, and explore a world of flavors.</p>
             <div class="hero-buttons">
-                <a href="<?php echo url_for('/recipes/browse.php'); ?>" class="btn-primary">Browse Recipes</a>
+                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn-primary">Browse Recipes</a>
                 <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn-secondary">Join Community</a>
             </div>
         </div>
