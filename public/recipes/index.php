@@ -1,10 +1,9 @@
 <?php
-require_once('../../private/config/config.php');
-require_once(PRIVATE_PATH . '/core/initialize.php');
+require_once('../../private/core/initialize.php');
 require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 
 $page_title = 'Recipes';
-$page_style = 'recipe-gallery';
+$page_style = 'pages/recipe-gallery';
 $scripts = ['recipe-favorites']; // Load recipe-favorites.js
 
 // Debug logging
