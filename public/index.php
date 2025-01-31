@@ -1,6 +1,6 @@
 <?php
 require_once('../private/core/initialize.php');
-$page_title = 'Welcome to FlavorConnect';
+$page_title = 'Home';
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
