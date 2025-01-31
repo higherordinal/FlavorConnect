@@ -70,13 +70,24 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-secondary);
     font-weight: 600;
-    line-height: 1.2;
+    margin-top: 0;
     margin-bottom: var(--spacing-md);
+    line-height: 1.2;
 }
 
-h1 { font-size: var(--font-size-xxlarge); }
-h2 { font-size: var(--font-size-xlarge); }
-h3 { font-size: var(--font-size-large); }
+h1:not(.logo h1) {
+    font-size: var(--font-size-xxlarge);
+    color: var(--accent-color);
+}
+
+h2 {
+    font-size: var(--font-size-xlarge);
+}
+
+h3 {
+    font-size: var(--font-size-large);
+}
+
 h4 { font-size: var(--font-size-base); }
 
 p { margin-bottom: var(--spacing-md); }
@@ -89,7 +100,7 @@ a {
 }
 
 a:hover {
-    color: var(--primary-color);
+    color: var(--accent-color-dark);
 }
 
 .back-link {
