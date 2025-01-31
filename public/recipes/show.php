@@ -240,6 +240,6 @@ if($session->is_logged_in()) {
     </div>
 </div>
 
-<script src="<?php echo url_for('/assets/js/recipe-scale.js'); ?>"></script>
-<script src="<?php echo url_for('/assets/js/recipe-show.js'); ?>"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>"></script>
 <?php include(SHARED_PATH . '/footer.php'); ?>

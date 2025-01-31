@@ -158,49 +158,53 @@ if ($current_page > $total_pages) {
                         </button>
                     <?php } ?>
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" class="recipe-link">
-                    <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" alt="<?php echo h($recipe->title); ?>" class="recipe-image">
-                    
-                    <div class="recipe-content">
-                        <h2 class="recipe-title"><?php echo h($recipe->title); ?></h2>
+                        <div class="recipe-image-container">
+                            <img src="<?php echo $recipe->img_file_path ? url_for($recipe->img_file_path) : url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+                                 alt="<?php echo h($recipe->title); ?>" 
+                                 class="recipe-image">
+                        </div>
                         
-                        <div class="recipe-meta">
-                            <span class="rating">
-                                <?php 
-                                    $rating = $recipe->get_average_rating();
-                                    echo str_repeat('★', round($rating));
-                                    echo str_repeat('☆', 5 - round($rating));
-                                    echo " (" . $recipe->rating_count() . ")";
-                                ?>
-                            </span>
-                            <span class="time">
-                                <?php echo $recipe->get_total_time_display(); ?>
-                            </span>
+                        <div class="recipe-content">
+                            <h2 class="recipe-title"><?php echo h($recipe->title); ?></h2>
+                            
+                            <div class="recipe-meta">
+                                <span class="rating">
+                                    <?php 
+                                        $rating = $recipe->get_average_rating();
+                                        echo str_repeat('★', round($rating));
+                                        echo str_repeat('☆', 5 - round($rating));
+                                        echo " (" . $recipe->rating_count() . ")";
+                                    ?>
+                                </span>
+                                <span class="time">
+                                    <?php echo $recipe->get_total_time_display(); ?>
+                                </span>
+                            </div>
+
+                            <div class="recipe-tags">
+                                <?php if($style) { ?>
+                                    <span class="recipe-tag"><?php echo h($style->name); ?></span>
+                                <?php } ?>
+                                <?php if($diet) { ?>
+                                    <span class="recipe-tag"><?php echo h($diet->name); ?></span>
+                                <?php } ?>
+                                <?php if($type) { ?>
+                                    <span class="recipe-tag"><?php echo h($type->name); ?></span>
+                                <?php } ?>
+                            </div>
                         </div>
 
-                        <div class="recipe-tags">
-                            <?php if($style) { ?>
-                                <span class="recipe-tag"><?php echo h($style->name); ?></span>
-                            <?php } ?>
-                            <?php if($diet) { ?>
-                                <span class="recipe-tag"><?php echo h($diet->name); ?></span>
-                            <?php } ?>
-                            <?php if($type) { ?>
-                                <span class="recipe-tag"><?php echo h($type->name); ?></span>
-                            <?php } ?>
-                        </div>
-                    </div>
+                        <div class="recipe-footer">
+                            <div class="recipe-author">
+                                <?php $user = User::find_by_id($recipe->user_id); ?>
+                                <span class="author-name">By <?php echo h($user->username); ?></span>
+                            </div>
 
-                    <div class="recipe-footer">
-                        <div class="recipe-author">
-                            <?php $user = User::find_by_id($recipe->user_id); ?>
-                            <span class="author-name">By <?php echo h($user->username); ?></span>
+                            <div class="recipe-rating">
+                                <i class="fas fa-star"></i>
+                                <span><?php echo number_format($recipe->get_average_rating(), 1); ?></span>
+                            </div>
                         </div>
-
-                        <div class="recipe-rating">
-                            <i class="fas fa-star"></i>
-                            <span><?php echo number_format($recipe->get_average_rating(), 1); ?></span>
-                        </div>
-                    </div>
                     </a>
                 </article>
             <?php } ?>
