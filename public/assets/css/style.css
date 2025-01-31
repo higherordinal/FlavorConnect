@@ -213,3 +213,15 @@ label {
     color: var(--warning-color);
     border: 1px solid var(--warning-color);
 }
+
+/* Layout */
+.main-content {
+    margin: var(--spacing-2xl) auto;
+    padding: 0 var(--spacing-lg);
+    width: 100%;
+}
+
+.main-content > * {
+    margin-left: auto;
+    margin-right: auto;
+}

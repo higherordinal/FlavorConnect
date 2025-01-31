@@ -3,28 +3,28 @@
     display: grid;
     place-items: center;
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
-    padding: 2rem;
+    padding: var(--spacing-lg);
 }
 
 .content > h1 {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--spacing-xl);
 }
 
 form {
     display: grid;
-    gap: 1.5rem;
+    gap: var(--spacing-lg);
     width: 100%;
     max-width: 400px;
 }
 
 form > div {
     display: grid;
-    gap: 0.5rem;
+    gap: var(--spacing-sm);
 }
 
 /* Link container */
 form + div {
-    margin-top: 1.5rem;
+    margin-top: var(--spacing-lg);
     text-align: center;
 }
