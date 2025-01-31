@@ -270,3 +270,261 @@ INSERT INTO recipe_tag (recipe_id, tag_id) VALUES
  (SELECT tag_id FROM tag WHERE name = 'Vegan')),
 ((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 
  (SELECT tag_id FROM tag WHERE name = 'Healthy'));
+
+-- Insert ingredients for Classic Spaghetti Carbonara
+INSERT INTO ingredient (recipe_id, name) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 'spaghetti'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 'eggs'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 'pecorino romano cheese'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 'pancetta'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 'black pepper'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 'salt');
+
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, measurement_id, quantity) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'spaghetti' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara')),
+ (SELECT measurement_id FROM measurement WHERE name = 'pound'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'eggs' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 4),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'pecorino romano cheese' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'pancetta' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara')),
+ (SELECT measurement_id FROM measurement WHERE name = 'ounce'),
+ 8),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'black pepper' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara')),
+ (SELECT measurement_id FROM measurement WHERE name = 'teaspoon'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'salt' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara')),
+ (SELECT measurement_id FROM measurement WHERE name = 'teaspoon'),
+ 1);
+
+INSERT INTO recipe_step (recipe_id, step_number, instruction) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 1, 'Bring a large pot of salted water to boil for the pasta.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 2, 'While water is heating, cut the pancetta into small cubes.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 3, 'In a bowl, whisk together eggs, grated pecorino cheese, and black pepper.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 4, 'Cook spaghetti in the boiling water according to package instructions.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 5, 'While pasta cooks, sauté pancetta in a large pan until crispy.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 6, 'Reserve 1 cup pasta water, then drain pasta.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 7, 'Working quickly, add hot pasta to pancetta, then mix in egg mixture, stirring constantly.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 8, 'Add pasta water as needed to create a creamy sauce. Serve immediately.');
+
+-- Insert ingredients for Breakfast Burrito
+INSERT INTO ingredient (recipe_id, name) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'large tortillas'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'eggs'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'black beans'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'cheddar cheese'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'salsa'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'avocado'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'salt'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 'pepper');
+
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, measurement_id, quantity) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'large tortillas' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 4),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'eggs' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 6),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'black beans' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'cheddar cheese' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'salsa' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 0.5),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'avocado' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1);
+
+INSERT INTO recipe_step (recipe_id, step_number, instruction) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 1, 'Warm the tortillas in a large skillet.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 2, 'Scramble the eggs with salt and pepper until just set.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 3, 'Heat the black beans in a small saucepan.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 4, 'Slice the avocado.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 5, 'Layer each tortilla with eggs, beans, cheese, avocado, and salsa.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 6, 'Roll up tightly, tucking in the sides as you go.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 7, 'Optional: Return to skillet and brown on all sides.');
+
+-- Insert ingredients for Vegetarian Buddha Bowl
+INSERT INTO ingredient (recipe_id, name) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'quinoa'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'sweet potato'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'chickpeas'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'kale'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'avocado'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'tahini'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'lemon juice'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'olive oil'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'salt'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 'pepper');
+
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, measurement_id, quantity) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'quinoa' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'sweet potato' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'chickpeas' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'kale' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'avocado' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'tahini' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'tablespoon'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'lemon juice' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl')),
+ (SELECT measurement_id FROM measurement WHERE name = 'tablespoon'),
+ 1);
+
+INSERT INTO recipe_step (recipe_id, step_number, instruction) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 1, 'Cook quinoa according to package instructions.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 2, 'Roast sweet potato cubes with olive oil, salt, and pepper.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 3, 'Season and roast chickpeas until crispy.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 4, 'Massage kale with olive oil and salt.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 5, 'Make dressing by whisking tahini, lemon juice, and water.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 6, 'Assemble bowls with quinoa base, topped with vegetables.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 7, 'Add sliced avocado and drizzle with tahini dressing.');
+
+-- Insert ingredients for Mediterranean Quinoa Salad
+INSERT INTO ingredient (recipe_id, name) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'quinoa'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'cucumber'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'cherry tomatoes'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'red onion'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'kalamata olives'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'feta cheese'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'olive oil'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'lemon juice'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'fresh parsley'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'salt'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 'pepper');
+
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, measurement_id, quantity) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'quinoa' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1.5),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'cucumber' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'cherry tomatoes' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'red onion' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 0.5),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'kalamata olives' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 0.5),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'feta cheese' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 0.75),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'olive oil' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'tablespoon'),
+ 3),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'lemon juice' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad')),
+ (SELECT measurement_id FROM measurement WHERE name = 'tablespoon'),
+ 2);
+
+INSERT INTO recipe_step (recipe_id, step_number, instruction) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 1, 'Cook quinoa according to package instructions, let cool.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 2, 'Dice cucumber and quarter cherry tomatoes.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 3, 'Finely slice red onion and chop parsley.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 4, 'In a large bowl, combine cooled quinoa with all chopped vegetables.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 5, 'Add olives and crumbled feta cheese.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 6, 'Whisk together olive oil, lemon juice, salt, and pepper.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 7, 'Pour dressing over salad and toss to combine. Serve chilled.');
+
+-- Insert ingredients for Spicy Thai Curry
+INSERT INTO ingredient (recipe_id, name) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'coconut milk'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'red curry paste'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'tofu'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'bell peppers'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'bamboo shoots'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'carrots'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'broccoli'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'soy sauce'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'brown sugar'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'lime juice'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'basil leaves'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 'jasmine rice');
+
+INSERT INTO recipe_ingredient (recipe_id, ingredient_id, measurement_id, quantity) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'coconut milk' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'red curry paste' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'tablespoon'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'tofu' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'bell peppers' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'bamboo shoots' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'carrots' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 1),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'broccoli' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 2),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT ingredient_id FROM ingredient WHERE name = 'jasmine rice' AND recipe_id = (SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry')),
+ (SELECT measurement_id FROM measurement WHERE name = 'cup'),
+ 2);
+
+INSERT INTO recipe_step (recipe_id, step_number, instruction) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 1, 'Cook jasmine rice according to package instructions.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 2, 'Press and cube tofu, then pan-fry until golden.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 3, 'In a large pot, heat coconut milk and stir in curry paste.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 4, 'Add vegetables and simmer until tender-crisp.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 5, 'Add tofu, soy sauce, and brown sugar.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 6, 'Finish with lime juice and fresh basil.'),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 7, 'Serve hot over jasmine rice.');
