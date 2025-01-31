@@ -19,10 +19,6 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
     
-    <?php if(isset($page_style)) { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/' . $page_style . '.css'); ?>">
-    <?php } ?>
-    
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css'); ?>">
     <?php } ?>
