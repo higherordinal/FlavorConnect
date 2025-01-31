@@ -68,7 +68,7 @@
 }
 
 .main-content .search-button:hover {
-    background: var(--accent-color);
+    background: var(--secondary-color);
 }
 
 /* Filters */
