@@ -13,6 +13,41 @@ error_log("Scripts to load: " . print_r($scripts, true));
 include(SHARED_PATH . '/public_header.php');
 ?>
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
+<?php
+// Get filter values
+$search = $_GET['search'] ?? '';
+$style_id = !empty($_GET['style']) ? (int)$_GET['style'] : null;
+$diet_id = !empty($_GET['diet']) ? (int)$_GET['diet'] : null;
+$type_id = !empty($_GET['type']) ? (int)$_GET['type'] : null;
+$sort = $_GET['sort'] ?? 'newest';
+
+// Get current page
+$current_page = $_GET['page'] ?? 1;
+$current_page = max(1, (int)$current_page);
+
+// Set recipes per page
+$per_page = 12;
+
+// Get filter options
+$styles = RecipeAttribute::find_by_type('style');
+$diets = RecipeAttribute::find_by_type('diet');
+$types = RecipeAttribute::find_by_type('type');
+
+// Calculate offset
+$offset = ($current_page - 1) * $per_page;
+
+// Get total recipes count for pagination
+$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id);
+$total_pages = ceil($total_recipes / $per_page);
+
+// Get recipes for current page
+$recipes = Recipe::find_all_filtered($search, $style_id, $diet_id, $type_id, $sort, $per_page, $offset);
+
+// Ensure current page is not greater than total pages
+if ($current_page > $total_pages) {
+    redirect_to('/recipes/index.php');
+}
+?>
 
 <div class="recipe-gallery">
     <div class="gallery-header">
@@ -37,12 +72,7 @@ include(SHARED_PATH . '/public_header.php');
             <label for="style-filter" class="filter-label">Style</label>
             <select id="style-filter" class="filter-select" name="style" 
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['style' => ''])); ?>' + this.value">
-                <option value="">All Styles</option>
-                <?php foreach($styles as $style) { ?>
-                    <option value="<?php echo h($style->id); ?>" <?php if($style_id === $style->id) echo 'selected'; ?>>
-                        <?php echo h($style->name); ?>
-                    </option>
-                <?php } ?>
+                <option value="">All Styles</option><?php foreach($styles as $style) { ?><option value="<?php echo h($style->id); ?>" <?php if($style_id === $style->id) echo 'selected'; ?>><?php echo h($style->name); ?></option><?php } ?>
             </select>
         </div>
 
@@ -50,12 +80,7 @@ include(SHARED_PATH . '/public_header.php');
             <label for="diet-filter" class="filter-label">Diet</label>
             <select id="diet-filter" class="filter-select" name="diet" 
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['diet' => ''])); ?>' + this.value">
-                <option value="">All Diets</option>
-                <?php foreach($diets as $diet) { ?>
-                    <option value="<?php echo h($diet->id); ?>" <?php if($diet_id === $diet->id) echo 'selected'; ?>>
-                        <?php echo h($diet->name); ?>
-                    </option>
-                <?php } ?>
+                <option value="">All Diets</option><?php foreach($diets as $diet) { ?><option value="<?php echo h($diet->id); ?>" <?php if($diet_id === $diet->id) echo 'selected'; ?>><?php echo h($diet->name); ?></option><?php } ?>
             </select>
         </div>
 
@@ -63,12 +88,7 @@ include(SHARED_PATH . '/public_header.php');
             <label for="type-filter" class="filter-label">Type</label>
             <select id="type-filter" class="filter-select" name="type" 
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['type' => ''])); ?>' + this.value">
-                <option value="">All Types</option>
-                <?php foreach($types as $type) { ?>
-                    <option value="<?php echo h($type->id); ?>" <?php if($type_id === $type->id) echo 'selected'; ?>>
-                        <?php echo h($type->name); ?>
-                    </option>
-                <?php } ?>
+                <option value="">All Types</option><?php foreach($types as $type) { ?><option value="<?php echo h($type->id); ?>" <?php if($type_id === $type->id) echo 'selected'; ?>><?php echo h($type->name); ?></option><?php } ?>
             </select>
         </div>
 
@@ -76,10 +96,7 @@ include(SHARED_PATH . '/public_header.php');
             <label for="sort-filter" class="filter-label">Sort By</label>
             <select id="sort-filter" class="filter-select" name="sort" 
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['sort' => ''])); ?>' + this.value">
-                <option value="newest" <?php if($sort === 'newest') echo 'selected'; ?>>Newest First</option>
-                <option value="oldest" <?php if($sort === 'oldest') echo 'selected'; ?>>Oldest First</option>
-                <option value="name_asc" <?php if($sort === 'name_asc') echo 'selected'; ?>>Name A-Z</option>
-                <option value="name_desc" <?php if($sort === 'name_desc') echo 'selected'; ?>>Name Z-A</option>
+                <option value="newest" <?php if($sort === 'newest') echo 'selected'; ?>>Newest First</option><option value="oldest" <?php if($sort === 'oldest') echo 'selected'; ?>>Oldest First</option><option value="name_asc" <?php if($sort === 'name_asc') echo 'selected'; ?>>Name A-Z</option><option value="name_desc" <?php if($sort === 'name_desc') echo 'selected'; ?>>Name Z-A</option>
             </select>
         </div>
 
