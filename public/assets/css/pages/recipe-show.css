@@ -101,7 +101,7 @@
 .recipe-description {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: var(--color-gray-800);
+    color: var(--text-color);
 }
 
 .recipe-ingredients {
@@ -207,7 +207,7 @@
     margin: 0 0 1.5rem 0;
     padding-bottom: 1rem;
     border-bottom: 2px solid var(--color-gray-200);
-    color: var(--color-gray-900);
+    color: var(--text-color);
     font-family: var(--font-heading);
 }
 
@@ -237,7 +237,7 @@
 .step-number {
     width: 2.5rem;
     height: 2.5rem;
-    background-color: var(--color-primary);
+    background-color: var(--primary-color);
     color: var(--color-white);
     border-radius: 50%;
     display: grid;
@@ -254,17 +254,17 @@
 .step-content p {
     margin: 0;
     font-size: 1.1rem;
-    color: var(--color-gray-800);
+    color: var(--text-color);
     line-height: 1.6;
 }
 
 .step-note {
     margin-top: 0.75rem;
     padding: 0.75rem;
-    background-color: var(--color-gray-100);
-    border-left: 3px solid var(--color-primary);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-    color: var(--color-gray-700);
+    background-color: var(--light-gray);
+    border-left: 3px solid var(--primary-color);
+    border-radius: 0 var(--border-radius-sm) var(--border-radius-sm) 0;
+    color: var(--text-color);
     font-size: 0.95rem;
     font-style: italic;
 }
@@ -290,7 +290,7 @@
 
 .comments-header h2 {
     margin: 0;
-    color: var(--color-gray-900);
+    color: var(--text-color);
     font-family: var(--font-heading);
 }
 
@@ -299,7 +299,7 @@
     grid-template-columns: auto auto;
     align-items: center;
     gap: 0.5rem;
-    color: var(--color-gray-700);
+    color: var(--text-color);
     font-weight: 600;
 }
 
@@ -322,7 +322,7 @@
 
 .comment-form h3 {
     margin: 0 0 1rem 0;
-    color: var(--color-gray-800);
+    color: var(--text-color);
     font-size: 1.1rem;
 }
 
@@ -398,11 +398,11 @@ button.submit-comment:hover {
     padding: 2rem;
     background-color: var(--color-gray-100);
     border-radius: var(--radius-md);
-    color: var(--color-gray-700);
+    color: var(--text-color);
 }
 
 .login-prompt a {
-    color: var(--color-primary);
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
 }
@@ -460,7 +460,7 @@ button.submit-comment:hover {
 }
 
 .comment-text {
-    color: var(--color-gray-800);
+    color: var(--text-color);
     line-height: 1.5;
 }
 

@@ -113,7 +113,7 @@ if($session->is_logged_in()) {
             <?php foreach($ingredients as $ingredient) { ?>
                 <li>
                     <span class="amount" data-base="<?php echo h($ingredient->quantity); ?>">
-                        <?php echo h($ingredient->quantity); ?>
+                        <?php echo h(format_quantity($ingredient->quantity)); ?>
                     </span>
                     <?php 
                     $measurement = $ingredient->measurement;
