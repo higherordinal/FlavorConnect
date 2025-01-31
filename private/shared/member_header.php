@@ -56,15 +56,14 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
             <div class="user-section">
                 <button class="user-menu-button">
                     <?php 
-                    $user = User::find_by_id($session->user_id);
+                    $user = User::find_by_id($session->get_user_id());
                     echo '<img src="' . url_for('/assets/images/avatars/default.png') . '" alt="Profile">';
                     ?>
                     <span><?php echo h($user->first_name); ?></span>
                 </button>
                 <div class="dropdown-menu">
                     <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
-                    <a href="<?php echo url_for('/settings.php'); ?>">Settings</a>
-                    <a href="<?php echo url_for('/logout.php'); ?>">Logout</a>
+                    <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
                 </div>
             </div>
         </div>
