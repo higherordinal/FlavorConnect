@@ -9,6 +9,9 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlavorConnect - <?php echo h($page_title); ?></title>
     
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <!-- Base Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/layout.css'); ?>">
