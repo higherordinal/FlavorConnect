@@ -23,6 +23,9 @@ class RecipeIngredient extends DatabaseObject {
     /** @var int Quantity */
     public $quantity;
 
+    private $_measurement;
+    private $_ingredient;
+
     /**
      * Constructor for RecipeIngredient class
      * @param array $args Associative array of property values
@@ -32,6 +35,54 @@ class RecipeIngredient extends DatabaseObject {
         $this->ingredient_id = $args['ingredient_id'] ?? null;
         $this->measurement_id = $args['measurement_id'] ?? '';
         $this->quantity = $args['quantity'] ?? '';
+    }
+
+    /**
+     * Get the measurement object
+     * @return object|null The measurement object or null if not found
+     */
+    public function getMeasurement() {
+        if(!isset($this->_measurement) && $this->measurement_id) {
+            $sql = "SELECT name FROM measurement WHERE measurement_id = ?";
+            $stmt = self::$database->prepare($sql);
+            $stmt->bind_param("i", $this->measurement_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($row = $result->fetch_object()) {
+                $this->_measurement = $row;
+            }
+        }
+        return $this->_measurement;
+    }
+
+    /**
+     * Get the ingredient object
+     * @return object|null The ingredient object or null if not found
+     */
+    public function getIngredient() {
+        if(!isset($this->_ingredient) && $this->ingredient_id) {
+            $sql = "SELECT name FROM ingredient WHERE ingredient_id = ?";
+            $stmt = self::$database->prepare($sql);
+            $stmt->bind_param("i", $this->ingredient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($row = $result->fetch_object()) {
+                $this->_ingredient = $row;
+            }
+        }
+        return $this->_ingredient;
+    }
+
+    /**
+     * Magic getter for measurement property
+     */
+    public function __get($name) {
+        if($name === 'measurement') {
+            return $this->getMeasurement();
+        }
+        if($name === 'ingredient') {
+            return $this->getIngredient();
+        }
     }
 
     /**
