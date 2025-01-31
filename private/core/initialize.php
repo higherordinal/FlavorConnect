@@ -14,6 +14,11 @@ error_log("Session state in initialize.php:");
 error_log("Session ID: " . session_id());
 error_log("Session Data: " . print_r($_SESSION, true));
 
+// Prevent caching during development
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 // Custom autoloader for FlavorConnect classes
 spl_autoload_register(function($class) {
     // Keep the original class name for the file
