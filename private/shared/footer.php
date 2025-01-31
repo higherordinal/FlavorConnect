@@ -1,4 +1,4 @@
-    </div> <!-- Close .main-content from header.php -->
+    </main> <!-- Close .main-content from header.php -->
     
 <footer>
     <div class="footer-info">
