@@ -15,6 +15,54 @@
 
 .auth-buttons .btn {
     white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.auth-buttons .login {
+    color: var(--light-gray);
+    position: relative;
+    padding: 0.5rem 1rem;
+}
+
+.auth-buttons .login::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent-color);
+    transition: width 0.3s ease;
+}
+
+.auth-buttons .login:hover,
+.auth-buttons .login:focus {
+    color: var(--accent-color);
+    outline: none;
+}
+
+.auth-buttons .login:hover::after,
+.auth-buttons .login:focus::after {
+    width: 100%;
+}
+
+.auth-buttons .signup {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+}
+
+.auth-buttons .signup:hover,
+.auth-buttons .signup:focus {
+    background-color: var(--accent-color-dark);
+    transform: translateY(-1px);
+    outline: none;
+}
+
+.auth-buttons .signup:focus-visible {
+    box-shadow: 0 0 0 2px var(--primary-color), 0 0 0 4px var(--accent-color);
 }
 
 @media (max-width: 768px) {

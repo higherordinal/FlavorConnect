@@ -18,17 +18,30 @@
     cursor: pointer;
     padding: var(--spacing-sm);
     border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
 }
 
-.user-menu-button:hover {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.1);
+.user-menu-button:hover,
+.user-menu-button:focus {
+    color: var(--accent-color);
+    background-color: rgba(255, 255, 255, 0.05);
+    outline: none;
+}
+
+.user-menu-button:focus-visible {
+    box-shadow: 0 0 0 2px var(--accent-color);
 }
 
 .user-menu-button img {
     width: 32px;
     height: 32px;
     border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.user-menu-button:hover img,
+.user-menu-button:focus img {
+    transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
