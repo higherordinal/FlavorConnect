@@ -12,19 +12,19 @@
     grid-template-columns: 1fr auto;
     align-items: center;
     gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
     background-color: var(--primary-color);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
+    margin-bottom: var(--spacing-lg);
     box-shadow: var(--shadow-lg);
 }
 
-.main-content .gallery-title {
+.main-content .gallery-header h1 {
     font-family: var(--font-secondary);
     font-size: var(--font-size-xxlarge);
-    color: white;
     margin: 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: var(--accent-color);
 }
 
 /* Search Bar */
