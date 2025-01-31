@@ -28,6 +28,12 @@ if(is_post_request() && $session->is_logged_in()) {
 // Get all reviews for this recipe
 $reviews = Review::find_by_recipe_id($recipe->recipe_id);
 
+// Get recipe ingredients
+$ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
+
+// Get recipe steps
+$steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
+
 $page_title = $recipe->title;
 $page_style = 'recipe-show';
 include(SHARED_PATH . '/header.php');
@@ -94,60 +100,31 @@ include(SHARED_PATH . '/header.php');
             </div>
         </div>
         <ul class="ingredients-list">
-            <li><span class="amount" data-base="2">2</span> cups all-purpose flour</li>
-            <li><span class="amount" data-base="1">1</span> cup milk</li>
-            <li><span class="amount" data-base="0.5">½</span> cup sugar</li>
-            <li><span class="amount" data-base="2">2</span> large eggs</li>
-            <li><span class="amount" data-base="1.5">1½</span> teaspoons baking powder</li>
+            <?php foreach($ingredients as $ingredient) { ?>
+                <li>
+                    <span class="amount" data-base="<?php echo h($ingredient->quantity); ?>">
+                        <?php echo h($ingredient->quantity); ?>
+                    </span>
+                    <?php echo h($ingredient->get_measurement()->name); ?> 
+                    <?php echo h($ingredient->get_ingredient()->name); ?>
+                </li>
+            <?php } ?>
         </ul>
     </div>
 
     <div class="recipe-directions">
         <h2>Directions</h2>
         <ol class="directions-list">
-            <li>
-                <div class="direction-step">
-                    <span class="step-number">1</span>
-                    <div class="step-content">
-                        <p>In a large bowl, whisk together flour and baking powder.</p>
-                        <div class="step-note">Make sure to sift the flour to avoid lumps.</div>
+            <?php foreach($steps as $step) { ?>
+                <li>
+                    <div class="direction-step">
+                        <span class="step-number"><?php echo h($step->step_number); ?></span>
+                        <div class="step-content">
+                            <p><?php echo h($step->instruction); ?></p>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li>
-                <div class="direction-step">
-                    <span class="step-number">2</span>
-                    <div class="step-content">
-                        <p>In a separate bowl, beat eggs and sugar until light and fluffy.</p>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="direction-step">
-                    <span class="step-number">3</span>
-                    <div class="step-content">
-                        <p>Gradually add milk to the egg mixture while continuing to beat.</p>
-                        <div class="step-note">The mixture should be smooth and well combined.</div>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="direction-step">
-                    <span class="step-number">4</span>
-                    <div class="step-content">
-                        <p>Fold the dry ingredients into the wet ingredients until just combined. Do not overmix.</p>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <div class="direction-step">
-                    <span class="step-number">5</span>
-                    <div class="step-content">
-                        <p>Pour the batter into a prepared pan and bake at 350°F for 25-30 minutes.</p>
-                        <div class="step-note">Test with a toothpick - it should come out clean when done.</div>
-                    </div>
-                </div>
-            </li>
+                </li>
+            <?php } ?>
         </ol>
     </div>
 
