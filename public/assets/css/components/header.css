@@ -55,12 +55,12 @@
 }
 
 /* Navigation Styles */
-.main-nav {
+header.header nav.main-nav {
     justify-self: center;
     width: 100%;
 }
 
-.main-nav ul {
+header.header nav.main-nav ul {
     display: grid;
     grid-auto-flow: column;
     justify-content: center;
@@ -70,16 +70,41 @@
     padding: 0;
 }
 
-.main-nav a {
-    color: var(--light-gray);
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.3s ease;
+header.header nav.main-nav ul li {
+    position: relative;
 }
 
-.main-nav a:hover,
-.main-nav a.active {
-    color: white;
+header.header nav.main-nav ul li a {
+    color: #ECF0F1;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+header.header nav.main-nav ul li::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #F1C40F;
+    transition: width 0.3s ease;
+}
+
+/* Hover and focus states only */
+header.header nav.main-nav ul li:hover::after,
+header.header nav.main-nav ul li:focus-within::after {
+    width: 100%;
+}
+
+/* Active, hover, and focus colors */
+header.header nav.main-nav ul li a.active,
+header.header nav.main-nav ul li a:hover,
+header.header nav.main-nav ul li a:focus {
+    color: #F1C40F !important;
 }
 
 /* Responsive Design */
