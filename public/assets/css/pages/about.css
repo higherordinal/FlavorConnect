@@ -13,11 +13,13 @@
     grid-template-columns: 1fr 1fr;
     gap: var(--spacing-xl);
     align-items: center;
-    background-color: var(--primary-color);
+    position: relative;
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-xl);
     color: var(--color-white);
     box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color-dark) 100%);
 }
 
 .about-hero-content {
@@ -46,6 +48,18 @@
     border-radius: var(--border-radius-lg);
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.about-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--border-radius-lg);
+    transition: transform 0.3s ease;
+}
+
+.about-hero-img:hover {
+    transform: scale(1.05);
 }
 
 /* Mission Section */
