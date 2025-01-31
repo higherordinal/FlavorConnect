@@ -93,4 +93,31 @@ function current_page() {
   return $this_page;
 }
 
+/**
+ * Formats a recipe quantity as a fraction
+ * @param float $value The quantity to format
+ * @return string The formatted quantity
+ */
+function format_quantity($value) {
+    // Convert common decimals to fractions
+    $value = floatval($value);
+    
+    if ($value == 0.25) return '¼';
+    if ($value == 0.5) return '½';
+    if ($value == 0.75) return '¾';
+    if ($value == 0.33) return '⅓';
+    if ($value == 0.67) return '⅔';
+    if ($value == 1.25) return '1¼';
+    if ($value == 1.5) return '1½';
+    if ($value == 1.75) return '1¾';
+    
+    // For whole numbers, return as is
+    if (floor($value) == $value) {
+        return (string)$value;
+    }
+    
+    // For other decimals, round to 2 places
+    return number_format($value, 2);
+}
+
 ?>

@@ -13,8 +13,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (value === 1.5) return '1½';
         if (value === 1.75) return '1¾';
         
-        // For other values, round to 2 decimal places if needed
-        return Number.isInteger(value) ? value.toString() : value.toFixed(2);
+        // For whole numbers, return as is
+        if (Math.floor(value) === value) {
+            return value.toString();
+        }
+        
+        // For other decimals, round to 2 places
+        return value.toFixed(2);
     }
 
     function updateAmounts(scale) {
