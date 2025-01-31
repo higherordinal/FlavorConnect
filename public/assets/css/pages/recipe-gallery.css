@@ -2,8 +2,7 @@
     display: grid;
     gap: var(--spacing-xl);
     background-color: var(--background-color);
-    padding: var(--spacing-xl);
-    margin: 4rem auto;
+    padding: var(--spacing-lg);
     max-width: 1400px;
 }
 
@@ -115,7 +114,8 @@
 
 .main-content .clear-filters {
     grid-column: 1 / -1;
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: var(--spacing-xs);
     color: var(--error-color);
@@ -132,9 +132,9 @@
 
 /* Filter Summary */
 .main-content .filter-summary {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
-    flex-wrap: wrap;
     gap: var(--spacing-md);
     padding: var(--spacing-md);
     background-color: var(--primary-color);
@@ -149,8 +149,8 @@
 }
 
 .main-content .active-filters {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, max-content));
     gap: var(--spacing-sm);
 }
 
@@ -248,10 +248,11 @@
 
 /* Pagination */
 .main-content .pagination {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(40px, max-content));
     gap: var(--spacing-sm);
     margin-top: var(--spacing-xl);
+    justify-content: center;
 }
 
 .main-content .page-link {

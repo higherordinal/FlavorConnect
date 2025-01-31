@@ -175,7 +175,8 @@
     padding: 1rem 1.5rem;
     border-radius: var(--radius-sm);
     margin-bottom: 0.5rem;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: 0.5rem;
 }
@@ -234,15 +235,13 @@
 }
 
 .step-number {
-    flex-shrink: 0;
     width: 2.5rem;
     height: 2.5rem;
     background-color: var(--color-primary);
     color: var(--color-white);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     font-weight: 600;
     font-size: 1.25rem;
 }
@@ -296,7 +295,8 @@
 }
 
 .average-rating {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto auto;
     align-items: center;
     gap: 0.5rem;
     color: var(--color-gray-700);
@@ -327,10 +327,10 @@
 }
 
 .star-rating {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
+    display: grid;
+    grid-template-columns: repeat(5, auto);
     gap: 0.25rem;
+    align-items: center;
 }
 
 .star-rating input {
