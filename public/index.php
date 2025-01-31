@@ -20,8 +20,7 @@ if($session->is_logged_in()) {
             </div>
         </div>
         <div class="hero-image">
-            <!-- Image placeholder for hero section -->
-            <div class="hero-img-placeholder"></div>
+            <img src="<?php echo url_for('/assets/images/hero-img.jpg'); ?>" alt="Delicious food spread" class="hero-img">
         </div>
     </section>
 
@@ -56,17 +55,43 @@ if($session->is_logged_in()) {
             // Placeholder for featured recipes
             // In reality, this would be populated from the database
             $featured_recipes = [
-                ['title' => 'Italian Pasta Carbonara', 'chef' => 'Chef Maria'],
-                ['title' => 'Japanese Ramen Bowl', 'chef' => 'Chef Tanaka'],
-                ['title' => 'Mediterranean Salad', 'chef' => 'Chef Alex'],
-                ['title' => 'French Croissants', 'chef' => 'Chef Pierre']
+                [
+                    'title' => 'Italian Pasta Carbonara',
+                    'chef' => 'Chef Maria',
+                    'description' => 'A classic Roman pasta dish made with eggs, cheese, pancetta, and black pepper.',
+                    'time' => '30 min'
+                ],
+                [
+                    'title' => 'Japanese Ramen Bowl',
+                    'chef' => 'Chef Tanaka',
+                    'description' => 'Rich and flavorful ramen with tender chashu pork, soft-boiled egg, and fresh vegetables.',
+                    'time' => '45 min'
+                ],
+                [
+                    'title' => 'Mediterranean Salad',
+                    'chef' => 'Chef Alex',
+                    'description' => 'Fresh and healthy salad with tomatoes, cucumbers, olives, and feta cheese.',
+                    'time' => '15 min'
+                ],
+                [
+                    'title' => 'French Croissants',
+                    'chef' => 'Chef Pierre',
+                    'description' => 'Buttery and flaky croissants made with traditional French techniques.',
+                    'time' => '3 hrs'
+                ]
             ];
 
             foreach($featured_recipes as $recipe) {
                 echo '<div class="recipe-card">';
-                echo '<div class="recipe-image-placeholder"></div>';
-                echo '<h3>' . h($recipe['title']) . '</h3>';
-                echo '<p>By ' . h($recipe['chef']) . '</p>';
+                echo '<img src="' . url_for('/assets/images/placeholder-recipe.jpg') . '" alt="' . h($recipe['title']) . '" class="recipe-image">';
+                echo '<div class="recipe-content">';
+                echo '<h3 class="recipe-title">' . h($recipe['title']) . '</h3>';
+                echo '<div class="recipe-meta">';
+                echo '<span>By ' . h($recipe['chef']) . '</span>';
+                echo '<span>' . h($recipe['time']) . '</span>';
+                echo '</div>';
+                echo '<p class="recipe-description">' . h($recipe['description']) . '</p>';
+                echo '</div>';
                 echo '</div>';
             }
             ?>
