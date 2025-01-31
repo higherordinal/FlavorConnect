@@ -3,7 +3,6 @@ require_once('../../private/core/initialize.php');
 require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 
 $page_title = 'Recipes';
-$page_style = 'pages/recipe-gallery';
 $scripts = ['recipe-favorites']; // Load recipe-favorites.js
 
 // Debug logging
@@ -12,41 +11,8 @@ error_log("Session state: " . print_r($_SESSION, true));
 error_log("Scripts to load: " . print_r($scripts, true));
 
 include(SHARED_PATH . '/public_header.php');
-
-// Get filter values
-$search = $_GET['search'] ?? '';
-$style_id = !empty($_GET['style']) ? (int)$_GET['style'] : null;
-$diet_id = !empty($_GET['diet']) ? (int)$_GET['diet'] : null;
-$type_id = !empty($_GET['type']) ? (int)$_GET['type'] : null;
-$sort = $_GET['sort'] ?? 'newest';
-
-// Get current page
-$current_page = $_GET['page'] ?? 1;
-$current_page = max(1, (int)$current_page);
-
-// Set recipes per page
-$per_page = 12;
-
-// Get filter options
-$styles = RecipeAttribute::find_by_type('style');
-$diets = RecipeAttribute::find_by_type('diet');
-$types = RecipeAttribute::find_by_type('type');
-
-// Calculate offset
-$offset = ($current_page - 1) * $per_page;
-
-// Get total recipes count for pagination
-$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id);
-$total_pages = ceil($total_recipes / $per_page);
-
-// Get recipes for current page
-$recipes = Recipe::find_all_filtered($search, $style_id, $diet_id, $type_id, $sort, $per_page, $offset);
-
-// Ensure current page is not greater than total pages
-if ($current_page > $total_pages) {
-    redirect_to('/recipes/index.php');
-}
 ?>
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
 
 <div class="recipe-gallery">
     <div class="gallery-header">
