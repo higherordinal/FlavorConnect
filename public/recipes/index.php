@@ -12,7 +12,7 @@ error_log("Scripts to load: " . print_r($scripts, true));
 
 include(SHARED_PATH . '/public_header.php');
 ?>
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=1.0'); ?>">
 <?php
 // Get filter values
 $search = $_GET['search'] ?? '';
