@@ -56,30 +56,30 @@ if($session->is_logged_in()) {
             <h1><?php echo h($recipe->title); ?></h1>
             <div class="recipe-meta">
                 <div class="recipe-time">
-                    <div class="time-item">
-                        <span class="time-label">Prep Time:</span>
-                        <span class="time-value"><?php echo h($recipe->get_prep_time_display()); ?></span>
-                    </div>
-                    <div class="time-item">
-                        <span class="time-label">Cook Time:</span>
-                        <span class="time-value"><?php echo h($recipe->get_cook_time_display()); ?></span>
-                    </div>
-                    <div class="time-item">
-                        <span class="time-label">Total Time:</span>
-                        <span class="time-value"><?php echo h($recipe->get_total_time_display()); ?></span>
-                    </div>
+                    <span>
+                        <i class="fas fa-clock"></i>
+                        Prep: <?php echo h(TimeUtility::format_time($recipe->prep_time)); ?>
+                    </span>
+                    <span>
+                        <i class="fas fa-fire"></i>
+                        Cook: <?php echo h(TimeUtility::format_time($recipe->cook_time)); ?>
+                    </span>
+                    <span>
+                        <i class="fas fa-hourglass-end"></i>
+                        Total: <?php echo h(TimeUtility::format_time($recipe->prep_time + $recipe->cook_time)); ?>
+                    </span>
                 </div>
                 <span>
                     <i class="fas fa-utensils"></i>
-                    <?php echo h($recipe->style()->name ?? 'Any Style'); ?>
+                    <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>
                 </span>
                 <span>
                     <i class="fas fa-leaf"></i>
-                    <?php echo h($recipe->diet()->name ?? 'Any Diet'); ?>
+                    <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
                 </span>
                 <span>
                     <i class="fas fa-tag"></i>
-                    <?php echo h($recipe->type()->name ?? 'Any Type'); ?>
+                    <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
                 </span>
             </div>
             <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
@@ -115,8 +115,11 @@ if($session->is_logged_in()) {
                     <span class="amount" data-base="<?php echo h($ingredient->quantity); ?>">
                         <?php echo h($ingredient->quantity); ?>
                     </span>
-                    <?php echo h($ingredient->get_measurement()->name); ?> 
-                    <?php echo h($ingredient->get_ingredient()->name); ?>
+                    <?php 
+                    $measurement = $ingredient->measurement;
+                    $ingredient_obj = $ingredient->ingredient;
+                    echo h($measurement ? $measurement->name : ''); ?> 
+                    <?php echo h($ingredient_obj ? $ingredient_obj->name : ''); ?>
                 </li>
             <?php } ?>
         </ul>
@@ -143,18 +146,13 @@ if($session->is_logged_in()) {
             <h2>Watch How to Make It</h2>
             <div class="video-container">
                 <?php
-                // Convert YouTube URL to embed URL
+                // Extract video ID from YouTube URL
                 $video_id = '';
-                if(preg_match('/[?&]v=([^&]+)/', $recipe->video_url, $matches)) {
-                    $video_id = $matches[1];
-                } elseif(preg_match('/youtu\.be\/([^?&]+)/', $recipe->video_url, $matches)) {
-                    $video_id = $matches[1];
+                if(preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/', $recipe->video_url, $match)) {
+                    $video_id = $match[1];
                 }
                 if($video_id) {
-                    echo '<iframe src="https://www.youtube.com/embed/' . h($video_id) . '" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen></iframe>';
+                    echo '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . h($video_id) . '" frameborder="0" allowfullscreen></iframe>';
                 }
                 ?>
             </div>
@@ -166,53 +164,46 @@ if($session->is_logged_in()) {
             <h2><i class="fas fa-comments"></i> Reviews & Comments</h2>
             <?php if($reviews) { 
                 $avg_rating = array_reduce($reviews, function($carry, $review) {
-                    return $carry + (int)$review->rating_value;
+                    return $carry + $review->rating_value;
                 }, 0) / count($reviews);
             ?>
-                <div class="average-rating">
-                    <span class="stars">
-                        <?php for($i = 1; $i <= 5; $i++) { ?>
-                            <i class="fas fa-star <?php echo $i <= round($avg_rating) ? 'filled' : ''; ?>"></i>
-                        <?php } ?>
-                    </span>
-                    <?php echo number_format($avg_rating, 1); ?> / 5
-                    (<?php echo count($reviews); ?> reviews)
+                <div class="rating-summary">
+                    <div class="average-rating">
+                        <span class="rating-value"><?php echo number_format($avg_rating, 1); ?></span>
+                        <div class="stars">
+                            <?php for($i = 1; $i <= 5; $i++) { ?>
+                                <i class="fas fa-star<?php echo $i <= $avg_rating ? '' : '-o'; ?>"></i>
+                            <?php } ?>
+                        </div>
+                        <span class="rating-count">(<?php echo count($reviews); ?> reviews)</span>
+                    </div>
                 </div>
             <?php } ?>
         </div>
 
         <?php if($session->is_logged_in()) { ?>
-            <form action="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" 
-                  method="POST" 
-                  class="comment-form">
-                <h3><i class="fas fa-pen"></i> Write a Review</h3>
-                <div class="star-rating">
-                    <input type="radio" id="star5" name="review[rating]" value="5">
-                    <label for="star5" title="5 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star4" name="review[rating]" value="4">
-                    <label for="star4" title="4 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star3" name="review[rating]" value="3">
-                    <label for="star3" title="3 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star2" name="review[rating]" value="2">
-                    <label for="star2" title="2 stars"><i class="fas fa-star"></i></label>
-                    <input type="radio" id="star1" name="review[rating]" value="1">
-                    <label for="star1" title="1 star"><i class="fas fa-star"></i></label>
-                </div>
-
-                <textarea name="review[comment]" 
-                          class="comment-textarea" 
-                          placeholder="Share your thoughts about this recipe..."
-                          required></textarea>
-
-                <button type="submit" class="submit-comment">
-                    <i class="fas fa-paper-plane"></i> Submit Review
-                </button>
-            </form>
+            <div class="add-comment">
+                <h3>Add Your Review</h3>
+                <form action="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" method="post">
+                    <div class="rating-input">
+                        <label>Rating:</label>
+                        <div class="star-rating">
+                            <?php for($i = 5; $i >= 1; $i--) { ?>
+                                <input type="radio" id="star<?php echo $i; ?>" name="review[rating]" value="<?php echo $i; ?>">
+                                <label for="star<?php echo $i; ?>"><i class="fas fa-star"></i></label>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <div class="comment-input">
+                        <label for="comment">Your Comment:</label>
+                        <textarea id="comment" name="review[comment]" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </form>
+            </div>
         <?php } else { ?>
             <div class="login-prompt">
-                <i class="fas fa-lock"></i>
-                Please <a href="<?php echo url_for('/public/auth/login.php'); ?>">log in</a> 
-                to leave a review.
+                <p>Please <a href="<?php echo url_for('/auth/login.php'); ?>">log in</a> to leave a review.</p>
             </div>
         <?php } ?>
 
@@ -224,21 +215,19 @@ if($session->is_logged_in()) {
                     <div class="comment-header">
                         <span class="comment-author">
                             <i class="fas fa-user"></i>
-                            <?php echo h($review->user()->username); ?>
+                            <?php echo h($user ? $user->username : 'Anonymous'); ?>
                         </span>
                         <?php if($review->created_date) { ?>
                             <span class="comment-date">
                                 <i class="fas fa-calendar"></i>
-                                <?php echo h($review->created_date); ?>
+                                <?php echo date('M j, Y', strtotime($review->created_date)); ?>
                             </span>
                         <?php } ?>
-                    </div>
-                    <div class="comment-rating">
-                        <?php for($i = 1; $i <= 5; $i++) { ?>
-                            <span class="star <?php echo $i <= $review->rating_value ? 'filled' : ''; ?>">
-                                ★
-                            </span>
-                        <?php } ?>
+                        <div class="comment-rating">
+                            <?php for($i = 1; $i <= 5; $i++) { ?>
+                                <i class="fas fa-star<?php echo $i <= $review->rating_value ? '' : '-o'; ?>"></i>
+                            <?php } ?>
+                        </div>
                     </div>
                     <?php if($review->comment_text) { ?>
                         <div class="comment-text">
