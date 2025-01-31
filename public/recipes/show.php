@@ -28,15 +28,19 @@ if(is_post_request() && $session->is_logged_in()) {
 // Get all reviews for this recipe
 $reviews = Review::find_by_recipe_id($recipe->recipe_id);
 
-// Get recipe ingredients
-$ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
-
-// Get recipe steps
-$steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
+// Get recipe ingredients and steps using Recipe class methods
+$ingredients = $recipe->ingredients();
+$steps = $recipe->steps();
 
 $page_title = $recipe->title;
 $page_style = 'recipe-show';
-include(SHARED_PATH . '/header.php');
+
+// Include the appropriate header based on login status
+if($session->is_logged_in()) {
+    include(SHARED_PATH . '/member_header.php');
+} else {
+    include(SHARED_PATH . '/public_header.php');
+}
 ?>
 
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-show.css'); ?>">
@@ -51,14 +55,20 @@ include(SHARED_PATH . '/header.php');
         <div class="recipe-header-overlay">
             <h1><?php echo h($recipe->title); ?></h1>
             <div class="recipe-meta">
-                <span>
-                    <i class="fas fa-clock"></i> 
-                    Prep: <?php echo h($recipe->prep_hours); ?>h <?php echo h($recipe->prep_minutes); ?>m
-                </span>
-                <span>
-                    <i class="fas fa-fire"></i>
-                    Cook: <?php echo h($recipe->cook_hours); ?>h <?php echo h($recipe->cook_minutes); ?>m
-                </span>
+                <div class="recipe-time">
+                    <div class="time-item">
+                        <span class="time-label">Prep Time:</span>
+                        <span class="time-value"><?php echo h($recipe->get_prep_time_display()); ?></span>
+                    </div>
+                    <div class="time-item">
+                        <span class="time-label">Cook Time:</span>
+                        <span class="time-value"><?php echo h($recipe->get_cook_time_display()); ?></span>
+                    </div>
+                    <div class="time-item">
+                        <span class="time-label">Total Time:</span>
+                        <span class="time-value"><?php echo h($recipe->get_total_time_display()); ?></span>
+                    </div>
+                </div>
                 <span>
                     <i class="fas fa-utensils"></i>
                     <?php echo h($recipe->style()->name ?? 'Any Style'); ?>
