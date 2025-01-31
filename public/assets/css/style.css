@@ -18,19 +18,19 @@
     /* Typography */
     --font-primary: 'Roboto', sans-serif;
     --font-secondary: 'Open Sans', sans-serif;
-    --font-size-small: 0.875rem;
-    --font-size-base: 1rem;
-    --font-size-large: 1.25rem;
-    --font-size-xlarge: 1.5rem;
-    --font-size-xxlarge: 2rem;
+    --font-size-small: clamp(0.75rem, 1.5vw, 0.875rem);
+    --font-size-base: clamp(0.875rem, 2vw, 1rem);
+    --font-size-large: clamp(1rem, 2.5vw, 1.25rem);
+    --font-size-xlarge: clamp(1.25rem, 3vw, 1.5rem);
+    --font-size-xxlarge: clamp(1.5rem, 4vw, 2rem);
 
     /* Spacing */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-2xl: 3rem;
+    --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
+    --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
+    --spacing-md: clamp(1rem, 2vw, 1.5rem);
+    --spacing-lg: clamp(1.5rem, 3vw, 2rem);
+    --spacing-xl: clamp(2rem, 4vw, 3rem);
+    --spacing-2xl: clamp(3rem, 6vw, 4rem);
 
     /* Border Radius */
     --border-radius-sm: 4px;
