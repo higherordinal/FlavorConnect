@@ -119,16 +119,7 @@ class Recipe extends DatabaseObject {
      * @return array Array of RecipeStep objects
      */
     public function steps() {
-        $sql = "SELECT * FROM recipe_step WHERE recipe_id = ? ORDER BY step_number";
-        $stmt = self::$database->prepare($sql);
-        $stmt->bind_param("i", $this->recipe_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $steps = [];
-        while($row = $result->fetch_assoc()) {
-            $steps[] = $row;
-        }
-        return $steps;
+        return RecipeStep::find_by_recipe_id($this->recipe_id);
     }
 
     /**
