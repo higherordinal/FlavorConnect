@@ -24,7 +24,11 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css?v=' . time()); ?>">
     <?php } ?>
+    <?php if($page_title === 'Recipes') { ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
+    <?php } else { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . strtolower($page_title) . '.css'); ?>">
+    <?php } ?>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
 </head>
 <body>
