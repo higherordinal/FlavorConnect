@@ -528,3 +528,37 @@ INSERT INTO recipe_step (recipe_id, step_number, instruction) VALUES
 ((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 5, 'Add tofu, soy sauce, and brown sugar.'),
 ((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 6, 'Finish with lime juice and fresh basil.'),
 ((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 7, 'Serve hot over jasmine rice.');
+
+-- Insert sample recipe ratings
+INSERT INTO recipe_rating (recipe_id, user_id, rating_value) VALUES
+-- Classic Spaghetti Carbonara ratings
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT user_id FROM user_account WHERE username = 'foodie_jane'), 5),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT user_id FROM user_account WHERE username = 'home_cook'), 4),
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT user_id FROM user_account WHERE username = 'chef_maria'), 5),
+
+-- Vegetarian Buddha Bowl ratings
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT user_id FROM user_account WHERE username = 'foodie_jane'), 5),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT user_id FROM user_account WHERE username = 'chef_maria'), 4),
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT user_id FROM user_account WHERE username = 'admin_chef'), 4),
+
+-- Mediterranean Quinoa Salad ratings
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT user_id FROM user_account WHERE username = 'foodie_jane'), 4),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT user_id FROM user_account WHERE username = 'home_cook'), 5),
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT user_id FROM user_account WHERE username = 'super_admin'), 5),
+
+-- Spicy Thai Curry ratings
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT user_id FROM user_account WHERE username = 'chef_maria'), 5),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT user_id FROM user_account WHERE username = 'admin_chef'), 4),
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT user_id FROM user_account WHERE username = 'home_cook'), 3);
