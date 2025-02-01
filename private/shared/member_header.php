@@ -30,7 +30,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
         <div class="header-grid">
             <!-- Logo and Site Name -->
             <div class="logo">
-                <a href="<?php echo url_for('/dashboard.php'); ?>">
+                <a href="<?php echo url_for('/index.php'); ?>">
                     <span class="logo-the">The</span>
                     <h1>FlavorConnect</h1>
                 </a>
@@ -39,8 +39,8 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
             <!-- Main Navigation -->
             <nav class="main-nav">
                 <ul>
-                    <li><a href="<?php echo url_for('/dashboard.php'); ?>" <?php echo $page_title === 'Dashboard' ? 'class="active"' : ''; ?>>Dashboard</a></li>
-                    <li><a href="<?php echo url_for('/recipes/my-recipes.php'); ?>" <?php echo $page_title === 'My Recipes' ? 'class="active"' : ''; ?>>My Recipes</a></li>
+                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active"' : ''; ?>>Home</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active"' : ''; ?>>Recipes</a></li>
                     <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>" <?php echo $page_title === 'Favorites' ? 'class="active"' : ''; ?>>Favorites</a></li>
                     <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active"' : ''; ?>>Create Recipe</a></li>
                     <?php 

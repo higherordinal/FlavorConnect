@@ -10,7 +10,11 @@ error_log("Loading recipe gallery page");
 error_log("Session state: " . print_r($_SESSION, true));
 error_log("Scripts to load: " . print_r($scripts, true));
 
-include(SHARED_PATH . '/public_header.php');
+if($session->is_logged_in()) {
+    include(SHARED_PATH . '/member_header.php');
+} else {
+    include(SHARED_PATH . '/public_header.php');
+}
 ?>
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=1.0'); ?>">
 <?php
