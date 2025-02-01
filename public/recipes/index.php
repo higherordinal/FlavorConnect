@@ -173,7 +173,7 @@ if ($current_page > $total_pages) {
                                         $rating = $recipe->get_average_rating();
                                         echo str_repeat('★', round($rating));
                                         echo str_repeat('☆', 5 - round($rating));
-                                        echo " (" . $recipe->rating_count() . ")";
+                                        echo ' <span class="review-count">(' . $recipe->rating_count() . ')</span>';
                                     ?>
                                 </span>
                                 <span class="time">
@@ -181,15 +181,15 @@ if ($current_page > $total_pages) {
                                 </span>
                             </div>
 
-                            <div class="recipe-tags">
+                            <div class="recipe-attributes">
                                 <?php if($style) { ?>
-                                    <span class="recipe-tag"><?php echo h($style->name); ?></span>
+                                    <span class="recipe-attribute"><?php echo h($style->name); ?></span>
                                 <?php } ?>
                                 <?php if($diet) { ?>
-                                    <span class="recipe-tag"><?php echo h($diet->name); ?></span>
+                                    <span class="recipe-attribute"><?php echo h($diet->name); ?></span>
                                 <?php } ?>
                                 <?php if($type) { ?>
-                                    <span class="recipe-tag"><?php echo h($type->name); ?></span>
+                                    <span class="recipe-attribute"><?php echo h($type->name); ?></span>
                                 <?php } ?>
                             </div>
                         </div>
@@ -198,11 +198,6 @@ if ($current_page > $total_pages) {
                             <div class="recipe-author">
                                 <?php $user = User::find_by_id($recipe->user_id); ?>
                                 <span class="author-name">By <?php echo h($user->username); ?></span>
-                            </div>
-
-                            <div class="recipe-rating">
-                                <i class="fas fa-star"></i>
-                                <span><?php echo number_format($recipe->get_average_rating(), 1); ?></span>
                             </div>
                         </div>
                     </a>
