@@ -92,6 +92,10 @@
     opacity: 0.9;
 }
 
+.recipe-meta .rating .fa-star {
+    color: var(--accent-color);
+}
+
 .recipe-content {
     display: grid;
     grid-template-columns: 1fr;
@@ -298,6 +302,10 @@
     color: #fff;
     font-size: 1rem;
     opacity: 0.9;
+}
+
+.recipe-card .recipe-content .fa-star {
+    color: var(--accent-color);
 }
 
 /* Comments Section */

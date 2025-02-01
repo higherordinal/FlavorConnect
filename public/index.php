@@ -68,10 +68,10 @@ if($session->is_logged_in()) {
                 echo '<span>' . h($total_time) . '</span>';
                 echo '</div>';
                 echo '<p class="recipe-description">' . h($recipe->description) . '</p>';
-                echo '<div class="recipe-tags">';
-                if($recipe->style()) echo '<span class="recipe-tag">' . h($recipe->style()->name) . '</span>';
-                if($recipe->diet()) echo '<span class="recipe-tag">' . h($recipe->diet()->name) . '</span>';
-                if($recipe->type()) echo '<span class="recipe-tag">' . h($recipe->type()->name) . '</span>';
+                echo '<div class="recipe-attributes">';
+                if($recipe->style()) echo '<span class="recipe-attribute">' . h($recipe->style()->name) . '</span>';
+                if($recipe->diet()) echo '<span class="recipe-attribute">' . h($recipe->diet()->name) . '</span>';
+                if($recipe->type()) echo '<span class="recipe-attribute">' . h($recipe->type()->name) . '</span>';
                 echo '</div>';
                 echo '<a href="' . url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))) . '" class="btn-text">View Recipe</a>';
                 echo '</div>';
