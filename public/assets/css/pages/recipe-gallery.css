@@ -185,7 +185,11 @@
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .recipe-image-container {
     grid-row: 1;
+    width: 100%;
     height: 200px;
+    overflow: hidden;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .recipe-image {
@@ -217,26 +221,18 @@
 }
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attributes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: var(--spacing-xs);
-    margin-top: var(--spacing-sm);
-    padding: 0 var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attribute {
-    background-color: var(--accent-color);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: var(--border-radius-sm);
-    font-size: var(--font-size-small);
-    transition: background-color 0.3s ease;
-    cursor: pointer;
-}
-
-.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attribute:hover {
-    background-color: var(--accent-color-dark);
+    background-color: var(--primary-color);
+    color: var(--color-white);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
 }
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .favorite-btn {
@@ -244,6 +240,23 @@
     top: 1rem;
     right: 1rem;
     z-index: 1;
+}
+
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-content .rating {
+    color: var(--accent-color);
+}
+
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-content .rating .review-count {
+    color: var(--text-color);
+}
+
+/* Rating styles */
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-content .rating {
+    color: var(--accent-color);
+}
+
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-content .rating .review-count {
+    color: var(--text-color);
 }
 
 /* Favorite Button */
