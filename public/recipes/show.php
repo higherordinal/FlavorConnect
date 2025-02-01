@@ -54,6 +54,37 @@ if($session->is_logged_in()) {
              alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
         <div class="recipe-header-overlay">
             <h1><?php echo h($recipe->title); ?></h1>
+            <div class="recipe-rating">
+                <?php 
+                $avg_rating = $recipe->average_rating();
+                ?>
+                <div class="stars">
+                    <?php
+                    if ($avg_rating) {
+                        // Full stars
+                        for ($i = 1; $i <= floor($avg_rating); $i++) {
+                            echo '<i class="fas fa-star"></i>';
+                        }
+                        // Half star if needed
+                        if ($avg_rating - floor($avg_rating) >= 0.5) {
+                            echo '<i class="fas fa-star-half-alt"></i>';
+                        }
+                        // Empty stars
+                        for ($i = ceil($avg_rating); $i < 5; $i++) {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    } else {
+                        // Show empty stars if no ratings
+                        for ($i = 0; $i < 5; $i++) {
+                            echo '<i class="far fa-star"></i>';
+                        }
+                    }
+                    ?>
+                </div>
+                <?php if ($avg_rating): ?>
+                    <span class="rating-text"><?php echo h($avg_rating . ' / 5.0'); ?></span>
+                <?php endif; ?>
+            </div>
             <div class="recipe-meta">
                 <div class="recipe-time">
                     <span>

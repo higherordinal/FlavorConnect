@@ -142,11 +142,24 @@ class Recipe extends DatabaseObject {
     }
 
     /**
+     * Find featured recipes
+     * @param int $limit Optional limit of recipes to return
+     * @return array Array of Recipe objects
+     */
+    public static function find_featured($limit = 4) {
+        $sql = "SELECT * FROM " . static::$table_name;
+        $sql .= " WHERE is_featured = 1";
+        $sql .= " ORDER BY created_at DESC";
+        $sql .= " LIMIT " . (int)$limit;
+        return static::find_by_sql($sql);
+    }
+
+    /**
      * Finds all featured recipes
      * @param int $limit Maximum number of recipes to return
      * @return array Array of Recipe objects
      */
-    public static function find_featured($limit=3) {
+    public static function find_all_featured($limit=3) {
         $sql = "SELECT * FROM " . static::$table_name;
         $sql .= " WHERE is_featured = TRUE";
         $sql .= " ORDER BY created_at DESC";
@@ -164,6 +177,18 @@ class Recipe extends DatabaseObject {
      */
     public function get_image_path() {
         return $this->img_file_path ? '/assets/uploads/recipes/' . $this->img_file_path : '/assets/images/recipe-placeholder.jpg';
+    }
+
+    /**
+     * Calculate the average rating for this recipe
+     * @return float|null Average rating or null if no ratings
+     */
+    public function average_rating() {
+        $sql = "SELECT AVG(rating_value) as avg_rating FROM recipe_rating ";
+        $sql .= "WHERE recipe_id = '" . self::$database->escape_string($this->recipe_id) . "'";
+        $result = self::$database->query($sql);
+        $row = $result->fetch_assoc();
+        return $row['avg_rating'] ? round($row['avg_rating'], 1) : null;
     }
 
     /**

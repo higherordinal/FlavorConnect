@@ -39,6 +39,14 @@ class User extends DatabaseObject {
     protected $password_required = true;
 
     /**
+     * Gets the user's full name
+     * @return string Full name (first + last)
+     */
+    public function full_name() {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
      * Constructor for User class
      * @param array $args Associative array of property values
      */

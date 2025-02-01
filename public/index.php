@@ -52,54 +52,28 @@ if($session->is_logged_in()) {
         <h2>Featured Recipes</h2>
         <div class="recipe-grid">
             <?php
-            // Placeholder for featured recipes
-            // In reality, this would be populated from the database
-            $featured_recipes = [
-                [
-                    'title' => 'Italian Pasta Carbonara',
-                    'chef' => 'Chef Maria',
-                    'description' => 'A classic Roman pasta dish made with eggs, cheese, pancetta, and black pepper.',
-                    'time' => '30 min',
-                    'tags' => ['Italian', 'Pasta', 'Quick']
-                ],
-                [
-                    'title' => 'Japanese Ramen Bowl',
-                    'chef' => 'Chef Tanaka',
-                    'description' => 'Rich and flavorful ramen with tender chashu pork, soft-boiled egg, and fresh vegetables.',
-                    'time' => '45 min',
-                    'tags' => ['Japanese', 'Soup', 'Comfort Food']
-                ],
-                [
-                    'title' => 'Mediterranean Salad',
-                    'chef' => 'Chef Alex',
-                    'description' => 'Fresh and healthy salad with tomatoes, cucumbers, olives, and feta cheese.',
-                    'time' => '15 min',
-                    'tags' => ['Mediterranean', 'Healthy', 'Vegetarian']
-                ],
-                [
-                    'title' => 'French Croissants',
-                    'chef' => 'Chef Pierre',
-                    'description' => 'Buttery and flaky croissants made with traditional French techniques.',
-                    'time' => '3 hrs',
-                    'tags' => ['French', 'Bakery', 'Advanced']
-                ]
-            ];
-
+            // Get featured recipes from the database
+            $featured_recipes = Recipe::find_featured();
+            
             foreach($featured_recipes as $recipe) {
+                $chef = User::find_by_id($recipe->user_id);
+                $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
+                
                 echo '<div class="recipe-card">';
-                echo '<img src="' . url_for('/assets/images/placeholder-recipe.jpg') . '" alt="' . h($recipe['title']) . '" class="recipe-image">';
+                echo '<img src="' . url_for('/assets/images/recipe-placeholder.jpg') . '" alt="' . h($recipe->title) . '" class="recipe-image">';
                 echo '<div class="recipe-content">';
-                echo '<h3 class="recipe-title">' . h($recipe['title']) . '</h3>';
+                echo '<h3 class="recipe-title">' . h($recipe->title) . '</h3>';
                 echo '<div class="recipe-meta">';
-                echo '<span>By ' . h($recipe['chef']) . '</span>';
-                echo '<span>' . h($recipe['time']) . '</span>';
+                echo '<span>By ' . h($chef->first_name . ' ' . $chef->last_name) . '</span>';
+                echo '<span>' . h($total_time) . '</span>';
                 echo '</div>';
-                echo '<p class="recipe-description">' . h($recipe['description']) . '</p>';
+                echo '<p class="recipe-description">' . h($recipe->description) . '</p>';
                 echo '<div class="recipe-tags">';
-                echo '<span class="recipe-tag">Asian</span>';
-                echo '<span class="recipe-tag">Vegetarian</span>';
-                echo '<span class="recipe-tag">Main Course</span>';
+                if($recipe->style()) echo '<span class="recipe-tag">' . h($recipe->style()->name) . '</span>';
+                if($recipe->diet()) echo '<span class="recipe-tag">' . h($recipe->diet()->name) . '</span>';
+                if($recipe->type()) echo '<span class="recipe-tag">' . h($recipe->type()->name) . '</span>';
                 echo '</div>';
+                echo '<a href="' . url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))) . '" class="btn-text">View Recipe</a>';
                 echo '</div>';
                 echo '</div>';
             }
