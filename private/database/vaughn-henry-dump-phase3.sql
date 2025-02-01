@@ -55,7 +55,7 @@ CREATE TABLE recipe (
     recipe_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
     title VARCHAR(100) NOT NULL,
-    description VARCHAR(255),
+    description TEXT,
     type_id INT UNSIGNED,
     style_id INT UNSIGNED,
     diet_id INT UNSIGNED,
@@ -105,7 +105,7 @@ CREATE TABLE recipe_step (
     step_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     recipe_id INT UNSIGNED NOT NULL,
     step_number INT NOT NULL,
-    instruction VARCHAR(255) NOT NULL,
+    instruction TEXT NOT NULL,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     INDEX idx_step_recipe (recipe_id)
 );
@@ -115,7 +115,7 @@ CREATE TABLE tag (
     tag_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     user_id INT UNSIGNED,
-    UNIQUE (name, user_id),
+    UNIQUE INDEX idx_tag_name (name),
     FOREIGN KEY (user_id) REFERENCES user_account(user_id) ON DELETE SET NULL
 );
 
@@ -134,7 +134,7 @@ CREATE TABLE recipe_comment (
     comment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     recipe_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
-    comment_text VARCHAR(255) NOT NULL,
+    comment_text TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (user_id) REFERENCES user_account(user_id) ON DELETE CASCADE,
@@ -562,3 +562,30 @@ INSERT INTO recipe_rating (recipe_id, user_id, rating_value) VALUES
  (SELECT user_id FROM user_account WHERE username = 'admin_chef'), 4),
 ((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
  (SELECT user_id FROM user_account WHERE username = 'home_cook'), 3);
+
+-- Insert sample recipe comments
+INSERT INTO recipe_comment (recipe_id, user_id, comment_text, created_at) VALUES
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT user_id FROM user_account WHERE username = 'foodie_jane'),
+ 'This carbonara is absolutely amazing! The sauce was perfectly creamy and the pancetta adds such a wonderful flavor.',
+ '2024-01-15 18:30:00'),
+
+((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'),
+ (SELECT user_id FROM user_account WHERE username = 'chef_maria'),
+ 'Love how customizable this bowl is. I added some extra roasted chickpeas for protein and it was delicious!',
+ '2024-01-20 12:15:00'),
+
+((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'),
+ (SELECT user_id FROM user_account WHERE username = 'home_cook'),
+ 'Perfect light lunch option. The combination of fresh vegetables and quinoa is so refreshing.',
+ '2024-01-25 13:45:00'),
+
+((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'),
+ (SELECT user_id FROM user_account WHERE username = 'admin_chef'),
+ 'Great balance of spices! I added a bit more coconut milk to make it creamier.',
+ '2024-01-28 19:20:00'),
+
+((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'),
+ (SELECT user_id FROM user_account WHERE username = 'chef_maria'),
+ 'Made this for my family and they loved it! The step-by-step instructions were very helpful.',
+ '2024-01-30 20:00:00');
