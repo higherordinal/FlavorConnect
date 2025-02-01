@@ -59,25 +59,29 @@ if($session->is_logged_in()) {
                     'title' => 'Italian Pasta Carbonara',
                     'chef' => 'Chef Maria',
                     'description' => 'A classic Roman pasta dish made with eggs, cheese, pancetta, and black pepper.',
-                    'time' => '30 min'
+                    'time' => '30 min',
+                    'tags' => ['Italian', 'Pasta', 'Quick']
                 ],
                 [
                     'title' => 'Japanese Ramen Bowl',
                     'chef' => 'Chef Tanaka',
                     'description' => 'Rich and flavorful ramen with tender chashu pork, soft-boiled egg, and fresh vegetables.',
-                    'time' => '45 min'
+                    'time' => '45 min',
+                    'tags' => ['Japanese', 'Soup', 'Comfort Food']
                 ],
                 [
                     'title' => 'Mediterranean Salad',
                     'chef' => 'Chef Alex',
                     'description' => 'Fresh and healthy salad with tomatoes, cucumbers, olives, and feta cheese.',
-                    'time' => '15 min'
+                    'time' => '15 min',
+                    'tags' => ['Mediterranean', 'Healthy', 'Vegetarian']
                 ],
                 [
                     'title' => 'French Croissants',
                     'chef' => 'Chef Pierre',
                     'description' => 'Buttery and flaky croissants made with traditional French techniques.',
-                    'time' => '3 hrs'
+                    'time' => '3 hrs',
+                    'tags' => ['French', 'Bakery', 'Advanced']
                 ]
             ];
 
@@ -91,6 +95,11 @@ if($session->is_logged_in()) {
                 echo '<span>' . h($recipe['time']) . '</span>';
                 echo '</div>';
                 echo '<p class="recipe-description">' . h($recipe['description']) . '</p>';
+                echo '<div class="recipe-tags">';
+                echo '<span class="recipe-tag">Asian</span>';
+                echo '<span class="recipe-tag">Vegetarian</span>';
+                echo '<span class="recipe-tag">Main Course</span>';
+                echo '</div>';
                 echo '</div>';
                 echo '</div>';
             }

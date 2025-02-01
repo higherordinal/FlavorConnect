@@ -216,18 +216,27 @@
     gap: 1rem;
 }
 
-.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-tags {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: start;
-    gap: 0.5rem;
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+    padding: 0 var(--spacing-md);
+    margin-bottom: var(--spacing-md);
 }
 
-.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-tag {
-    padding: 0.25rem 0.5rem;
-    background: #f0f0f0;
-    border-radius: 4px;
-    font-size: 0.875rem;
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attribute {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-small);
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attribute:hover {
+    background-color: var(--accent-color-dark);
 }
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .favorite-btn {
