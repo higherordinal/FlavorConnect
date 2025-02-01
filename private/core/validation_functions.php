@@ -136,8 +136,8 @@ function validate_recipe($recipe_data) {
     // Description validation
     if(is_blank($recipe_data['description'])) {
         $errors['description'] = "Description cannot be blank.";
-    } elseif(!has_length($recipe_data['description'], ['min' => 10, 'max' => 65535])) {
-        $errors['description'] = "Description must be between 10 and 65,535 characters.";
+    } elseif(!has_length($recipe_data['description'], ['min' => 10, 'max' => 255])) {
+        $errors['description'] = "Description must be between 10 and 255 characters.";
     }
 
     // Style validation
@@ -202,6 +202,98 @@ function validate_recipe($recipe_data) {
             $errors['alt_text'] = "Please provide alt text for the image.";
         }
     }
+
+    return $errors;
+}
+
+/**
+ * Validates recipe step data
+ * @param array $step_data The step data to validate
+ * @return array Array of validation errors
+ */
+function validate_recipe_step($step_data) {
+    $errors = [];
+
+    // Recipe ID validation
+    if(!isset($step_data['recipe_id']) || !is_numeric($step_data['recipe_id'])) {
+        $errors['recipe_id'] = "Recipe ID is required.";
+    }
+
+    // Step number validation
+    if(!isset($step_data['step_number']) || !is_numeric($step_data['step_number'])) {
+        $errors['step_number'] = "Step number is required.";
+    } elseif(!has_number_between($step_data['step_number'], 1, 100)) {
+        $errors['step_number'] = "Step number must be between 1 and 100.";
+    }
+
+    // Instruction validation
+    if(is_blank($step_data['instruction'])) {
+        $errors['instruction'] = "Instruction cannot be blank.";
+    } elseif(!has_length($step_data['instruction'], ['min' => 3, 'max' => 255])) {
+        $errors['instruction'] = "Instruction must be between 3 and 255 characters.";
+    }
+
+    return $errors;
+}
+
+/**
+ * Validates recipe comment data
+ * @param array $comment_data The comment data to validate
+ * @return array Array of validation errors
+ */
+function validate_recipe_comment($comment_data) {
+    $errors = [];
+
+    // Recipe ID validation
+    if(!isset($comment_data['recipe_id']) || !is_numeric($comment_data['recipe_id'])) {
+        $errors['recipe_id'] = "Recipe ID is required.";
+    }
+
+    // User ID validation
+    if(!isset($comment_data['user_id']) || !is_numeric($comment_data['user_id'])) {
+        $errors['user_id'] = "User ID is required.";
+    }
+
+    // Comment text validation
+    if(is_blank($comment_data['comment_text'])) {
+        $errors['comment_text'] = "Comment cannot be blank.";
+    } elseif(!has_length($comment_data['comment_text'], ['min' => 2, 'max' => 255])) {
+        $errors['comment_text'] = "Comment must be between 2 and 255 characters.";
+    }
+
+    return $errors;
+}
+
+/**
+ * Validates tag data
+ * @param array $tag_data The tag data to validate
+ * @return array Array of validation errors
+ */
+function validate_tag($tag_data) {
+    $errors = [];
+
+    // Tag name validation
+    if(is_blank($tag_data['name'])) {
+        $errors['name'] = "Tag name cannot be blank.";
+    } elseif(!has_length($tag_data['name'], ['min' => 2, 'max' => 50])) {
+        $errors['name'] = "Tag name must be between 2 and 50 characters.";
+    }
+
+    // Check for unique tag name
+    $sql = "SELECT COUNT(*) FROM tag WHERE name = ?";
+    $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+    $stmt = $db->prepare($sql);
+    $stmt->bind_param("s", $tag_data['name']);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $count = $result->fetch_array()[0];
+    
+    if($count > 0) {
+        $errors['name'] = "This tag name already exists.";
+    }
+
+    $stmt->close();
+    $db->close();
 
     return $errors;
 }
