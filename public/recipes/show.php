@@ -248,10 +248,10 @@ if($session->is_logged_in()) {
                             <i class="fas fa-user"></i>
                             <?php echo h($user ? $user->username : 'Anonymous'); ?>
                         </span>
-                        <?php if($review->created_date) { ?>
+                        <?php if($review->created_at) { ?>
                             <span class="comment-date">
                                 <i class="fas fa-calendar"></i>
-                                <?php echo date('M j, Y', strtotime($review->created_date)); ?>
+                                <?php echo date('M j, Y', strtotime($review->created_at)); ?>
                             </span>
                         <?php } ?>
                         <div class="comment-rating">
