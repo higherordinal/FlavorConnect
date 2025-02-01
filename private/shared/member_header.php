@@ -10,7 +10,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <title>FlavorConnect - <?php echo h($page_title); ?></title>
     
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <!-- Base Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/style.css?v=' . time()); ?>">
@@ -24,6 +24,8 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css?v=' . time()); ?>">
     <?php } ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . strtolower($page_title) . '.css'); ?>">
+    <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
 </head>
 <body>
     <header class="header">
@@ -54,16 +56,17 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
 
             <!-- User Section -->
             <div class="user-section">
-                <button class="user-menu-button">
-                    <?php 
-                    $user = User::find_by_id($session->get_user_id());
-                    echo '<img src="' . url_for('/assets/images/avatars/default.png') . '" alt="Profile">';
-                    ?>
-                    <span><?php echo h($user->first_name); ?></span>
-                </button>
-                <div class="dropdown-menu">
-                    <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
-                    <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
+                <div class="user-menu">
+                    <button class="user-menu-button">
+                        <?php 
+                        $user = User::find_by_id($session->get_user_id());
+                        ?>
+                        <span><?php echo h($user->username); ?></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
+                        <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
