@@ -217,8 +217,8 @@
 }
 
 .main-content .recipe-gallery .recipe-grid .recipe-card .recipe-attributes {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: var(--spacing-xs);
     margin-top: var(--spacing-sm);
     padding: 0 var(--spacing-md);
