@@ -152,7 +152,8 @@ if ($current_page > $total_pages) {
                 $type = $recipe->type();
             ?>
                 <article class="recipe-card">
-                    <?php if($session->is_logged_in()) { 
+                    <?php /* Temporarily disabled user favorites
+                    if($session->is_logged_in()) { 
                         $is_favorited = UserFavorite::is_favorite($session->get_user_id(), $recipe->recipe_id);
                     ?>
                         <button type="button" class="favorite-btn <?php echo $is_favorited ? 'active' : ''; ?>" 
@@ -160,7 +161,7 @@ if ($current_page > $total_pages) {
                                 data-is-favorited="<?php echo $is_favorited ? 'true' : 'false'; ?>">
                             <i class="fa-heart <?php echo $is_favorited ? 'fas' : 'far'; ?>"></i>
                         </button>
-                    <?php } ?>
+                    <?php } */ ?>
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" class="recipe-link">
                         <div class="recipe-image-container">
                             <img src="<?php echo $recipe->img_file_path ? url_for($recipe->img_file_path) : url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
