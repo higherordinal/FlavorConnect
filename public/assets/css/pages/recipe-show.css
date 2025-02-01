@@ -103,9 +103,19 @@
 }
 
 .recipe-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: 1.2rem;
+    line-height: 1.8;
     color: var(--text-color);
+    padding: 1.5rem 2rem;
+    background-color: var(--background-color);
+    border-radius: var(--radius-md);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid var(--primary-color);
+    margin: 1rem 0;
+    font-style: italic;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .recipe-ingredients {
