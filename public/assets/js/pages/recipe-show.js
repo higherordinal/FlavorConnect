@@ -57,12 +57,14 @@ document.addEventListener('DOMContentLoaded', function() {
             // Only clone the content we want to print
             const title = document.querySelector('.recipe-header-overlay h1').cloneNode(true);
             const description = document.querySelector('.recipe-description').cloneNode(true);
+            const meta = document.querySelector('.recipe-meta').cloneNode(true);
             const ingredients = document.querySelector('.recipe-ingredients').cloneNode(true);
             const directions = document.querySelector('.recipe-directions').cloneNode(true);
             
             // Build print content
             printContent.appendChild(title);
             printContent.appendChild(description);
+            printContent.appendChild(meta);
             printContent.appendChild(ingredients);
             printContent.appendChild(directions);
             
@@ -77,29 +79,70 @@ document.addEventListener('DOMContentLoaded', function() {
                     <style>
                         @media print {
                             body { 
-                                padding: 20px;
+                                padding: 40px;
                                 font-size: 12pt;
+                                line-height: 1.5;
+                                max-width: 800px;
+                                margin: 0 auto;
                             }
                             h1 { 
                                 color: #000;
                                 text-shadow: none;
                                 font-size: 24pt;
                                 margin-bottom: 20px;
+                                text-align: center;
+                            }
+                            .recipe-description {
+                                margin-bottom: 20px;
+                                text-align: center;
+                                font-style: italic;
+                            }
+                            .recipe-meta {
+                                display: flex !important;
+                                justify-content: center;
+                                gap: 20px;
+                                margin-bottom: 30px;
+                                border-top: 1px solid #ccc;
+                                border-bottom: 1px solid #ccc;
+                                padding: 15px 0;
+                                text-align: center;
+                            }
+                            .recipe-meta span {
+                                display: inline-block;
+                                margin: 0 10px;
+                            }
+                            .recipe-meta i {
+                                margin-right: 5px;
                             }
                             .recipe-ingredients,
                             .recipe-directions {
-                                break-inside: avoid;
-                                page-break-inside: avoid;
                                 box-shadow: none;
                                 border: none;
+                                margin-bottom: 30px;
+                            }
+                            .recipe-ingredients h2,
+                            .recipe-directions h2 {
+                                font-size: 18pt;
+                                margin-bottom: 15px;
+                                border-bottom: 2px solid #000;
+                                padding-bottom: 5px;
                             }
                             .scaling-buttons,
-                            .print-recipe-btn {
+                            .print-recipe-btn,
+                            .recipe-actions,
+                            .recipe-meta {
                                 display: none;
+                            }
+                            .ingredients-list,
+                            .directions-list {
+                                padding-left: 20px;
                             }
                             .ingredients-list li,
                             .directions-list li {
-                                page-break-inside: avoid;
+                                margin-bottom: 8px;
+                            }
+                            .directions-list li {
+                                margin-bottom: 15px;
                             }
                         }
                     </style>
@@ -164,11 +207,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 .recipe-ingredients,
                 .recipe-directions {
-                    break-inside: avoid;
-                    page-break-inside: avoid;
+                    box-shadow: none;
+                    border: none;
                     margin: 1rem 0;
                     padding: 1rem 0;
-                    box-shadow: none;
                 }
             }
         `;
