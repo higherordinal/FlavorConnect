@@ -1,83 +1,90 @@
-/* Global CSS Variables and Base Styles for FlavorConnect */
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
 
-/* CSS Variables */
 :root {
+    /* Border Radius */
+    --border-radius-lg: 12px;
+    --border-radius-md: 8px;
+    --border-radius-sm: 4px;
+    --border-radius-xl: 16px;
+
+    /* Box Shadow */
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+
     /* Colors */
-    --primary-color: #0a1a29;
-    --secondary-color: #3498DB;
     --accent-color: #F1C40F;
     --accent-color-dark: #2980B9;
     --background-color: #F5F6FA;
-    --text-color: #2C3E50;
-    --light-gray: #ECF0F1;
-    --dark-gray: #7F8C8D;
-    --success-color: #27AE60;
-    --error-color: #C0392B;
-    --warning-color: #E74C3C;
     --color-white: white;
+    --dark-gray: #7F8C8D;
+    --error-color: #C0392B;
+    --light-gray: #ECF0F1;
+    --primary-color: #0a1a29;
+    --secondary-color: #3498DB;
+    --success-color: #27AE60;
+    --text-color: #2C3E50;
+    --warning-color: #E74C3C;
+
+    /* Spacing */
+    --spacing-2xl: clamp(3rem, 6vw, 4rem);
+    --spacing-lg: clamp(1.5rem, 3vw, 2rem);
+    --spacing-md: clamp(1rem, 2vw, 1.5rem);
+    --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
+    --spacing-xl: clamp(2rem, 4vw, 3rem);
+    --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
 
     /* Typography */
     --font-primary: 'Roboto', sans-serif;
     --font-secondary: 'Open Sans', sans-serif;
-    --font-size-small: clamp(0.75rem, 1.5vw, 0.875rem);
     --font-size-base: clamp(0.875rem, 2vw, 1rem);
     --font-size-large: clamp(1rem, 2.5vw, 1.25rem);
+    --font-size-small: clamp(0.75rem, 1.5vw, 0.875rem);
     --font-size-xlarge: clamp(1.25rem, 3vw, 1.5rem);
     --font-size-xxlarge: clamp(1.5rem, 4vw, 2rem);
-
-    /* Spacing */
-    --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
-    --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
-    --spacing-md: clamp(1rem, 2vw, 1.5rem);
-    --spacing-lg: clamp(1.5rem, 3vw, 2rem);
-    --spacing-xl: clamp(2rem, 4vw, 3rem);
-    --spacing-2xl: clamp(3rem, 6vw, 4rem);
-
-    /* Border Radius */
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
-    --border-radius-xl: 16px;
-
-    /* Box Shadow */
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
 }
 
-/* Reset & Base Styles */
+/* ==========================================================================
+   Reset & Base Styles
+   ========================================================================== */
+
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
-    height: 100%;
 }
 
 body {
-    font-family: var(--font-primary);
-    color: var(--text-color);
     background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-primary);
     line-height: 1.6;
     min-height: 100vh;
 }
 
-/* Typography */
+/* ==========================================================================
+   Typography
+   ========================================================================== */
+
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-secondary);
     font-weight: 600;
-    margin-top: 0;
-    margin-bottom: var(--spacing-md);
     line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+    margin-top: 0;
 }
 
 h1:not(.logo h1) {
-    font-size: var(--font-size-xxlarge);
     color: var(--accent-color);
+    font-size: var(--font-size-xxlarge);
 }
 
 h2 {
@@ -88,11 +95,18 @@ h3 {
     font-size: var(--font-size-large);
 }
 
-h4 { font-size: var(--font-size-base); }
+h4 { 
+    font-size: var(--font-size-base); 
+}
 
-p { margin-bottom: var(--spacing-md); }
+p { 
+    margin-bottom: var(--spacing-md); 
+}
 
-/* Links */
+/* ==========================================================================
+   Links
+   ========================================================================== */
+
 a {
     color: var(--primary-color);
     text-decoration: none;
@@ -104,11 +118,11 @@ a:hover {
 }
 
 .back-link {
-    display: inline-flex;
     align-items: center;
-    gap: var(--spacing-xs);
     color: var(--primary-color);
+    display: inline-flex;
     font-weight: 500;
+    gap: var(--spacing-xs);
     margin-bottom: var(--spacing-md);
 }
 
@@ -120,21 +134,44 @@ a:hover {
     font-size: var(--font-size-small);
 }
 
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
 /* Buttons */
 .btn {
-    display: inline-block;
-    padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--border-radius-sm);
-    font-weight: 500;
-    text-align: center;
     cursor: pointer;
+    display: inline-block;
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-align: center;
     transition: all 0.3s ease;
+}
+
+.btn:hover {
+    filter: brightness(110%);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid var(--secondary-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--secondary-color);
+    display: inline-block;
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .btn-primary {
     background-color: var(--primary-color);
-    color: var(--color-white);
     border: none;
+    color: var(--color-white);
 }
 
 .btn-primary:hover {
@@ -146,117 +183,93 @@ a:hover {
     color: white;
 }
 
-.btn-accent {
-    background-color: var(--accent-color);
-    color: white;
-}
-
-.btn:hover {
-    filter: brightness(110%);
-}
-
-.btn-outline {
-    display: inline-block;
-    padding: var(--spacing-sm) var(--spacing-md);
-    background-color: transparent;
-    border: 2px solid var(--secondary-color);
-    border-radius: var(--border-radius-sm);
-    color: var(--secondary-color);
-    font-weight: 500;
-}
-
-/* Form Elements */
-input, select, textarea {
-    width: 100%;
-    padding: var(--spacing-sm);
-    border: 1px solid var(--light-gray);
-    border-radius: var(--border-radius-sm);
-    font-family: var(--font-primary);
-    font-size: var(--font-size-base);
-    color: var(--text-color);
-    transition: border-color 0.3s ease;
-}
-
-input:focus, select:focus, textarea:focus {
-    outline: none;
-    border-color: var(--accent-color);
-}
-
-label {
-    display: block;
-    margin-bottom: var(--spacing-xs);
-    font-weight: 500;
-}
-
-/* Utility Classes */
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
-
-.mt-1 { margin-top: var(--spacing-sm); }
-.mt-2 { margin-top: var(--spacing-md); }
-.mt-3 { margin-top: var(--spacing-lg); }
-.mb-1 { margin-bottom: var(--spacing-sm); }
-.mb-2 { margin-bottom: var(--spacing-md); }
-.mb-3 { margin-bottom: var(--spacing-lg); }
-
-.p-1 { padding: var(--spacing-sm); }
-.p-2 { padding: var(--spacing-md); }
-.p-3 { padding: var(--spacing-lg); }
-
-.hidden { display: none !important; }
-.visible { display: block !important; }
-
-/* Status Colors */
-.text-success { color: var(--success-color); }
-.text-error { color: var(--error-color); }
-.text-warning { color: var(--warning-color); }
-
-.bg-success { background-color: var(--success-color); }
-.bg-error { background-color: var(--error-color); }
-.bg-warning { background-color: var(--warning-color); }
-
-/* Card Style */
+/* Cards */
 .card {
     background-color: white;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
-    padding: var(--spacing-lg);
     margin-bottom: var(--spacing-md);
-}
-
-.card-header {
-    margin-bottom: var(--spacing-md);
-    border-bottom: 1px solid var(--light-gray);
-    padding-bottom: var(--spacing-sm);
-}
-
-/* Alert/Message Styles */
-.alert {
     padding: var(--spacing-md);
+}
+
+/* Forms */
+input, select, textarea {
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius-sm);
+    color: var(--text-color);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    padding: var(--spacing-sm);
+    transition: border-color 0.3s ease;
+    width: 100%;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--accent-color);
+    outline: none;
+}
+
+label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Alerts */
+.alert {
     border-radius: var(--border-radius-sm);
     margin-bottom: var(--spacing-md);
-}
-
-.alert-success {
-    background-color: rgba(39, 174, 96, 0.1);
-    color: var(--success-color);
-    border: 1px solid var(--success-color);
+    padding: var(--spacing-md);
 }
 
 .alert-error {
     background-color: rgba(192, 57, 43, 0.1);
-    color: var(--error-color);
     border: 1px solid var(--error-color);
+    color: var(--error-color);
+}
+
+.alert-success {
+    background-color: rgba(39, 174, 96, 0.1);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
 }
 
 .alert-warning {
     background-color: rgba(241, 196, 15, 0.1);
-    color: var(--warning-color);
     border: 1px solid var(--warning-color);
+    color: var(--warning-color);
 }
 
-/* Layout */
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+.bg-accent { background-color: var(--accent-color); }
+.bg-error { background-color: var(--error-color); }
+.bg-primary { background-color: var(--primary-color); }
+.bg-secondary { background-color: var(--secondary-color); }
+.bg-success { background-color: var(--success-color); }
+.bg-warning { background-color: var(--warning-color); }
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-error { color: var(--error-color); }
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
 .main-content {
     margin: var(--spacing-lg) auto;
     padding: 0 var(--spacing-lg);

@@ -1,22 +1,22 @@
 /* Footer Layout */
 footer {
+    background-color: var(--primary-color);
+    color: var(--light-gray);
     display: grid;
+    gap: 2rem;
     grid-template-areas:
         "info links social"
         "copyright copyright copyright";
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto;
-    gap: 2rem;
-    width: 100%;
     padding: 3rem 2rem;
-    background-color: var(--primary-color);
-    color: var(--light-gray);
+    width: 100%;
 }
 
 footer .footer-info {
-    grid-area: info;
     display: grid;
     gap: 1rem;
+    grid-area: info;
 }
 
 footer .footer-info h3 {
@@ -25,15 +25,15 @@ footer .footer-info h3 {
 }
 
 footer .footer-info address {
+    color: var(--dark-gray);
     font-style: normal;
     line-height: 1.5;
-    color: var(--dark-gray);
 }
 
 footer .footer-links {
-    grid-area: links;
     display: grid;
     gap: 0.5rem;
+    grid-area: links;
 }
 
 footer .footer-links h3 {
@@ -45,8 +45,8 @@ footer .footer-links nav ul {
     display: grid;
     gap: 0.5rem;
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
 }
 
 footer .footer-links a {
@@ -60,9 +60,9 @@ footer .footer-links a:hover {
 }
 
 footer .footer-social {
-    grid-area: social;
     display: grid;
     gap: 0.5rem;
+    grid-area: social;
 }
 
 footer .footer-social h3 {
@@ -74,8 +74,8 @@ footer .footer-social ul {
     display: grid;
     gap: 0.5rem;
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
 }
 
 footer .footer-social a {
@@ -89,12 +89,12 @@ footer .footer-social a:hover {
 }
 
 footer .footer-copyright {
-    grid-area: copyright;
-    text-align: center;
-    padding-top: 2rem;
-    margin-top: 1rem;
     border-top: 1px solid var(--dark-gray);
     color: var(--dark-gray);
+    grid-area: copyright;
+    margin-top: 1rem;
+    padding-top: 2rem;
+    text-align: center;
 }
 
 /* Responsive Design */
@@ -106,15 +106,12 @@ footer .footer-copyright {
             "social"
             "copyright";
         grid-template-columns: 1fr;
-        text-align: center;
         padding: 2rem 1rem;
+        text-align: center;
     }
 
     footer .footer-links nav ul,
     footer .footer-social ul {
-        justify-items: center;
-    }
-}
         justify-items: center;
     }
 }

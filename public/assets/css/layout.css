@@ -6,8 +6,12 @@ body {
         "main"
         "footer";
     grid-template-rows: auto 1fr auto;
-    min-height: 100vh;
     margin: 0;
+    min-height: 100vh;
+}
+
+footer {
+    grid-area: footer;
 }
 
 header {
@@ -16,8 +20,4 @@ header {
 
 .main-content {
     grid-area: main;
-}
-
-footer {
-    grid-area: footer;
 }
