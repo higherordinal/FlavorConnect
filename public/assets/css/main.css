@@ -71,6 +71,43 @@ body {
 }
 
 /* ==========================================================================
+   Base Layout
+   ========================================================================== */
+
+body {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "main"
+        "footer";
+    grid-template-rows: auto 1fr auto;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* Grid Areas */
+footer {
+    grid-area: footer;
+}
+
+header {
+    grid-area: header;
+}
+
+.main-content {
+    grid-area: main;
+    margin: var(--spacing-lg) auto;
+    padding: 0 var(--spacing-lg);
+    width: 100%;
+}
+
+/* Main Content Layout */
+.main-content > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ==========================================================================
    Typography
    ========================================================================== */
 
@@ -241,6 +278,25 @@ label {
 }
 
 /* ==========================================================================
+   Spacing Utilities
+   ========================================================================== */
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+
+/* ==========================================================================
+   Text Alignment
+   ========================================================================== */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+/* ==========================================================================
    Utility Classes
    ========================================================================== */
 
@@ -250,17 +306,6 @@ label {
 .bg-secondary { background-color: var(--secondary-color); }
 .bg-success { background-color: var(--success-color); }
 .bg-warning { background-color: var(--warning-color); }
-
-.mb-1 { margin-bottom: var(--spacing-sm); }
-.mb-2 { margin-bottom: var(--spacing-md); }
-.mb-3 { margin-bottom: var(--spacing-lg); }
-.mt-1 { margin-top: var(--spacing-sm); }
-.mt-2 { margin-top: var(--spacing-md); }
-.mt-3 { margin-top: var(--spacing-lg); }
-
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
 
 .text-error { color: var(--error-color); }
 .text-success { color: var(--success-color); }
