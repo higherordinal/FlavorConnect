@@ -23,7 +23,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=' . time()); ?>">
     
     <?php if($page_title === 'Home') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
     <?php } ?>
     
     <?php if($page_title === 'About') { ?>

@@ -22,7 +22,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
     
     <?php if($page_title === 'Home') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home-grid.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
     <?php } ?>
     <?php if($page_title === 'Recipes') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
@@ -64,8 +64,9 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     <button class="user-menu-button">
                         <?php 
                         $user = User::find_by_id($session->get_user_id());
+                        $username = $user ? h($user->username) : 'Guest';
                         ?>
-                        <span><?php echo h($user->username); ?></span>
+                        <span><?php echo $username; ?></span>
                     </button>
                     <div class="dropdown-menu">
                         <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
