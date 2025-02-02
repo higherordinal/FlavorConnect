@@ -57,48 +57,61 @@ if ($current_page > $total_pages) {
     <div class="gallery-header">
         <h1 class="gallery-title">Recipes</h1>
         
-        <form class="search-form" action="<?php echo url_for('/recipes/index.php'); ?>" method="GET">
+        <form class="search-form" action="<?php echo url_for('/recipes/index.php'); ?>" method="GET" role="search">
             <div class="search-bar">
                 <input type="text" 
                        name="search" 
                        value="<?php echo h($search); ?>" 
                        placeholder="Search recipes..."
-                       class="search-input">
-                <button type="submit" class="search-button">
-                    <i class="fas fa-search"></i>
+                       class="search-input"
+                       aria-label="Search recipes">
+                <button type="submit" class="search-button" aria-label="Submit search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
                 </button>
             </div>
         </form>
     </div>
 
-    <div class="gallery-filters">
+    <div class="gallery-filters" role="group" aria-label="Recipe filters">
         <div class="filter-group">
-            <label for="style-filter" class="filter-label">Style</label>
-            <select id="style-filter" class="filter-select" name="style" 
+            <label for="style-filter" class="filter-label" id="style-label">Style</label>
+            <select id="style-filter" 
+                    class="filter-select" 
+                    name="style" 
+                    aria-labelledby="style-label"
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['style' => ''])); ?>' + this.value">
                 <option value="">All Styles</option><?php foreach($styles as $style) { ?><option value="<?php echo h($style->id); ?>" <?php if($style_id === $style->id) echo 'selected'; ?>><?php echo h($style->name); ?></option><?php } ?>
             </select>
         </div>
 
         <div class="filter-group">
-            <label for="diet-filter" class="filter-label">Diet</label>
-            <select id="diet-filter" class="filter-select" name="diet" 
+            <label for="diet-filter" class="filter-label" id="diet-label">Diet</label>
+            <select id="diet-filter" 
+                    class="filter-select" 
+                    name="diet" 
+                    aria-labelledby="diet-label"
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['diet' => ''])); ?>' + this.value">
                 <option value="">All Diets</option><?php foreach($diets as $diet) { ?><option value="<?php echo h($diet->id); ?>" <?php if($diet_id === $diet->id) echo 'selected'; ?>><?php echo h($diet->name); ?></option><?php } ?>
             </select>
         </div>
 
         <div class="filter-group">
-            <label for="type-filter" class="filter-label">Type</label>
-            <select id="type-filter" class="filter-select" name="type" 
+            <label for="type-filter" class="filter-label" id="type-label">Type</label>
+            <select id="type-filter" 
+                    class="filter-select" 
+                    name="type" 
+                    aria-labelledby="type-label"
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['type' => ''])); ?>' + this.value">
                 <option value="">All Types</option><?php foreach($types as $type) { ?><option value="<?php echo h($type->id); ?>" <?php if($type_id === $type->id) echo 'selected'; ?>><?php echo h($type->name); ?></option><?php } ?>
             </select>
         </div>
 
         <div class="filter-group">
-            <label for="sort-filter" class="filter-label">Sort By</label>
-            <select id="sort-filter" class="filter-select" name="sort" 
+            <label for="sort-filter" class="filter-label" id="sort-label">Sort By</label>
+            <select id="sort-filter" 
+                    class="filter-select" 
+                    name="sort" 
+                    aria-labelledby="sort-label"
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['sort' => ''])); ?>' + this.value">
                 <option value="newest" <?php if($sort === 'newest') echo 'selected'; ?>>Newest First</option><option value="oldest" <?php if($sort === 'oldest') echo 'selected'; ?>>Oldest First</option><option value="name_asc" <?php if($sort === 'name_asc') echo 'selected'; ?>>Name A-Z</option><option value="name_desc" <?php if($sort === 'name_desc') echo 'selected'; ?>>Name Z-A</option>
             </select>
@@ -151,42 +164,46 @@ if ($current_page > $total_pages) {
                 $diet = $recipe->diet();
                 $type = $recipe->type();
             ?>
-                <article class="recipe-card">
+                <article class="recipe-card" role="article">
                     <?php /* Temporarily disabled user favorites
                     if($session->is_logged_in()) { 
                         $is_favorited = UserFavorite::is_favorite($session->get_user_id(), $recipe->recipe_id);
                     ?>
                         <button type="button" class="favorite-btn <?php echo $is_favorited ? 'active' : ''; ?>" 
                                 data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
-                                data-is-favorited="<?php echo $is_favorited ? 'true' : 'false'; ?>">
-                            <i class="fa-heart <?php echo $is_favorited ? 'fas' : 'far'; ?>"></i>
+                                data-is-favorited="<?php echo $is_favorited ? 'true' : 'false'; ?>"
+                                aria-label="<?php echo $is_favorited ? 'Remove from favorites' : 'Add to favorites'; ?>"
+                                aria-pressed="<?php echo $is_favorited ? 'true' : 'false'; ?>">
+                            <i class="fa-heart <?php echo $is_favorited ? 'fas' : 'far'; ?>" aria-hidden="true"></i>
                         </button>
                     <?php } */ ?>
-                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" class="recipe-link">
+                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" 
+                       class="recipe-link"
+                       aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
                         <div class="recipe-image-container">
                             <img src="<?php echo $recipe->img_file_path ? url_for($recipe->img_file_path) : url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
-                                 alt="<?php echo h($recipe->title); ?>" 
+                                 alt="Photo of <?php echo h($recipe->title); ?>" 
                                  class="recipe-image">
                         </div>
                         
                         <div class="recipe-content">
-                            <h2 class="recipe-title"><?php echo h($recipe->title); ?></h2>
+                            <h2 class="recipe-title" id="recipe-title-<?php echo h($recipe->recipe_id); ?>"><?php echo h($recipe->title); ?></h2>
                             
                             <div class="recipe-meta">
-                                <span class="rating">
+                                <span class="rating" aria-label="Rating: <?php echo $recipe->get_average_rating(); ?> out of 5 stars">
                                     <?php 
                                         $rating = $recipe->get_average_rating();
                                         echo str_repeat('★', round($rating));
                                         echo str_repeat('☆', 5 - round($rating));
-                                        echo ' <span class="review-count">(' . $recipe->rating_count() . ')</span>';
+                                        echo ' <span class="review-count" aria-label="' . $recipe->rating_count() . ' reviews">(' . $recipe->rating_count() . ')</span>';
                                     ?>
                                 </span>
-                                <span class="time">
+                                <span class="time" aria-label="Total time: <?php echo $recipe->get_total_time_display(); ?>">
                                     <?php echo $recipe->get_total_time_display(); ?>
                                 </span>
                             </div>
 
-                            <div class="recipe-attributes">
+                            <div class="recipe-attributes" role="list">
                                 <?php if($style) { ?>
                                     <span class="recipe-attribute"><?php echo h($style->name); ?></span>
                                 <?php } ?>
@@ -211,11 +228,13 @@ if ($current_page > $total_pages) {
         </div>
 
         <?php if($total_pages > 1) { ?>
-            <div class="pagination">
+            <nav class="pagination" role="navigation" aria-label="Recipe pages">
                 <?php if($current_page > 1) { ?>
                     <a href="<?php echo url_for('/recipes/index.php?' . build_query_string(['page' => $current_page - 1])); ?>" 
-                       class="page-link" aria-label="Previous page">
-                        <i class="fas fa-chevron-left"></i>
+                       class="page-link" 
+                       aria-label="Go to previous page">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                        <span class="sr-only">Previous page</span>
                     </a>
                 <?php } ?>
 
@@ -226,24 +245,28 @@ if ($current_page > $total_pages) {
                         ($i >= $current_page - 1 && $i <= $current_page + 1)
                     ) { ?>
                         <a href="<?php echo url_for('/recipes/index.php?' . build_query_string(['page' => $i])); ?>" 
-                           class="page-link <?php if($i === $current_page) echo 'active'; ?>">
+                           class="page-link <?php if($i === $current_page) echo 'active'; ?>"
+                           aria-label="Go to page <?php echo $i; ?>"
+                           <?php if($i === $current_page) echo 'aria-current="page"'; ?>>
                             <?php echo $i; ?>
                         </a>
                     <?php } elseif(
                         $i === 3 || 
                         $i === $total_pages - 2
                     ) { ?>
-                        <span class="page-link">...</span>
+                        <span class="page-link" aria-hidden="true">...</span>
                     <?php } ?>
                 <?php } ?>
 
                 <?php if($current_page < $total_pages) { ?>
                     <a href="<?php echo url_for('/recipes/index.php?' . build_query_string(['page' => $current_page + 1])); ?>" 
-                       class="page-link" aria-label="Next page">
-                        <i class="fas fa-chevron-right"></i>
+                       class="page-link" 
+                       aria-label="Go to next page">
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                        <span class="sr-only">Next page</span>
                     </a>
                 <?php } ?>
-            </div>
+            </nav>
         <?php } ?>
     <?php } ?>
 </div>
