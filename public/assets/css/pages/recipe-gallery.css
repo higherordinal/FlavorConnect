@@ -17,20 +17,21 @@
 .main-content .gallery-header {
     align-items: center;
     background-color: var(--primary-color);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-lg);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
     display: grid;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-sm);
     grid-template-columns: 1fr auto;
-    padding: var(--spacing-lg);
+    min-height: 60px;
+    padding: var(--spacing-xs) var(--spacing-md);
 }
 
 .main-content .gallery-header h1 {
     color: var(--accent-color);
     font-family: var(--font-secondary);
-    font-size: var(--font-size-xxlarge);
+    font-size: var(--font-size-xlarge);
+    line-height: 1;
     margin: 0;
-    text-align: center;
 }
 
 /* ==========================================================================
@@ -38,46 +39,39 @@
    ========================================================================== */
 
 .main-content .search-form {
-    max-width: 400px;
+    max-width: 300px;
     width: 100%;
 }
 
 .main-content .search-bar {
     background-color: white;
-    border: 2px solid transparent;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-md);
+    border: 1px solid var(--light-gray);
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
     display: grid;
-    gap: 0;
     grid-template-columns: 1fr auto;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    height: 36px;
+    min-width: 200px;
 }
 
-.main-content .search-bar:focus-within {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 4px rgba(241, 196, 15, 0.2);
-}
-
-.main-content .search-input {
+.main-content .search-bar .search-input {
+    background: transparent;
     border: none;
-    font-size: var(--font-size-base);
-    outline: none;
-    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-small);
+    height: 100%;
+    padding: var(--spacing-xs) var(--spacing-sm);
     width: 100%;
 }
 
-.main-content .search-button {
-    background: var(--primary-color);
+.main-content .search-bar .search-button {
+    align-items: center;
+    background: none;
     border: none;
-    color: white;
+    color: var(--dark-gray);
     cursor: pointer;
-    padding: var(--spacing-md) var(--spacing-lg);
-    transition: all 0.3s ease;
-}
-
-.main-content .search-button:hover {
-    background: var(--secondary-color);
+    display: grid;
+    padding: 0 var(--spacing-sm);
+    place-items: center;
 }
 
 /* ==========================================================================
@@ -87,12 +81,12 @@
 .main-content .gallery-filters {
     background-color: white;
     border: 1px solid var(--light-gray);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
     display: grid;
-    gap: var(--spacing-md);
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    padding: var(--spacing-lg);
+    gap: var(--spacing-sm);
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    padding: var(--spacing-sm);
 }
 
 .main-content .filter-group {
@@ -103,39 +97,39 @@
 .main-content .filter-label {
     color: var(--primary-color);
     font-size: var(--font-size-small);
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    font-weight: 500;
+    margin-left: var(--spacing-xs);
 }
 
 .main-content .filter-select {
     background-color: white;
-    border: 2px solid var(--light-gray);
+    border: 1px solid var(--light-gray);
     border-radius: var(--border-radius-sm);
     cursor: pointer;
-    font-size: var(--font-size-base);
-    padding: var(--spacing-sm) var(--spacing-md);
-    transition: all 0.3s ease;
+    font-size: var(--font-size-small);
+    height: 36px;
+    padding: 0 var(--spacing-sm);
 }
 
 .main-content .filter-select:hover,
 .main-content .filter-select:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(10, 26, 41, 0.1);
+    box-shadow: var(--shadow-sm);
 }
 
 .main-content .clear-filters {
     align-items: center;
     color: var(--error-color);
     display: grid;
+    font-size: var(--font-size-small);
     font-weight: 500;
     gap: var(--spacing-xs);
     grid-column: 1 / -1;
     grid-template-columns: auto 1fr;
-    padding: var(--spacing-sm);
-    border-radius: var(--border-radius-sm);
+    height: 36px;
+    padding: 0 var(--spacing-sm);
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: background-color 0.2s ease;
 }
 
 .main-content .clear-filters:hover {
@@ -149,12 +143,12 @@
 .main-content .filter-summary {
     align-items: center;
     background-color: var(--primary-color);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-sm);
     color: white;
     display: grid;
-    gap: var(--spacing-md);
+    gap: var(--spacing-sm);
     grid-template-columns: auto 1fr;
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
 }
 
 .main-content .results-count {
