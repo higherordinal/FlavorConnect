@@ -4,38 +4,38 @@
 }
 
 .user-section {
-    grid-area: user;
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
+    display: flex;
+    grid-area: user;
+    justify-content: flex-end;
 }
 
 .user-menu {
-    position: relative;
     display: inline-block;
+    position: relative;
 }
 
 .user-menu-button {
-    display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 1rem;
     background-color: var(--background-hover);
     border: 1px solid var(--border-color);
-    cursor: pointer;
+    border-radius: var(--border-radius-md);
     color: var(--text-color);
+    cursor: pointer;
+    display: flex;
     font-size: 0.95rem;
     font-weight: 500;
-    border-radius: var(--border-radius-md);
-    transition: all 0.2s ease;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
     position: relative;
+    transition: all 0.2s ease;
 }
 
 .user-menu-button::after {
     content: '\f107';
     font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
     font-size: 0.9rem;
+    font-weight: 900;
     margin-left: 0.25rem;
     transition: transform 0.2s ease;
 }
@@ -43,9 +43,9 @@
 .user-menu-button:hover {
     background-color: var(--background-color);
     border-color: var(--primary-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     color: var(--primary-color);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .user-menu-button:hover::after {
@@ -53,8 +53,8 @@
 }
 
 .user-menu-button:active {
-    transform: translateY(0);
     box-shadow: none;
+    transform: translateY(0);
 }
 
 .user-menu-button span {
@@ -63,29 +63,29 @@
 }
 
 .dropdown-menu {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    right: 0;
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    padding: 0.5rem;
-    min-width: 200px;
     display: none;
+    min-width: 200px;
+    padding: 0.5rem;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
     z-index: 1000;
 }
 
 .dropdown-menu.show {
-    display: block;
     animation: fadeIn 0.2s ease-out;
+    display: block;
 }
 
 .dropdown-menu a {
+    border-radius: var(--border-radius-sm);
+    color: var(--text-color);
     display: block;
     padding: 0.75rem 1rem;
-    color: var(--text-color);
     text-decoration: none;
-    border-radius: var(--border-radius-sm);
     transition: background-color 0.2s ease;
 }
 
@@ -95,16 +95,16 @@
 }
 
 .dropdown-menu hr {
-    margin: 0.5rem 0;
     border: none;
     border-top: 1px solid var(--border-color);
+    margin: 0.5rem 0;
 }
 
 .user-menu-button img {
-    width: 32px;
-    height: 32px;
     border-radius: 50%;
+    height: 32px;
     transition: transform 0.3s ease;
+    width: 32px;
 }
 
 .user-menu-button:hover img,
@@ -129,10 +129,10 @@
 
 @media (max-width: 768px) {
     .header-grid {
+        gap: 1rem;
         grid-template-areas:
             "logo nav"
             "user user";
-        gap: 1rem;
     }
     
     .user-section {

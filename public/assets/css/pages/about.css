@@ -1,25 +1,31 @@
-/* About Page Grid Layout */
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+
 .about-section {
     display: grid;
     gap: var(--spacing-xl);
-    max-width: 1200px;
     margin: 0 auto;
+    max-width: 1200px;
     padding: var(--spacing-xl);
 }
 
-/* Hero Section */
+/* ==========================================================================
+   Hero Section
+   ========================================================================== */
+
 .about-hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-xl);
     align-items: center;
-    position: relative;
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-xl);
-    color: var(--color-white);
-    box-shadow: var(--shadow-lg);
-    overflow: hidden;
     background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color-dark) 100%);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--color-white);
+    display: grid;
+    gap: var(--spacing-xl);
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    padding: var(--spacing-xl);
+    position: relative;
 }
 
 .about-hero-content {
@@ -37,101 +43,107 @@
 .about-hero p {
     font-size: var(--font-size-large);
     line-height: 1.6;
-    opacity: 0.9;
     margin: 0;
+    opacity: 0.9;
 }
 
 .about-hero-image {
-    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-lg);
     height: 100%;
     min-height: 400px;
-    border-radius: var(--border-radius-lg);
     overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.1);
+    width: 100%;
 }
 
 .about-hero-img {
-    width: 100%;
+    border-radius: var(--border-radius-lg);
     height: 100%;
     object-fit: cover;
-    border-radius: var(--border-radius-lg);
     transition: transform 0.3s ease;
+    width: 100%;
 }
 
 .about-hero-img:hover {
     transform: scale(1.05);
 }
 
-/* Mission Section */
+/* ==========================================================================
+   Mission Section
+   ========================================================================== */
+
 .mission-section {
-    display: grid;
-    gap: var(--spacing-lg);
-    text-align: center;
-    padding: var(--spacing-xl);
     background-color: white;
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
+    display: grid;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
 }
 
 .mission-section h2 {
-    font-size: var(--font-size-xlarge);
     color: var(--primary-color);
+    font-size: var(--font-size-xlarge);
     margin: 0;
 }
 
 .mission-section p {
-    font-size: var(--font-size-large);
     color: var(--text-color);
+    font-size: var(--font-size-large);
     line-height: 1.6;
-    max-width: 800px;
     margin: 0 auto;
+    max-width: 800px;
 }
 
-/* Features Grid */
+/* ==========================================================================
+   Features Section
+   ========================================================================== */
+
 .features-section {
+    background-color: var(--background-color);
+    border-radius: var(--border-radius-lg);
     display: grid;
     gap: var(--spacing-xl);
     padding: var(--spacing-xl);
-    background-color: var(--background-color);
-    border-radius: var(--border-radius-lg);
 }
 
 .features-section h2 {
-    font-size: var(--font-size-xlarge);
     color: var(--primary-color);
+    font-size: var(--font-size-xlarge);
     margin: 0;
     text-align: center;
 }
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .feature-card {
-    display: grid;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
     background-color: white;
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
+    display: grid;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-    transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
 }
 
 .feature-icon {
-    font-size: 2.5rem;
     color: var(--primary-color);
+    font-size: 2.5rem;
 }
 
 .feature-card h3 {
-    font-size: var(--font-size-large);
     color: var(--primary-color);
+    font-size: var(--font-size-large);
     margin: 0;
 }
 
@@ -141,15 +153,18 @@
     margin: 0;
 }
 
-/* Join Section */
+/* ==========================================================================
+   Join Section
+   ========================================================================== */
+
 .join-section {
-    display: grid;
-    gap: var(--spacing-lg);
-    text-align: center;
-    padding: var(--spacing-xl);
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border-radius: var(--border-radius-lg);
     color: var(--color-white);
+    display: grid;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
 }
 
 .join-section h2 {
@@ -160,20 +175,23 @@
 .join-section p {
     font-size: var(--font-size-large);
     line-height: 1.6;
-    opacity: 0.9;
-    max-width: 800px;
     margin: 0 auto;
+    max-width: 800px;
+    opacity: 0.9;
 }
 
 .cta-buttons {
     display: grid;
-    grid-template-columns: auto auto;
     gap: var(--spacing-md);
+    grid-template-columns: auto auto;
     justify-content: center;
     margin-top: var(--spacing-lg);
 }
 
-/* Responsive Design */
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
 @media (max-width: 1024px) {
     .about-hero {
         grid-template-columns: 1fr;
