@@ -1,3 +1,5 @@
+import { formatFraction, addSafeEventListener, fetchData } from '../utils/common.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Add smooth scroll behavior for the "Back to Recipes" link
     const backLink = document.querySelector('.back-link');
@@ -143,6 +145,16 @@ document.addEventListener('DOMContentLoaded', function() {
                             }
                             .directions-list li {
                                 margin-bottom: 15px;
+                            }
+                            .step-number {
+                                display: none;
+                            }
+                            .directions-list {
+                                list-style-type: decimal;
+                                padding-left: 30px;
+                            }
+                            .directions-list li {
+                                padding-left: 10px;
                             }
                         }
                     </style>
