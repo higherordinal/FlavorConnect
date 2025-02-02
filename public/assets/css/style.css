@@ -265,18 +265,3 @@ label {
 .text-error { color: var(--error-color); }
 .text-success { color: var(--success-color); }
 .text-warning { color: var(--warning-color); }
-
-/* ==========================================================================
-   Layout
-   ========================================================================== */
-
-.main-content {
-    margin: var(--spacing-lg) auto;
-    padding: 0 var(--spacing-lg);
-    width: 100%;
-}
-
-.main-content > * {
-    margin-left: auto;
-    margin-right: auto;
-}

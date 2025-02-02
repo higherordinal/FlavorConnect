@@ -1,4 +1,7 @@
-/* Main Grid Layout */
+/* ==========================================================================
+   Base Layout
+   ========================================================================== */
+
 body {
     display: grid;
     grid-template-areas:
@@ -10,6 +13,7 @@ body {
     min-height: 100vh;
 }
 
+/* Grid Areas */
 footer {
     grid-area: footer;
 }
@@ -20,4 +24,32 @@ header {
 
 .main-content {
     grid-area: main;
+    margin: var(--spacing-lg) auto;
+    padding: 0 var(--spacing-lg);
+    width: 100%;
 }
+
+/* Main Content Layout */
+.main-content > * {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ==========================================================================
+   Spacing Utilities
+   ========================================================================== */
+
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+
+/* ==========================================================================
+   Text Alignment
+   ========================================================================== */
+
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
