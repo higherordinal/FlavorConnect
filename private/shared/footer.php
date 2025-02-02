@@ -1,19 +1,19 @@
     </main> <!-- Close .main-content from header.php -->
     
-<footer>
+<footer role="contentinfo">
     <div class="footer-info">
         <h3>About FlavorConnect</h3>
         <p>Connecting food enthusiasts with their perfect dining experiences.</p>
-        <address>
+        <address aria-label="Contact information">
             123 Foodie Lane<br>
             Cuisine City, FC 12345<br>
-            Phone: (555) 123-4567
+            Phone: <a href="tel:+15551234567" aria-label="Call us at (555) 123-4567">(555) 123-4567</a>
         </address>
     </div>
 
     <div class="footer-links">
-        <h3>Quick Links</h3>
-        <nav>
+        <h3 id="quick-links">Quick Links</h3>
+        <nav aria-labelledby="quick-links">
             <ul>
                 <li><a href="<?php echo url_for('/index.php'); ?>">Home</a></li>
                 <li><a href="<?php echo url_for('/about.php'); ?>">About Us</a></li>
@@ -22,13 +22,13 @@
     </div>
 
     <div class="footer-social">
-        <h3>Connect With Us</h3>
-        <nav>
+        <h3 id="social-links">Connect With Us</h3>
+        <nav aria-labelledby="social-links">
             <ul>
-                <li><a href="#">Facebook</a></li>
-                <li><a href="#">Twitter</a></li>
-                <li><a href="#">Instagram</a></li>
-                <li><a href="#">LinkedIn</a></li>
+                <li><a href="#" aria-label="Visit our Facebook page">Facebook</a></li>
+                <li><a href="#" aria-label="Follow us on Twitter">Twitter</a></li>
+                <li><a href="#" aria-label="Follow us on Instagram">Instagram</a></li>
+                <li><a href="#" aria-label="Connect with us on LinkedIn">LinkedIn</a></li>
             </ul>
         </nav>
     </div>

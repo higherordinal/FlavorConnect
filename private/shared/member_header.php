@@ -32,45 +32,45 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
 </head>
 <body>
-    <header class="header">
+    <header class="header" role="banner">
         <div class="header-grid">
             <!-- Logo and Site Name -->
             <div class="logo">
-                <a href="<?php echo url_for('/index.php'); ?>">
+                <a href="<?php echo url_for('/index.php'); ?>" aria-label="FlavorConnect Home">
                     <span class="logo-the">The</span>
                     <h1>FlavorConnect</h1>
                 </a>
             </div>
 
             <!-- Main Navigation -->
-            <nav class="main-nav">
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active"' : ''; ?>>Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active"' : ''; ?>>Recipes</a></li>
-                    <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>" <?php echo $page_title === 'Favorites' ? 'class="active"' : ''; ?>>Favorites</a></li>
-                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active"' : ''; ?>>Create Recipe</a></li>
+                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
+                    <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>" <?php echo $page_title === 'Favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
+                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
                     <?php 
                     // Using cached admin status from session for performance
                     if($session->is_admin()) { 
                     ?>
-                    <li><a href="<?php echo url_for('/admin/index.php'); ?>" <?php echo strpos($page_title, 'Admin') !== false ? 'class="active"' : ''; ?>>Admin</a></li>
+                    <li><a href="<?php echo url_for('/admin/index.php'); ?>" <?php echo strpos($page_title, 'Admin') !== false ? 'class="active" aria-current="page"' : ''; ?>>Admin</a></li>
                     <?php } ?>
                 </ul>
             </nav>
 
             <!-- User Section -->
             <div class="user-section">
-                <div class="user-menu">
-                    <button class="user-menu-button">
+                <div class="user-menu" role="navigation" aria-label="User menu">
+                    <button class="user-menu-button" aria-haspopup="true" aria-expanded="false" aria-controls="user-dropdown">
                         <?php 
                         $user = User::find_by_id($session->get_user_id());
                         $username = $user ? h($user->username) : 'Guest';
                         ?>
                         <span><?php echo $username; ?></span>
                     </button>
-                    <div class="dropdown-menu">
-                        <a href="<?php echo url_for('/profile.php'); ?>">Profile</a>
-                        <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
+                    <div class="dropdown-menu" id="user-dropdown" role="menu" aria-label="User menu options">
+                        <a href="<?php echo url_for('/profile.php'); ?>" role="menuitem">Profile</a>
+                        <a href="<?php echo url_for('/auth/logout.php'); ?>" role="menuitem">Logout</a>
                     </div>
                 </div>
             </div>

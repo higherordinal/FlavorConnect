@@ -31,22 +31,22 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <?php } ?>
 </head>
 <body>
-    <header class="header">
+    <header class="header" role="banner">
         <div class="header-grid">
             <!-- Logo and Site Name -->
             <div class="logo">
-                <a href="<?php echo url_for('/index.php'); ?>">
+                <a href="<?php echo url_for('/index.php'); ?>" aria-label="FlavorConnect Home">
                     <span class="logo-the">The</span>
                     <h1>FlavorConnect</h1>
                 </a>
             </div>
 
             <!-- Main Navigation -->
-            <nav class="main-nav">
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active"' : ''; ?>>Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active"' : ''; ?>>Recipes</a></li>
-                    <li><a href="<?php echo url_for('/about.php'); ?>" <?php echo $page_title === 'About' ? 'class="active"' : ''; ?>>About</a></li>
+                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
+                    <li><a href="<?php echo url_for('/about.php'); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>>About</a></li>
                 </ul>
             </nav>
 
