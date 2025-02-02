@@ -1,3 +1,5 @@
+import { debounce, formatTime, fetchData } from '../utils/common.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     let recipes = [];
     let currentFilters = {
@@ -35,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const url = '/FlavorConnect/public/recipes/api.php?action=list';
             console.log('API URL:', url);
             
-            const response = await fetch(url);
+            const response = await fetchData(url);
             console.log('Response status:', response.status);
             console.log('Response headers:', Object.fromEntries(response.headers));
             
@@ -106,18 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     return 0;
             }
         });
-    }
-
-    // Format time for display
-    function formatTime(seconds) {
-        if (!seconds) return 'N/A';
-        if (seconds < 60) return '1 min';
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        if (hours > 0) {
-            return hours + ' hr ' + (minutes > 0 ? minutes + ' min' : '');
-        }
-        return minutes + ' min';
     }
 
     // Update recipe grid
@@ -244,19 +234,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (value) params.set(key, value);
         });
         window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
-    }
-
-    // Debounce helper function
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
     }
 
     // Set up event listeners
