@@ -139,7 +139,11 @@
 .recipe-grid {
     display: grid;
     gap: var(--spacing-lg);
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
 }
 
 .recipe-card {
