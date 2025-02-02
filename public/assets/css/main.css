@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CSS Variables
+   CSS Custom Properties
    ========================================================================== */
 
 :root {
@@ -10,9 +10,9 @@
     --border-radius-xl: 16px;
 
     /* Box Shadow */
-    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
 
     /* Colors */
     --accent-color: #F1C40F;
@@ -65,27 +65,21 @@ html, body {
 body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: var(--font-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-}
-
-/* ==========================================================================
-   Base Layout
-   ========================================================================== */
-
-body {
     display: grid;
+    font-family: var(--font-primary);
     grid-template-areas:
         "header"
         "main"
         "footer";
     grid-template-rows: auto 1fr auto;
-    margin: 0;
+    line-height: 1.6;
     min-height: 100vh;
 }
 
-/* Grid Areas */
+/* ==========================================================================
+   Layout & Grid Areas
+   ========================================================================== */
+
 footer {
     grid-area: footer;
 }
@@ -101,7 +95,6 @@ header {
     width: 100%;
 }
 
-/* Main Content Layout */
 .main-content > * {
     margin-left: auto;
     margin-right: auto;
@@ -132,16 +125,16 @@ h3 {
     font-size: var(--font-size-large);
 }
 
-h4 { 
-    font-size: var(--font-size-base); 
+h4 {
+    font-size: var(--font-size-base);
 }
 
-p { 
-    margin-bottom: var(--spacing-md); 
+p {
+    margin-bottom: var(--spacing-md);
 }
 
 /* ==========================================================================
-   Links
+   Links & Buttons
    ========================================================================== */
 
 a {
@@ -171,11 +164,6 @@ a:hover {
     font-size: var(--font-size-small);
 }
 
-/* ==========================================================================
-   Components
-   ========================================================================== */
-
-/* Buttons */
 .btn {
     border-radius: var(--border-radius-sm);
     cursor: pointer;
@@ -211,25 +199,15 @@ a:hover {
     color: var(--color-white);
 }
 
-.btn-primary:hover {
-    filter: brightness(110%);
-}
-
 .btn-secondary {
     background-color: var(--secondary-color);
     color: white;
 }
 
-/* Cards */
-.card {
-    background-color: white;
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-md);
-    padding: var(--spacing-md);
-}
+/* ==========================================================================
+   Forms & Inputs
+   ========================================================================== */
 
-/* Forms */
 input, select, textarea {
     border: 1px solid var(--light-gray);
     border-radius: var(--border-radius-sm);
@@ -250,6 +228,19 @@ label {
     display: block;
     font-weight: 500;
     margin-bottom: var(--spacing-xs);
+}
+
+/* ==========================================================================
+   Components
+   ========================================================================== */
+
+/* Cards */
+.card {
+    background-color: white;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
 }
 
 /* Alerts */
@@ -278,28 +269,10 @@ label {
 }
 
 /* ==========================================================================
-   Spacing Utilities
-   ========================================================================== */
-
-.mb-1 { margin-bottom: var(--spacing-sm); }
-.mb-2 { margin-bottom: var(--spacing-md); }
-.mb-3 { margin-bottom: var(--spacing-lg); }
-.mt-1 { margin-top: var(--spacing-sm); }
-.mt-2 { margin-top: var(--spacing-md); }
-.mt-3 { margin-top: var(--spacing-lg); }
-
-/* ==========================================================================
-   Text Alignment
-   ========================================================================== */
-
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-.text-right { text-align: right; }
-
-/* ==========================================================================
    Utility Classes
    ========================================================================== */
 
+/* Background Colors */
 .bg-accent { background-color: var(--accent-color); }
 .bg-error { background-color: var(--error-color); }
 .bg-primary { background-color: var(--primary-color); }
@@ -307,6 +280,20 @@ label {
 .bg-success { background-color: var(--success-color); }
 .bg-warning { background-color: var(--warning-color); }
 
+/* Margins */
+.mb-1 { margin-bottom: var(--spacing-sm); }
+.mb-2 { margin-bottom: var(--spacing-md); }
+.mb-3 { margin-bottom: var(--spacing-lg); }
+.mt-1 { margin-top: var(--spacing-sm); }
+.mt-2 { margin-top: var(--spacing-md); }
+.mt-3 { margin-top: var(--spacing-lg); }
+
+/* Text Colors */
 .text-error { color: var(--error-color); }
 .text-success { color: var(--success-color); }
 .text-warning { color: var(--warning-color); }
+
+/* Text Alignment */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
