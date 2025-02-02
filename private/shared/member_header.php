@@ -13,8 +13,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <!-- Base Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/style.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/layout.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css?v=' . time()); ?>">
     
     <!-- Component Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
