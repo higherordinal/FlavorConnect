@@ -33,11 +33,14 @@ function raw_u($string="") {
 
 /**
  * HTML escapes a string for safe output
- * @param string $string The string to escape
+ * @param string|null $string The string to escape
  * @return string The escaped string
  */
 function h($string="") {
-  return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+    if ($string === null) {
+        return '';
+    }
+    return htmlspecialchars((string)$string, ENT_QUOTES, 'UTF-8');
 }
 
 /**
