@@ -37,7 +37,7 @@ function initializeGallery() {
 async function loadRecipes() {
     try {
         showLoadingState(true);
-        const url = '/FlavorConnect/public/recipes/api.php?action=list';
+        const url = '/api/recipes?action=list';
         const response = await fetchData(url);
         state.recipes = response.recipes || [];
         applyFilters();

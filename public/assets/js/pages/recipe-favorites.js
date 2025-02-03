@@ -44,7 +44,7 @@ function setupEventListeners() {
             const heartIcon = this.querySelector('.fa-heart');
 
             // Toggle favorite status
-            fetch('/recipes/toggle_favorite.php', {
+            fetch('/api/favorites', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -76,7 +76,7 @@ function setupEventListeners() {
 async function loadFavorites() {
     try {
         showLoadingState(true);
-        const response = await fetchData('/FlavorConnect/public/recipes/api.php?action=get_favorites');
+        const response = await fetchData('/api/recipes?action=get_favorites');
         
         if (response.success) {
             updateFavoritesList(response.favorites);
@@ -101,7 +101,7 @@ async function handleUnfavorite(e) {
     const card = button.closest('.recipe-card');
 
     try {
-        const response = await fetchData('/FlavorConnect/public/recipes/api.php', {
+        const response = await fetchData('/api/recipes', {
             method: 'POST',
             body: JSON.stringify({
                 action: 'toggle_favorite',

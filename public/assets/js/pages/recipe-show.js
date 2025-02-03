@@ -72,7 +72,7 @@ function setupEventListeners() {
 async function loadRecipeData() {
     try {
         const recipeId = new URLSearchParams(window.location.search).get('id');
-        const response = await fetchData(`/FlavorConnect/public/recipes/api.php?action=get_recipe&id=${recipeId}`);
+        const response = await fetchData(`/api/recipes?action=get&id=${recipeId}`);
         
         if (response.success) {
             state.recipe = response.recipe;
@@ -121,7 +121,7 @@ async function handleRatingClick(e) {
     const recipeId = state.recipe.id;
 
     try {
-        const response = await fetchData('/FlavorConnect/public/recipes/api.php', {
+        const response = await fetchData('/api/recipes', {
             method: 'POST',
             body: JSON.stringify({
                 action: 'rate_recipe',
@@ -190,7 +190,7 @@ async function handleCommentSubmit(e) {
     }
 
     try {
-        const response = await fetchData('/FlavorConnect/public/recipes/api.php', {
+        const response = await fetchData('/api/recipes', {
             method: 'POST',
             body: JSON.stringify({
                 action: 'add_comment',
@@ -215,7 +215,7 @@ async function handleCommentSubmit(e) {
  */
 async function loadComments() {
     try {
-        const response = await fetchData(`/FlavorConnect/public/recipes/api.php?action=get_comments&recipe_id=${state.recipe.id}`);
+        const response = await fetchData(`/api/recipes?action=get_comments&recipe_id=${state.recipe.id}`);
         
         if (response.success) {
             state.comments = response.comments;
@@ -288,7 +288,7 @@ async function handleShare() {
  */
 async function handleSave() {
     try {
-        const response = await fetchData('/FlavorConnect/public/recipes/api.php', {
+        const response = await fetchData('/api/recipes', {
             method: 'POST',
             body: JSON.stringify({
                 action: 'toggle_favorite',
