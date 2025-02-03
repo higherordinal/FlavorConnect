@@ -16,19 +16,19 @@
 }
 
 .user-menu-button {
-    align-items: center;
-    background-color: var(--background-hover);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    color: var(--text-color);
-    cursor: pointer;
     display: flex;
-    font-size: 0.95rem;
-    font-weight: 500;
-    gap: 0.75rem;
-    padding: 0.5rem 1rem;
-    position: relative;
-    transition: all 0.2s ease;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.user-menu-button:hover {
+    color: var(--color-gray-200);
 }
 
 .user-menu-button::after {
@@ -38,14 +38,6 @@
     font-weight: 900;
     margin-left: 0.25rem;
     transition: transform 0.2s ease;
-}
-
-.user-menu-button:hover {
-    background-color: var(--background-color);
-    border-color: var(--primary-color);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    color: var(--primary-color);
-    transform: translateY(-1px);
 }
 
 .user-menu-button:hover::after {

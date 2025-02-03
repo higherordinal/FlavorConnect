@@ -1,8 +1,16 @@
 /**
- * Common utility functions for FlavorConnect
+ * @fileoverview Common utility functions for FlavorConnect application
+ * @author FlavorConnect Team
+ * @version 1.0.0
+ * @license MIT
  */
 
-// Debounce function to limit rate of function calls
+/**
+ * Debounces a function to limit the rate at which it is called
+ * @param {Function} func - The function to debounce
+ * @param {number} wait - The number of milliseconds to wait before calling the function
+ * @returns {Function} A debounced version of the input function
+ */
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
@@ -15,7 +23,11 @@ function debounce(func, wait) {
     };
 }
 
-// Format time from seconds to human readable string
+/**
+ * Formats time in seconds to a human-readable string
+ * @param {number} seconds - Time in seconds
+ * @returns {string} Formatted time string (e.g., "2 hr 30 min" or "45 min")
+ */
 function formatTime(seconds) {
     if (!seconds) return '0 min';
     const hours = Math.floor(seconds / 3600);
@@ -27,7 +39,11 @@ function formatTime(seconds) {
     return `${minutes} min`;
 }
 
-// Format date to locale string
+/**
+ * Formats a date string to a localized format
+ * @param {string} dateString - ISO date string
+ * @returns {string} Formatted date string
+ */
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -37,7 +53,13 @@ function formatDate(dateString) {
     });
 }
 
-// Handle AJAX requests
+/**
+ * Makes an AJAX request with error handling
+ * @param {string} url - The URL to fetch from
+ * @param {Object} [options={}] - Fetch options
+ * @returns {Promise<Object>} The parsed JSON response
+ * @throws {Error} If the request fails
+ */
 async function fetchData(url, options = {}) {
     try {
         const response = await fetch(url, {
@@ -58,7 +80,11 @@ async function fetchData(url, options = {}) {
     }
 }
 
-// Format number to fraction
+/**
+ * Converts a decimal number to a fraction string
+ * @param {number} value - The decimal number to convert
+ * @returns {string} The fraction as a string (e.g., "1/2" or "2 1/4")
+ */
 function formatFraction(value) {
     if (!value) return '0';
     if (value % 1 === 0) return value.toString();
@@ -87,7 +113,11 @@ function formatFraction(value) {
     return `${numerator}/${denominator}`;
 }
 
-// Toggle element visibility
+/**
+ * Toggles the visibility of an element
+ * @param {HTMLElement|string} element - The element or selector to toggle
+ * @param {boolean} [show=true] - Whether to show or hide the element
+ */
 function toggleVisibility(element, show = true) {
     if (typeof element === 'string') {
         element = document.querySelector(element);
@@ -97,7 +127,12 @@ function toggleVisibility(element, show = true) {
     }
 }
 
-// Add event listener with error handling
+/**
+ * Adds an event listener with error handling
+ * @param {HTMLElement|string} element - The element or selector to attach the listener to
+ * @param {string} event - The event name
+ * @param {Function} handler - The event handler function
+ */
 function addSafeEventListener(element, event, handler) {
     if (typeof element === 'string') {
         element = document.querySelector(element);
@@ -112,3 +147,14 @@ function addSafeEventListener(element, event, handler) {
         });
     }
 }
+
+// Export all utility functions
+export {
+    debounce,
+    formatTime,
+    formatDate,
+    fetchData,
+    formatFraction,
+    toggleVisibility,
+    addSafeEventListener
+};
