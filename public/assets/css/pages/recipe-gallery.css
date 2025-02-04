@@ -223,6 +223,13 @@
     justify-content: start;
 }
 
+.main-content .recipe-attribute {
+    background-color: var(--primary-color);
+    border-radius: var(--border-radius-sm);
+    color: var(--color-white);
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
 .main-content .recipe-footer {
     align-items: center;
     border-top: 1px solid var(--light-gray);
