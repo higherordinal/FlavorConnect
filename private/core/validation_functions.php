@@ -265,40 +265,6 @@ function validate_recipe_comment($comment_data) {
 }
 
 /**
- * Validates tag data
- * @param array $tag_data The tag data to validate
- * @return array Array of validation errors
- */
-function validate_tag($tag_data) {
-    $errors = [];
-
-    // Tag name validation
-    if(is_blank($tag_data['name'])) {
-        $errors['name'] = "Tag name cannot be blank.";
-    } elseif(!has_length($tag_data['name'], ['min' => 2, 'max' => 50])) {
-        $errors['name'] = "Tag name must be between 2 and 50 characters.";
-    }
-
-    // Check for unique tag name
-    $sql = "SELECT COUNT(*) FROM tag WHERE name = ?";
-    $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    $stmt = $db->prepare($sql);
-    $stmt->bind_param("s", $tag_data['name']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $count = $result->fetch_array()[0];
-    
-    if($count > 0) {
-        $errors['name'] = "This tag name already exists.";
-    }
-
-    $stmt->close();
-    $db->close();
-
-    return $errors;
-}
-
-/**
  * Validates user form data
  * @param array $user_data The user data to validate
  * @param string $current_id Current user ID for unique checks
@@ -360,3 +326,5 @@ function validate_login($login_data) {
 
     return $errors;
 }
+
+?>

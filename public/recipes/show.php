@@ -109,7 +109,7 @@ if($session->is_logged_in()) {
                     <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
                 </span>
                 <span>
-                    <i class="fas fa-tag"></i>
+                    <i class="fas fa-plate"></i>
                     <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
                 </span>
             </div>

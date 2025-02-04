@@ -123,25 +123,6 @@ class Recipe extends DatabaseObject {
     }
 
     /**
-     * Gets all tags for this recipe
-     * @return array Array of Tag objects
-     */
-    public function tags() {
-        $sql = "SELECT t.* FROM tag t 
-                JOIN recipe_tag rt ON t.tag_id = rt.tag_id 
-                WHERE rt.recipe_id = ?";
-        $stmt = self::$database->prepare($sql);
-        $stmt->bind_param("i", $this->recipe_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $tags = [];
-        while($row = $result->fetch_assoc()) {
-            $tags[] = $row;
-        }
-        return $tags;
-    }
-
-    /**
      * Find featured recipes
      * @param int $limit Optional limit of recipes to return
      * @return array Array of Recipe objects
