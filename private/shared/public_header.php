@@ -28,6 +28,9 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <?php if($page_title === 'About') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/about.css?v=' . time()); ?>">
     <?php } ?>
+    
+    <!-- JavaScript -->
+    <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
 </head>
 <body>
     <header class="header" role="banner">
@@ -42,6 +45,12 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
 
             <!-- Main Navigation -->
             <nav class="main-nav" role="navigation" aria-label="Main navigation">
+                <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true">
+                <label for="nav-toggle" class="nav-toggle-label" aria-label="Toggle menu">
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                    <span class="hamburger"></span>
+                </label>
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
@@ -49,12 +58,10 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                 </ul>
             </nav>
 
-            <!-- Authentication Section -->
-            <div class="auth-section">
-                <div class="auth-buttons">
-                    <a href="<?php echo url_for('/auth/login.php'); ?>" class="btn btn-outline">Login</a>
-                    <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn btn-primary">Sign Up</a>
-                </div>
+            <!-- Auth Links -->
+            <div class="auth-links">
+                <a href="<?php echo url_for('/auth/login.php'); ?>" class="login">Log In</a>
+                <a href="<?php echo url_for('/auth/register.php'); ?>" class="sign-up">Sign Up</a>
             </div>
         </div>
     </header>

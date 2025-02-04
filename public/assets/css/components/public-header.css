@@ -1,80 +1,50 @@
-/* Public Header Specific Styles & Layout */
+/* Public Header Grid */
 .header-grid {
     grid-template-areas: "logo nav auth";
 }
 
-.auth-section {
-    grid-area: auth;
-}
-
-.auth-buttons {
-    display: grid;
+/* Auth Links */
+.auth-links {
+    align-items: center;
+    display: flex;
     gap: var(--spacing-md);
-    grid-auto-flow: column;
+    grid-area: auth;
+    justify-self: end;
 }
 
-.auth-buttons .btn {
-    transition: all 0.3s ease;
-    white-space: nowrap;
+.auth-links a {
+    color: var(--color-white);
+    text-decoration: none;
+    padding: var(--spacing-sm);
 }
 
-.auth-buttons .login {
-    color: var(--light-gray);
-    padding: 0.5rem 1rem;
-    position: relative;
-}
-
-.auth-buttons .login::after {
-    background-color: var(--accent-color);
-    bottom: 0;
-    content: '';
-    height: 2px;
-    left: 0;
-    position: absolute;
-    transition: width 0.3s ease;
-    width: 0;
-}
-
-.auth-buttons .login:hover,
-.auth-buttons .login:focus {
+.auth-links a:hover {
     color: var(--accent-color);
-    outline: none;
 }
 
-.auth-buttons .login:hover::after,
-.auth-buttons .login:focus::after {
-    width: 100%;
-}
-
-.auth-buttons .signup {
+.auth-links .sign-up {
     background-color: var(--accent-color);
-    border-radius: var(--border-radius);
-    color: white;
-    font-weight: 500;
-    padding: 0.5rem 1.5rem;
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
 }
 
-.auth-buttons .signup:hover,
-.auth-buttons .signup:focus {
+.auth-links .sign-up:hover {
     background-color: var(--accent-color-dark);
-    outline: none;
-    transform: translateY(-1px);
-}
-
-.auth-buttons .signup:focus-visible {
-    box-shadow: 0 0 0 2px var(--primary-color), 0 0 0 4px var(--accent-color);
+    color: var(--color-white);
 }
 
 @media (max-width: 768px) {
-    .header-grid {
-        grid-template-areas:
-            "logo"
-            "nav"
-            "auth";
+    .auth-links {
+        gap: var(--spacing-sm);
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-links a {
+        padding: var(--spacing-xs);
     }
 
-    .auth-buttons {
-        grid-auto-flow: row;
-        justify-content: center;
+    .auth-links .sign-up {
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
 }

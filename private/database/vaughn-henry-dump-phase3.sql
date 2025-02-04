@@ -110,25 +110,6 @@ CREATE TABLE recipe_step (
     INDEX idx_step_recipe (recipe_id)
 );
 
--- Create tag table
-CREATE TABLE tag (
-    tag_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    user_id INT UNSIGNED,
-    UNIQUE INDEX idx_tag_name (name),
-    FOREIGN KEY (user_id) REFERENCES user_account(user_id) ON DELETE SET NULL
-);
-
--- Create recipe_tag table
-CREATE TABLE recipe_tag (
-    recipe_id INT UNSIGNED NOT NULL,
-    tag_id INT UNSIGNED NOT NULL,
-    PRIMARY KEY (recipe_id, tag_id),
-    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON DELETE CASCADE,
-    INDEX idx_tag_recipe (recipe_id, tag_id)
-);
-
 -- Create recipe_comment table
 CREATE TABLE recipe_comment (
     comment_id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -186,90 +167,47 @@ INSERT INTO user_account (username, first_name, last_name, email, password_hash,
 ('home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u'),
 ('foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u');
 
--- Insert some tags
-INSERT INTO tag (name, user_id) VALUES
-('Quick & Easy', 1),
-('Vegetarian', 1),
-('Breakfast', 1),
-('Comfort Food', 1),
-('Healthy', 1),
-('Italian', 1),
-('Mexican', 1),
-('Asian', 1),
-('Mediterranean', 1),
-('Vegan', 1);
-
 -- Insert sample recipes
 INSERT INTO recipe (user_id, title, description, type_id, style_id, diet_id, prep_time, cook_time, is_featured) VALUES
-((SELECT user_id FROM user_account WHERE username = 'chef_maria'), 
- 'Classic Spaghetti Carbonara', 'Traditional Italian pasta dish with eggs, cheese, pancetta, and black pepper', 
-   (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
-   (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
-   (SELECT diet_id FROM recipe_diet WHERE name = 'Low-Fat'), 
-   900, 1200, TRUE),
-   
-((SELECT user_id FROM user_account WHERE username = 'home_cook'), 
- 'Breakfast Burrito', 'Hearty breakfast wrapped in a warm tortilla',
-   (SELECT type_id FROM recipe_type WHERE name = 'Breakfast'),
-   (SELECT style_id FROM recipe_style WHERE name = 'Mexican'),
-   (SELECT diet_id FROM recipe_diet WHERE name = 'Low-Carb'),
-   600, 900, FALSE),
-   
-((SELECT user_id FROM user_account WHERE username = 'admin_chef'), 
- 'Vegetarian Buddha Bowl', 'Nutritious bowl filled with grains, vegetables, and tahini dressing',
-   (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
-   (SELECT style_id FROM recipe_style WHERE name = 'Asian'),
-   (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   1200, 600, TRUE),
+((SELECT user_id FROM user_account WHERE username = 'chef_maria'),
+ 'Classic Spaghetti Carbonara',
+ 'A traditional Italian pasta dish made with eggs, cheese, pancetta, and black pepper.',
+ (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
+ (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
+ NULL,
+ 1200, 1800, TRUE),
 
-((SELECT user_id FROM user_account WHERE username = 'foodie_jane'), 
- 'Mediterranean Quinoa Salad', 'Fresh and healthy salad with quinoa, vegetables, and feta cheese',
-   (SELECT type_id FROM recipe_type WHERE name = 'Salad'),
-   (SELECT style_id FROM recipe_style WHERE name = 'Mediterranean'),
-   (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
-   1800, 900, FALSE),
+((SELECT user_id FROM user_account WHERE username = 'home_cook'),
+ 'Breakfast Burrito',
+ 'A hearty breakfast wrap filled with scrambled eggs, cheese, and fresh vegetables.',
+ (SELECT type_id FROM recipe_type WHERE name = 'Breakfast'),
+ (SELECT style_id FROM recipe_style WHERE name = 'Mexican'),
+ NULL,
+ 900, 600, FALSE),
 
-((SELECT user_id FROM user_account WHERE username = 'chef_maria'), 
- 'Spicy Thai Curry', 'Aromatic curry with coconut milk and fresh vegetables',
-   (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
-   (SELECT style_id FROM recipe_style WHERE name = 'Thai'),
-   (SELECT diet_id FROM recipe_diet WHERE name = 'Vegan'),
-   1500, 2400, TRUE);
+((SELECT user_id FROM user_account WHERE username = 'foodie_jane'),
+ 'Vegetarian Buddha Bowl',
+ 'A nourishing bowl of grains, roasted vegetables, and protein-rich toppings.',
+ (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
+ (SELECT style_id FROM recipe_style WHERE name = 'Asian'),
+ (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
+ 1800, 2400, TRUE),
 
--- Tag the recipes
-INSERT INTO recipe_tag (recipe_id, tag_id) VALUES
-((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 
- (SELECT tag_id FROM tag WHERE name = 'Italian')),
-((SELECT recipe_id FROM recipe WHERE title = 'Classic Spaghetti Carbonara'), 
- (SELECT tag_id FROM tag WHERE name = 'Comfort Food')),
- 
-((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 
- (SELECT tag_id FROM tag WHERE name = 'Quick & Easy')),
-((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 
- (SELECT tag_id FROM tag WHERE name = 'Breakfast')),
-((SELECT recipe_id FROM recipe WHERE title = 'Breakfast Burrito'), 
- (SELECT tag_id FROM tag WHERE name = 'Mexican')),
- 
-((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 
- (SELECT tag_id FROM tag WHERE name = 'Healthy')),
-((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 
- (SELECT tag_id FROM tag WHERE name = 'Vegetarian')),
-((SELECT recipe_id FROM recipe WHERE title = 'Vegetarian Buddha Bowl'), 
- (SELECT tag_id FROM tag WHERE name = 'Asian')),
- 
-((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 
- (SELECT tag_id FROM tag WHERE name = 'Healthy')),
-((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 
- (SELECT tag_id FROM tag WHERE name = 'Mediterranean')),
-((SELECT recipe_id FROM recipe WHERE title = 'Mediterranean Quinoa Salad'), 
- (SELECT tag_id FROM tag WHERE name = 'Vegetarian')),
+((SELECT user_id FROM user_account WHERE username = 'admin_chef'),
+ 'Mediterranean Quinoa Salad',
+ 'A refreshing salad with quinoa, fresh vegetables, and Mediterranean flavors.',
+ (SELECT type_id FROM recipe_type WHERE name = 'Salad'),
+ (SELECT style_id FROM recipe_style WHERE name = 'Mediterranean'),
+ (SELECT diet_id FROM recipe_diet WHERE name = 'Vegetarian'),
+ 1200, 1800, FALSE),
 
-((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 
- (SELECT tag_id FROM tag WHERE name = 'Asian')),
-((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 
- (SELECT tag_id FROM tag WHERE name = 'Vegan')),
-((SELECT recipe_id FROM recipe WHERE title = 'Spicy Thai Curry'), 
- (SELECT tag_id FROM tag WHERE name = 'Healthy'));
+((SELECT user_id FROM user_account WHERE username = 'chef_maria'),
+ 'Spicy Thai Curry',
+ 'A flavorful and aromatic curry with vegetables and tofu in coconut milk.',
+ (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
+ (SELECT style_id FROM recipe_style WHERE name = 'Thai'),
+ (SELECT diet_id FROM recipe_diet WHERE name = 'Vegan'),
+ 1500, 2400, TRUE);
 
 -- Insert ingredients for Classic Spaghetti Carbonara
 INSERT INTO ingredient (recipe_id, name) VALUES

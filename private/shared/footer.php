@@ -7,7 +7,6 @@
         <address aria-label="Contact information">
             123 Foodie Lane<br>
             Cuisine City, FC 12345<br>
-            Phone: <a href="tel:+15551234567" aria-label="Call us at (555) 123-4567">(555) 123-4567</a>
         </address>
     </div>
 
