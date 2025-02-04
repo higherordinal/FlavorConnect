@@ -5,86 +5,33 @@
  * @license MIT
  */
 
-/**
- * Initializes member header functionality
- */
-function initializeMemberHeader() {
-    setupDropdownToggle();
-    setupNotifications();
-}
+document.addEventListener('DOMContentLoaded', () => {
+    // User Menu Toggle
+    const userMenuBtn = document.querySelector('.user-menu-button');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
 
-/**
- * Sets up user dropdown toggle functionality
- */
-function setupDropdownToggle() {
-    const dropdownToggle = document.querySelector('.member-dropdown-toggle');
-    const dropdown = document.querySelector('.member-dropdown');
-
-    if (dropdownToggle && dropdown) {
-        dropdownToggle.addEventListener('click', (e) => {
+    if (userMenuBtn && dropdownMenu) {
+        userMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            dropdown.classList.toggle('show');
+            const isExpanded = userMenuBtn.getAttribute('aria-expanded') === 'true';
+            userMenuBtn.setAttribute('aria-expanded', !isExpanded);
+            dropdownMenu.classList.toggle('show');
         });
 
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target) && !dropdownToggle.contains(e.target)) {
-                dropdown.classList.remove('show');
+            if (!dropdownMenu.contains(e.target) && !userMenuBtn.contains(e.target)) {
+                userMenuBtn.setAttribute('aria-expanded', 'false');
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Close dropdown on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && dropdownMenu.classList.contains('show')) {
+                userMenuBtn.setAttribute('aria-expanded', 'false');
+                dropdownMenu.classList.remove('show');
             }
         });
     }
-}
-
-/**
- * Sets up notification functionality
- */
-function setupNotifications() {
-    const notificationToggle = document.querySelector('.notification-toggle');
-    const notificationPanel = document.querySelector('.notification-panel');
-    const notificationCount = document.querySelector('.notification-count');
-
-    if (notificationToggle && notificationPanel) {
-        // Toggle notification panel
-        notificationToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            notificationPanel.classList.toggle('show');
-            
-            if (notificationPanel.classList.contains('show')) {
-                markNotificationsAsRead();
-            }
-        });
-
-        // Close panel when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!notificationPanel.contains(e.target) && !notificationToggle.contains(e.target)) {
-                notificationPanel.classList.remove('show');
-            }
-        });
-    }
-}
-
-/**
- * Marks notifications as read and updates UI
- */
-async function markNotificationsAsRead() {
-    const notificationCount = document.querySelector('.notification-count');
-    if (!notificationCount) return;
-
-    try {
-        const response = await fetch('/FlavorConnect/public/notifications/mark-read.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.ok) {
-            notificationCount.style.display = 'none';
-        }
-    } catch (error) {
-        console.error('Error marking notifications as read:', error);
-    }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeMemberHeader);
+});
