@@ -14,6 +14,19 @@ function url_for($script_path) {
 }
 
 /**
+ * Creates a URL-safe string from the given private path
+ * @param string $script_path The path to make URL-safe
+ * @return string The URL-safe string
+ */
+function private_url_for($script_path) {
+  // add the leading '/' if not present
+  if($script_path[0] != '/') {
+    $script_path = "/" . $script_path;
+  }
+  return PRIVATE_WWW_ROOT . $script_path;
+}
+
+/**
  * URL-encodes a string
  * @param string $string The string to encode
  * @return string The encoded string

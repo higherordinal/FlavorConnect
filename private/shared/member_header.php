@@ -22,11 +22,12 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
-    <?php } ?>
-    <?php if($page_title === 'Recipes') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
+    <?php } else if($page_title === 'Recipes') { ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=' . time()); ?>">
+    <?php } else if($page_title === 'recipe-form') { ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-form.css?v=' . time()); ?>">
     <?php } else { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . strtolower($page_title) . '.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . strtolower($page_title) . '.css?v=' . time()); ?>">
     <?php } ?>
     
     <!-- JavaScript -->
@@ -56,7 +57,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
                     <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>" <?php echo $page_title === 'Favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
-                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
+                    <li><a href="<?php echo private_url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
                 </ul>
             </nav>
 

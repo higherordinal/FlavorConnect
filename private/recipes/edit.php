@@ -3,9 +3,8 @@ require_once('../core/initialize.php');
 require_once(PRIVATE_PATH . '/validation/validation.php');
 require_login();
 
-$page_title = 'Edit Recipe';
-$page_style = 'recipe-form';
-include(SHARED_PATH . '/header.php');
+$page_title = 'recipe-form';
+include(SHARED_PATH . '/member_header.php');
 
 if(!isset($_GET['id'])) {
     redirect_to(url_for('/recipes/index.php'));

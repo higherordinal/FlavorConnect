@@ -19,26 +19,9 @@ if($recipe->user_id != $session->user_id && !$session->is_admin()) {
     redirect_to(url_for('/recipes/show.php?id=' . $id));
 }
 
-if(is_post_request()) {
-    // Delete recipe image if exists
-    if(!empty($recipe->img_file_path)) {
-        $image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $recipe->img_file_path;
-        if(file_exists($image_path)) {
-            unlink($image_path);
-        }
-    }
+$page_title = 'recipe-form';
+include(SHARED_PATH . '/member_header.php');
 
-    // Delete recipe
-    if($recipe->delete()) {
-        $session->message('Recipe deleted successfully.');
-        redirect_to(url_for('/recipes/index.php'));
-    } else {
-        $session->message('Failed to delete recipe.', 'error');
-    }
-}
-
-$page_title = 'Delete Recipe';
-include(SHARED_PATH . '/header.php');
 ?>
 
 <div class="delete-confirmation">
@@ -60,4 +43,23 @@ include(SHARED_PATH . '/header.php');
     </form>
 </div>
 
-<?php include(SHARED_PATH . '/footer.php'); ?>
+<?php 
+if(is_post_request()) {
+    // Delete recipe image if exists
+    if(!empty($recipe->img_file_path)) {
+        $image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $recipe->img_file_path;
+        if(file_exists($image_path)) {
+            unlink($image_path);
+        }
+    }
+
+    // Delete recipe
+    if($recipe->delete()) {
+        $session->message('Recipe deleted successfully.');
+        redirect_to(url_for('/recipes/index.php'));
+    } else {
+        $session->message('Failed to delete recipe.', 'error');
+    }
+}
+
+include(SHARED_PATH . '/footer.php'); ?>

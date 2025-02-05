@@ -29,10 +29,11 @@ spl_autoload_register(function($class) {
     }
 });
 
-// Load core functions
+// Load core functions and classes
 require_once(PRIVATE_PATH . '/core/functions.php');
-require_once(PRIVATE_PATH . '/core/database_functions.php');
+require_once(PRIVATE_PATH . '/core/auth_functions.php');
 require_once(PRIVATE_PATH . '/core/validation_functions.php');
+require_once(PRIVATE_PATH . '/core/database_functions.php');
 require_once(PRIVATE_PATH . '/core/error_functions.php');
 
 // Create database connection
