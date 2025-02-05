@@ -64,11 +64,13 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
         <div class="time-inputs">
             <div class="form-group">
                 <label for="prep_hours">Hours</label>
-                <input type="number" name="prep_hours" id="prep_hours" class="form-control" min="0" value="<?php echo h($recipe->prep_hours ?? 0); ?>">
+                <input type="number" name="prep_hours" id="prep_hours" class="form-control" min="0" 
+                       value="<?php echo h(isset($recipe->prep_time) && $recipe->prep_time > 0 ? floor($recipe->prep_time / 3600) : 0); ?>">
             </div>
             <div class="form-group">
                 <label for="prep_minutes">Minutes</label>
-                <input type="number" name="prep_minutes" id="prep_minutes" class="form-control" min="0" max="59" value="<?php echo h($recipe->prep_minutes ?? 0); ?>">
+                <input type="number" name="prep_minutes" id="prep_minutes" class="form-control" min="0" max="59" 
+                       value="<?php echo h(isset($recipe->prep_time) && $recipe->prep_time > 0 ? floor(($recipe->prep_time % 3600) / 60) : 0); ?>">
             </div>
         </div>
     </div>
@@ -78,11 +80,13 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
         <div class="time-inputs">
             <div class="form-group">
                 <label for="cook_hours">Hours</label>
-                <input type="number" name="cook_hours" id="cook_hours" class="form-control" min="0" value="<?php echo h($recipe->cook_hours ?? 0); ?>">
+                <input type="number" name="cook_hours" id="cook_hours" class="form-control" min="0" 
+                       value="<?php echo h(isset($recipe->cook_time) && $recipe->cook_time > 0 ? floor($recipe->cook_time / 3600) : 0); ?>">
             </div>
             <div class="form-group">
                 <label for="cook_minutes">Minutes</label>
-                <input type="number" name="cook_minutes" id="cook_minutes" class="form-control" min="0" max="59" value="<?php echo h($recipe->cook_minutes ?? 0); ?>">
+                <input type="number" name="cook_minutes" id="cook_minutes" class="form-control" min="0" max="59" 
+                       value="<?php echo h(isset($recipe->cook_time) && $recipe->cook_time > 0 ? floor(($recipe->cook_time % 3600) / 60) : 0); ?>">
             </div>
         </div>
     </div>

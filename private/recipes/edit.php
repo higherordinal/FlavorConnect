@@ -16,6 +16,17 @@ if(!$recipe) {
     redirect_to(url_for('/recipes/index.php'));
 }
 
+// Debug output
+error_log("Recipe Data:");
+error_log("Recipe ID: " . $recipe->recipe_id);
+error_log("Title: " . $recipe->title);
+error_log("Prep Time: " . $recipe->prep_time);
+error_log("Cook Time: " . $recipe->cook_time);
+error_log("Prep Hours: " . floor($recipe->prep_time / 3600));
+error_log("Prep Minutes: " . floor(($recipe->prep_time % 3600) / 60));
+error_log("Cook Hours: " . floor($recipe->cook_time / 3600));
+error_log("Cook Minutes: " . floor(($recipe->cook_time % 3600) / 60));
+
 // Load recipe ingredients and steps
 $ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
 $steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
