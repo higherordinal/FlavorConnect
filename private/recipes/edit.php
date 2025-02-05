@@ -1,6 +1,6 @@
 <?php
 require_once('../core/initialize.php');
-require_once(PRIVATE_PATH . '/validation/validation.php');
+require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
 $page_title = 'recipe-form';
@@ -16,8 +16,12 @@ if(!$recipe) {
     redirect_to(url_for('/recipes/index.php'));
 }
 
+// Load recipe ingredients and steps
+$ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
+$steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
+
 // Check if user has permission to edit this recipe
-if($recipe->user_id != $session->user_id && !$session->is_admin()) {
+if($recipe->user_id != $session->get_user_id() && !$session->is_admin()) {
     $session->message('You do not have permission to edit this recipe.', 'error');
     redirect_to(url_for('/recipes/show.php?id=' . $id));
 }

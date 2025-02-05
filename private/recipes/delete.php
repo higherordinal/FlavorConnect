@@ -1,5 +1,6 @@
 <?php
 require_once('../core/initialize.php');
+require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
 if(!isset($_GET['id'])) {
@@ -14,7 +15,7 @@ if(!$recipe) {
 }
 
 // Check if user has permission to delete this recipe
-if($recipe->user_id != $session->user_id && !$session->is_admin()) {
+if($recipe->user_id != $session->get_user_id() && !$session->is_admin()) {
     $session->message('You do not have permission to delete this recipe.', 'error');
     redirect_to(url_for('/recipes/show.php?id=' . $id));
 }

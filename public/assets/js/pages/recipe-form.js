@@ -109,9 +109,7 @@ function initializeIngredients() {
                 <input type="text" name="ingredients[${index}][name]" id="ingredient_${index}" class="form-control" required>
             </div>
             
-            <button type="button" class="btn btn-danger remove-ingredient">
-                <i class="fas fa-times"></i>
-            </button>
+            <button type="button" class="btn btn-danger remove-ingredient">×</button>
         `;
         
         return row;
@@ -162,9 +160,7 @@ function initializeDirections() {
                 <textarea name="steps[${index}][instruction]" id="step_${index}" class="form-control" rows="2" required></textarea>
                 <input type="hidden" name="steps[${index}][step_number]" value="${stepNumber}">
             </div>
-            <button type="button" class="btn btn-danger remove-step">
-                <i class="fas fa-times"></i>
-            </button>
+            <button type="button" class="btn btn-danger remove-step">×</button>
         `;
         
         return row;
