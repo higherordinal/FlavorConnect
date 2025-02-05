@@ -44,22 +44,89 @@ class Recipe extends DatabaseObject {
     public $created_at;
 
     /**
+     * Get prep time hours
+     * @return int Hours part of prep time
+     */
+    public function get_prep_hours() {
+        return floor($this->prep_time / 3600);
+    }
+
+    /**
+     * Get prep time minutes
+     * @return int Minutes part of prep time
+     */
+    public function get_prep_minutes() {
+        return floor(($this->prep_time % 3600) / 60);
+    }
+
+    /**
+     * Get cook time hours
+     * @return int Hours part of cook time
+     */
+    public function get_cook_hours() {
+        return floor($this->cook_time / 3600);
+    }
+
+    /**
+     * Get cook time minutes
+     * @return int Minutes part of cook time
+     */
+    public function get_cook_minutes() {
+        return floor(($this->cook_time % 3600) / 60);
+    }
+
+    /**
+     * Magic getter for time properties
+     */
+    public function __get($name) {
+        switch($name) {
+            case 'prep_hours':
+                return $this->get_prep_hours();
+            case 'prep_minutes':
+                return $this->get_prep_minutes();
+            case 'cook_hours':
+                return $this->get_cook_hours();
+            case 'cook_minutes':
+                return $this->get_cook_minutes();
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Constructor for Recipe class
      * @param array $args Associative array of property values
      */
     public function __construct($args=[]) {
         $this->title = $args['title'] ?? '';
         $this->description = $args['description'] ?? '';
-        $this->style_id = $args['style_id'] ?? null;
-        $this->diet_id = $args['diet_id'] ?? null;
-        $this->type_id = $args['type_id'] ?? null;
-        $this->prep_time = $args['prep_time'] ?? 0;
-        $this->cook_time = $args['cook_time'] ?? 0;
+        $this->user_id = $args['user_id'] ?? '';
+        $this->style_id = $args['style_id'] ?? '';
+        $this->diet_id = $args['diet_id'] ?? '';
+        $this->type_id = $args['type_id'] ?? '';
         $this->video_url = $args['video_url'] ?? '';
         $this->img_file_path = $args['img_file_path'] ?? '';
         $this->alt_text = $args['alt_text'] ?? '';
-        $this->is_featured = $args['is_featured'] ?? false;
+        $this->is_featured = $args['is_featured'] ?? 0;
         $this->created_at = $args['created_at'] ?? date('Y-m-d H:i:s');
+
+        // Convert hours and minutes to seconds for prep_time
+        if (isset($args['prep_hours']) || isset($args['prep_minutes'])) {
+            $hours = intval($args['prep_hours'] ?? 0);
+            $minutes = intval($args['prep_minutes'] ?? 0);
+            $this->prep_time = ($hours * 3600) + ($minutes * 60);
+        } else {
+            $this->prep_time = isset($args['prep_time']) ? intval($args['prep_time']) : 0;
+        }
+
+        // Convert hours and minutes to seconds for cook_time
+        if (isset($args['cook_hours']) || isset($args['cook_minutes'])) {
+            $hours = intval($args['cook_hours'] ?? 0);
+            $minutes = intval($args['cook_minutes'] ?? 0);
+            $this->cook_time = ($hours * 3600) + ($minutes * 60);
+        } else {
+            $this->cook_time = isset($args['cook_time']) ? intval($args['cook_time']) : 0;
+        }
     }
 
     /**

@@ -54,10 +54,16 @@ if(is_post_request()) {
         $recipe->style_id = $_POST['style_id'] ?? '';
         $recipe->diet_id = $_POST['diet_id'] ?? '';
         $recipe->type_id = $_POST['type_id'] ?? '';
-        $recipe->prep_hours = $_POST['prep_hours'] ?? 0;
-        $recipe->prep_minutes = $_POST['prep_minutes'] ?? 0;
-        $recipe->cook_hours = $_POST['cook_hours'] ?? 0;
-        $recipe->cook_minutes = $_POST['cook_minutes'] ?? 0;
+        
+        // Convert hours and minutes to seconds
+        $prep_hours = intval($_POST['prep_hours'] ?? 0);
+        $prep_minutes = intval($_POST['prep_minutes'] ?? 0);
+        $cook_hours = intval($_POST['cook_hours'] ?? 0);
+        $cook_minutes = intval($_POST['cook_minutes'] ?? 0);
+        
+        $recipe->prep_time = ($prep_hours * 3600) + ($prep_minutes * 60);
+        $recipe->cook_time = ($cook_hours * 3600) + ($cook_minutes * 60);
+        
         $recipe->video_url = $_POST['video_url'] ?? '';
         $recipe->img_file_path = $_POST['img_file_path'] ?? '';
         $recipe->alt_text = $_POST['alt_text'] ?? '';
