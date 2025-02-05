@@ -1,8 +1,13 @@
 <?php
-// Get all recipe attributes
-$styles = RecipeAttribute::get_all(RecipeAttribute::TYPE_STYLE);
-$diets = RecipeAttribute::get_all(RecipeAttribute::TYPE_DIET);
-$types = RecipeAttribute::get_all(RecipeAttribute::TYPE_TYPE);
+// Get recipe attributes from their respective tables
+$sql = "SELECT style_id as id, name FROM recipe_style ORDER BY name";
+$styles = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
+
+$sql = "SELECT diet_id as id, name FROM recipe_diet ORDER BY name";
+$diets = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
+
+$sql = "SELECT type_id as id, name FROM recipe_type ORDER BY name";
+$types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <div class="form-group">
@@ -21,8 +26,8 @@ $types = RecipeAttribute::get_all(RecipeAttribute::TYPE_TYPE);
         <select name="style_id" id="style_id" class="form-control" required>
             <option value="">Select Style</option>
             <?php foreach($styles as $style) { ?>
-                <option value="<?php echo h($style->id); ?>" <?php if(isset($recipe->style_id) && $recipe->style_id == $style->id) echo 'selected'; ?>>
-                    <?php echo h($style->name); ?>
+                <option value="<?php echo h($style['id']); ?>" <?php if(isset($recipe->style_id) && $recipe->style_id == $style['id']) echo 'selected'; ?>>
+                    <?php echo h($style['name']); ?>
                 </option>
             <?php } ?>
         </select>
@@ -33,8 +38,8 @@ $types = RecipeAttribute::get_all(RecipeAttribute::TYPE_TYPE);
         <select name="diet_id" id="diet_id" class="form-control" required>
             <option value="">Select Diet</option>
             <?php foreach($diets as $diet) { ?>
-                <option value="<?php echo h($diet->id); ?>" <?php if(isset($recipe->diet_id) && $recipe->diet_id == $diet->id) echo 'selected'; ?>>
-                    <?php echo h($diet->name); ?>
+                <option value="<?php echo h($diet['id']); ?>" <?php if(isset($recipe->diet_id) && $recipe->diet_id == $diet['id']) echo 'selected'; ?>>
+                    <?php echo h($diet['name']); ?>
                 </option>
             <?php } ?>
         </select>
@@ -45,8 +50,8 @@ $types = RecipeAttribute::get_all(RecipeAttribute::TYPE_TYPE);
         <select name="type_id" id="type_id" class="form-control" required>
             <option value="">Select Type</option>
             <?php foreach($types as $type) { ?>
-                <option value="<?php echo h($type->id); ?>" <?php if(isset($recipe->type_id) && $recipe->type_id == $type->id) echo 'selected'; ?>>
-                    <?php echo h($type->name); ?>
+                <option value="<?php echo h($type['id']); ?>" <?php if(isset($recipe->type_id) && $recipe->type_id == $type['id']) echo 'selected'; ?>>
+                    <?php echo h($type['name']); ?>
                 </option>
             <?php } ?>
         </select>

@@ -3,9 +3,14 @@ require_once('../core/initialize.php');
 require_once('../core/validation_functions.php');
 require_login();
 
-$page_title = 'Create New Recipe';
-$page_style = 'recipe-form';
-include(SHARED_PATH . '/header.php');
+// Debug output
+error_log("Script Path: " . $_SERVER['SCRIPT_NAME']);
+error_log("WWW_ROOT: " . WWW_ROOT);
+
+$page_title = 'recipe-form';
+error_log("Page Title: " . $page_title);
+
+include(SHARED_PATH . '/member_header.php');
 
 $recipe = new Recipe();
 $errors = [];
