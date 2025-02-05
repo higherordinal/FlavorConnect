@@ -30,7 +30,7 @@ if($session->is_logged_in()) {
         <div class="cta-card">
             <h3>Share Recipes</h3>
             <p>Join our community and share your culinary creations with food enthusiasts worldwide.</p>
-            <a href="<?php echo is_logged_in() ? private_url_for('/recipes/new.php?ref=home') : url_for('/login.php'); ?>" class="btn-text">
+            <a href="<?php echo is_logged_in() ? private_url_for('/recipes/new.php?ref=home') : url_for('/auth/login.php'); ?>" class="btn-text">
                 <?php echo is_logged_in() ? 'Start Sharing' : 'Login to Share'; ?>
             </a>
         </div>
@@ -77,7 +77,7 @@ if($session->is_logged_in()) {
                 if($recipe->diet()) echo '<span class="recipe-attribute">' . h($recipe->diet()->name) . '</span>';
                 if($recipe->type()) echo '<span class="recipe-attribute">' . h($recipe->type()->name) . '</span>';
                 echo '</div>';
-                echo '<a href="' . url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))) . '" class="btn-text">View Recipe</a>';
+                echo '<a href="' . url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=home') . '" class="btn-text">View Recipe</a>';
                 echo '</div>';
                 echo '</div>';
             }
