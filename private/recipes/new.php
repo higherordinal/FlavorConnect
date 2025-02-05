@@ -123,7 +123,12 @@ if(is_post_request()) {
 }
 
 $ref = $_GET['ref'] ?? '';
-$back_link = $ref === 'profile' ? private_url_for('/users/profile.php') : url_for('/recipes/index.php');
+$back_link = match($ref) {
+    'profile' => private_url_for('/users/profile.php'),
+    'home' => url_for('/index.php'),
+    'header' => url_for('/recipes/index.php'),
+    default => url_for('/recipes/index.php')
+};
 ?>
 
 <div class="recipe-form">

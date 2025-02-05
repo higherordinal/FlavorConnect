@@ -29,8 +29,8 @@ if($session->is_logged_in()) {
     <section class="cta-section">
         <div class="cta-card">
             <h3>Share Recipes</h3>
-            <p>Share your unique recipes with our growing community of food lovers.</p>
-            <a href="<?php echo url_for('/recipes/new.php'); ?>" class="btn-text">Start Sharing</a>
+            <p>Join our community and share your culinary creations with food enthusiasts worldwide.</p>
+            <a href="<?php echo url_for('/recipes/new.php?ref=home'); ?>" class="btn-text">Start Sharing</a>
         </div>
         <div class="cta-card">
             <h3>Find Inspiration</h3>
