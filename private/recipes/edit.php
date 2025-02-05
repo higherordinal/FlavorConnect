@@ -138,25 +138,29 @@ if(is_post_request()) {
 }
 ?>
 
-<div class="recipe-form">
-    <h1>Edit Recipe: <?php echo h($recipe->title); ?></h1>
-    
-    <?php echo display_errors($errors); ?>
-    
-    <form action="<?php echo url_for('/private/recipes/edit.php?id=' . h(u($id))); ?>" method="post" enctype="multipart/form-data">
-        <?php include('form_fields.php'); ?>
+<main>
+    <div class="recipe-form">
+        <header class="page-header">
+            <h1>Edit Recipe: <?php echo h($recipe->title); ?></h1>
+        </header>
+
+        <?php echo display_errors($errors); ?>
         
-        <div class="form-buttons">
-            <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i>
-                Save Changes
-            </button>
-            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="btn btn-secondary">
-                <i class="fas fa-times"></i>
-                Cancel
-            </a>
-        </div>
-    </form>
-</div>
+        <form action="<?php echo url_for('/private/recipes/edit.php?id=' . h(u($id))); ?>" method="post" enctype="multipart/form-data">
+            <?php include('form_fields.php'); ?>
+            
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save"></i>
+                    Save Changes
+                </button>
+                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

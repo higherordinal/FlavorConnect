@@ -24,24 +24,31 @@ include(SHARED_PATH . '/member_header.php');
 
 ?>
 
-<div class="delete-confirmation">
-    <h1>Delete Recipe</h1>
-    <p>Are you sure you want to delete the recipe "<?php echo h($recipe->title); ?>"?</p>
-    <p class="warning">This action cannot be undone.</p>
+<main>
+    <div class="recipe-form">
+        <header class="page-header">
+            <h1>Delete Recipe</h1>
+        </header>
 
-    <form action="<?php echo url_for('/private/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
-        <div class="form-buttons">
-            <button type="submit" class="btn btn-danger">
-                <i class="fas fa-trash"></i>
-                Delete Recipe
-            </button>
-            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="btn btn-secondary">
-                <i class="fas fa-times"></i>
-                Cancel
-            </a>
+        <div class="delete-confirmation">
+            <p>Are you sure you want to delete <strong><?php echo h($recipe->title); ?></strong>?</p>
+            <p class="warning">This action cannot be undone.</p>
         </div>
-    </form>
-</div>
+
+        <form action="<?php echo url_for('/private/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Delete Recipe
+                </button>
+                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
 
 <?php 
 if(is_post_request()) {
