@@ -28,10 +28,6 @@ include(SHARED_PATH . '/member_header.php');
                 <i class="fas fa-utensils"></i>
                 <span><?php echo count($recipes); ?> Recipes Created</span>
             </div>
-            <div class="stat">
-                <i class="fas fa-calendar-alt"></i>
-                <span>Member since <?php echo date('F Y', strtotime($user->created_at)); ?></span>
-            </div>
         </div>
     </div>
 
