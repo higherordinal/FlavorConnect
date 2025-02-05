@@ -8,6 +8,11 @@ if(!$recipe) {
     redirect_to(url_for('/index.php'));
 }
 
+// Determine back link based on referrer
+$ref = $_GET['ref'] ?? '';
+$back_link = $ref === 'home' ? url_for('/index.php') : url_for('/recipes/index.php');
+$back_text = $ref === 'home' ? 'Back to Home' : 'Back to Recipes';
+
 // Handle new review submission
 if(is_post_request() && $session->is_logged_in()) {
     $args = [];
@@ -46,8 +51,8 @@ if($session->is_logged_in()) {
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-show.css'); ?>">
 
 <div class="recipe-show">
-    <a href="<?php echo url_for('/recipes/index.php'); ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to Recipes
+    <a href="<?php echo $back_link; ?>" class="back-link">
+        <i class="fas fa-arrow-left"></i> <?php echo $back_text; ?>
     </a>
     <div class="recipe-header-image">
         <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
