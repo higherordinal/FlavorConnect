@@ -285,11 +285,26 @@
 }
 
 /* Form Buttons */
-.form-buttons {
+.recipe-form .form-buttons {
+    margin-top: var(--spacing-lg);
     display: flex;
     gap: var(--spacing-md);
-    justify-content: flex-end;
-    margin-top: var(--spacing-lg);
+    justify-content: flex-start;
+}
+
+.delete-confirmation {
+    text-align: center;
+    margin: var(--spacing-xl) 0;
+}
+
+.delete-confirmation p {
+    font-size: var(--font-size-large);
+    margin-bottom: var(--spacing-md);
+}
+
+.delete-confirmation .warning {
+    color: var(--danger-color);
+    font-weight: var(--font-weight-medium);
 }
 
 /* Responsive Design */
