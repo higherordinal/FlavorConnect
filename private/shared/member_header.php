@@ -19,6 +19,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-favorite.css?v=' . time()); ?>">
     
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
@@ -33,6 +34,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <!-- JavaScript -->
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
+    <script src="<?php echo url_for('/assets/js/components/recipe-favorite.js'); ?>" defer></script>
     <?php if($page_title === 'recipe-form') { ?>
     <script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>
     <?php } ?>
@@ -59,7 +61,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
-                    <li><a href="<?php echo url_for('/recipes/favorites.php'); ?>" <?php echo $page_title === 'Favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
+                    <li><a href="<?php echo private_url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'My Favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
                     <li><a href="<?php echo private_url_for('/recipes/new.php?ref=header'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
                 </ul>
             </nav>
@@ -76,6 +78,9 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     </button>
                     <div class="dropdown-menu">
                         <a href="<?php echo private_url_for('/users/profile.php'); ?>">Profile</a>
+                        <?php if(is_admin()) { ?>
+                        <a href="<?php echo private_url_for('/admin/index.php'); ?>">Admin Area</a>
+                        <?php } ?>
                         <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
                     </div>
                 </div>
