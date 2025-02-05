@@ -417,5 +417,23 @@ class Recipe extends DatabaseObject {
             'minutes' => floor(($seconds % 3600) / 60)
         ];
     }
+
+    /**
+     * Find all recipes created by a specific user
+     * @param int $user_id The ID of the user
+     * @return array Array of Recipe objects
+     */
+    public static function find_by_user_id($user_id) {
+        $sql = "SELECT * FROM " . static::$table_name;
+        $sql .= " WHERE user_id = ?";
+        $sql .= " ORDER BY created_at DESC";
+        
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return static::instantiate_result($result);
+    }
 }
 ?>
