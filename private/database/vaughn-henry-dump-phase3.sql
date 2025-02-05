@@ -149,8 +149,19 @@ CREATE TABLE user_favorite (
 );
 
 -- Insert predefined measurements
-INSERT INTO measurement (name) VALUES
-('cup'), ('teaspoon'), ('tablespoon'), ('gram'), ('kilogram'), ('ounce'), ('pound'), ('pinch'), ('dash'), ('liter'), ('milliliter');
+INSERT INTO measurement (measurement_id, name) VALUES
+(1,'cup'),
+(2,'tablespoon'),
+(3,'teaspoon'),
+(4,'pound'),
+(5,'ounce'),
+(6,'gram'),
+(7,'milliliter'),
+(8,'pinch'),
+(9,'piece'),
+(10,'whole'),
+(11,'to taste'),
+(12,'clove');
 
 -- Insert default recipe styles
 INSERT INTO recipe_style (name) VALUES
