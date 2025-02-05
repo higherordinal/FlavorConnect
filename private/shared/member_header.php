@@ -33,6 +33,9 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <!-- JavaScript -->
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
+    <?php if($page_title === 'recipe-form') { ?>
+    <script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>
+    <?php } ?>
 </head>
 <body>
     <header class="header" role="banner">
