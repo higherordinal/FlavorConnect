@@ -20,7 +20,12 @@ CREATE TABLE user_account (
     password_hash VARCHAR(255) NOT NULL,
     user_level ENUM('s', 'a', 'u') NOT NULL DEFAULT 'u',
     is_active BOOLEAN DEFAULT TRUE,
-    INDEX idx_user_is_active (is_active)
+    INDEX idx_user_username (username),
+    INDEX idx_user_email (email),
+    INDEX idx_user_is_active (is_active),
+    INDEX idx_user_last_name (last_name),
+    INDEX idx_user_level_lastname (user_level, last_name),
+    FULLTEXT INDEX idx_user_name (first_name, last_name)
 );
 
 -- Create recipe_style table
@@ -174,7 +179,7 @@ INSERT INTO recipe (user_id, title, description, type_id, style_id, diet_id, pre
  'A traditional Italian pasta dish made with eggs, cheese, pancetta, and black pepper.',
  (SELECT type_id FROM recipe_type WHERE name = 'Main Course'),
  (SELECT style_id FROM recipe_style WHERE name = 'Italian'),
- NULL,
+ (SELECT diet_id FROM recipe_diet WHERE name = 'Low-Fat'),
  1200, 1800, TRUE),
 
 ((SELECT user_id FROM user_account WHERE username = 'home_cook'),
@@ -182,7 +187,7 @@ INSERT INTO recipe (user_id, title, description, type_id, style_id, diet_id, pre
  'A hearty breakfast wrap filled with scrambled eggs, cheese, and fresh vegetables.',
  (SELECT type_id FROM recipe_type WHERE name = 'Breakfast'),
  (SELECT style_id FROM recipe_style WHERE name = 'Mexican'),
- NULL,
+ (SELECT diet_id FROM recipe_diet WHERE name = 'Low-Carb'),
  900, 600, FALSE),
 
 ((SELECT user_id FROM user_account WHERE username = 'foodie_jane'),
