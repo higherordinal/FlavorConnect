@@ -134,7 +134,7 @@ if(is_post_request()) {
     
     <?php echo display_errors($errors); ?>
     
-    <form action="<?php echo url_for('/private/recipes/new.php'); ?>" method="post" enctype="multipart/form-data">
+    <form action="<?php echo private_url_for('/recipes/new.php'); ?>" method="post" enctype="multipart/form-data">
         <?php include('form_fields.php'); ?>
         
         <div class="form-buttons">
