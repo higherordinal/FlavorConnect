@@ -26,6 +26,7 @@
     --secondary-color: #3498DB;
     --success-color: #27AE60;
     --text-color: #2C3E50;
+    --text-muted: #95A5A6;
     --warning-color: #E74C3C;
 
     /* Spacing */
@@ -390,6 +391,36 @@ a:hover {
     background-color: rgba(241, 196, 15, 0.1);
     border: 1px solid var(--warning-color);
     color: var(--warning-color);
+}
+
+/* Recipe Meta */
+.recipe-meta {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1rem;
+    align-items: center;
+}
+
+.recipe-meta .rating {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0.25rem;
+    align-items: center;
+    color: #ffd700;  /* Golden color for stars */
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+}
+
+.recipe-meta .time {
+    display: grid;
+    align-items: center;
+}
+
+.recipe-meta .rating .review-count {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: grid;
+    align-items: center;
 }
 
 /* ==========================================================================

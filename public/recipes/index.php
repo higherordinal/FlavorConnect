@@ -193,8 +193,17 @@ if ($current_page > $total_pages) {
                                 <span class="rating" aria-label="Rating: <?php echo $recipe->get_average_rating(); ?> out of 5 stars">
                                     <?php 
                                         $rating = $recipe->get_average_rating();
-                                        echo str_repeat('★', round($rating));
-                                        echo str_repeat('☆', 5 - round($rating));
+                                        // Full stars
+                                        for ($i = 1; $i <= floor($rating); $i++) {
+                                            echo '★';
+                                        }
+                                        // Half star if needed
+                                        if ($rating - floor($rating) >= 0.5) {
+                                            echo '⯨';
+                                        }
+                                        // Empty stars
+                                        $remaining = 5 - ceil($rating);
+                                        echo str_repeat('☆', $remaining);
                                         echo ' <span class="review-count" aria-label="' . $recipe->rating_count() . ' reviews">(' . $recipe->rating_count() . ')</span>';
                                     ?>
                                 </span>
