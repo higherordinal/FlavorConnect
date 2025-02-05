@@ -30,7 +30,7 @@ if($session->is_logged_in()) {
         <div class="cta-card">
             <h3>Share Recipes</h3>
             <p>Join our community and share your culinary creations with food enthusiasts worldwide.</p>
-            <a href="<?php echo url_for('/recipes/new.php?ref=home'); ?>" class="btn-text">Start Sharing</a>
+            <a href="<?php echo private_url_for('/recipes/new.php?ref=home'); ?>" class="btn-text">Start Sharing</a>
         </div>
         <div class="cta-card">
             <h3>Find Inspiration</h3>
