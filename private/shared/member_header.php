@@ -75,7 +75,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                         <span class="username"><?php echo $username; ?></span>
                     </button>
                     <div class="dropdown-menu">
-                        <a href="<?php echo url_for('/profile/index.php'); ?>">Profile</a>
+                        <a href="<?php echo private_url_for('/users/profile.php'); ?>">Profile</a>
                         <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
                     </div>
                 </div>
