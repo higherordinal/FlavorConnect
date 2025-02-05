@@ -35,7 +35,7 @@ include(SHARED_PATH . '/member_header.php');
         <section class="my-recipes">
             <div class="section-header">
                 <h2>My Recipes</h2>
-                <a href="<?php echo private_url_for('/recipes/new.php'); ?>" class="btn btn-primary">
+                <a href="<?php echo private_url_for('/recipes/new.php?ref=profile'); ?>" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Create New Recipe
                 </a>
             </div>
@@ -44,7 +44,7 @@ include(SHARED_PATH . '/member_header.php');
                 <div class="empty-state">
                     <i class="fas fa-book-open"></i>
                     <p>You haven't created any recipes yet.</p>
-                    <a href="<?php echo private_url_for('/recipes/new.php'); ?>" class="btn btn-primary">Create Your First Recipe</a>
+                    <a href="<?php echo private_url_for('/recipes/new.php?ref=profile'); ?>" class="btn btn-primary">Create Your First Recipe</a>
                 </div>
             <?php } else { ?>
                 <div class="recipe-grid">

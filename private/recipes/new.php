@@ -121,13 +121,15 @@ if(is_post_request()) {
         }
     }
 }
+
+$ref = $_GET['ref'] ?? '';
+$back_link = $ref === 'profile' ? private_url_for('/users/profile.php') : url_for('/recipes/index.php');
 ?>
 
 <div class="recipe-form">
     <div class="page-header">
-        <a href="<?php echo url_for('/recipes/index.php'); ?>" class="back-link">
-            <i class="fas fa-arrow-left"></i>
-            Back to Recipes
+        <a href="<?php echo $back_link; ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back
         </a>
         <h1>Create New Recipe</h1>
     </div>
