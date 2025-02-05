@@ -5,140 +5,60 @@
  * @license MIT
  */
 
-import { formatFraction } from '../utils/common.js';
-
-// State management
-const state = {
-    originalServings: 1,
-    currentServings: 1,
-    ingredients: []
-};
-
-/**
- * Initializes recipe scaling functionality
- */
-function initializeScaling() {
-    captureInitialState();
-    setupEventListeners();
-}
-
-/**
- * Captures initial recipe state
- */
-function captureInitialState() {
-    const servingsInput = document.querySelector('#servings');
-    if (servingsInput) {
-        state.originalServings = parseInt(servingsInput.value) || 1;
-        state.currentServings = state.originalServings;
-    }
-
-    // Store original ingredient amounts
-    state.ingredients = Array.from(document.querySelectorAll('.ingredient-amount')).map(el => ({
-        element: el,
-        originalAmount: parseFloat(el.dataset.amount) || 0,
-        unit: el.dataset.unit || ''
-    }));
-}
-
-/**
- * Sets up event listeners for scaling controls
- */
-function setupEventListeners() {
-    // Servings input
-    const servingsInput = document.querySelector('#servings');
-    if (servingsInput) {
-        servingsInput.addEventListener('change', handleServingsChange);
-        servingsInput.addEventListener('input', validateInput);
-    }
-
+document.addEventListener('DOMContentLoaded', function() {
     // Scale buttons
     const scaleButtons = document.querySelectorAll('.scale-btn');
     scaleButtons.forEach(button => {
-        button.addEventListener('click', handleScaleButtonClick);
+        button.addEventListener('click', function(e) {
+            const newScale = parseFloat(this.dataset.scale);
+            
+            // Update active button state
+            document.querySelectorAll('.scale-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // Update ingredient amounts
+            const amounts = document.querySelectorAll('.amount');
+            amounts.forEach(amount => {
+                const baseAmount = parseFloat(amount.dataset.base);
+                const newAmount = baseAmount * newScale;
+                amount.textContent = formatQuantity(newAmount);
+            });
+        });
     });
-
-    // Reset button
-    const resetButton = document.querySelector('.reset-scale');
-    if (resetButton) {
-        resetButton.addEventListener('click', resetScale);
-    }
-}
+});
 
 /**
- * Handles changes to servings input
- * @param {Event} e - Change event from servings input
+ * Formats a number as a fraction when appropriate
+ * @param {number} value - Number to format
+ * @returns {string} Formatted number
  */
-function handleServingsChange(e) {
-    const newServings = parseInt(e.target.value) || 1;
-    if (newServings < 1) {
-        e.target.value = 1;
-        return;
-    }
-
-    updateIngredientAmounts(newServings);
-    state.currentServings = newServings;
-}
-
-/**
- * Validates servings input to ensure only positive numbers
- * @param {Event} e - Input event from servings input
- */
-function validateInput(e) {
-    const value = e.target.value;
-    if (value < 0) {
-        e.target.value = 1;
-    }
-}
-
-/**
- * Handles clicks on scale buttons (half, double)
- * @param {Event} e - Click event from scale button
- */
-function handleScaleButtonClick(e) {
-    const action = e.currentTarget.dataset.action;
-    const servingsInput = document.querySelector('#servings');
-    let newServings = state.currentServings;
-
-    switch(action) {
-        case 'half':
-            newServings = Math.max(1, Math.floor(state.currentServings / 2));
-            break;
-        case 'double':
-            newServings = state.currentServings * 2;
-            break;
-    }
-
-    servingsInput.value = newServings;
-    updateIngredientAmounts(newServings);
-    state.currentServings = newServings;
-}
-
-/**
- * Updates ingredient amounts based on new servings
- * @param {number} newServings - New number of servings
- */
-function updateIngredientAmounts(newServings) {
-    const scaleFactor = newServings / state.originalServings;
-
-    state.ingredients.forEach(ingredient => {
-        const newAmount = ingredient.originalAmount * scaleFactor;
-        const formattedAmount = formatFraction(newAmount);
-        ingredient.element.textContent = `${formattedAmount}${ingredient.unit ? ' ' + ingredient.unit : ''}`;
-    });
-}
-
-/**
- * Resets recipe to original scale
- */
-function resetScale() {
-    const servingsInput = document.querySelector('#servings');
-    if (servingsInput) {
-        servingsInput.value = state.originalServings;
+function formatQuantity(value) {
+    if (value === 0) return '0';
+    
+    const wholePart = Math.floor(value);
+    const decimal = value - wholePart;
+    
+    // Convert decimal to fraction
+    let fraction = '';
+    if (decimal >= 0.875) {
+        fraction = '';
+        wholePart += 1;
+    } else if (decimal >= 0.625) {
+        fraction = '¾';
+    } else if (decimal >= 0.375) {
+        fraction = '½';
+    } else if (decimal >= 0.125) {
+        fraction = '¼';
     }
     
-    updateIngredientAmounts(state.originalServings);
-    state.currentServings = state.originalServings;
+    // Format the final string
+    if (wholePart === 0) {
+        return fraction || '0';
+    } else if (fraction) {
+        return `${wholePart} ${fraction}`;
+    } else {
+        return wholePart.toString();
+    }
 }
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeScaling);
