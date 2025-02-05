@@ -22,6 +22,8 @@ class RecipeIngredient extends DatabaseObject {
     public $measurement_id;
     /** @var int Quantity */
     public $quantity;
+    /** @var string Ingredient name */
+    public $name;
 
     private $_measurement;
     private $_ingredient;
@@ -35,6 +37,7 @@ class RecipeIngredient extends DatabaseObject {
         $this->ingredient_id = $args['ingredient_id'] ?? null;
         $this->measurement_id = $args['measurement_id'] ?? '';
         $this->quantity = $args['quantity'] ?? '';
+        $this->name = $args['name'] ?? '';
     }
 
     /**
@@ -151,14 +154,30 @@ class RecipeIngredient extends DatabaseObject {
      * @return array Array of RecipeIngredient objects
      */
     public static function find_by_recipe_id($recipe_id) {
-        $sql = "SELECT * FROM " . static::$table_name;
-        $sql .= " WHERE recipe_id = ?";
-        $sql .= " ORDER BY recipe_ingredient_id ASC";
+        error_log("Finding ingredients for recipe_id: " . $recipe_id);
+        
+        $sql = "SELECT ri.*, i.name FROM " . static::$table_name . " ri ";
+        $sql .= "JOIN ingredient i ON ri.ingredient_id = i.ingredient_id ";
+        $sql .= "WHERE ri.recipe_id = ? ";
+        $sql .= "ORDER BY ri.recipe_ingredient_id ASC";
+        
+        error_log("SQL Query: " . $sql);
         
         $stmt = self::$database->prepare($sql);
+        if (!$stmt) {
+            error_log("Prepare failed: " . self::$database->error);
+            return [];
+        }
+        
         $stmt->bind_param("i", $recipe_id);
-        $stmt->execute();
+        $success = $stmt->execute();
+        if (!$success) {
+            error_log("Execute failed: " . $stmt->error);
+            return [];
+        }
+        
         $result = $stmt->get_result();
+        error_log("Found " . $result->num_rows . " ingredients");
         
         $ingredients = [];
         while($row = $result->fetch_assoc()) {

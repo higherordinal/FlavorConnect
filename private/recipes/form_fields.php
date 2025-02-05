@@ -92,34 +92,71 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
     <div class="ingredients-section">
         <h4>Recipe Ingredients</h4>
         <div id="ingredients-container">
-            <?php for($i = 0; $i < 3; $i++) { ?>
-            <div class="ingredient-row">
-                <div class="form-group">
-                    <label for="quantity_<?php echo $i; ?>">Quantity</label>
-                    <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" class="form-control" step="0.01" min="0" required>
+            <?php 
+            if (isset($ingredients) && !empty($ingredients)) {
+                foreach($ingredients as $i => $ingredient) { ?>
+                <div class="ingredient-row">
+                    <div class="form-group">
+                        <label for="quantity_<?php echo $i; ?>">Quantity</label>
+                        <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
+                               class="form-control" step="0.01" min="0" value="<?php echo h($ingredient->quantity); ?>" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="measurement_<?php echo $i; ?>">Measurement</label>
+                        <select name="ingredients[<?php echo $i; ?>][measurement_id]" id="measurement_<?php echo $i; ?>" class="form-control" required>
+                            <option value="">Select Measurement</option>
+                            <?php
+                            $measurements = $db->query("SELECT * FROM measurement ORDER BY name");
+                            while($measurement = $measurements->fetch_assoc()) {
+                                $selected = ($measurement['measurement_id'] == $ingredient->measurement_id) ? 'selected' : '';
+                                echo "<option value=\"" . h($measurement['measurement_id']) . "\" {$selected}>" . h($measurement['name']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ingredient_<?php echo $i; ?>">Ingredient</label>
+                        <input type="text" name="ingredients[<?php echo $i; ?>][name]" id="ingredient_<?php echo $i; ?>" 
+                               class="form-control" value="<?php echo h($ingredient->name); ?>" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-ingredient">×</button>
                 </div>
-                
-                <div class="form-group">
-                    <label for="measurement_<?php echo $i; ?>">Measurement</label>
-                    <select name="ingredients[<?php echo $i; ?>][measurement_id]" id="measurement_<?php echo $i; ?>" class="form-control" required>
-                        <option value="">Select Measurement</option>
-                        <?php
-                        $measurements = $db->query("SELECT * FROM measurement ORDER BY name");
-                        while($measurement = $measurements->fetch_assoc()) {
-                            echo "<option value=\"" . h($measurement['measurement_id']) . "\">" . h($measurement['name']) . "</option>";
-                        }
-                        ?>
-                    </select>
+                <?php }
+            } else {
+                // Show default empty ingredient rows if no ingredients exist
+                for($i = 0; $i < 3; $i++) { ?>
+                <div class="ingredient-row">
+                    <div class="form-group">
+                        <label for="quantity_<?php echo $i; ?>">Quantity</label>
+                        <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
+                               class="form-control" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="measurement_<?php echo $i; ?>">Measurement</label>
+                        <select name="ingredients[<?php echo $i; ?>][measurement_id]" id="measurement_<?php echo $i; ?>" class="form-control" required>
+                            <option value="">Select Measurement</option>
+                            <?php
+                            $measurements = $db->query("SELECT * FROM measurement ORDER BY name");
+                            while($measurement = $measurements->fetch_assoc()) {
+                                echo "<option value=\"" . h($measurement['measurement_id']) . "\">" . h($measurement['name']) . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="ingredient_<?php echo $i; ?>">Ingredient</label>
+                        <input type="text" name="ingredients[<?php echo $i; ?>][name]" id="ingredient_<?php echo $i; ?>" class="form-control" required>
+                    </div>
+                    
+                    <button type="button" class="btn btn-danger remove-ingredient">×</button>
                 </div>
-                
-                <div class="form-group">
-                    <label for="ingredient_<?php echo $i; ?>">Ingredient</label>
-                    <input type="text" name="ingredients[<?php echo $i; ?>][name]" id="ingredient_<?php echo $i; ?>" class="form-control" required>
-                </div>
-                
-                <button type="button" class="btn btn-danger remove-ingredient">×</button>
-            </div>
-            <?php } ?>
+                <?php }
+            } ?>
         </div>
         
         <button type="button" class="btn btn-primary" id="add-ingredient">
@@ -132,24 +169,30 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
     <div class="directions-section">
         <h4>Recipe Directions</h4>
         <div id="directions-container">
-            <div class="direction-row">
-                <span class="step-number">1</span>
-                <div class="form-group">
-                    <label for="step_0">Step 1 Instructions</label>
-                    <textarea name="steps[0][instruction]" id="step_0" class="form-control" rows="2" required></textarea>
-                    <input type="hidden" name="steps[0][step_number]" value="1">
+            <?php 
+            if (isset($steps) && !empty($steps)) {
+                foreach($steps as $i => $step) { ?>
+                <div class="direction-row">
+                    <span class="step-number"><?php echo $i + 1; ?></span>
+                    <div class="form-group">
+                        <label for="step_<?php echo $i; ?>">Step <?php echo $i + 1; ?> Instructions</label>
+                        <textarea name="steps[<?php echo $i; ?>][instruction]" id="step_<?php echo $i; ?>" 
+                                  class="form-control" rows="2" required><?php echo h($step->instruction); ?></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger remove-direction">×</button>
                 </div>
-                <button type="button" class="btn btn-danger remove-step">×</button>
-            </div>
-            <div class="direction-row">
-                <span class="step-number">2</span>
-                <div class="form-group">
-                    <label for="step_1">Step 2 Instructions</label>
-                    <textarea name="steps[1][instruction]" id="step_1" class="form-control" rows="2" required></textarea>
-                    <input type="hidden" name="steps[1][step_number]" value="2">
+                <?php }
+            } else {
+                // Show default empty step if no steps exist ?>
+                <div class="direction-row">
+                    <span class="step-number">1</span>
+                    <div class="form-group">
+                        <label for="step_0">Step 1 Instructions</label>
+                        <textarea name="steps[0][instruction]" id="step_0" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger remove-direction">×</button>
                 </div>
-                <button type="button" class="btn btn-danger remove-step">×</button>
-            </div>
+            <?php } ?>
         </div>
         <button type="button" id="add-step" class="btn btn-outline-secondary">
             <i class="fas fa-plus"></i> Add Step
@@ -184,7 +227,4 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
     <small class="form-text text-muted">Add a link to your recipe video if you have one</small>
 </div>
 
-<?php if (!isset($recipe_form_js_loaded)): ?>
-    <?php $recipe_form_js_loaded = true; ?>
-    <script src="<?php echo url_for('/assets/js/recipe-form.js'); ?>" defer></script>
-<?php endif; ?>
+<script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>

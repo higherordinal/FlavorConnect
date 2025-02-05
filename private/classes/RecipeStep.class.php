@@ -37,14 +37,29 @@ class RecipeStep extends DatabaseObject {
      * @return array Array of RecipeStep objects
      */
     public static function find_by_recipe_id($recipe_id) {
+        error_log("Finding steps for recipe_id: " . $recipe_id);
+        
         $sql = "SELECT * FROM " . static::$table_name;
         $sql .= " WHERE recipe_id = ?";
         $sql .= " ORDER BY step_number ASC";
         
+        error_log("SQL Query: " . $sql);
+        
         $stmt = self::$database->prepare($sql);
+        if (!$stmt) {
+            error_log("Prepare failed: " . self::$database->error);
+            return [];
+        }
+        
         $stmt->bind_param("i", $recipe_id);
-        $stmt->execute();
+        $success = $stmt->execute();
+        if (!$success) {
+            error_log("Execute failed: " . $stmt->error);
+            return [];
+        }
+        
         $result = $stmt->get_result();
+        error_log("Found " . $result->num_rows . " steps");
         
         $steps = [];
         while($row = $result->fetch_assoc()) {

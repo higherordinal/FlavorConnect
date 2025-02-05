@@ -11,7 +11,7 @@ class User extends DatabaseObject {
     /** @var string Database table name */
     static protected $table_name = 'user_account';
     /** @var array Database columns */
-    static protected $db_columns = ['user_id', 'username', 'first_name', 'last_name', 'email', 'password_hash', 'user_level', 'is_active'];
+    static protected $db_columns = ['user_id', 'username', 'first_name', 'last_name', 'email', 'password_hash', 'user_level', 'is_active', 'created_at'];
     /** @var string Primary key column */
     static protected $primary_key = 'user_id';
 
@@ -37,6 +37,8 @@ class User extends DatabaseObject {
     public $errors = [];
     /** @var bool Whether password is required for validation */
     protected $password_required = true;
+    /** @var string When the user account was created */
+    public $created_at;
 
     /**
      * Gets the user's full name
@@ -58,6 +60,7 @@ class User extends DatabaseObject {
         $this->password = $args['password'] ?? '';
         $this->user_level = $args['user_level'] ?? 'u';
         $this->is_active = $args['is_active'] ?? true;
+        $this->created_at = $args['created_at'] ?? date('Y-m-d H:i:s');
     }
 
     /**

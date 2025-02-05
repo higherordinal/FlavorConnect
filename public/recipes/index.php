@@ -165,18 +165,15 @@ if ($current_page > $total_pages) {
                 $type = $recipe->type();
             ?>
                 <article class="recipe-card" role="article">
-                    <?php /* Temporarily disabled user favorites
-                    if($session->is_logged_in()) { 
-                        $is_favorited = UserFavorite::is_favorite($session->get_user_id(), $recipe->recipe_id);
+                    <?php if($session->is_logged_in()) { 
+                        $is_favorited = $recipe->is_favorited_by($session->get_user_id());
                     ?>
-                        <button type="button" class="favorite-btn <?php echo $is_favorited ? 'active' : ''; ?>" 
-                                data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
-                                data-is-favorited="<?php echo $is_favorited ? 'true' : 'false'; ?>"
-                                aria-label="<?php echo $is_favorited ? 'Remove from favorites' : 'Add to favorites'; ?>"
-                                aria-pressed="<?php echo $is_favorited ? 'true' : 'false'; ?>">
-                            <i class="fa-heart <?php echo $is_favorited ? 'fas' : 'far'; ?>" aria-hidden="true"></i>
-                        </button>
-                    <?php } */ ?>
+                    <button class="favorite-btn <?php echo $is_favorited ? 'favorited' : ''; ?>"
+                            data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
+                            aria-label="<?php echo $is_favorited ? 'Remove from' : 'Add to'; ?> favorites">
+                        <i class="<?php echo $is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
+                    </button>
+                    <?php } ?>
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" 
                        class="recipe-link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
