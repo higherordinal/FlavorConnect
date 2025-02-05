@@ -190,9 +190,9 @@ function initializeDirections() {
     if (addStepBtn && directionsContainer) {
         // Add new step
         addStepBtn.addEventListener('click', function() {
-            const newRow = createDirectionRow(stepCount);
+            const currentStepCount = directionsContainer.querySelectorAll('.direction-row').length;
+            const newRow = createDirectionRow(currentStepCount);
             directionsContainer.appendChild(newRow);
-            stepCount++;
             updateRemoveStepButtons();
         });
 
