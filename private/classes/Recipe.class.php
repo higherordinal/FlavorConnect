@@ -435,5 +435,35 @@ class Recipe extends DatabaseObject {
         
         return static::instantiate_result($result);
     }
+
+    /**
+     * Gets all recipes favorited by a specific user
+     * @param int $user_id The ID of the user
+     * @return array Array of Recipe objects
+     */
+    static public function find_favorites_by_user_id($user_id) {
+        $database = static::get_database();
+        $sql = "SELECT r.* FROM " . static::$table_name . " r ";
+        $sql .= "JOIN user_favorite f ON r.recipe_id = f.recipe_id ";
+        $sql .= "WHERE f.user_id = ? ";
+        $sql .= "ORDER BY f.created_at DESC";
+        
+        $stmt = $database->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return static::instantiate_result($result);
+    }
+
+    /**
+     * Checks if this recipe is favorited by a user
+     * @param int $user_id The user ID to check
+     * @return bool True if favorited
+     */
+    public function is_favorited_by($user_id) {
+        require_once('RecipeFavorite.class.php');
+        return RecipeFavorite::is_favorited($user_id, $this->recipe_id);
+    }
 }
 ?>
