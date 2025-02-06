@@ -231,16 +231,19 @@ a:hover {
 }
 
 .back-link {
-    align-items: center;
-    color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--color-white);
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-sm);
     display: inline-flex;
-    font-weight: 500;
-    gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-md);
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .back-link:hover {
-    color: var(--accent-color);
+    background-color: var(--accent-color-dark);
+    color: var(--color-white);
 }
 
 .back-link i {

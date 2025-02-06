@@ -182,24 +182,26 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                         <label for="step_<?php echo $i; ?>">Step <?php echo $i + 1; ?> Instructions</label>
                         <textarea name="steps[<?php echo $i; ?>][instruction]" id="step_<?php echo $i; ?>" 
                                   class="form-control" rows="2" required><?php echo h($step->instruction); ?></textarea>
+                        <input type="hidden" name="steps[<?php echo $i; ?>][step_number]" value="<?php echo $i + 1; ?>">
                     </div>
-                    <button type="button" class="btn btn-danger remove-direction">×</button>
+                    <button type="button" class="btn btn-danger remove-step">×</button>
                 </div>
                 <?php }
-            } else {
-                // Show default empty step if no steps exist ?>
+            } else { ?>
                 <div class="direction-row">
                     <span class="step-number">1</span>
                     <div class="form-group">
                         <label for="step_0">Step 1 Instructions</label>
                         <textarea name="steps[0][instruction]" id="step_0" class="form-control" rows="2" required></textarea>
+                        <input type="hidden" name="steps[0][step_number]" value="1">
                     </div>
-                    <button type="button" class="btn btn-danger remove-direction">×</button>
+                    <button type="button" class="btn btn-danger remove-step">×</button>
                 </div>
             <?php } ?>
         </div>
-        <button type="button" id="add-step" class="btn btn-outline-secondary">
-            <i class="fas fa-plus"></i> Add Step
+        
+        <button type="button" class="btn btn-primary" id="add-step">
+            <i class="fas fa-plus"></i> Add Another Step
         </button>
     </div>
 </div>
