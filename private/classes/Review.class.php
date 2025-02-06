@@ -56,8 +56,6 @@ class Review extends DatabaseObject {
         $attributes = [];
         foreach(static::$db_columns as $column) {
             if($column == 'rating_id') { continue; }
-            if($column == 'comment_text') { continue; }
-            if($column == 'created_at') { continue; }
             $attributes[$column] = $this->$column;
         }
         return $attributes;
@@ -74,11 +72,12 @@ class Review extends DatabaseObject {
         // If rating saved and we have a comment, save the comment
         if($result && !empty($this->comment_text)) {
             $sql = "INSERT INTO recipe_comment ";
-            $sql .= "(recipe_id, user_id, comment_text) ";
+            $sql .= "(recipe_id, user_id, comment_text, created_at) ";
             $sql .= "VALUES (";
             $sql .= "'" . self::$database->escape_string($this->recipe_id) . "',";
             $sql .= "'" . self::$database->escape_string($this->user_id) . "',";
-            $sql .= "'" . self::$database->escape_string($this->comment_text) . "'";
+            $sql .= "'" . self::$database->escape_string($this->comment_text) . "',";
+            $sql .= "'" . self::$database->escape_string($this->created_at) . "'";
             $sql .= ")";
             
             $result = self::$database->query($sql);

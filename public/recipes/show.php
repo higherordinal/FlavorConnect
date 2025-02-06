@@ -239,9 +239,17 @@ $recipe_data = [
                     <div class="average-rating">
                         <span class="rating-value"><?php echo number_format($avg_rating, 1); ?></span>
                         <div class="stars">
-                            <?php for($i = 1; $i <= 5; $i++) { ?>
-                                <i class="fas fa-star<?php echo $i <= $avg_rating ? '' : '-o'; ?>"></i>
-                            <?php } ?>
+                            <?php 
+                            for($i = 1; $i <= 5; $i++) {
+                                if ($avg_rating >= $i) {
+                                    echo '<i class="fas fa-star"></i>';
+                                } elseif ($avg_rating > $i - 1) {
+                                    echo '<i class="fas fa-star-half-alt"></i>';
+                                } else {
+                                    echo '<i class="far fa-star"></i>';
+                                }
+                            }
+                            ?>
                         </div>
                         <span class="rating-count">(<?php echo count($reviews); ?> reviews)</span>
                     </div>
@@ -308,9 +316,18 @@ $recipe_data = [
                             </span>
                         <?php } ?>
                         <div class="comment-rating">
-                            <?php for($i = 1; $i <= 5; $i++) { ?>
-                                <i class="fas fa-star<?php echo $i <= $review->rating_value ? '' : '-o'; ?>"></i>
-                            <?php } ?>
+                            <?php 
+                            $rating = $review->rating_value;
+                            for($i = 1; $i <= 5; $i++) {
+                                if ($rating >= $i) {
+                                    echo '<i class="fas fa-star"></i>';
+                                } elseif ($rating > $i - 1) {
+                                    echo '<i class="fas fa-star-half-alt"></i>';
+                                } else {
+                                    echo '<i class="far fa-star"></i>';
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                     <?php if($review->comment_text) { ?>
