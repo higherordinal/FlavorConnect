@@ -178,7 +178,7 @@ if ($current_page > $total_pages) {
                        class="recipe-link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
                         <div class="recipe-image-container">
-                            <img src="<?php echo $recipe->img_file_path ? url_for($recipe->img_file_path) : url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+                            <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
                                  alt="Photo of <?php echo h($recipe->title); ?>" 
                                  class="recipe-image">
                         </div>

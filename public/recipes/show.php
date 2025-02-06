@@ -87,7 +87,7 @@ $recipe_data = [
         <i class="fas fa-arrow-left"></i> <?php echo $back_text; ?>
     </a>
     <div class="recipe-header-image">
-        <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+        <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
              alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
         <div class="recipe-header-overlay">
             <h1><?php echo h($recipe->title); ?></h1>
