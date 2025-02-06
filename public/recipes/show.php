@@ -152,10 +152,10 @@ $recipe_data = [
             </div>
             <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
                 <div class="recipe-actions">
-                    <a href="<?php echo url_for('/private/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
+                    <a href="<?php echo private_url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
                         <i class="fas fa-edit"></i> Edit Recipe
                     </a>
-                    <a href="<?php echo url_for('/private/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
+                    <a href="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
                         <i class="fas fa-trash"></i> Delete Recipe
                     </a>
                 </div>
