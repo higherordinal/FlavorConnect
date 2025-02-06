@@ -98,11 +98,22 @@ if(is_post_request()) {
         }
     }
 }
+
+$ref = $_GET['ref'] ?? '';
+$back_link = match($ref) {
+    'profile' => private_url_for('/users/profile.php'),
+    'home' => url_for('/index.php'),
+    'header' => url_for('/recipes/index.php'),
+    default => url_for('/recipes/show.php?id=' . h(u($id)))
+};
 ?>
 
 <main>
     <div class="recipe-form">
         <header class="page-header">
+            <a href="<?php echo $back_link; ?>" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
             <h1>Edit Recipe: <?php echo h($recipe->title); ?></h1>
         </header>
 
@@ -116,6 +127,10 @@ if(is_post_request()) {
                     <i class="fas fa-save"></i>
                     Save Changes
                 </button>
+                <a href="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($id))); ?>" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Delete Recipe
+                </a>
                 <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="btn btn-secondary">
                     <i class="fas fa-times"></i>
                     Cancel
