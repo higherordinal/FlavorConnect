@@ -41,7 +41,7 @@ $types = RecipeAttribute::find_by_type('type');
 $offset = ($current_page - 1) * $per_page;
 
 // Get total recipes count for pagination
-$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id);
+$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id, $sort);
 $total_pages = ceil($total_recipes / $per_page);
 
 // Get recipes for current page

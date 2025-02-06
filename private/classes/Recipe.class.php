@@ -275,70 +275,14 @@ class Recipe extends DatabaseObject {
      * @param int|null $style_id Style ID filter
      * @param int|null $diet_id Diet ID filter
      * @param int|null $type_id Type ID filter
+     * @param string $sort Sort order ('newest', 'oldest', 'rating')
      * @return int Total number of matching recipes
      */
-    public static function count_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null) {
-        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
-        $where_clauses = [];
-        $params = [];
-        $types = "";
-        
-        if(!empty($search)) {
-            $where_clauses[] = "(title LIKE ? OR description LIKE ?)";
-            $search_param = "%{$search}%";
-            $params[] = $search_param;
-            $params[] = $search_param;
-            $types .= "ss";
-        }
-        
-        if(!empty($style_id)) {
-            $where_clauses[] = "style_id = ?";
-            $params[] = $style_id;
-            $types .= "i";
-        }
-        
-        if(!empty($diet_id)) {
-            $where_clauses[] = "diet_id = ?";
-            $params[] = $diet_id;
-            $types .= "i";
-        }
-        
-        if(!empty($type_id)) {
-            $where_clauses[] = "type_id = ?";
-            $params[] = $type_id;
-            $types .= "i";
-        }
-        
-        if(!empty($where_clauses)) {
-            $sql .= " WHERE " . implode(" AND ", $where_clauses);
-        }
-
-        $stmt = self::$database->prepare($sql);
-        if(!empty($params)) {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        return (int)$row['count'];
-    }
-
-    /**
-     * Finds recipes matching the given filters
-     * @param string $search Search query
-     * @param int|null $style_id Style ID filter
-     * @param int|null $diet_id Diet ID filter
-     * @param int|null $type_id Type ID filter
-     * @param string $sort Sort order ('newest', 'oldest', 'rating')
-     * @param int $limit Number of recipes per page
-     * @param int $offset Offset for pagination
-     * @return array Array of Recipe objects
-     */
-    public static function find_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null, $sort='newest', $limit=12, $offset=0) {
-        $sql = "SELECT r.* FROM " . static::$table_name . " r";
+    public static function count_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null, $sort='newest') {
+        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " r";
         
         if($sort === 'rating') {
-            $sql .= " LEFT JOIN (
+            $sql .= " INNER JOIN (
                         SELECT recipe_id, AVG(rating_value) as avg_rating 
                         FROM recipe_rating 
                         GROUP BY recipe_id
@@ -375,6 +319,80 @@ class Recipe extends DatabaseObject {
             $types .= "i";
         }
         
+        if($sort === 'rating') {
+            $where_clauses[] = "ratings.avg_rating IS NOT NULL";
+        }
+        
+        if(!empty($where_clauses)) {
+            $sql .= " WHERE " . implode(" AND ", $where_clauses);
+        }
+
+        $stmt = self::$database->prepare($sql);
+        if(!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return (int)$row['count'];
+    }
+
+    /**
+     * Finds recipes matching the given filters
+     * @param string $search Search query
+     * @param int|null $style_id Style ID filter
+     * @param int|null $diet_id Diet ID filter
+     * @param int|null $type_id Type ID filter
+     * @param string $sort Sort order ('newest', 'oldest', 'rating')
+     * @param int $limit Number of recipes per page
+     * @param int $offset Offset for pagination
+     * @return array Array of Recipe objects
+     */
+    public static function find_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null, $sort='newest', $limit=12, $offset=0) {
+        $sql = "SELECT r.* FROM " . static::$table_name . " r";
+        
+        if($sort === 'rating') {
+            $sql .= " INNER JOIN (
+                        SELECT recipe_id, AVG(rating_value) as avg_rating 
+                        FROM recipe_rating 
+                        GROUP BY recipe_id
+                    ) ratings ON r.recipe_id = ratings.recipe_id";
+        }
+        
+        $where_clauses = [];
+        $params = [];
+        $types = "";
+        
+        if(!empty($search)) {
+            $where_clauses[] = "(r.title LIKE ? OR r.description LIKE ?)";
+            $search_param = "%{$search}%";
+            $params[] = $search_param;
+            $params[] = $search_param;
+            $types .= "ss";
+        }
+        
+        if(!empty($style_id)) {
+            $where_clauses[] = "r.style_id = ?";
+            $params[] = $style_id;
+            $types .= "i";
+        }
+        
+        if(!empty($diet_id)) {
+            $where_clauses[] = "r.diet_id = ?";
+            $params[] = $diet_id;
+            $types .= "i";
+        }
+        
+        if(!empty($type_id)) {
+            $where_clauses[] = "r.type_id = ?";
+            $params[] = $type_id;
+            $types .= "i";
+        }
+        
+        if($sort === 'rating') {
+            $where_clauses[] = "ratings.avg_rating IS NOT NULL";
+        }
+        
         if(!empty($where_clauses)) {
             $sql .= " WHERE " . implode(" AND ", $where_clauses);
         }
@@ -384,7 +402,7 @@ class Recipe extends DatabaseObject {
                 $sql .= " ORDER BY r.created_at ASC";
                 break;
             case 'rating':
-                $sql .= " ORDER BY avg_rating DESC NULLS LAST, r.created_at DESC";
+                $sql .= " ORDER BY ratings.avg_rating DESC NULLS LAST, r.created_at DESC";
                 break;
             case 'newest':
             default:
