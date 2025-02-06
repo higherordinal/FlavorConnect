@@ -556,10 +556,9 @@
 }
 
 .star-rating {
-    display: grid;
-    grid-template-columns: repeat(5, auto);
-    gap: 0.25rem;
-    align-items: center;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 3px;
 }
 
 .star-rating input {
@@ -568,76 +567,70 @@
 
 .star-rating label {
     cursor: pointer;
-    padding: 0 0.1rem;
+    color: #ddd;
+    font-size: 24px;
+    transition: color 0.2s ease-in-out;
 }
 
-.star-rating label i {
-    font-size: 1.5rem;
-    color: var(--color-gray-300);
-    transition: color 0.2s ease;
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #ffd700;
 }
 
-.star-rating label:hover i,
-.star-rating label:hover ~ label i,
-.star-rating input:checked ~ label i {
-    color: var(--color-warning);
+.star-rating label:has(~ input:checked) {
+    color: #ffd700;
 }
 
-.star-rating:hover label:hover i,
-.star-rating:hover label:hover ~ label i {
-    color: var(--color-warning-light);
+.star-rating label:hover ~ label {
+    color: #ddd !important;
 }
 
-.star-rating input:checked + label i,
-.star-rating input:checked ~ label i {
-    color: var(--color-warning);
-}
-
-.comment-textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border: 2px solid var(--color-gray-300);
-    border-radius: var(--radius-sm);
-    resize: vertical;
-}
-
-button.submit-comment {
-    background-color: var(--primary-color);
-    color: #ffffff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    width: fit-content;
-    display: inline-flex;
+.rating-input {
+    display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
-button.submit-comment:hover {
-    background-color: #0d2235;
-}
-
-.login-prompt {
-    text-align: center;
-    padding: 2rem;
-    background-color: var(--color-gray-100);
-    border-radius: var(--radius-md);
-    color: var(--text-color);
-}
-
-.login-prompt a {
-    color: var(--primary-color);
-    text-decoration: none;
+.rating-input label {
+    margin: 0;
     font-weight: 600;
 }
 
-.login-prompt a:hover {
-    text-decoration: underline;
+.comment-input {
+    margin-bottom: 15px;
+}
+
+.comment-input label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.comment-input textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.add-comment .btn-primary {
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .star-rating label {
+        font-size: 20px;
+    }
+    
+    .rating-input {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .comments-list {

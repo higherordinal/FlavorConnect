@@ -37,7 +37,7 @@ $reviews = Review::find_by_recipe_id($recipe->recipe_id);
 $ingredients = $recipe->ingredients();
 $steps = $recipe->steps();
 
-$page_title = $recipe->title;
+$page_title = 'recipe-show';
 $page_style = 'recipe-show';
 
 // Include the appropriate header based on login status
@@ -46,7 +46,39 @@ if($session->is_logged_in()) {
 } else {
     include(SHARED_PATH . '/public_header.php');
 }
+
+// Prepare recipe data for JavaScript
+$recipe_data = [
+    'recipe_id' => $recipe->recipe_id,
+    'title' => $recipe->title,
+    'description' => $recipe->description,
+    'prep_time' => $recipe->prep_time,
+    'cook_time' => $recipe->cook_time,
+    'img_file_path' => $recipe->img_file_path,
+    'video_url' => $recipe->video_url,
+    'alt_text' => $recipe->alt_text,
+    'ingredients' => array_map(function($ing) {
+        return [
+            'ingredient_id' => $ing->ingredient_id,
+            'name' => $ing->name,
+            'amount' => $ing->amount,
+            'unit' => $ing->unit
+        ];
+    }, $ingredients),
+    'steps' => array_map(function($step) {
+        return [
+            'step_id' => $step->step_id,
+            'instruction' => $step->instruction,
+            'step_number' => $step->step_number
+        ];
+    }, $steps)
+];
 ?>
+
+<script>
+    // Make recipe data available to JavaScript
+    window.recipeData = <?php echo json_encode($recipe_data); ?>;
+</script>
 
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-show.css'); ?>">
 
@@ -221,20 +253,36 @@ if($session->is_logged_in()) {
             <div class="add-comment">
                 <h3>Add Your Review</h3>
                 <form action="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" method="post">
-                    <div class="rating-input">
+                    <div class="form-group rating-input">
                         <label>Rating:</label>
                         <div class="star-rating">
-                            <?php for($i = 5; $i >= 1; $i--) { ?>
-                                <input type="radio" id="star<?php echo $i; ?>" name="review[rating]" value="<?php echo $i; ?>">
-                                <label for="star<?php echo $i; ?>"><i class="fas fa-star"></i></label>
-                            <?php } ?>
+                            <input type="radio" id="star1" name="review[rating]" value="1">
+                            <label for="star1"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star2" name="review[rating]" value="2">
+                            <label for="star2"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star3" name="review[rating]" value="3">
+                            <label for="star3"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star4" name="review[rating]" value="4">
+                            <label for="star4"><i class="fas fa-star"></i></label>
+                            <input type="radio" id="star5" name="review[rating]" value="5">
+                            <label for="star5"><i class="fas fa-star"></i></label>
                         </div>
                     </div>
-                    <div class="comment-input">
+                    
+                    <div class="form-group comment-input">
                         <label for="comment">Your Comment:</label>
-                        <textarea id="comment" name="review[comment]" rows="4" required></textarea>
+                        <textarea 
+                            id="comment" 
+                            name="review[comment]" 
+                            rows="4" 
+                            required 
+                            placeholder="Share your thoughts about this recipe..."
+                        ></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Submit Review</button>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                    </div>
                 </form>
             </div>
         <?php } else { ?>
@@ -276,6 +324,6 @@ if($session->is_logged_in()) {
     </div>
 </div>
 
-<script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>"></script>
-<script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
 <?php include(SHARED_PATH . '/footer.php'); ?>

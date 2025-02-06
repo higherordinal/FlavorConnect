@@ -41,66 +41,7 @@ $errors = [];
 
 if(is_post_request()) {
     // Validate recipe data
-    $validation = new Validation($_POST);
-    $validation->check('title', [
-        'label' => 'Title',
-        'required' => true,
-        'min' => 2,
-        'max' => 255
-    ]);
-    $validation->check('description', [
-        'label' => 'Description',
-        'required' => true,
-        'min' => 2,
-        'max' => 65535
-    ]);
-    $validation->check('style_id', [
-        'label' => 'Style',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('diet_id', [
-        'label' => 'Diet',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('type_id', [
-        'label' => 'Type',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('prep_hours', [
-        'label' => 'Prep Hours',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('prep_minutes', [
-        'label' => 'Prep Minutes',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('cook_hours', [
-        'label' => 'Cook Hours',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('cook_minutes', [
-        'label' => 'Cook Minutes',
-        'required' => true,
-        'numeric' => true
-    ]);
-    $validation->check('video_url', [
-        'label' => 'Video URL',
-        'url' => true
-    ]);
-    $validation->check('alt_text', [
-        'label' => 'Alt Text',
-        'required' => true,
-        'min' => 2,
-        'max' => 255
-    ]);
-
-    $errors = $validation->errors();
+    $errors = validate_recipe($_POST);
     
     if(empty($errors)) {
         // Handle file upload
@@ -131,10 +72,16 @@ if(is_post_request()) {
         $recipe->style_id = $_POST['style_id'] ?? $recipe->style_id;
         $recipe->diet_id = $_POST['diet_id'] ?? $recipe->diet_id;
         $recipe->type_id = $_POST['type_id'] ?? $recipe->type_id;
-        $recipe->prep_hours = $_POST['prep_hours'] ?? $recipe->prep_hours;
-        $recipe->prep_minutes = $_POST['prep_minutes'] ?? $recipe->prep_minutes;
-        $recipe->cook_hours = $_POST['cook_hours'] ?? $recipe->cook_hours;
-        $recipe->cook_minutes = $_POST['cook_minutes'] ?? $recipe->cook_minutes;
+        
+        // Convert hours and minutes to seconds
+        $prep_hours = intval($_POST['prep_hours'] ?? 0);
+        $prep_minutes = intval($_POST['prep_minutes'] ?? 0);
+        $cook_hours = intval($_POST['cook_hours'] ?? 0);
+        $cook_minutes = intval($_POST['cook_minutes'] ?? 0);
+        
+        $recipe->prep_time = ($prep_hours * 3600) + ($prep_minutes * 60);
+        $recipe->cook_time = ($cook_hours * 3600) + ($cook_minutes * 60);
+        
         $recipe->video_url = $_POST['video_url'] ?? $recipe->video_url;
         if(isset($_POST['img_file_path'])) {
             $recipe->img_file_path = $_POST['img_file_path'];
@@ -161,7 +108,7 @@ if(is_post_request()) {
 
         <?php echo display_errors($errors); ?>
         
-        <form action="<?php echo url_for('/private/recipes/edit.php?id=' . h(u($id))); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo private_url_for('/recipes/edit.php?id=' . h(u($id))); ?>" method="post" enctype="multipart/form-data">
             <?php include('form_fields.php'); ?>
             
             <div class="form-buttons">
