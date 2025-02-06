@@ -30,8 +30,8 @@
     left: 0;
     top: 50%;
     transform: translateY(-50%);
-    display: inline-flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
     gap: var(--spacing-sm);
     color: var(--accent-color);
     text-decoration: none;
@@ -137,20 +137,33 @@
     display: grid;
     grid-template-columns: 100px 215px 1fr 40px;
     gap: 1rem;
-    align-items: start;
     position: relative;
 }
 
 .ingredient-row .form-group {
     margin-bottom: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.ingredient-row .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.ingredient-row .form-group input {
+    display: block;
 }
 
 .ingredient-row .remove-ingredient {
-    margin-top: calc(24px + var(--spacing-sm));
-    padding: 0.25rem 0.5rem;
+    padding: 0;
     font-size: 1.25rem;
-    line-height: 1;
-    height: min-content;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    align-self: center;
+    margin-top: 24px;
 }
 
 /* Directions Section */
@@ -176,33 +189,46 @@
     display: grid;
     grid-template-columns: 40px 1fr 40px;
     gap: 1rem;
-    align-items: start;
     position: relative;
 }
 
 .direction-row .form-group {
     margin-bottom: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.direction-row .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.direction-row .form-group textarea {
+    display: block;
 }
 
 .direction-row .step-number {
-    margin-top: calc(24px + var(--spacing-sm));
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    place-items: center;
     width: 30px;
     height: 30px;
     background-color: var(--primary-color);
     color: var(--color-white);
     border-radius: 50%;
     font-weight: bold;
+    align-self: center;
+    margin-top: 24px;
 }
 
 .direction-row .remove-step {
-    margin-top: calc(24px + var(--spacing-sm));
-    padding: 0.25rem 0.5rem;
+    padding: 0;
     font-size: 1.25rem;
-    line-height: 1;
-    height: min-content;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    align-self: center;
+    margin-top: 24px;
 }
 
 .step-number {
@@ -233,16 +259,25 @@
 }
 
 /* Buttons */
+.recipe-form .form-buttons {
+    margin-top: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: var(--spacing-md);
+    justify-content: start;
+}
+
 .btn {
-    display: inline-flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    place-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm) var(--spacing-md);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-sm);
     font-weight: 500;
-    cursor: pointer;
+    text-decoration: none;
     transition: all 0.2s ease;
-    border: none;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -336,30 +371,6 @@
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
-/* Form Buttons */
-.recipe-form .form-buttons {
-    margin-top: var(--spacing-lg);
-    display: flex;
-    gap: var(--spacing-md);
-    justify-content: flex-start;
-}
-
-.delete-confirmation {
-    text-align: center;
-    margin: var(--spacing-xl) 0;
-}
-
-.delete-confirmation p {
-    font-size: var(--font-size-large);
-    margin-bottom: var(--spacing-md);
-}
-
-.delete-confirmation .warning {
-    color: var(--danger-color);
-    font-weight: var(--font-weight-medium);
-}
-
-/* Responsive Design */
 @media (max-width: 768px) {
     .recipe-form {
         padding: var(--spacing-md);
@@ -379,8 +390,24 @@
         gap: 0.5rem;
     }
 
+    .ingredient-row .remove-ingredient {
+        justify-self: end;
+        margin-top: 0;
+    }
+
     .direction-row {
-        grid-template-columns: 40px 1fr;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .direction-row .step-number {
+        justify-self: start;
+        margin-top: 0;
+    }
+
+    .direction-row .remove-step {
+        justify-self: end;
+        margin-top: 0;
     }
 
     .remove-ingredient,
@@ -391,7 +418,7 @@
     }
 
     .form-buttons {
-        flex-direction: column;
+        grid-template-columns: 1fr;
     }
 
     .form-buttons .btn {
@@ -467,4 +494,19 @@
 
 .recipe-form .invalid-feedback::before {
     content: "⚠";
+}
+
+.delete-confirmation {
+    text-align: center;
+    margin: var(--spacing-xl) 0;
+}
+
+.delete-confirmation p {
+    font-size: var(--font-size-large);
+    margin-bottom: var(--spacing-md);
+}
+
+.delete-confirmation .warning {
+    color: var(--danger-color);
+    font-weight: var(--font-weight-medium);
 }
