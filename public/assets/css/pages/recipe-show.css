@@ -134,6 +134,40 @@
     transform: translateY(-2px);
 }
 
+.recipe-video {
+    display: grid;
+    gap: var(--grid-gap);
+    padding: var(--spacing-md);
+    background-color: var(--color-white);
+    border-top: 6px solid var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.recipe-video h2 {
+    color: var(--primary-color);
+    font-size: var(--font-size-xlarge);
+    margin: 0;
+}
+
+.recipe-video .video-container {
+    position: relative;
+    padding-bottom: 40%;
+    height: 0;
+    overflow: hidden;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.recipe-video .video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
 @media (max-width: 1024px) {
     .recipe-container {
         gap: var(--grid-gap);
