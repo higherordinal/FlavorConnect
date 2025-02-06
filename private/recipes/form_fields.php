@@ -197,6 +197,15 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                     </div>
                     <button type="button" class="btn btn-danger remove-step">×</button>
                 </div>
+                <div class="direction-row">
+                    <span class="step-number">2</span>
+                    <div class="form-group">
+                        <label for="step_1">Step 2 Instructions</label>
+                        <textarea name="steps[1][instruction]" id="step_1" class="form-control" rows="2" required></textarea>
+                        <input type="hidden" name="steps[1][step_number]" value="2">
+                    </div>
+                    <button type="button" class="btn btn-danger remove-step">×</button>
+                </div>
             <?php } ?>
         </div>
         
