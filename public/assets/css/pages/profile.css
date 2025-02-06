@@ -12,8 +12,12 @@
 
 .profile-header h1 {
     margin: 0;
-    color: var(--text-color);
-    font-size: var(--font-size-xxlarge);
+    color: var(--color-white);
+    font-size: var(--font-size-xlarge);
+    background-color: var(--primary-color);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    display: inline-block;
 }
 
 .profile-stats {

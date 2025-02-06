@@ -13,7 +13,7 @@ if(!$user) {
 // Get all recipes created by this user
 $recipes = Recipe::find_by_user_id($user_id);
 
-$page_title = 'My Profile';
+$page_title = 'profile';
 $page_style = 'profile';
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -22,7 +22,7 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="profile-container">
     <div class="profile-header">
-        <h1>My Profile</h1>
+        <h1><?php echo h($user->username); ?></h1>
         <div class="profile-stats">
             <div class="stat">
                 <i class="fas fa-utensils"></i>
