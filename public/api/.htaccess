@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteBase /FlavorConnect/public/api/
+
+# Handle recipe API requests
+RewriteRule ^recipes/?$ recipes/index.php [L,QSA]

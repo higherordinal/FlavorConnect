@@ -195,7 +195,8 @@ abstract class DatabaseObject {
      * @return bool True if save was successful
      */
     public function save() {
-        if(isset($this->id)) {
+        $pk = static::get_primary_key();
+        if(isset($this->$pk)) {
             return $this->update();
         } else {
             return $this->create();
@@ -220,8 +221,9 @@ abstract class DatabaseObject {
      */
     public function attributes() {
         $attributes = [];
+        $pk = static::get_primary_key();
         foreach(static::$db_columns as $column) {
-            if($column == 'id') { continue; }
+            if($column == $pk) { continue; }
             $attributes[$column] = $this->$column;
         }
         return $attributes;

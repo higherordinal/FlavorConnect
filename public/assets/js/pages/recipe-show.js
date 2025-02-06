@@ -71,13 +71,9 @@ function setupEventListeners() {
  */
 async function loadRecipeData() {
     try {
-        const recipeId = new URLSearchParams(window.location.search).get('id');
-        const response = await fetchData(`/api/recipes?action=get&id=${recipeId}`);
-        
-        if (response.success) {
-            state.recipe = response.recipe;
-            updateRecipeUI();
-        }
+        // Use the data embedded in the page
+        state.recipe = window.recipeData;
+        updateRecipeUI();
     } catch (error) {
         console.error('Error loading recipe:', error);
         showError('Failed to load recipe data');
@@ -110,6 +106,31 @@ function updateRecipeUI() {
 
     // Update rating
     updateRatingDisplay(state.recipe.average_rating);
+
+    // Update ingredients
+    const ingredientsList = document.querySelector('.recipe-ingredients-list');
+    if (ingredientsList && state.recipe.ingredients) {
+        ingredientsList.innerHTML = state.recipe.ingredients.map(ing => `
+            <li class="ingredient-item">
+                <span class="amount">${ing.amount}</span>
+                <span class="unit">${ing.unit}</span>
+                <span class="name">${ing.name}</span>
+            </li>
+        `).join('');
+    }
+
+    // Update steps
+    const stepsList = document.querySelector('.recipe-steps-list');
+    if (stepsList && state.recipe.steps) {
+        // Sort steps by step number
+        const sortedSteps = [...state.recipe.steps].sort((a, b) => a.step_number - b.step_number);
+        stepsList.innerHTML = sortedSteps.map(step => `
+            <li class="step-item">
+                <span class="step-number">${step.step_number}.</span>
+                <span class="instruction">${step.instruction}</span>
+            </li>
+        `).join('');
+    }
 }
 
 /**
@@ -333,5 +354,46 @@ function showError(message) {
     }
 }
 
+// Initialize star rating behavior
+function initializeStarRating() {
+    const starRating = document.querySelector('.star-rating');
+    if (!starRating) return;
+
+    const stars = starRating.querySelectorAll('label');
+    const inputs = starRating.querySelectorAll('input');
+    let selectedRating = 0;
+    
+    // Light up stars based on rating
+    function updateStars(rating) {
+        stars.forEach((star, index) => {
+            star.style.color = index < rating ? '#ffd700' : '#ddd';
+        });
+    }
+
+    stars.forEach((star, index) => {
+        // Handle hover
+        star.addEventListener('mouseenter', () => {
+            if (!selectedRating) {
+                updateStars(index + 1);
+            }
+        });
+
+        // Handle click
+        star.addEventListener('click', (e) => {
+            e.preventDefault();
+            selectedRating = index + 1;
+            updateStars(selectedRating);
+            inputs[index].checked = true;
+        });
+    });
+
+    starRating.addEventListener('mouseleave', () => {
+        updateStars(selectedRating);
+    });
+}
+
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeRecipeShow);
+document.addEventListener('DOMContentLoaded', () => {
+    initializeRecipeShow();
+    initializeStarRating();
+});
