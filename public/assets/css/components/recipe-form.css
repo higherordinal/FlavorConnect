@@ -135,7 +135,7 @@
     box-shadow: var(--shadow-sm);
     margin-bottom: 0.5rem;
     display: grid;
-    grid-template-columns: 100px 150px 1fr 40px;
+    grid-template-columns: 100px 215px 1fr 40px;
     gap: 1rem;
     align-items: start;
     position: relative;
