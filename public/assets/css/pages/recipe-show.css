@@ -532,13 +532,35 @@
     font-weight: 600;
 }
 
-.stars .fa-star {
-    color: var(--color-gray-300);
-    margin: 0 0.1rem;
+.stars i,
+.comment-rating i {
+    color: #ddd;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.2),
+                 1px -1px 0 rgba(0,0,0,0.2),
+                -1px  1px 0 rgba(0,0,0,0.2),
+                 1px  1px 0 rgba(0,0,0,0.2);
 }
 
-.stars .fa-star.filled {
-    color: var(--color-warning);
+.stars .fas.fa-star,
+.stars .fas.fa-star-half-alt,
+.comment-rating .fas.fa-star,
+.comment-rating .fas.fa-star-half-alt {
+    color: #ffd700;
+}
+
+.average-rating .stars {
+    display: inline-flex;
+    gap: 2px;
+    margin: 0 8px;
+}
+
+.comment-rating {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.comment-rating i {
+    font-size: 14px;
 }
 
 .comment-form {
