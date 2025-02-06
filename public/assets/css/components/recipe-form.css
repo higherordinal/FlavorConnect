@@ -56,26 +56,50 @@
     box-shadow: var(--shadow-sm);
 }
 
+/* Form sections */
+.form-section {
+    background: var(--color-white);
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+}
+
+.form-section h4 {
+    color: var(--primary-color);
+    font-size: var(--font-size-large);
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
+}
+
 /* Categories Section */
 .categories-row {
+    background-color: var(--background-color);
+    padding: 0.5rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 1rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    gap: 0.5rem;
 }
 
 /* Time Section */
 .time-row {
+    background-color: var(--background-color);
+    padding: 0.5rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 1rem;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
+    gap: 0.5rem;
 }
 
 .time-section {
-    background: var(--background-color);
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius-md);
+    background-color: var(--color-white);
+    padding: 0.75rem;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
 }
 
 .time-section h4 {
@@ -92,24 +116,31 @@
 
 /* Ingredients Section */
 .ingredients-section {
-    margin-bottom: var(--spacing-lg);
+    background-color: var(--background-color);
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 2rem;
 }
 
 .ingredients-section h4 {
     color: var(--primary-color);
     font-size: var(--font-size-large);
     margin-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
 }
 
 .ingredient-row {
+    background-color: var(--color-white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr auto;
-    gap: var(--spacing-md);
-    align-items: center;
-    padding: var(--spacing-md);
-    background: var(--background-color);
-    border-radius: var(--border-radius-md);
-    margin-bottom: var(--spacing-md);
+    grid-template-columns: 100px 150px 1fr 40px;
+    gap: 1rem;
+    align-items: start;
+    position: relative;
 }
 
 .ingredient-row .form-group {
@@ -118,28 +149,39 @@
 
 .ingredient-row .remove-ingredient {
     margin-top: calc(24px + var(--spacing-sm));
+    padding: 0.25rem 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    height: min-content;
 }
 
 /* Directions Section */
 .directions-section {
-    margin-bottom: var(--spacing-lg);
+    background-color: var(--background-color);
+    padding: 2rem;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 2rem;
 }
 
 .directions-section h4 {
     color: var(--primary-color);
     font-size: var(--font-size-large);
     margin-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 0.5rem;
 }
 
 .direction-row {
+    background-color: var(--color-white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 1rem;
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: var(--spacing-md);
-    align-items: center;
-    padding: var(--spacing-md);
-    background: var(--background-color);
-    border-radius: var(--border-radius-md);
-    margin-bottom: var(--spacing-md);
+    grid-template-columns: 40px 1fr 40px;
+    gap: 1rem;
+    align-items: start;
+    position: relative;
 }
 
 .direction-row .form-group {
@@ -148,10 +190,23 @@
 
 .direction-row .step-number {
     margin-top: calc(24px + var(--spacing-sm));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: var(--primary-color);
+    color: var(--color-white);
+    border-radius: 50%;
+    font-weight: bold;
 }
 
 .direction-row .remove-step {
     margin-top: calc(24px + var(--spacing-sm));
+    padding: 0.25rem 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    height: min-content;
 }
 
 .step-number {
@@ -260,6 +315,7 @@
 #add-step {
     width: fit-content;
     margin-top: var(--spacing-md);
+    width: 100%;
 }
 
 /* Form Controls */
@@ -313,8 +369,29 @@
         padding: var(--spacing-md);
     }
 
+    .form-section,
+    .categories-row,
+    .time-row,
+    .image-section,
+    .ingredients-section,
+    .directions-section {
+        padding: 1.5rem;
+    }
+
     .ingredient-row {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .direction-row {
+        grid-template-columns: 40px 1fr;
+    }
+
+    .remove-ingredient,
+    .remove-step {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
     }
 
     .form-buttons {
