@@ -103,7 +103,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                     <div class="form-group">
                         <label for="quantity_<?php echo $i; ?>">Quantity</label>
                         <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
-                               class="form-control" step="0.01" min="0" value="<?php echo h($ingredient->quantity); ?>" required>
+                               class="form-control" step="0.01" min="0" value="<?php echo h(format_quantity($ingredient->quantity)); ?>" required>
                     </div>
                     
                     <div class="form-group">
@@ -223,9 +223,10 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
             <input type="file" name="recipe_image" id="recipe_image" class="form-control" accept="image/*" <?php echo isset($recipe->img_file_path) ? '' : 'required'; ?>>
             <?php if(isset($recipe->img_file_path) && $recipe->img_file_path) { ?>
                 <div class="mt-2">
-                    <img src="<?php echo url_for($recipe->image_path()); ?>" alt="Current recipe image" class="img-thumbnail">
+                    <img src="<?php echo url_for('/assets/uploads/recipes/' . $recipe->img_file_path); ?>" alt="Current recipe image" class="img-thumbnail" style="max-width: 200px;">
                 </div>
             <?php } ?>
+            <small class="form-text text-muted">Upload a high-quality image of your recipe</small>
         </div>
 
         <div class="form-group">
