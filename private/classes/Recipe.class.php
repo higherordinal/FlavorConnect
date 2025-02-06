@@ -275,26 +275,17 @@ class Recipe extends DatabaseObject {
      * @param int|null $style_id Style ID filter
      * @param int|null $diet_id Diet ID filter
      * @param int|null $type_id Type ID filter
-     * @param string $sort Sort order ('newest', 'oldest', 'rating')
      * @return int Total number of matching recipes
      */
-    public static function count_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null, $sort='newest') {
-        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " r";
-        
-        if($sort === 'rating') {
-            $sql .= " INNER JOIN (
-                        SELECT recipe_id, AVG(rating_value) as avg_rating 
-                        FROM recipe_rating 
-                        GROUP BY recipe_id
-                    ) ratings ON r.recipe_id = ratings.recipe_id";
-        }
+    public static function count_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null) {
+        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
         
         $where_clauses = [];
         $params = [];
         $types = "";
         
         if(!empty($search)) {
-            $where_clauses[] = "(r.title LIKE ? OR r.description LIKE ?)";
+            $where_clauses[] = "(title LIKE ? OR description LIKE ?)";
             $search_param = "%{$search}%";
             $params[] = $search_param;
             $params[] = $search_param;
@@ -302,25 +293,21 @@ class Recipe extends DatabaseObject {
         }
         
         if(!empty($style_id)) {
-            $where_clauses[] = "r.style_id = ?";
+            $where_clauses[] = "style_id = ?";
             $params[] = $style_id;
             $types .= "i";
         }
         
         if(!empty($diet_id)) {
-            $where_clauses[] = "r.diet_id = ?";
+            $where_clauses[] = "diet_id = ?";
             $params[] = $diet_id;
             $types .= "i";
         }
         
         if(!empty($type_id)) {
-            $where_clauses[] = "r.type_id = ?";
+            $where_clauses[] = "type_id = ?";
             $params[] = $type_id;
             $types .= "i";
-        }
-        
-        if($sort === 'rating') {
-            $where_clauses[] = "ratings.avg_rating IS NOT NULL";
         }
         
         if(!empty($where_clauses)) {
@@ -352,7 +339,7 @@ class Recipe extends DatabaseObject {
         $sql = "SELECT r.* FROM " . static::$table_name . " r";
         
         if($sort === 'rating') {
-            $sql .= " INNER JOIN (
+            $sql .= " LEFT JOIN (
                         SELECT recipe_id, AVG(rating_value) as avg_rating 
                         FROM recipe_rating 
                         GROUP BY recipe_id
@@ -387,10 +374,6 @@ class Recipe extends DatabaseObject {
             $where_clauses[] = "r.type_id = ?";
             $params[] = $type_id;
             $types .= "i";
-        }
-        
-        if($sort === 'rating') {
-            $where_clauses[] = "ratings.avg_rating IS NOT NULL";
         }
         
         if(!empty($where_clauses)) {

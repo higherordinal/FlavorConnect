@@ -41,8 +41,8 @@ $types = RecipeAttribute::find_by_type('type');
 $offset = ($current_page - 1) * $per_page;
 
 // Get total recipes count for pagination
-$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id, $sort);
-$total_pages = ceil($total_recipes / $per_page);
+$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id);
+$total_pages = max(1, ceil($total_recipes / $per_page));
 
 // Get recipes for current page
 $recipes = Recipe::find_all_filtered($search, $style_id, $diet_id, $type_id, $sort, $per_page, $offset);
@@ -133,17 +133,17 @@ if ($current_page > $total_pages) {
                         Search: <?php echo h($search); ?>
                     </span>
                 <?php } ?>
-                <?php if($style_id && ($style = RecipeAttribute::find_by_id($style_id))) { ?>
+                <?php if($style_id && ($style = RecipeAttribute::find_one($style_id, 'style'))) { ?>
                     <span class="filter-tag">
                         Style: <?php echo h($style->name); ?>
                     </span>
                 <?php } ?>
-                <?php if($diet_id && ($diet = RecipeAttribute::find_by_id($diet_id))) { ?>
+                <?php if($diet_id && ($diet = RecipeAttribute::find_one($diet_id, 'diet'))) { ?>
                     <span class="filter-tag">
                         Diet: <?php echo h($diet->name); ?>
                     </span>
                 <?php } ?>
-                <?php if($type_id && ($type = RecipeAttribute::find_by_id($type_id))) { ?>
+                <?php if($type_id && ($type = RecipeAttribute::find_one($type_id, 'type'))) { ?>
                     <span class="filter-tag">
                         Type: <?php echo h($type->name); ?>
                     </span>
