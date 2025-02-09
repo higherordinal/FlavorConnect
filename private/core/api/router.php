@@ -7,15 +7,9 @@
 class ApiRouter {
     private $endpoints = [];
     private $request;
-    private $response;
 
     public function __construct() {
         $this->request = $this->parseRequest();
-        $this->response = [
-            'success' => false,
-            'data' => null,
-            'error' => null
-        ];
     }
 
     /**
@@ -36,78 +30,47 @@ class ApiRouter {
      * @return array Request data
      */
     private function parseRequest() {
+        $json = file_get_contents('php://input');
+        $body = !empty($json) ? json_decode($json, true) : [];
+        
+        if (!empty($json) && json_last_error() !== JSON_ERROR_NONE) {
+            json_error('Invalid JSON data');
+        }
+
         return [
             'method' => $_SERVER['REQUEST_METHOD'],
             'path' => trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'),
             'query' => $_GET,
-            'body' => $this->getRequestBody()
+            'body' => $body
         ];
     }
 
     /**
-     * Get request body data
-     * @return array Request body data
-     */
-    private function getRequestBody() {
-        $body = file_get_contents('php://input');
-        return json_decode($body, true) ?? [];
-    }
-
-    /**
-     * Handle the API request
-     * @return array Response data
+     * Handle the incoming request
      */
     public function handleRequest() {
         try {
-            // Extract API path (everything after /api/)
-            $pathParts = explode('api/', $this->request['path']);
-            $apiPath = end($pathParts);
+            // Get endpoint path
+            $parts = explode('/', $this->request['path']);
+            $endpoint = $parts[1] ?? '';
 
-            // Find matching endpoint
-            foreach ($this->endpoints as $path => $endpoint) {
-                if (strpos($apiPath, $path) === 0) {
-                    // Check HTTP method
-                    if (!in_array($this->request['method'], $endpoint['methods'])) {
-                        throw new Exception('Method not allowed', 405);
-                    }
-
-                    // Call handler
-                    $result = call_user_func($endpoint['handler'], $this->request);
-                    $this->response['success'] = true;
-                    $this->response['data'] = $result;
-                    return $this->response;
-                }
+            // Check if endpoint exists
+            if (!isset($this->endpoints[$endpoint])) {
+                json_error('Endpoint not found', 404);
             }
 
-            throw new Exception('Endpoint not found', 404);
+            // Check if method is allowed
+            $handler = $this->endpoints[$endpoint];
+            if (!in_array($this->request['method'], $handler['methods'])) {
+                json_error('Method not allowed', 405);
+            }
+
+            // Call handler
+            $result = call_user_func($handler['handler'], $this->request);
+            json_success($result);
+
         } catch (Exception $e) {
-            $this->response['error'] = [
-                'message' => $e->getMessage(),
-                'code' => $e->getCode() ?: 500
-            ];
-            return $this->response;
+            json_error($e->getMessage(), $e->getCode() ?: 500);
         }
-    }
-
-    /**
-     * Send the API response
-     * @param array $response Response data
-     */
-    public function sendResponse($response) {
-        // Set response code
-        if (isset($response['error'])) {
-            http_response_code($response['error']['code']);
-        } else {
-            http_response_code(200);
-        }
-
-        // Set headers
-        header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type');
-
-        // Send response
-        echo json_encode($response);
     }
 }

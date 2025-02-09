@@ -7,37 +7,37 @@ error_reporting(0);
 
 header('Content-Type: application/json');
 
-/**
- * Returns a JSON error response
- * @param string $message Error message
- * @param int $status HTTP status code
- */
-function json_error($message, $status = 400) {
-    http_response_code($status);
-    echo json_encode([
-        'success' => false,
-        'error' => $message
-    ]);
-    exit;
-}
+// Build request object
+$request = [
+    'session' => $session,
+    'method' => $_SERVER['REQUEST_METHOD'],
+    'query' => $_GET,
+    'raw_body' => file_get_contents('php://input'),
+    'body' => []
+];
 
-/**
- * Returns a JSON success response
- * @param array $data Response data
- */
-function json_success($data) {
-    echo json_encode(array_merge(['success' => true], $data));
-    exit;
+// Parse JSON body if present
+if (!empty($request['raw_body'])) {
+    $request['body'] = json_decode($request['raw_body'], true) ?? [];
 }
 
 // Handle GET requests
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $action = $_GET['action'] ?? '';
+if ($request['method'] === 'GET') {
+    require_method('GET', $request['method']);
     
-    if ($action === 'get' && isset($_GET['id'])) {
-        $recipe = Recipe::find_by_id($_GET['id']);
+    $action = $request['query']['action'] ?? '';
+    
+    if ($action === 'get') {
+        $rules = [
+            'id' => ['required', 'number', 'min:1']
+        ];
         
-        if ($recipe) {
+        process_api_request($request, $rules, function($request) {
+            $recipe = Recipe::find_by_id($request['query']['id']);
+            if (!$recipe) {
+                json_error('Recipe not found', 404);
+            }
+            
             $ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
             $steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
             
@@ -69,53 +69,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             ];
             
             json_success(['recipe' => $recipe_data]);
-        } else {
-            json_error('Recipe not found', 404);
-        }
-    } else {
-        json_error('Recipe not found', 404);
+        });
     }
+    
+    json_error('Invalid action');
 }
 
 // Handle POST requests
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // Get POST data
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-
-        if (!$data || json_last_error() !== JSON_ERROR_NONE) {
-            json_error('Invalid JSON data');
-        }
-
-        $action = $data['action'] ?? '';
-        
-        // Handle favorite toggle
-        if ($action === 'toggle_favorite') {
-            // Validate required fields
-            $errors = [];
-            if (!isset($data['recipe_id']) || is_blank($data['recipe_id'])) {
-                $errors[] = 'Recipe ID is required';
-            } elseif (!has_number_between($data['recipe_id'], 1, PHP_INT_MAX)) {
-                $errors[] = 'Invalid recipe ID';
+if ($request['method'] === 'POST') {
+    require_method('POST', $request['method']);
+    
+    $rules = [
+        'action' => ['required'],
+        'recipe_id' => ['required', 'number', 'min:1']
+    ];
+    
+    process_api_request($request, $rules, function($request) {
+        if ($request['body']['action'] === 'toggle_favorite') {
+            if (!$request['session']->is_logged_in()) {
+                json_error('You must be logged in', 401);
             }
-
-            if (!empty($errors)) {
-                json_error(implode(', ', $errors));
-            }
-
-            if (!$session->is_logged_in()) {
-                json_error('User must be logged in', 401);
-            }
-
-            $recipe = Recipe::find_by_id($data['recipe_id']);
+            
+            $recipe = Recipe::find_by_id($request['body']['recipe_id']);
             if (!$recipe) {
                 json_error('Recipe not found', 404);
             }
-
-            $user_id = $session->get_user_id();
+            
+            $user_id = $request['session']->get_user_id();
             $is_favorited = $recipe->is_favorited_by($user_id);
-
+            
             if ($is_favorited) {
                 // Remove from favorites
                 $result = $recipe->remove_from_favorites($user_id);
@@ -125,21 +107,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $result = $recipe->add_to_favorites($user_id);
                 $message = 'Recipe added to favorites';
             }
-
-            if ($result) {
-                json_success([
-                    'message' => $message,
-                    'is_favorited' => !$is_favorited
-                ]);
-            } else {
+            
+            if (!$result) {
                 json_error('Failed to update favorite status', 500);
             }
-        } else {
-            json_error('Invalid action');
+            
+            json_success([
+                'message' => $message,
+                'is_favorited' => !$is_favorited
+            ]);
         }
-    } catch (Exception $e) {
-        json_error($e->getMessage(), 500);
-    }
+        
+        json_error('Invalid action');
+    });
 }
 
 // Handle other HTTP methods
