@@ -1,6 +1,10 @@
 <?php
 require_once('../../../private/core/initialize.php');
 
+// Prevent PHP errors from being displayed in the response
+ini_set('display_errors', 0);
+error_reporting(0);
+
 header('Content-Type: application/json');
 
 // Handle GET requests
@@ -56,6 +60,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         'error' => 'Recipe not found'
     ]);
     exit;
+}
+
+// Handle POST requests
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    try {
+        // Get POST data
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if (!$data) {
+            throw new Exception('Invalid JSON data');
+        }
+
+        $action = $data['action'] ?? '';
+        
+        // Handle favorite toggle
+        if ($action === 'toggle_favorite' && isset($data['recipe_id'])) {
+            if (!$session->is_logged_in()) {
+                throw new Exception('User must be logged in');
+            }
+
+            $recipe = Recipe::find_by_id($data['recipe_id']);
+            if (!$recipe) {
+                throw new Exception('Recipe not found');
+            }
+
+            $user_id = $session->get_user_id();
+            $is_favorited = $recipe->is_favorited_by($user_id);
+
+            if ($is_favorited) {
+                // Remove from favorites
+                $result = $recipe->remove_from_favorites($user_id);
+                $message = 'Recipe removed from favorites';
+            } else {
+                // Add to favorites
+                $result = $recipe->add_to_favorites($user_id);
+                $message = 'Recipe added to favorites';
+            }
+
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'message' => $message,
+                    'is_favorited' => !$is_favorited
+                ]);
+                exit;
+            } else {
+                throw new Exception('Failed to update favorite status');
+            }
+        } else {
+            throw new Exception('Invalid action');
+        }
+    } catch (Exception $e) {
+        http_response_code(400);
+        echo json_encode([
+            'success' => false,
+            'error' => $e->getMessage()
+        ]);
+        exit;
+    }
 }
 
 // Handle other HTTP methods

@@ -50,6 +50,55 @@ if ($current_page > $total_pages) {
 }
 ?>
 
+<script>
+    // Make user data available to JavaScript
+    window.isLoggedIn = <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>;
+    window.userId = <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>;
+    
+    // API Configuration
+    window.API_CONFIG = {
+        baseUrl: 'http://localhost:3000',
+        endpoints: {
+            favorites: '/favorites'
+        }
+    };
+
+    // Initialize recipes data
+    window.initialRecipes = <?php 
+        $recipesData = array_map(function($recipe) use ($session) {
+            $style = $recipe->style();
+            $diet = $recipe->diet();
+            $type = $recipe->type();
+            $user = User::find_by_id($recipe->user_id);
+            $rating = $recipe->get_average_rating();
+            $is_favorited = $session->is_logged_in() ? 
+                RecipeFavorite::is_favorited($session->get_user_id(), $recipe->recipe_id) : false;
+
+            return [
+                'recipe_id' => $recipe->recipe_id,
+                'user_id' => $session->is_logged_in() ? $session->get_user_id() : null,
+                'username' => $user ? $user->username : 'Unknown',
+                'title' => $recipe->title,
+                'description' => $recipe->description,
+                'style_id' => $recipe->style_id,
+                'style' => $style ? $style->name : null,
+                'diet_id' => $recipe->diet_id,
+                'diet' => $diet ? $diet->name : null,
+                'type_id' => $recipe->type_id,
+                'type' => $type ? $type->name : null,
+                'prep_time' => $recipe->prep_time,
+                'cook_time' => $recipe->cook_time,
+                'img_file_path' => $recipe->img_file_path,
+                'created_at' => $recipe->created_at,
+                'rating' => $rating['average'] ?? null,
+                'rating_count' => $rating['count'] ?? 0,
+                'is_favorited' => $is_favorited
+            ];
+        }, $recipes);
+        echo json_encode($recipesData);
+    ?>;
+</script>
+
 <div class="recipe-gallery">
     <div class="gallery-header">
         <h1 class="gallery-title">Recipes</h1>
@@ -276,6 +325,27 @@ if ($current_page > $total_pages) {
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
 
+<script>
+    // Initialize API configuration
+    window.API_CONFIG = {
+        baseUrl: '<?php echo url_for('/api/recipes/'); ?>'  // Added trailing slash
+    };
+
+    // Pass recipe data to JavaScript
+    window.userId = <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>;
+    window.initialRecipes = <?php
+        $recipe_data = array_map(function($recipe) use ($session) {
+            return [
+                'recipe_id' => $recipe->recipe_id,
+                'user_id' => $session->is_logged_in() ? $session->get_user_id() : null,
+                'is_favorited' => $session->is_logged_in() ? $recipe->is_favorited_by($session->get_user_id()) : false
+            ];
+        }, $recipes);
+        echo json_encode($recipe_data);
+    ?>;
+</script>
+
+<script src="<?php echo url_for('/assets/js/pages/recipe-gallery.js?v=1.0'); ?>"></script>
 
 <?php
 // Helper function to maintain query parameters
