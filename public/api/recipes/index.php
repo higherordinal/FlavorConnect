@@ -7,6 +7,29 @@ error_reporting(0);
 
 header('Content-Type: application/json');
 
+/**
+ * Returns a JSON error response
+ * @param string $message Error message
+ * @param int $status HTTP status code
+ */
+function json_error($message, $status = 400) {
+    http_response_code($status);
+    echo json_encode([
+        'success' => false,
+        'error' => $message
+    ]);
+    exit;
+}
+
+/**
+ * Returns a JSON success response
+ * @param array $data Response data
+ */
+function json_success($data) {
+    echo json_encode(array_merge(['success' => true], $data));
+    exit;
+}
+
 // Handle GET requests
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $action = $_GET['action'] ?? '';
@@ -45,21 +68,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 }, $steps)
             ];
             
-            echo json_encode([
-                'success' => true,
-                'recipe' => $recipe_data
-            ]);
-            exit;
+            json_success(['recipe' => $recipe_data]);
+        } else {
+            json_error('Recipe not found', 404);
         }
+    } else {
+        json_error('Recipe not found', 404);
     }
-    
-    // If we get here, something went wrong
-    http_response_code(404);
-    echo json_encode([
-        'success' => false,
-        'error' => 'Recipe not found'
-    ]);
-    exit;
 }
 
 // Handle POST requests
@@ -69,21 +84,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
-        if (!$data) {
-            throw new Exception('Invalid JSON data');
+        if (!$data || json_last_error() !== JSON_ERROR_NONE) {
+            json_error('Invalid JSON data');
         }
 
         $action = $data['action'] ?? '';
         
         // Handle favorite toggle
-        if ($action === 'toggle_favorite' && isset($data['recipe_id'])) {
+        if ($action === 'toggle_favorite') {
+            // Validate required fields
+            $errors = [];
+            if (!isset($data['recipe_id']) || is_blank($data['recipe_id'])) {
+                $errors[] = 'Recipe ID is required';
+            } elseif (!has_number_between($data['recipe_id'], 1, PHP_INT_MAX)) {
+                $errors[] = 'Invalid recipe ID';
+            }
+
+            if (!empty($errors)) {
+                json_error(implode(', ', $errors));
+            }
+
             if (!$session->is_logged_in()) {
-                throw new Exception('User must be logged in');
+                json_error('User must be logged in', 401);
             }
 
             $recipe = Recipe::find_by_id($data['recipe_id']);
             if (!$recipe) {
-                throw new Exception('Recipe not found');
+                json_error('Recipe not found', 404);
             }
 
             $user_id = $session->get_user_id();
@@ -100,31 +127,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($result) {
-                echo json_encode([
-                    'success' => true,
+                json_success([
                     'message' => $message,
                     'is_favorited' => !$is_favorited
                 ]);
-                exit;
             } else {
-                throw new Exception('Failed to update favorite status');
+                json_error('Failed to update favorite status', 500);
             }
         } else {
-            throw new Exception('Invalid action');
+            json_error('Invalid action');
         }
     } catch (Exception $e) {
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'error' => $e->getMessage()
-        ]);
-        exit;
+        json_error($e->getMessage(), 500);
     }
 }
 
 // Handle other HTTP methods
-http_response_code(405);
-echo json_encode([
-    'success' => false,
-    'error' => 'Method not allowed'
-]);
+json_error('Method not allowed', 405);
