@@ -252,24 +252,71 @@
    ========================================================================== */
 
 .main-content .favorite-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
     background: none;
     border: none;
-    color: var(--accent-color);
+    color: #fff;
+    font-size: 1.5rem;
     cursor: pointer;
-    font-size: var(--font-size-base);
-    padding: var(--spacing-xs);
-    position: absolute;
-    right: var(--spacing-md);
-    top: var(--spacing-md);
-    z-index: 1;
+    transition: transform 0.2s ease;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .main-content .favorite-btn:hover {
-    color: var(--accent-color-dark);
+    transform: scale(1.1);
 }
 
-.main-content .favorite-btn.active {
-    color: var(--accent-color);
+.main-content .favorite-btn.favorited {
+    color: #ff4b4b;
+}
+
+.main-content .favorite-btn i {
+    line-height: 1;
+}
+
+/* ==========================================================================
+   Toast Notifications
+   ========================================================================== */
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 1rem 2rem;
+    border-radius: 4px;
+    color: white;
+    font-weight: 500;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+}
+
+.toast.success {
+    background-color: #4CAF50;
+}
+
+.toast.error {
+    background-color: #f44336;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
 }
 
 /* ==========================================================================

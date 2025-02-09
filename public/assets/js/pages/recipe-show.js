@@ -65,12 +65,6 @@ function setupEventListeners() {
     if (shareButton) {
         addSafeEventListener(shareButton, 'click', handleShare);
     }
-
-    // Save recipe
-    const saveButton = document.querySelector('.save-recipe');
-    if (saveButton) {
-        addSafeEventListener(saveButton, 'click', handleSave);
-    }
 }
 
 /**
@@ -412,18 +406,38 @@ async function handleShare() {
  */
 async function handleSave() {
     try {
-        const response = await fetchData('/api/recipes', {
+        const { recipe } = state;
+        if (!recipe || !recipe.user_id) {
+            console.error('Missing recipe data or user_id');
+            return;
+        }
+
+        const url = `${window.API_CONFIG.baseUrl}${window.API_CONFIG.endpoints.favorites}`;
+        const body = {
+            userId: recipe.user_id,
+            recipeId: recipe.recipe_id
+        };
+
+        const response = await fetch(url, {
             method: 'POST',
-            body: JSON.stringify({
-                action: 'toggle_favorite',
-                recipe_id: state.recipe.id
-            })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
         });
 
-        if (response.success) {
-            const saveButton = document.querySelector('.save-recipe');
-            const isSaved = saveButton.classList.toggle('saved');
-            showSuccess(isSaved ? 'Recipe saved to favorites' : 'Recipe removed from favorites');
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to save recipe');
+        }
+
+        const data = await response.json();
+        if (data.success) {
+            state.isFavorited = data.is_favorited;
+            updateFavoriteButton();
+            showSuccess(data.message);
+        } else {
+            throw new Error(data.message || 'Failed to save recipe');
         }
     } catch (error) {
         console.error('Error saving recipe:', error);

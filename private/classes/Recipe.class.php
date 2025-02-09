@@ -543,5 +543,25 @@ class Recipe extends DatabaseObject {
         if (!$user_id) return false;
         return RecipeFavorite::is_favorited($user_id, $this->recipe_id);
     }
+
+    /**
+     * Add this recipe to a user's favorites
+     * @param int $user_id The user ID
+     * @return bool True if successful
+     */
+    public function add_to_favorites($user_id) {
+        require_once('RecipeFavorite.class.php');
+        return RecipeFavorite::add_favorite($user_id, $this->recipe_id);
+    }
+
+    /**
+     * Remove this recipe from a user's favorites
+     * @param int $user_id The user ID
+     * @return bool True if successful
+     */
+    public function remove_from_favorites($user_id) {
+        require_once('RecipeFavorite.class.php');
+        return RecipeFavorite::remove_favorite($user_id, $this->recipe_id);
+    }
 }
 ?>

@@ -1,80 +1,131 @@
 /**
- * @fileoverview Recipe Gallery page functionality for FlavorConnect
- * @author FlavorConnect Team
- * @version 1.0.0
- * @license MIT
+ * @fileoverview Recipe gallery functionality
  */
-
-import { debounce, formatTime, fetchData } from '../utils/common.js';
 
 // State management
 const state = {
-    recipes: [],
-    currentFilters: {
-        search: '',
-        style: '',
-        diet: '',
-        type: '',
-        sort: 'newest',
-        page: 1
-    }
+    recipes: window.initialRecipes || []
 };
 
-/**
- * Initializes the recipe gallery page
- * Sets up event listeners and loads initial data
- */
+// Initialize gallery
 function initializeGallery() {
-    loadRecipes();
     setupEventListeners();
-    loadFiltersFromURL();
+}
+
+// Set up event listeners
+function setupEventListeners() {
+    // Event delegation for favorite buttons
+    document.querySelector('.recipe-grid').addEventListener('click', async (e) => {
+        const favoriteBtn = e.target.closest('.favorite-btn');
+        if (favoriteBtn) {
+            e.preventDefault();
+            await handleFavoriteToggle(e);
+        }
+    });
 }
 
 /**
- * Loads recipes from the API
- * @returns {Promise<void>}
+ * Handles toggling recipe favorite status
+ * @param {Event} e - Click event from favorite button
  */
-async function loadRecipes() {
+async function handleFavoriteToggle(e) {
     try {
-        showLoadingState(true);
-        const url = '/api/recipes?action=list';
-        const response = await fetchData(url);
-        state.recipes = response.recipes || [];
-        applyFilters();
+        const button = e.target.closest('.favorite-btn');
+        if (!button) return;
+
+        const recipeId = button.dataset.recipeId;
+        const userId = window.userId;
+        
+        if (!recipeId || !userId) {
+            console.error('Missing recipe ID or user ID');
+            return;
+        }
+
+        const url = window.API_CONFIG.baseUrl;
+        const body = {
+            action: 'toggle_favorite',
+            recipe_id: parseInt(recipeId)
+        };
+
+        console.log('Making API request:', {
+            url,
+            method: 'POST',
+            body
+        });
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        console.log('API response status:', response.status);
+        
+        const data = await response.json();
+        console.log('API response data:', data);
+
+        if (!response.ok) {
+            console.error('API error response:', data);
+            throw new Error(data.error || 'Failed to update favorite status');
+        }
+        
+        if (data.success) {
+            // Update recipe in state
+            const recipe = state.recipes.find(r => r.recipe_id === parseInt(recipeId));
+            if (recipe) {
+                recipe.is_favorited = !recipe.is_favorited; // Toggle the state
+            }
+
+            // Update button UI
+            button.classList.toggle('favorited');
+            button.setAttribute('aria-label', 
+                button.classList.contains('favorited') ? 'Remove from favorites' : 'Add to favorites'
+            );
+            
+            // Update icon
+            const icon = button.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fas');
+                icon.classList.toggle('far');
+            }
+            
+            showSuccess(data.message || 'Recipe favorite status updated');
+        } else {
+            throw new Error(data.error || 'Failed to update favorite status');
+        }
     } catch (error) {
-        showError('Failed to load recipes. Please try again later.');
-        console.error('Error loading recipes:', error);
-    } finally {
-        showLoadingState(false);
+        console.error('Error toggling favorite:', error);
+        showError(error.message || 'Failed to update favorite status');
     }
 }
 
 /**
- * Sets up event listeners for filters and search
+ * Shows a success message
+ * @param {string} message - The message to show
  */
-function setupEventListeners() {
-    // Search input
-    document.querySelector('.search-input').addEventListener('input', 
-        debounce(e => {
-            state.currentFilters.search = e.target.value;
-            applyFilters();
-            updateURL();
-        }, 300)
-    );
+function showSuccess(message) {
+    // Create and show toast notification
+    const toast = document.createElement('div');
+    toast.className = 'toast success';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
 
-    // Filter selects
-    const filterSelects = document.querySelectorAll('.filter-select');
-    filterSelects.forEach(select => {
-        select.addEventListener('change', e => {
-            const filterType = e.target.dataset.filter;
-            state.currentFilters[filterType] = e.target.value;
-            applyFilters();
-            updateURL();
-        });
-    });
-
-    // Clear filters button
-    document.querySelector('.clear-filters').addEventListener('click', clearFilters);
+/**
+ * Shows an error message
+ * @param {string} message - The message to show
+ */
+function showError(message) {
+    // Create and show toast notification
+    const toast = document.createElement('div');
+    toast.className = 'toast error';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
 }
 
 /**
@@ -102,25 +153,22 @@ function applyFilters() {
         return searchMatch && styleMatch && dietMatch && typeMatch;
     });
 
-    const sortedRecipes = filteredRecipes.sort((a, b) => {
-        switch(state.currentFilters.sort) {
-            case 'newest':
-                return new Date(b.created_at) - new Date(a.created_at);
+    // Sort recipes
+    const sortedRecipes = [...filteredRecipes].sort((a, b) => {
+        switch (state.currentFilters.sort) {
+            case 'rating':
+                return (b.rating || 0) - (a.rating || 0);
+            case 'title':
+                return a.title.localeCompare(b.title);
             case 'oldest':
                 return new Date(a.created_at) - new Date(b.created_at);
-            case 'name_asc':
-                return a.title.localeCompare(b.title);
-            case 'name_desc':
-                return b.title.localeCompare(a.title);
+            case 'newest':
             default:
-                return 0;
+                return new Date(b.created_at) - new Date(a.created_at);
         }
     });
 
-    const start = (state.currentFilters.page - 1) * 12;
-    const paginatedRecipes = sortedRecipes.slice(start, start + 12);
-
-    updateRecipeGrid(paginatedRecipes);
+    updateRecipeGrid(sortedRecipes);
     updatePagination(sortedRecipes.length);
 }
 
@@ -144,15 +192,15 @@ function createRecipeCard(recipe) {
     return `
         <article class="recipe-card">
             ${window.isLoggedIn ? `
-                <button type="button" class="favorite-btn ${recipe.is_favorited ? 'active' : ''}" 
-                        data-recipe-id="${recipe.id}"
-                        data-is-favorited="${recipe.is_favorited ? 'true' : 'false'}">
+                <button type="button" class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}" 
+                        data-recipe-id="${recipe.recipe_id}"
+                        aria-label="${recipe.is_favorited ? 'Remove from favorites' : 'Add to favorites'}">
                     <i class="fa-heart ${recipe.is_favorited ? 'fas' : 'far'}"></i>
                 </button>
             ` : ''}
-            <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.id}" class="recipe-link">
+            <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.recipe_id}" class="recipe-link">
                 <div class="recipe-image">
-                    <img src="${recipe.image ? '/FlavorConnect/public' + recipe.image : '/FlavorConnect/public/assets/images/recipe-placeholder.jpg'}" 
+                    <img src="${recipe.img_file_path ? '/FlavorConnect/public' + recipe.img_file_path : '/FlavorConnect/public/assets/images/recipe-placeholder.jpg'}" 
                          alt="${recipe.title}">
                 </div>
                 <div class="recipe-content">
@@ -190,9 +238,10 @@ function createRecipeCard(recipe) {
  */
 function createEmptyState() {
     return `
-        <div class="no-results">
-            <p>No recipes found matching your criteria.</p>
-            <button onclick="window.location.href='/FlavorConnect/public/recipes/index.php'" class="btn btn-primary">Clear Filters</button>
+        <div class="empty-state">
+            <i class="fas fa-search"></i>
+            <h2>No recipes found</h2>
+            <p>Try adjusting your filters or search terms</p>
         </div>
     `;
 }
@@ -202,63 +251,30 @@ function createEmptyState() {
  * @param {number} totalRecipes - Total number of recipes
  */
 function updatePagination(totalRecipes) {
-    const totalPages = Math.ceil(totalRecipes / 12);
-    const pagination = document.querySelector('.pagination');
-    
-    if (totalPages <= 1) {
-        pagination.style.display = 'none';
-        return;
-    }
-
-    pagination.style.display = 'flex';
-    pagination.innerHTML = `
-        ${state.currentFilters.page > 1 ? `
-            <a href="#" class="page-link" data-page="${state.currentFilters.page - 1}">
-                <i class="fas fa-chevron-left"></i>
-            </a>
-        ` : ''}
-        ${Array.from({length: totalPages}, (_, i) => i + 1).map(page => `
-            <a href="#" class="page-link ${page === state.currentFilters.page ? 'active' : ''}" 
-               data-page="${page}">${page}</a>
-        `).join('')}
-        ${state.currentFilters.page < totalPages ? `
-            <a href="#" class="page-link" data-page="${state.currentFilters.page + 1}">
-                <i class="fas fa-chevron-right"></i>
-            </a>
-        ` : ''}
-    `;
-
-    // Add click handlers for pagination
-    pagination.querySelectorAll('.page-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const newPage = parseInt(e.target.closest('.page-link').dataset.page);
-            if (newPage !== state.currentFilters.page) {
-                state.currentFilters.page = newPage;
-                applyFilters();
-                // Scroll to top of recipe grid
-                document.querySelector('.recipe-grid').scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
+    // Pagination implementation...
 }
 
 /**
  * Clears all filters and resets the display
  */
 function clearFilters() {
-    // Reset filter state
-    Object.keys(state.currentFilters).forEach(key => {
-        state.currentFilters[key] = '';
-    });
+    // Reset all filters to default values
+    state.currentFilters = {
+        search: '',
+        style: '',
+        diet: '',
+        type: '',
+        sort: 'newest',
+        page: 1
+    };
 
-    // Reset UI
+    // Reset form inputs
     document.querySelector('.search-input').value = '';
     document.querySelectorAll('.filter-select').forEach(select => {
         select.value = '';
     });
 
-    // Update display
+    // Update display and URL
     applyFilters();
     updateURL();
 }
@@ -271,7 +287,7 @@ function updateURL() {
     Object.entries(state.currentFilters).forEach(([key, value]) => {
         if (value) params.set(key, value);
     });
-    window.history.pushState({}, '', `${window.location.pathname}?${params.toString()}`);
+    window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
 }
 
 /**
@@ -279,15 +295,13 @@ function updateURL() {
  */
 function loadFiltersFromURL() {
     const params = new URLSearchParams(window.location.search);
-    Object.keys(state.currentFilters).forEach(key => {
-        const value = params.get(key);
-        if (value) {
+    params.forEach((value, key) => {
+        if (state.currentFilters.hasOwnProperty(key)) {
             state.currentFilters[key] = value;
-            const element = document.querySelector(`[data-filter="${key}"]`);
-            if (element) element.value = value;
+            const input = document.querySelector(`[data-filter="${key}"]`);
+            if (input) input.value = value;
         }
     });
-    applyFilters();
 }
 
 /**
@@ -295,21 +309,11 @@ function loadFiltersFromURL() {
  * @param {boolean} show - Whether to show or hide loading state
  */
 function showLoadingState(show) {
-    const loader = document.querySelector('.loader');
-    if (loader) {
-        loader.style.display = show ? 'block' : 'none';
-    }
-}
-
-/**
- * Shows error message to user
- * @param {string} message - Error message to display
- */
-function showError(message) {
-    const errorElement = document.querySelector('.error-message');
-    if (errorElement) {
-        errorElement.textContent = message;
-        errorElement.style.display = 'block';
+    const grid = document.querySelector('.recipe-grid');
+    if (show) {
+        grid.classList.add('loading');
+    } else {
+        grid.classList.remove('loading');
     }
 }
 
