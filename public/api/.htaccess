@@ -1,5 +1,18 @@
+# FlavorConnect API Configuration
+# Note: Favorite-related endpoints are now handled by Node.js API on port 3000
+
 RewriteEngine On
 RewriteBase /FlavorConnect/public/api/
 
-# Handle recipe API requests
-RewriteRule ^recipes/?$ recipes/index.php [L,QSA]
+# Route all API requests to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# Set JSON content type for API responses
+Header set Content-Type application/json
+
+# Allow CORS for Node.js API
+Header set Access-Control-Allow-Origin "http://localhost:3000"
+Header set Access-Control-Allow-Methods "GET, POST, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type"

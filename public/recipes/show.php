@@ -47,6 +47,12 @@ if($session->is_logged_in()) {
     include(SHARED_PATH . '/public_header.php');
 }
 
+// Check if recipe is favorited by current user
+$is_favorited = false;
+if($session->is_logged_in()) {
+    $is_favorited = RecipeFavorite::is_favorited($session->get_user_id(), $recipe->recipe_id);
+}
+
 // Prepare recipe data for JavaScript
 $recipe_data = [
     'recipe_id' => $recipe->recipe_id,
@@ -71,7 +77,9 @@ $recipe_data = [
             'instruction' => $step->instruction,
             'step_number' => $step->step_number
         ];
-    }, $steps)
+    }, $steps),
+    'is_favorited' => $is_favorited,
+    'user_id' => $session->is_logged_in() ? $session->get_user_id() : null
 ];
 ?>
 
@@ -90,76 +98,87 @@ $recipe_data = [
         <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
              alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
         <div class="recipe-header-overlay">
-            <h1><?php echo h($recipe->title); ?></h1>
-            <div class="recipe-rating">
-                <?php 
-                $avg_rating = $recipe->average_rating();
-                ?>
-                <div class="stars">
-                    <?php
-                    if ($avg_rating) {
-                        // Full stars
-                        for ($i = 1; $i <= floor($avg_rating); $i++) {
-                            echo '<i class="fas fa-star"></i>';
-                        }
-                        // Half star if needed
-                        if ($avg_rating - floor($avg_rating) >= 0.5) {
-                            echo '<i class="fas fa-star-half-alt"></i>';
-                        }
-                        // Empty stars
-                        for ($i = ceil($avg_rating); $i < 5; $i++) {
-                            echo '<i class="far fa-star"></i>';
-                        }
-                    } else {
-                        // Show empty stars if no ratings
-                        for ($i = 0; $i < 5; $i++) {
-                            echo '<i class="far fa-star"></i>';
-                        }
-                    }
-                    ?>
+            <div class="recipe-header-content">
+                <div class="recipe-title-section">
+                    <h1><?php echo h($recipe->title); ?></h1>
+                    <?php if($session->is_logged_in()) { ?>
+                        <button class="favorite-btn <?php echo $is_favorited ? 'favorited' : ''; ?>" 
+                                data-recipe-id="<?php echo $recipe->recipe_id; ?>">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    <?php } ?>
                 </div>
-                <?php if ($avg_rating): ?>
-                    <span class="rating-text"><?php echo h($avg_rating . ' / 5.0'); ?></span>
-                <?php endif; ?>
+                <div class="recipe-meta">
+                    <div class="recipe-rating">
+                        <?php 
+                        $avg_rating = $recipe->average_rating();
+                        ?>
+                        <div class="stars">
+                            <?php
+                            if ($avg_rating) {
+                                // Full stars
+                                for ($i = 1; $i <= floor($avg_rating); $i++) {
+                                    echo '<i class="fas fa-star"></i>';
+                                }
+                                // Half star if needed
+                                if ($avg_rating - floor($avg_rating) >= 0.5) {
+                                    echo '<i class="fas fa-star-half-alt"></i>';
+                                }
+                                // Empty stars
+                                for ($i = ceil($avg_rating); $i < 5; $i++) {
+                                    echo '<i class="far fa-star"></i>';
+                                }
+                            } else {
+                                // No ratings yet
+                                for ($i = 0; $i < 5; $i++) {
+                                    echo '<i class="far fa-star"></i>';
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="recipe-details">
+                        <div class="recipe-time">
+                            <span>
+                                <i class="fas fa-clock"></i>
+                                Prep: <?php echo h(TimeUtility::format_time($recipe->prep_time)); ?>
+                            </span>
+                            <span>
+                                <i class="fas fa-fire"></i>
+                                Cook: <?php echo h(TimeUtility::format_time($recipe->cook_time)); ?>
+                            </span>
+                            <span>
+                                <i class="fas fa-hourglass-end"></i>
+                                Total: <?php echo h(TimeUtility::format_time($recipe->prep_time + $recipe->cook_time)); ?>
+                            </span>
+                        </div>
+                        <div class="recipe-attributes">
+                            <span>
+                                <i class="fas fa-utensils"></i>
+                                <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>
+                            </span>
+                            <span>
+                                <i class="fas fa-leaf"></i>
+                                <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
+                            </span>
+                            <span>
+                                <i class="fas fa-plate"></i>
+                                <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
+                    <div class="recipe-actions">
+                        <a href="<?php echo private_url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
+                            <i class="fas fa-edit"></i> Edit Recipe
+                        </a>
+                        <a href="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Delete Recipe
+                        </a>
+                    </div>
+                <?php } ?>
             </div>
-            <div class="recipe-meta">
-                <div class="recipe-time">
-                    <span>
-                        <i class="fas fa-clock"></i>
-                        Prep: <?php echo h(TimeUtility::format_time($recipe->prep_time)); ?>
-                    </span>
-                    <span>
-                        <i class="fas fa-fire"></i>
-                        Cook: <?php echo h(TimeUtility::format_time($recipe->cook_time)); ?>
-                    </span>
-                    <span>
-                        <i class="fas fa-hourglass-end"></i>
-                        Total: <?php echo h(TimeUtility::format_time($recipe->prep_time + $recipe->cook_time)); ?>
-                    </span>
-                </div>
-                <span>
-                    <i class="fas fa-utensils"></i>
-                    <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>
-                </span>
-                <span>
-                    <i class="fas fa-leaf"></i>
-                    <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
-                </span>
-                <span>
-                    <i class="fas fa-plate"></i>
-                    <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
-                </span>
-            </div>
-            <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
-                <div class="recipe-actions">
-                    <a href="<?php echo private_url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
-                        <i class="fas fa-edit"></i> Edit Recipe
-                    </a>
-                    <a href="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Delete Recipe
-                    </a>
-                </div>
-            <?php } ?>
         </div>
     </div>
 
@@ -340,6 +359,19 @@ $recipe_data = [
         </div>
     </div>
 </div>
+
+<script id="recipe-data" type="application/json">
+    <?php 
+    $recipe_data = [
+        'recipe_id' => $recipe->recipe_id,
+        'user_id' => $session->get_user_id(),
+        'title' => $recipe->title,
+        'description' => $recipe->description,
+        'is_favorited' => $recipe->is_favorited_by_user($session->get_user_id())
+    ];
+    echo json_encode($recipe_data); 
+    ?>
+</script>
 
 <script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
 <script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>" type="module"></script>

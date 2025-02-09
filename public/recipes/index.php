@@ -3,12 +3,9 @@ require_once('../../private/core/initialize.php');
 require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 
 $page_title = 'Recipes';
-$scripts = ['recipe-favorites']; // Load recipe-favorites.js
-
 // Debug logging
 error_log("Loading recipe gallery page");
 error_log("Session state: " . print_r($_SESSION, true));
-error_log("Scripts to load: " . print_r($scripts, true));
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');

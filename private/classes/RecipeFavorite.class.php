@@ -8,12 +8,10 @@ class RecipeFavorite extends DatabaseObject {
     /** @var string Database table name */
     static protected $table_name = 'user_favorite';
     /** @var array Database columns */
-    static protected $db_columns = ['favorite_id', 'user_id', 'recipe_id', 'created_at'];
-    /** @var string Primary key column */
-    static protected $primary_key = 'favorite_id';
+    static protected $db_columns = ['user_id', 'recipe_id', 'created_at'];
+    /** @var array Primary key columns */
+    static protected $primary_key = ['user_id', 'recipe_id'];
 
-    /** @var int Unique identifier for the favorite */
-    public $favorite_id;
     /** @var int ID of user who favorited */
     public $user_id;
     /** @var int ID of favorited recipe */
@@ -38,6 +36,8 @@ class RecipeFavorite extends DatabaseObject {
      * @return bool True if favorited
      */
     public static function is_favorited($user_id, $recipe_id) {
+        if (!$user_id || !$recipe_id) return false;
+        
         $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
         $sql .= " WHERE user_id = ? AND recipe_id = ?";
         
@@ -52,33 +52,92 @@ class RecipeFavorite extends DatabaseObject {
     }
 
     /**
-     * Toggles favorite status for a recipe
+     * Add a recipe to user's favorites
      * @param int $user_id The user ID
      * @param int $recipe_id The recipe ID
-     * @return bool True if now favorited, false if unfavorited
+     * @return bool True if successful
+     */
+    public static function add_favorite($user_id, $recipe_id) {
+        if (!$user_id || !$recipe_id) return false;
+        if (static::is_favorited($user_id, $recipe_id)) return true;
+
+        $favorite = new static([
+            'user_id' => $user_id,
+            'recipe_id' => $recipe_id
+        ]);
+
+        return $favorite->save();
+    }
+
+    /**
+     * Remove a recipe from user's favorites
+     * @param int $user_id The user ID
+     * @param int $recipe_id The recipe ID
+     * @return bool True if successful
+     */
+    public static function remove_favorite($user_id, $recipe_id) {
+        if (!$user_id || !$recipe_id) return false;
+        if (!static::is_favorited($user_id, $recipe_id)) return true;
+
+        $sql = "DELETE FROM " . static::$table_name;
+        $sql .= " WHERE user_id = ? AND recipe_id = ?";
+        
+        $database = static::get_database();
+        $stmt = $database->prepare($sql);
+        $stmt->bind_param("ii", $user_id, $recipe_id);
+        
+        return $stmt->execute();
+    }
+
+    /**
+     * Get all favorites for a user
+     * @param int $user_id The user ID
+     * @return array Array of Recipe objects
+     */
+    public static function get_user_favorites($user_id) {
+        if (!$user_id) return [];
+
+        $sql = "SELECT r.* FROM recipe r ";
+        $sql .= "JOIN " . static::$table_name . " f ON r.recipe_id = f.recipe_id ";
+        $sql .= "WHERE f.user_id = ?";
+
+        $database = static::get_database();
+        $stmt = $database->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $favorites = [];
+        while ($row = $result->fetch_assoc()) {
+            $favorites[] = Recipe::create_from_array($row);
+        }
+
+        return $favorites;
+    }
+
+    /**
+     * Toggle favorite status for a recipe
+     * @param int $user_id The user ID
+     * @param int $recipe_id The recipe ID
+     * @return array Status array with success and is_favorited
      */
     public static function toggle_favorite($user_id, $recipe_id) {
-        if(self::is_favorited($user_id, $recipe_id)) {
-            // Remove favorite
-            $sql = "DELETE FROM " . static::$table_name;
-            $sql .= " WHERE user_id = ? AND recipe_id = ?";
-            
-            $database = static::get_database();
-            $stmt = $database->prepare($sql);
-            $stmt->bind_param("ii", $user_id, $recipe_id);
-            $stmt->execute();
-            
-            return false;
-        } else {
-            // Add favorite
-            $favorite = new self([
-                'user_id' => $user_id,
-                'recipe_id' => $recipe_id
-            ]);
-            $favorite->create();
-            
-            return true;
+        if (!$user_id || !$recipe_id) {
+            return ['success' => false, 'message' => 'Invalid user or recipe ID'];
         }
+
+        $is_favorited = static::is_favorited($user_id, $recipe_id);
+        $success = $is_favorited ? 
+            static::remove_favorite($user_id, $recipe_id) : 
+            static::add_favorite($user_id, $recipe_id);
+
+        return [
+            'success' => $success,
+            'is_favorited' => !$is_favorited,
+            'message' => $success ? 
+                (!$is_favorited ? 'Added to favorites' : 'Removed from favorites') : 
+                'Failed to update favorite status'
+        ];
     }
 }
 ?>

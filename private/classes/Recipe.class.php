@@ -533,5 +533,15 @@ class Recipe extends DatabaseObject {
         require_once('RecipeFavorite.class.php');
         return RecipeFavorite::is_favorited($user_id, $this->recipe_id);
     }
+
+    /**
+     * Check if recipe is favorited by a specific user
+     * @param int $user_id User ID to check
+     * @return bool True if favorited by user
+     */
+    public function is_favorited_by_user($user_id) {
+        if (!$user_id) return false;
+        return RecipeFavorite::is_favorited($user_id, $this->recipe_id);
+    }
 }
 ?>
