@@ -19,7 +19,6 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-favorite.css?v=' . time()); ?>">
     
     <?php if($page_title === 'Home') { ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
@@ -32,9 +31,18 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <?php } ?>
     
     <!-- JavaScript -->
+    <script>
+        // API Configuration
+        window.API_CONFIG = {
+            baseUrl: 'http://localhost:3000',
+            endpoints: {
+                favorites: '/api/favorites'
+            }
+        };
+    </script>
+    <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
-    <script src="<?php echo url_for('/assets/js/components/recipe-favorite.js'); ?>" defer></script>
     <?php if($page_title === 'recipe-form') { ?>
     <script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>
     <?php } ?>

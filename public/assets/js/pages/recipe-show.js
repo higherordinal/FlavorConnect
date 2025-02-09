@@ -18,7 +18,8 @@ import {
 const state = {
     recipe: null,
     comments: [],
-    currentRating: 0
+    currentRating: 0,
+    isFavorited: false
 };
 
 /**
@@ -47,6 +48,12 @@ function setupEventListeners() {
         addSafeEventListener(commentForm, 'submit', handleCommentSubmit);
     }
 
+    // Favorite functionality
+    const favoriteBtn = document.querySelector('.favorite-btn');
+    if (favoriteBtn) {
+        addSafeEventListener(favoriteBtn, 'click', handleFavoriteToggle);
+    }
+
     // Print recipe
     const printButton = document.querySelector('.print-recipe');
     if (printButton) {
@@ -67,16 +74,105 @@ function setupEventListeners() {
 }
 
 /**
- * Loads recipe data from the server
+ * Loads recipe data and initializes state
  */
 async function loadRecipeData() {
     try {
-        // Use the data embedded in the page
-        state.recipe = window.recipeData;
+        // Load recipe data from the page
+        const recipeDataScript = document.getElementById('recipe-data');
+        if (recipeDataScript) {
+            state.recipe = JSON.parse(recipeDataScript.textContent);
+            state.isFavorited = state.recipe.is_favorited;
+            updateFavoriteButton();
+        }
+
+        // Load comments
+        await loadComments();
+        updateCommentsUI();
+
+        // Update recipe UI
         updateRecipeUI();
     } catch (error) {
-        console.error('Error loading recipe:', error);
+        console.error('Error loading recipe data:', error);
         showError('Failed to load recipe data');
+    }
+}
+
+/**
+ * Handles toggling recipe favorite status
+ */
+async function handleFavoriteToggle() {
+    try {
+        const { recipe } = state;
+        console.log('Current recipe state:', recipe);
+        
+        if (!recipe || !recipe.user_id) {
+            console.error('Missing recipe data or user_id');
+            return;
+        }
+
+        const url = `${window.API_CONFIG.baseUrl}${window.API_CONFIG.endpoints.favorites}`;
+        const body = {
+            userId: recipe.user_id,
+            recipeId: recipe.recipe_id
+        };
+
+        console.log('Making API request:', {
+            url,
+            method: 'POST',
+            body
+        });
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        console.log('API response status:', response.status);
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('API error response:', errorData);
+            throw new Error(errorData.message || 'Failed to update favorite status');
+        }
+
+        const data = await response.json();
+        console.log('API response data:', data);
+        
+        if (data.success) {
+            state.isFavorited = data.is_favorited;
+            updateFavoriteButton();
+            showSuccess(data.message);
+        } else {
+            throw new Error(data.message || 'Failed to update favorite status');
+        }
+    } catch (error) {
+        console.error('Error toggling favorite:', error);
+        showError('Failed to update favorite status');
+    }
+}
+
+/**
+ * Updates favorite button UI based on current state
+ */
+function updateFavoriteButton() {
+    const favoriteBtn = document.querySelector('.favorite-btn');
+    if (favoriteBtn) {
+        console.log('Updating favorite button state:', state.isFavorited);
+        favoriteBtn.classList.toggle('favorited', state.isFavorited);
+        favoriteBtn.setAttribute('aria-label', state.isFavorited ? 'Remove from favorites' : 'Add to favorites');
+        
+        // Update icon if it exists
+        const icon = favoriteBtn.querySelector('i');
+        if (icon) {
+            icon.classList.toggle('fas', state.isFavorited);
+            icon.classList.toggle('far', !state.isFavorited);
+        }
+    } else {
+        console.warn('Favorite button not found in DOM');
     }
 }
 
@@ -236,15 +332,22 @@ async function handleCommentSubmit(e) {
  */
 async function loadComments() {
     try {
-        const response = await fetchData(`/api/recipes?action=get_comments&recipe_id=${state.recipe.id}`);
-        
-        if (response.success) {
-            state.comments = response.comments;
-            updateCommentsUI();
+        if (!state.recipe || !state.recipe.recipe_id) {
+            console.warn('No recipe data available for loading comments');
+            return;
         }
+
+        const comments = await fetchData(
+            `${window.API_CONFIG.baseUrl}/api/recipes`, 
+            {
+                action: 'get_comments',
+                recipe_id: state.recipe.recipe_id
+            }
+        );
+        state.comments = comments || [];
     } catch (error) {
         console.error('Error loading comments:', error);
-        showError('Failed to load comments');
+        state.comments = [];
     }
 }
 
