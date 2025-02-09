@@ -1,11 +1,19 @@
 <?php
 require_once('../../private/core/initialize.php');
 
-// Get recipe ID from URL
-$id = $_GET['id'] ?? '1';
-$recipe = Recipe::find_by_id($id);
-if(!$recipe) {
-    redirect_to(url_for('/index.php'));
+// Get and validate recipe ID
+$rules = ['id' => ['required', 'number', 'min:1']];
+$errors = validate_api_request(['id' => $_GET['id'] ?? ''], $rules);
+
+if (!empty($errors)) {
+    $session->message('Invalid recipe ID.');
+    redirect_to(url_for('/recipes/index.php'));
+}
+
+$recipe = Recipe::find_by_id($_GET['id']);
+if (!$recipe) {
+    $session->message('Recipe not found.');
+    redirect_to(url_for('/recipes/index.php'));
 }
 
 // Determine back link based on referrer
@@ -14,26 +22,36 @@ $back_link = $ref === 'home' ? url_for('/index.php') : url_for('/recipes/index.p
 $back_text = $ref === 'home' ? 'Back to Home' : 'Back to Recipes';
 
 // Handle new review submission
-if(is_post_request() && $session->is_logged_in()) {
-    $args = [];
-    $args['recipe_id'] = $recipe->recipe_id;
-    $args['user_id'] = $session->get_user_id();
-    $args['rating_value'] = $_POST['review']['rating'] ?? '';
-    $args['comment_text'] = $_POST['review']['comment'] ?? '';
+if (is_post_request()) {
+    if (!$session->is_logged_in()) {
+        $session->message('You must be logged in to submit a review.');
+        redirect_to(url_for('/login.php'));
+    }
+
+    $review_data = [
+        'recipe_id' => $recipe->recipe_id,
+        'user_id' => $session->get_user_id(),
+        'rating_value' => $_POST['review']['rating'] ?? '',
+        'comment_text' => $_POST['review']['comment'] ?? ''
+    ];
+
+    $errors = validate_recipe_comment($review_data);
     
-    $review = new Review($args);
-    if($review->save()) {
-        $session->message('Review submitted successfully.');
-        redirect_to(url_for('/recipes/show.php?id=' . $id));
-    } else {
-        // Keep errors for display
+    if (empty($errors)) {
+        $review = new Review($review_data);
+        if ($review->save()) {
+            $session->message('Review submitted successfully.');
+            redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+        } else {
+            $errors[] = 'Failed to save review.';
+        }
     }
 }
 
 // Get all reviews for this recipe
 $reviews = Review::find_by_recipe_id($recipe->recipe_id);
 
-// Get recipe ingredients and steps using Recipe class methods
+// Get recipe ingredients and steps
 $ingredients = $recipe->ingredients();
 $steps = $recipe->steps();
 
@@ -53,34 +71,13 @@ if($session->is_logged_in()) {
     $is_favorited = RecipeFavorite::is_favorited($session->get_user_id(), $recipe->recipe_id);
 }
 
-// Prepare recipe data for JavaScript
-$recipe_data = [
-    'recipe_id' => $recipe->recipe_id,
-    'title' => $recipe->title,
-    'description' => $recipe->description,
-    'prep_time' => $recipe->prep_time,
-    'cook_time' => $recipe->cook_time,
-    'img_file_path' => $recipe->img_file_path,
-    'video_url' => $recipe->video_url,
-    'alt_text' => $recipe->alt_text,
-    'ingredients' => array_map(function($ing) {
-        return [
-            'ingredient_id' => $ing->ingredient_id,
-            'name' => $ing->name,
-            'amount' => $ing->amount,
-            'unit' => $ing->unit
-        ];
-    }, $ingredients),
-    'steps' => array_map(function($step) {
-        return [
-            'step_id' => $step->step_id,
-            'instruction' => $step->instruction,
-            'step_number' => $step->step_number
-        ];
-    }, $steps),
-    'is_favorited' => $is_favorited,
-    'user_id' => $session->is_logged_in() ? $session->get_user_id() : null
-];
+// Display any validation errors
+if(!empty($errors)) {
+    echo display_errors($errors);
+}
+
+// Display any session messages
+echo display_session_message();
 ?>
 
 <script>
