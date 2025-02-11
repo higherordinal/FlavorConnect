@@ -92,7 +92,7 @@ class Review extends DatabaseObject {
      * @return array Array of Review objects with comments
      */
     public static function find_by_recipe_id($recipe_id) {
-        $sql = "SELECT r.*, c.comment_text, c.created_at, u.username ";
+        $sql = "SELECT r.*, COALESCE(c.comment_text, '') as comment_text, c.created_at, u.username ";
         $sql .= "FROM " . static::$table_name . " AS r ";
         $sql .= "LEFT JOIN recipe_comment AS c ON r.recipe_id = c.recipe_id AND r.user_id = c.user_id ";
         $sql .= "LEFT JOIN user_account AS u ON r.user_id = u.user_id ";

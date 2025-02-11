@@ -11,8 +11,8 @@
 function display_errors($errors=array()) {
     $output = '';
     if(!empty($errors)) {
-        $output .= "<div class=\"errors\">";
-        $output .= "Please fix the following errors:";
+        $output .= "<div class=\"message error\">";
+        $output .= "<p>Please fix the following errors:</p>";
         $output .= "<ul>";
         foreach($errors as $error) {
             $output .= "<li>" . h($error) . "</li>";
@@ -49,7 +49,7 @@ function display_session_message() {
     global $session;
     $msg = $session->message();
     if(isset($msg) && $msg != '') {
-        return '<div id="message">' . h($msg) . '</div>';
+        return '<div class="message success">' . h($msg) . '</div>';
     }
     return '';
 }
