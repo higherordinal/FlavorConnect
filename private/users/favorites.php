@@ -15,6 +15,34 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
+<style>
+    .recipe-tag {
+        background-color: var(--primary-color);
+        color: white;
+        padding: var(--spacing-xxs) var(--spacing-xs);
+        margin: 0 var(--spacing-xxs) var(--spacing-xxs) 0;
+    }
+
+    .recipe-card {
+        padding: var(--spacing-md);
+    }
+
+    .recipe-info {
+        padding: var(--spacing-md) 0;
+    }
+
+    .recipe-title {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .recipe-description {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .recipe-attributes {
+        margin-top: var(--spacing-md);
+    }
+</style>
 
 <div class="recipe-gallery">
     <div class="gallery-header">
