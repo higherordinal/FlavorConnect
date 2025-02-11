@@ -97,18 +97,18 @@ async function loadRecipeData() {
  */
 async function handleFavoriteToggle() {
     try {
-        const { recipe } = state;
-        console.log('Current recipe state:', recipe);
+        const recipeId = state.recipe.recipe_id;
+        const userId = state.recipe.user_id;
         
-        if (!recipe || !recipe.user_id) {
-            console.error('Missing recipe data or user_id');
+        if (!recipeId || !userId) {
+            console.error('Missing recipe ID or user ID');
             return;
         }
 
-        const url = `${window.API_CONFIG.baseUrl}${window.API_CONFIG.endpoints.favorites}`;
+        const url = `${window.API_CONFIG.baseUrl}`;
         const body = {
-            userId: recipe.user_id,
-            recipeId: recipe.recipe_id
+            action: 'toggle_favorite',
+            recipe_id: parseInt(recipeId)
         };
 
         console.log('Making API request:', {
@@ -120,32 +120,36 @@ async function handleFavoriteToggle() {
         const response = await fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify(body)
         });
 
         console.log('API response status:', response.status);
         
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            console.error('API error response:', errorData);
-            throw new Error(errorData.message || 'Failed to update favorite status');
-        }
-
         const data = await response.json();
         console.log('API response data:', data);
+
+        if (!response.ok) {
+            console.error('API error response:', data);
+            throw new Error(data.error || 'Failed to update favorite status');
+        }
         
         if (data.success) {
-            state.isFavorited = data.is_favorited;
+            // Update recipe state
+            state.isFavorited = !state.isFavorited;
+
+            // Update button UI
             updateFavoriteButton();
-            showSuccess(data.message);
+            
+            showSuccess(data.message || 'Recipe favorite status updated');
         } else {
-            throw new Error(data.message || 'Failed to update favorite status');
+            throw new Error(data.error || 'Failed to update favorite status');
         }
     } catch (error) {
         console.error('Error toggling favorite:', error);
-        showError('Failed to update favorite status');
+        showError(error.message || 'Failed to update favorite status');
     }
 }
 
@@ -331,13 +335,11 @@ async function loadComments() {
             return;
         }
 
-        const comments = await fetchData(
-            `${window.API_CONFIG.baseUrl}/api/recipes`, 
-            {
-                action: 'get_comments',
-                recipe_id: state.recipe.recipe_id
-            }
-        );
+        const url = new URL(`${window.API_CONFIG.baseUrl}`);
+        url.searchParams.append('action', 'get_comments');
+        url.searchParams.append('recipe_id', state.recipe.recipe_id);
+
+        const comments = await fetchData(url.toString());
         state.comments = comments || [];
     } catch (error) {
         console.error('Error loading comments:', error);
@@ -412,10 +414,10 @@ async function handleSave() {
             return;
         }
 
-        const url = `${window.API_CONFIG.baseUrl}${window.API_CONFIG.endpoints.favorites}`;
+        const url = `${window.API_CONFIG.baseUrl}`;
         const body = {
-            userId: recipe.user_id,
-            recipeId: recipe.recipe_id
+            action: 'toggle_favorite',
+            recipe_id: recipe.recipe_id
         };
 
         const response = await fetch(url, {
