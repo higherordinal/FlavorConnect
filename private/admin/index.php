@@ -2,7 +2,8 @@
 require_once('../core/initialize.php');
 require_admin();
 
-$page_title = 'Admin Dashboard';
+$page_title = 'admin';
+$page_style = 'admin';
 include(SHARED_PATH . '/member_header.php');
 ?>
 
