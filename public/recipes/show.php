@@ -18,8 +18,27 @@ if (!$recipe) {
 
 // Determine back link based on referrer
 $ref = $_GET['ref'] ?? '';
-$back_link = $ref === 'home' ? url_for('/index.php') : url_for('/recipes/index.php');
-$back_text = $ref === 'home' ? 'Back to Home' : 'Back to Recipes';
+switch ($ref) {
+    case 'home':
+        $back_link = url_for('/index.php');
+        $back_text = 'Back to Home';
+        break;
+    case 'favorites':
+        $back_link = private_url_for('/users/favorites.php');
+        $back_text = 'Back to Favorites';
+        break;
+    case 'profile':
+        $back_link = private_url_for('/users/profile.php');
+        $back_text = 'Back to Profile';
+        break;
+    case 'gallery':
+        $back_link = url_for('/recipes/index.php');
+        $back_text = 'Back to Recipes';
+        break;
+    default:
+        $back_link = url_for('/recipes/index.php');
+        $back_text = 'Back to Recipes';
+}
 
 // Handle new review submission
 if (is_post_request()) {
