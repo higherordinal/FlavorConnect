@@ -86,8 +86,11 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                     </button>
                     <div class="dropdown-menu">
                         <a href="<?php echo private_url_for('/users/profile.php'); ?>">Profile</a>
-                        <?php if(is_admin()) { ?>
-                        <a href="<?php echo private_url_for('/admin/index.php'); ?>">Admin Area</a>
+                        <?php if($session->is_admin() || $session->is_super_admin()) { ?>
+                        <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Admin (Dashboard)
+                        </a>
                         <?php } ?>
                         <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
                     </div>
