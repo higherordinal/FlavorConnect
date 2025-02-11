@@ -1,5 +1,6 @@
 <?php
 require_once('../../../private/core/initialize.php');
+require_once('../../../private/classes/User.class.php');
 require_login();
 
 // Only admins and super admins can access this page
@@ -12,14 +13,14 @@ $page_title = 'User Management';
 $page_style = 'admin';
 
 // Get all users except super admins (only super admins can manage other admins)
-$sql = "SELECT * FROM " . User::get_table_name();
+$sql = "SELECT * FROM user_account";
 if(!$session->is_super_admin()) {
     $sql .= " WHERE user_level = 'u'";
 }
 $sql .= " ORDER BY username ASC";
 $users = User::find_by_sql($sql);
 
-include(SHARED_PATH . '/header.php');
+include(SHARED_PATH . '/member_header.php');
 ?>
 
 <div class="admin-content">

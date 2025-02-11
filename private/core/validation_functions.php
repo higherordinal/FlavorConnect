@@ -327,4 +327,22 @@ function validate_login($login_data) {
     return $errors;
 }
 
+/**
+ * Validates metadata (style, diet, type, measurement) data
+ * @param array $data The metadata to validate
+ * @return array Array of validation errors
+ */
+function validate_metadata($data) {
+    $errors = [];
+
+    // Name validation
+    if(is_blank($data['name'])) {
+        $errors[] = "Name cannot be blank.";
+    } elseif (!has_length($data['name'], ['min' => 2, 'max' => 255])) {
+        $errors[] = "Name must be between 2 and 255 characters.";
+    }
+
+    return $errors;
+}
+
 ?>

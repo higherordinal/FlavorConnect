@@ -597,5 +597,50 @@ class Recipe extends DatabaseObject {
         require_once('RecipeFavorite.class.php');
         return RecipeFavorite::remove_favorite($user_id, $this->recipe_id);
     }
+
+    /**
+     * Count recipes by style
+     * @param int $style_id The style ID to count
+     * @return int Number of recipes with this style
+     */
+    public static function count_by_style($style_id) {
+        $sql = "SELECT COUNT(*) FROM recipe WHERE style_id = ?";
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $style_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $count = $result->fetch_array()[0];
+        return $count;
+    }
+
+    /**
+     * Count recipes by diet
+     * @param int $diet_id The diet ID to count
+     * @return int Number of recipes with this diet
+     */
+    public static function count_by_diet($diet_id) {
+        $sql = "SELECT COUNT(*) FROM recipe WHERE diet_id = ?";
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $diet_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $count = $result->fetch_array()[0];
+        return $count;
+    }
+
+    /**
+     * Count recipes by type
+     * @param int $type_id The type ID to count
+     * @return int Number of recipes with this type
+     */
+    public static function count_by_type($type_id) {
+        $sql = "SELECT COUNT(*) FROM recipe WHERE type_id = ?";
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $type_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $count = $result->fetch_array()[0];
+        return $count;
+    }
 }
 ?>

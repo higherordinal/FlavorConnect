@@ -50,6 +50,14 @@ class RecipeAttribute extends DatabaseObject {
     }
 
     /**
+     * Validates the attribute data
+     * @return array Array of validation errors
+     */
+    protected function validate() {
+        return validate_metadata(['name' => $this->name]);
+    }
+
+    /**
      * Gets all attributes of a specific type
      * @param string $type The attribute type (style, diet, type)
      * @return array Array of RecipeAttribute objects
@@ -98,21 +106,5 @@ class RecipeAttribute extends DatabaseObject {
             $object_array[] = static::instantiate($record);
         }
         return $object_array;
-    }
-
-    /**
-     * Validates attribute data before saving
-     * @return array Array of validation errors
-     */
-    protected function validate() {
-        $this->errors = [];
-
-        if (empty($this->name)) {
-            $this->errors[] = "Name cannot be empty.";
-        } elseif (strlen($this->name) > 255) {
-            $this->errors[] = "Name must be less than 255 characters.";
-        }
-
-        return $this->errors;
     }
 }
