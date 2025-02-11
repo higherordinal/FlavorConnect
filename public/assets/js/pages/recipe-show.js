@@ -77,12 +77,10 @@ async function loadRecipeData() {
         if (recipeDataScript) {
             state.recipe = JSON.parse(recipeDataScript.textContent);
             state.isFavorited = state.recipe.is_favorited;
+            state.comments = state.recipe.comments || [];
             updateFavoriteButton();
+            updateCommentsUI();
         }
-
-        // Load comments
-        await loadComments();
-        updateCommentsUI();
 
         // Update recipe UI
         updateRecipeUI();
@@ -316,7 +314,13 @@ async function handleCommentSubmit(e) {
 
         if (response.success) {
             form.reset();
-            await loadComments();
+            state.comments.push({
+                user_name: 'You',
+                rating: state.currentRating,
+                comment_text: comment,
+                created_at: new Date().toISOString()
+            });
+            updateCommentsUI();
             showSuccess('Comment added successfully');
         }
     } catch (error) {
@@ -326,43 +330,46 @@ async function handleCommentSubmit(e) {
 }
 
 /**
- * Loads comments for the recipe
- */
-async function loadComments() {
-    try {
-        if (!state.recipe || !state.recipe.recipe_id) {
-            console.warn('No recipe data available for loading comments');
-            return;
-        }
-
-        const url = new URL(`${window.API_CONFIG.baseUrl}`);
-        url.searchParams.append('action', 'get_comments');
-        url.searchParams.append('recipe_id', state.recipe.recipe_id);
-
-        const comments = await fetchData(url.toString());
-        state.comments = comments || [];
-    } catch (error) {
-        console.error('Error loading comments:', error);
-        state.comments = [];
-    }
-}
-
-/**
- * Updates the comments UI
+ * Updates the comments UI with current state
  */
 function updateCommentsUI() {
     const commentsContainer = document.querySelector('.comments-list');
     if (!commentsContainer) return;
 
-    commentsContainer.innerHTML = state.comments.map(comment => `
+    if (!state.comments || state.comments.length === 0) {
+        commentsContainer.innerHTML = '<p class="no-comments">No comments yet. Be the first to review this recipe!</p>';
+        return;
+    }
+
+    const commentHTML = state.comments.map(comment => `
         <div class="comment">
             <div class="comment-header">
-                <span class="comment-author">${comment.author}</span>
-                <span class="comment-date">${formatDate(comment.created_at)}</span>
+                <span class="user-name">${comment.user_name}</span>
+                <div class="rating">
+                    ${generateStarRating(comment.rating)}
+                </div>
+                <span class="date">${formatDate(comment.created_at)}</span>
             </div>
-            <div class="comment-content">${comment.content}</div>
+            <div class="comment-text">
+                ${comment.comment_text}
+            </div>
         </div>
     `).join('');
+
+    commentsContainer.innerHTML = commentHTML;
+}
+
+/**
+ * Generates HTML for star rating display
+ * @param {number} rating - Rating value (1-5)
+ * @returns {string} HTML string for star rating
+ */
+function generateStarRating(rating) {
+    let stars = '';
+    for (let i = 1; i <= 5; i++) {
+        stars += `<i class="fas fa-star${i <= rating ? '' : ' empty'}"></i>`;
+    }
+    return stars;
 }
 
 /**

@@ -354,7 +354,7 @@ echo display_session_message();
 
 <script>
     window.API_CONFIG = {
-        baseUrl: '<?php echo url_for('/api/recipes/'); ?>'
+        baseUrl: '<?php echo 'http://' . $_SERVER['HTTP_HOST'] . url_for('/api/recipes/'); ?>'
     };
 </script>
 
