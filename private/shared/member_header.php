@@ -69,7 +69,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
-                    <li><a href="<?php echo private_url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'My Favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
+                    <li><a href="<?php echo private_url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
                     <li><a href="<?php echo private_url_for('/recipes/new.php?ref=header'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
                 </ul>
             </nav>
