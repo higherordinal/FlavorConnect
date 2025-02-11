@@ -64,7 +64,7 @@ if($session->is_logged_in()) {
                 $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
                 
                 echo '<div class="recipe-card">';
-                echo '<img src="' . url_for('/assets/images/recipe-placeholder.jpg') . '" alt="' . h($recipe->title) . '" class="recipe-image">';
+                echo '<img src="' . url_for($recipe->get_image_path()) . '" alt="' . h($recipe->title) . '" class="recipe-image">';
                 echo '<div class="recipe-content">';
                 echo '<h3 class="recipe-title">' . h($recipe->title) . '</h3>';
                 echo '<div class="recipe-meta">';
