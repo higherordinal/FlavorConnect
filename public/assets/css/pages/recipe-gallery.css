@@ -224,6 +224,12 @@
     justify-content: start;
 }
 
+.main-content .recipe-attributes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
 .main-content .recipe-attribute {
     background-color: var(--primary-color);
     border-radius: var(--border-radius-sm);
