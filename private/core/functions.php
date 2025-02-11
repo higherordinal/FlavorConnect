@@ -110,6 +110,15 @@ function current_page() {
 }
 
 /**
+ * Gets the raw decimal value for form inputs
+ * @param float $value The quantity to format
+ * @return float The raw decimal value
+ */
+function get_raw_quantity($value) {
+    return number_format(floatval($value), 2);
+}
+
+/**
  * Formats a recipe quantity as a fraction
  * @param float $value The quantity to format
  * @return string The formatted quantity

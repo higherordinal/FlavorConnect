@@ -130,6 +130,40 @@ class Recipe extends DatabaseObject {
     }
 
     /**
+     * Updates an existing record in the database
+     * @return bool True if update was successful
+     */
+    protected function update() {
+        $this->validate();
+        if(!empty($this->errors)) { return false; }
+
+        // If image is being updated, delete the old image file
+        if (array_key_exists('img_file_path', $this->attributes())) {
+            $old_recipe = self::find_by_id($this->recipe_id);
+            if ($old_recipe && $old_recipe->img_file_path && $old_recipe->img_file_path !== $this->img_file_path) {
+                $old_image_path = PRIVATE_PATH . '/../public/assets/uploads/recipes/' . $old_recipe->img_file_path;
+                if (file_exists($old_image_path)) {
+                    unlink($old_image_path);
+                }
+            }
+        }
+
+        $attributes = $this->sanitized_attributes();
+        $attribute_pairs = [];
+        foreach($attributes as $key => $value) {
+            $attribute_pairs[] = "{$key}='{$value}'";
+        }
+
+        $sql = "UPDATE " . static::$table_name . " SET ";
+        $sql .= join(', ', $attribute_pairs);
+        $sql .= " WHERE recipe_id='" . db_escape(static::get_database(), $this->recipe_id) . "' ";
+        $sql .= "LIMIT 1";
+
+        $result = mysqli_query(static::get_database(), $sql);
+        return $result;
+    }
+
+    /**
      * Gets the style attribute for this recipe
      * @return RecipeAttribute|null RecipeAttribute object or null if not found
      */

@@ -53,13 +53,7 @@ if(is_post_request()) {
 
             // Move file to target location
             if(move_uploaded_file($temp_path, $target_path)) {
-                // Delete old image if exists
-                if(!empty($recipe->img_file_path)) {
-                    $old_image = PUBLIC_PATH . '/assets/uploads/recipes/' . $recipe->img_file_path;
-                    if(file_exists($old_image)) {
-                        unlink($old_image);
-                    }
-                }
+                // Set new image path - old image will be deleted by Recipe::update()
                 $_POST['img_file_path'] = $filename;
             } else {
                 $session->message('Error uploading image. Please try again.', 'error');

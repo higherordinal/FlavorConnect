@@ -30,7 +30,7 @@
 
 .recipe-header-overlay {
     align-items: end;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
     display: grid;
     height: 100%;
     left: 0;

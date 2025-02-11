@@ -103,7 +103,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                     <div class="form-group">
                         <label for="quantity_<?php echo $i; ?>">Quantity</label>
                         <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
-                               class="form-control" step="0.01" min="0" value="<?php echo h(format_quantity($ingredient->quantity)); ?>" required>
+                               class="form-control" step="0.01" min="0" value="<?php echo h(get_raw_quantity($ingredient->quantity)); ?>" required>
                     </div>
                     
                     <div class="form-group">
