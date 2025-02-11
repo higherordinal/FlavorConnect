@@ -30,18 +30,21 @@ include(SHARED_PATH . '/member_header.php');
         <div class="recipe-grid">
             <?php foreach($favorites as $recipe) { ?>
                 <div class="recipe-card">
+                    <div class="recipe-image-container">
+                        <?php if($recipe->img_file_path) { ?>
+                            <img src="<?php echo url_for('/assets/uploads/recipes/' . basename($recipe->img_file_path)); ?>" 
+                                 alt="<?php echo h($recipe->alt_text); ?>" 
+                                 class="recipe-image">
+                        <?php } else { ?>
+                            <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+                                 alt="Recipe placeholder image" 
+                                 class="recipe-image">
+                        <?php } ?>
+                        <button class="favorite-btn favorited" data-recipe-id="<?php echo $recipe->recipe_id; ?>">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=favorites'); ?>" class="recipe-link">
-                        <div class="recipe-image-container">
-                            <?php if($recipe->img_file_path) { ?>
-                                <img src="<?php echo url_for($recipe->img_file_path); ?>" 
-                                     alt="<?php echo h($recipe->alt_text); ?>" 
-                                     class="recipe-image">
-                            <?php } else { ?>
-                                <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
-                                     alt="Recipe placeholder image" 
-                                     class="recipe-image">
-                            <?php } ?>
-                        </div>
                         <div class="recipe-info">
                             <h2 class="recipe-title"><?php echo h($recipe->title); ?></h2>
                             <p class="recipe-description"><?php echo h($recipe->description); ?></p>
@@ -60,5 +63,7 @@ include(SHARED_PATH . '/member_header.php');
         </div>
     <?php } ?>
 </div>
+
+<script type="module" src="<?php echo url_for('/assets/js/pages/favorites.js'); ?>"></script>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

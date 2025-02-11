@@ -54,6 +54,15 @@ class RecipeEndpoints {
                     json_error(implode(', ', $errors));
                 }
                 return self::updateRecipe($request['query']['id'], $request['body']);
+
+            case 'favorite':
+                require_login();
+                $rules = ['id' => ['required', 'number', 'min:1']];
+                $errors = validate_api_request($request['query'], $rules);
+                if (!empty($errors)) {
+                    json_error(implode(', ', $errors));
+                }
+                return self::toggleFavorite($request['query']['id'], $request['method'] === 'POST');
                 
             case 'delete':
                 require_login();
@@ -148,6 +157,40 @@ class RecipeEndpoints {
             json_error('Failed to delete recipe', 500);
         }
         return ['message' => 'Recipe deleted successfully'];
+    }
+
+    /**
+     * Toggle favorite status for a recipe
+     * @param int $recipe_id Recipe ID
+     * @param bool $favorite True to favorite, false to unfavorite
+     * @return array Response data
+     */
+    private static function toggleFavorite($recipe_id, $favorite) {
+        global $session;
+        
+        $user_id = $session->get_user_id();
+        
+        if ($favorite) {
+            // Add to favorites
+            $sql = "INSERT INTO recipe_favorite ";
+            $sql .= "(user_id, recipe_id) ";
+            $sql .= "VALUES (";
+            $sql .= "'" . db_escape($user_id) . "',";
+            $sql .= "'" . db_escape($recipe_id) . "'";
+            $sql .= ")";
+        } else {
+            // Remove from favorites
+            $sql = "DELETE FROM recipe_favorite ";
+            $sql .= "WHERE user_id = '" . db_escape($user_id) . "' ";
+            $sql .= "AND recipe_id = '" . db_escape($recipe_id) . "'";
+        }
+        
+        $result = db_query($sql);
+        if ($result) {
+            return ['success' => true];
+        } else {
+            json_error('Failed to update favorite status');
+        }
     }
 
     /**
