@@ -80,11 +80,6 @@ if(!empty($errors)) {
 echo display_session_message();
 ?>
 
-<script>
-    // Make recipe data available to JavaScript
-    window.recipeData = <?php echo json_encode($recipe_data); ?>;
-</script>
-
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-show.css'); ?>">
 
 <div class="recipe-show">
@@ -357,17 +352,32 @@ echo display_session_message();
     </div>
 </div>
 
+<script>
+    window.API_CONFIG = {
+        baseUrl: '<?php echo url_for('/api/recipes/'); ?>'
+    };
+</script>
+
 <script id="recipe-data" type="application/json">
-    <?php 
+<?php 
     $recipe_data = [
-        'recipe_id' => $recipe->recipe_id,
-        'user_id' => $session->get_user_id(),
+        'recipe_id' => (int)$recipe->recipe_id,
+        'user_id' => (int)$session->get_user_id(),
         'title' => $recipe->title,
         'description' => $recipe->description,
-        'is_favorited' => $recipe->is_favorited_by_user($session->get_user_id())
+        'is_favorited' => (bool)$recipe->is_favorited_by_user($session->get_user_id()),
+        'comments' => array_map(function($review) {
+            return [
+                'id' => (int)$review->rating_id,
+                'user_name' => $review->user()->full_name(),
+                'rating' => (int)$review->rating_value,
+                'comment_text' => $review->comment_text,
+                'created_at' => $review->created_at
+            ];
+        }, $reviews ?? [])
     ];
-    echo json_encode($recipe_data); 
-    ?>
+    echo json_encode($recipe_data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP | JSON_UNESCAPED_UNICODE); 
+?>
 </script>
 
 <script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
