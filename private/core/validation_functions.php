@@ -1,4 +1,7 @@
 <?php
+require_once('database_functions.php');
+require_once('functions.php');
+
 // Validation functions
 
 /**
@@ -330,9 +333,11 @@ function validate_login($login_data) {
 /**
  * Validates metadata (style, diet, type, measurement) data
  * @param array $data The metadata to validate
+ * @param string $table The table name for uniqueness check
+ * @param string $current_id Current ID for uniqueness check
  * @return array Array of validation errors
  */
-function validate_metadata($data) {
+function validate_metadata($data, $table = '', $current_id = '0') {
     $errors = [];
 
     // Name validation
@@ -340,9 +345,52 @@ function validate_metadata($data) {
         $errors[] = "Name cannot be blank.";
     } elseif (!has_length($data['name'], ['min' => 2, 'max' => 255])) {
         $errors[] = "Name must be between 2 and 255 characters.";
+    } elseif ($table && !has_unique_metadata_name($data['name'], $table, $current_id)) {
+        $type = str_replace('recipe_', '', $table);
+        $errors[] = "A " . $type . " with the name '" . h($data['name']) . "' already exists.";
     }
 
     return $errors;
+}
+
+/**
+ * Validates if a metadata name is unique within its type
+ * @param string $name The name to check
+ * @param string $table The table to check in (recipe_style, recipe_diet, recipe_type)
+ * @param string $current_id The current ID to exclude
+ * @return bool True if name is unique
+ */
+function has_unique_metadata_name($name, $table, $current_id="0") {
+    global $db;
+    
+    // Map table names to their primary key columns
+    $primary_keys = [
+        'recipe_style' => 'style_id',
+        'recipe_diet' => 'diet_id',
+        'recipe_type' => 'type_id'
+    ];
+    
+    $primary_key = $primary_keys[$table] ?? null;
+    if (!$primary_key) {
+        return false; // Invalid table name
+    }
+    
+    $sql = "SELECT COUNT(*) FROM " . $table;
+    $sql .= " WHERE name='" . db_escape($db, $name) . "'";
+    if($current_id != "0") {
+        $sql .= " AND " . $primary_key . " != '" . db_escape($db, $current_id) . "'";
+    }
+    
+    try {
+        $result = mysqli_query($db, $sql);
+        if (!$result) {
+            return false;
+        }
+        $row = mysqli_fetch_row($result);
+        return $row[0] == 0;
+    } catch(Exception $e) {
+        return false;
+    }
 }
 
 ?>

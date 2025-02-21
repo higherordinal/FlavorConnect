@@ -21,6 +21,7 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/admin.css'); ?>">
+<script src="<?php echo url_for('/assets/js/pages/admin-categories.js'); ?>"></script>
 
 <div class="admin-management metadata">
     <div class="breadcrumbs">
@@ -35,7 +36,7 @@ include(SHARED_PATH . '/member_header.php');
     
     <?php echo display_session_message(); ?>
     
-    <form action="<?php echo url_for('/admin/categories/save.php'); ?>" method="post">
+    <form action="<?php echo private_url_for('/admin/categories/save.php'); ?>" method="post">
         <div class="metadata-sections">
             <!-- Recipe Styles Section -->
             <section class="metadata-section">

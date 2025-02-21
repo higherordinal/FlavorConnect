@@ -37,12 +37,11 @@ abstract class DatabaseObject {
      * @return mysqli The database connection instance
      * @throws Exception if database connection is not set
      */
-    protected static function get_database() {
-        if (!isset(self::$database)) {
-            error_log("Warning: Database connection not set!");
-            throw new Exception("Database connection not set. Call set_database() first.");
+    public static function get_database() {
+        if(!isset(static::$database)) {
+            throw new Exception('Database connection not set.');
         }
-        return self::$database;
+        return static::$database;
     }
 
     /**
@@ -151,18 +150,25 @@ abstract class DatabaseObject {
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
 
-        $database = static::get_database();
-        $result = mysqli_query($database, $sql);
-        if($result) {
-            $insert_id = mysqli_insert_id($database);
-            $pk = static::get_primary_key();
-            if($pk && $insert_id) {
-                $this->$pk = $insert_id;
+        try {
+            $database = static::get_database();
+            $result = mysqli_query($database, $sql);
+            if($result) {
+                $insert_id = mysqli_insert_id($database);
+                $pk = static::get_primary_key();
+                if($pk && $insert_id) {
+                    $this->$pk = $insert_id;
+                }
+                return true;
             }
-            return true;
-        } else {
-            return false;
+        } catch(mysqli_sql_exception $e) {
+            if($e->getCode() == 1062) { // Duplicate entry error
+                $this->errors[] = "This name already exists.";
+            } else {
+                $this->errors[] = "Database error: " . $e->getMessage();
+            }
         }
+        return false;
     }
 
     /**
