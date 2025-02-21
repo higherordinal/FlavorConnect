@@ -61,7 +61,7 @@
 .favorite-btn {
     background: none;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
@@ -81,7 +81,7 @@
 }
 
 .favorite-btn i {
-    color: #fff;
+    color: var(--color-white);
     transition: color 0.2s ease;
 }
 
@@ -402,7 +402,7 @@
     right: 0;
     padding: 2rem;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.95));
-    color: #ffffff;
+    color: var(--color-white);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
     z-index: 2;
 }
@@ -412,7 +412,7 @@
     font-size: 2.5rem;
     font-family: var(--font-heading);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9);
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 500;
 }
 
@@ -421,7 +421,7 @@
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     font-size: 1rem;
-    color: #ffffff;
+    color: var(--color-white);
 }
 
 .recipe-time {
@@ -443,12 +443,12 @@
     backdrop-filter: blur(4px);
     transition: all 0.2s ease;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
-    color: #ffffff;
+    color: var(--color-white);
     font-weight: 400;
 }
 
 .recipe-meta i {
-    color: #ffffff;
+    color: var(--color-white);
     opacity: 0.9;
 }
 
@@ -525,7 +525,7 @@
 
 .scale-btn.active {
     background-color: var(--primary-color);
-    color: white;
+    color: var(--color-white);
     border: none;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
     transform: translateY(1px);
@@ -545,7 +545,7 @@
 }
 
 .ingredients-list li {
-    background-color: white;
+    background-color: var(--color-white);
     padding: 1rem 1.5rem;
     border-radius: var(--radius-sm);
     margin-bottom: 0.5rem;
@@ -599,7 +599,7 @@
     grid-template-columns: auto 1fr;
     gap: 1.5rem;
     padding: 1.5rem;
-    background-color: white;
+    background-color: var(--color-white);
     border-radius: var(--radius-sm);
     margin-bottom: 1rem;
 }
@@ -669,7 +669,7 @@
 }
 
 .recipe-rating .rating-text {
-    color: #fff;
+    color: var(--color-white);
     font-size: 1rem;
     opacity: 0.9;
 }
@@ -687,7 +687,7 @@
 .favorite-btn {
     background: none;
     border: none;
-    color: #fff;
+    color: var(--color-white);
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem;
@@ -699,7 +699,7 @@
 }
 
 .favorite-btn i {
-    color: #fff;
+    color: var(--color-white);
     transition: color 0.2s ease;
 }
 
@@ -743,7 +743,7 @@
 
 .stars i,
 .comment-rating i {
-    color: #ddd;
+    color: var(--color-gray-300);
     text-shadow: -1px -1px 0 rgba(0,0,0,0.2),
                  1px -1px 0 rgba(0,0,0,0.2),
                 -1px  1px 0 rgba(0,0,0,0.2),
@@ -798,7 +798,7 @@
 
 .star-rating label {
     cursor: pointer;
-    color: #ddd;
+    color: var(--color-gray-300);
     font-size: 24px;
     transition: color 0.2s ease-in-out;
 }
@@ -814,7 +814,7 @@
 }
 
 .star-rating label:hover ~ label {
-    color: #ddd !important;
+    color: var(--color-gray-300) !important;
 }
 
 .rating-input {
@@ -919,7 +919,7 @@
 
 .print-recipe-btn {
     background-color: var(--primary-color) !important;
-    color: #ffffff !important;
+    color: var(--color-white) !important;
     border: none;
     padding: 0.75rem 1.25rem;
     border-radius: var(--radius-sm);
