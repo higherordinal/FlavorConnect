@@ -23,11 +23,21 @@ $users = User::find_by_sql($sql);
 include(SHARED_PATH . '/member_header.php');
 ?>
 
+<link rel="stylesheet" href="<?php echo url_for('/stylesheets/admin.css'); ?>">
+
 <div class="admin-content">
+    <div class="breadcrumbs">
+        <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">User Management</span>
+    </div>
+
     <div class="admin-header">
         <h1>User Management</h1>
         <div class="actions">
-            <a href="<?php echo url_for('/private/admin/users/new.php'); ?>" class="btn btn-primary">
+            <a href="<?php echo url_for('/private/admin/users/new.php'); ?>" class="action">
                 <i class="fas fa-plus"></i> Create New User
             </a>
         </div>
@@ -36,7 +46,7 @@ include(SHARED_PATH . '/member_header.php');
     <?php echo display_session_message(); ?>
 
     <div class="table-responsive">
-        <table class="table">
+        <table class="list">
             <thead>
                 <tr>
                     <th>Username</th>
@@ -74,12 +84,12 @@ include(SHARED_PATH . '/member_header.php');
                         </td>
                         <td class="actions">
                             <a href="<?php echo url_for('/private/admin/users/edit.php?id=' . h(u($user->user_id))); ?>" 
-                               class="btn btn-sm" title="Edit">
+                               class="action" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <?php if($user->user_level !== 's') { ?>
                                 <a href="<?php echo url_for('/private/admin/users/delete.php?id=' . h(u($user->user_id))); ?>" 
-                                   class="btn btn-sm btn-danger" 
+                                   class="action btn-danger" 
                                    onclick="return confirm('Are you sure you want to delete this user?');"
                                    title="Delete">
                                     <i class="fas fa-trash"></i>

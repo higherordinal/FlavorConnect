@@ -38,7 +38,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
             <!-- Logo and Site Name -->
             <div class="logo">
                 <a href="<?php echo url_for('/index.php'); ?>" aria-label="FlavorConnect Home">
-                    <span class="logo-the">The</span>
+                    <span class="logo-the"><i class="fas fa-utensils"></i>The</span>
                     <h1>FlavorConnect</h1>
                 </a>
             </div>
