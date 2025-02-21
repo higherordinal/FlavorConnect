@@ -238,19 +238,20 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-xs);
+    min-height: 4rem; /* Set minimum height to accommodate two lines */
+    align-items: center; /* Center attributes vertically */
     margin-top: auto;
-    align-items: center;
 }
 
 .main-content .recipe-attribute {
     background-color: var(--primary-color);
     border-radius: var(--border-radius-sm);
-    color: var(--color-white);
+    color: white;
+    font-size: var(--font-size-small);
     padding: var(--spacing-xs) var(--spacing-sm);
     line-height: 1;
     display: inline-flex;
     align-items: center;
-    font-size: var(--font-size-small);
     margin: 0;
 }
 
