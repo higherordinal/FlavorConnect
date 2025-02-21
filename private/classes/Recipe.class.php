@@ -419,7 +419,13 @@ class Recipe extends DatabaseObject {
                 $sql .= " ORDER BY r.created_at ASC";
                 break;
             case 'rating':
-                $sql .= " ORDER BY ratings.avg_rating DESC NULLS LAST, r.created_at DESC";
+                $sql .= " ORDER BY COALESCE(ratings.avg_rating, 0) DESC, r.recipe_id DESC";
+                break;
+            case 'name_asc':
+                $sql .= " ORDER BY r.title ASC";
+                break;
+            case 'name_desc':
+                $sql .= " ORDER BY r.title DESC";
                 break;
             case 'newest':
             default:

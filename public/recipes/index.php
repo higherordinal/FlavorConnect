@@ -159,7 +159,11 @@ if ($current_page > $total_pages) {
                     name="sort" 
                     aria-labelledby="sort-label"
                     onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['sort' => ''])); ?>' + this.value">
-                <option value="newest" <?php if($sort === 'newest') echo 'selected'; ?>>Newest First</option><option value="oldest" <?php if($sort === 'oldest') echo 'selected'; ?>>Oldest First</option><option value="name_asc" <?php if($sort === 'name_asc') echo 'selected'; ?>>Name A-Z</option><option value="name_desc" <?php if($sort === 'name_desc') echo 'selected'; ?>>Name Z-A</option>
+                <option value="newest" <?php if($sort === 'newest') echo 'selected'; ?>>Newest First</option>
+                <option value="rating" <?php if($sort === 'rating') echo 'selected'; ?>>Highest Rated</option>
+                <option value="oldest" <?php if($sort === 'oldest') echo 'selected'; ?>>Oldest First</option>
+                <option value="name_asc" <?php if($sort === 'name_asc') echo 'selected'; ?>>Name A-Z</option>
+                <option value="name_desc" <?php if($sort === 'name_desc') echo 'selected'; ?>>Name Z-A</option>
             </select>
         </div>
 
