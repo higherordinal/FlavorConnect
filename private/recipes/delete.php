@@ -36,7 +36,7 @@ include(SHARED_PATH . '/member_header.php');
             <p class="warning">This action cannot be undone.</p>
         </div>
 
-        <form action="<?php echo url_for('/private/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
+        <form action="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
             <div class="form-buttons">
                 <button type="submit" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
