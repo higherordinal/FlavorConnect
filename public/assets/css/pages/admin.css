@@ -470,6 +470,69 @@ a.action.delete:hover {
     font-size: 0.9rem;
 }
 
+/* Admin Dashboard */
+.admin-dashboard {
+    max-width: var(--container-width);
+    margin: var(--spacing-xl) auto;
+    padding: 0 var(--spacing-md);
+}
+
+.admin-modules {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.admin-module {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-module:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.admin-module h2 {
+    color: var(--text-color);
+    margin-bottom: var(--spacing-sm);
+    font-size: 1.5rem;
+}
+
+.admin-module p {
+    color: var(--text-secondary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.admin-module .actions {
+    margin-top: var(--spacing-md);
+}
+
+.admin-module .action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: var(--primary-color);
+    color: var(--on-primary-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.admin-module .action:hover {
+    background: var(--primary-dark-color);
+}
+
+.admin-module .action i {
+    font-size: 1.25rem;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .admin-header {
