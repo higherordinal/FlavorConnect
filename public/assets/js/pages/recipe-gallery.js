@@ -4,12 +4,21 @@
 
 // State management
 const state = {
-    recipes: window.initialRecipes || []
+    recipes: window.initialRecipes || [],
+    currentFilters: {
+        search: '',
+        style: '',
+        diet: '',
+        type: '',
+        sort: 'newest',
+        page: 1
+    }
 };
 
 // Initialize gallery
 function initializeGallery() {
     setupEventListeners();
+    loadFiltersFromURL();
 }
 
 // Set up event listeners
@@ -22,110 +31,15 @@ function setupEventListeners() {
             await handleFavoriteToggle(e);
         }
     });
-}
 
-/**
- * Handles toggling recipe favorite status
- * @param {Event} e - Click event from favorite button
- */
-async function handleFavoriteToggle(e) {
-    try {
-        const button = e.target.closest('.favorite-btn');
-        if (!button) return;
-
-        const recipeId = button.dataset.recipeId;
-        const userId = window.userId;
-        
-        if (!recipeId || !userId) {
-            console.error('Missing recipe ID or user ID');
-            return;
-        }
-
-        const url = window.API_CONFIG.baseUrl;
-        const body = {
-            action: 'toggle_favorite',
-            recipe_id: parseInt(recipeId)
-        };
-
-        console.log('Making API request:', {
-            url,
-            method: 'POST',
-            body
+    // Sort field listener
+    const sortSelect = document.querySelector('#sort');
+    if (sortSelect) {
+        sortSelect.addEventListener('change', (e) => {
+            state.currentFilters.sort = e.target.value;
+            applyFilters();
         });
-
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify(body)
-        });
-
-        console.log('API response status:', response.status);
-        
-        const data = await response.json();
-        console.log('API response data:', data);
-
-        if (!response.ok) {
-            console.error('API error response:', data);
-            throw new Error(data.error || 'Failed to update favorite status');
-        }
-        
-        if (data.success) {
-            // Update recipe in state
-            const recipe = state.recipes.find(r => r.recipe_id === parseInt(recipeId));
-            if (recipe) {
-                recipe.is_favorited = !recipe.is_favorited; // Toggle the state
-            }
-
-            // Update button UI
-            button.classList.toggle('favorited');
-            button.setAttribute('aria-label', 
-                button.classList.contains('favorited') ? 'Remove from favorites' : 'Add to favorites'
-            );
-            
-            // Update icon
-            const icon = button.querySelector('i');
-            if (icon) {
-                icon.classList.toggle('fas');
-                icon.classList.toggle('far');
-            }
-            
-            showSuccess(data.message || 'Recipe favorite status updated');
-        } else {
-            throw new Error(data.error || 'Failed to update favorite status');
-        }
-    } catch (error) {
-        console.error('Error toggling favorite:', error);
-        showError(error.message || 'Failed to update favorite status');
     }
-}
-
-/**
- * Shows a success message
- * @param {string} message - The message to show
- */
-function showSuccess(message) {
-    // Create and show toast notification
-    const toast = document.createElement('div');
-    toast.className = 'toast success';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-}
-
-/**
- * Shows an error message
- * @param {string} message - The message to show
- */
-function showError(message) {
-    // Create and show toast notification
-    const toast = document.createElement('div');
-    toast.className = 'toast error';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
 }
 
 /**
@@ -154,19 +68,31 @@ function applyFilters() {
     });
 
     // Sort recipes
-    const sortedRecipes = [...filteredRecipes].sort((a, b) => {
-        switch (state.currentFilters.sort) {
-            case 'rating':
-                return (b.rating || 0) - (a.rating || 0);
-            case 'title':
-                return a.title.localeCompare(b.title);
-            case 'oldest':
-                return new Date(a.created_at) - new Date(b.created_at);
-            case 'newest':
-            default:
-                return new Date(b.created_at) - new Date(a.created_at);
-        }
-    });
+    let sortedRecipes = [...filteredRecipes];
+    switch (state.currentFilters.sort) {
+        case 'rating':
+            sortedRecipes.sort((a, b) => {
+                // Handle null ratings
+                const ratingA = a.rating || 0;
+                const ratingB = b.rating || 0;
+                // Sort by rating (descending) and then by number of ratings (descending)
+                if (ratingA === ratingB) {
+                    return (b.rating_count || 0) - (a.rating_count || 0);
+                }
+                return ratingB - ratingA;
+            });
+            break;
+        case 'title':
+            sortedRecipes.sort((a, b) => a.title.localeCompare(b.title));
+            break;
+        case 'oldest':
+            sortedRecipes.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+            break;
+        case 'newest':
+        default:
+            sortedRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            break;
+    }
 
     updateRecipeGrid(sortedRecipes);
     updatePagination(sortedRecipes.length);
