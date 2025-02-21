@@ -20,9 +20,17 @@ $measurements = Measurement::find_all_ordered();
 include(SHARED_PATH . '/member_header.php');
 ?>
 
-<link rel="stylesheet" href="<?php echo url_for('/css/admin.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/admin.css'); ?>">
 
 <div class="admin-management metadata">
+    <div class="breadcrumbs">
+        <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Recipe Metadata</span>
+    </div>
+
     <h1>Recipe Metadata Management</h1>
     
     <?php echo display_session_message(); ?>
@@ -32,7 +40,7 @@ include(SHARED_PATH . '/member_header.php');
             <!-- Recipe Styles Section -->
             <section class="metadata-section">
                 <h2>Recipe Styles</h2>
-                <table class="table">
+                <table class="list">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -46,7 +54,7 @@ include(SHARED_PATH . '/member_header.php');
                                     <input type="text" name="styles[<?php echo h($style->id); ?>]" value="<?php echo h($style->name); ?>" class="form-control">
                                 </td>
                                 <td class="actions">
-                                    <button type="button" class="btn btn-sm btn-danger delete-row" data-id="<?php echo h($style->id); ?>">
+                                    <button type="button" class="action delete" data-id="<?php echo h($style->id); ?>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -65,7 +73,7 @@ include(SHARED_PATH . '/member_header.php');
             <!-- Recipe Diets Section -->
             <section class="metadata-section">
                 <h2>Recipe Diets</h2>
-                <table class="table">
+                <table class="list">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -81,7 +89,7 @@ include(SHARED_PATH . '/member_header.php');
                                 </td>
                                 <td><?php echo Recipe::count_by_diet($diet->id); ?></td>
                                 <td class="actions">
-                                    <button type="button" class="btn btn-sm btn-danger delete-row" data-id="<?php echo h($diet->id); ?>">
+                                    <button type="button" class="action delete" data-id="<?php echo h($diet->id); ?>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -101,7 +109,7 @@ include(SHARED_PATH . '/member_header.php');
             <!-- Recipe Types Section -->
             <section class="metadata-section">
                 <h2>Recipe Types</h2>
-                <table class="table">
+                <table class="list">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -117,7 +125,7 @@ include(SHARED_PATH . '/member_header.php');
                                 </td>
                                 <td><?php echo Recipe::count_by_type($type->id); ?></td>
                                 <td class="actions">
-                                    <button type="button" class="btn btn-sm btn-danger delete-row" data-id="<?php echo h($type->id); ?>">
+                                    <button type="button" class="action delete" data-id="<?php echo h($type->id); ?>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -137,7 +145,7 @@ include(SHARED_PATH . '/member_header.php');
             <!-- Recipe Measurements Section -->
             <section class="metadata-section">
                 <h2>Recipe Measurements</h2>
-                <table class="table">
+                <table class="list">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -151,7 +159,7 @@ include(SHARED_PATH . '/member_header.php');
                                     <input type="text" name="measurements[<?php echo h($measurement->measurement_id); ?>]" value="<?php echo h($measurement->name); ?>" class="form-control">
                                 </td>
                                 <td class="actions">
-                                    <button type="button" class="btn btn-sm btn-danger delete-row" data-id="<?php echo h($measurement->measurement_id); ?>">
+                                    <button type="button" class="action delete" data-id="<?php echo h($measurement->measurement_id); ?>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
@@ -168,8 +176,8 @@ include(SHARED_PATH . '/member_header.php');
             </section>
         </div>
 
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">Save Changes</button>
+        <div class="form-buttons">
+            <button type="submit" class="action">Save Changes</button>
         </div>
     </form>
 </div>

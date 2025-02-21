@@ -24,7 +24,7 @@
 
 .list th {
     background: var(--primary-color);
-    color: var(--on-primary-color);
+    color: var(--accent-color);
     font-weight: 600;
     padding: var(--spacing-md);
     text-align: left;
@@ -438,6 +438,36 @@ a.action.delete:hover {
     color: var(--text-color);
     margin: 0;
     font-size: 1.5rem;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    margin-bottom: var(--spacing-md);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+}
+
+.breadcrumb-item {
+    color: var(--text-secondary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item:not(.active):hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.breadcrumb-separator {
+    color: var(--text-secondary-color);
+    font-size: 0.9rem;
 }
 
 /* Responsive Design */
