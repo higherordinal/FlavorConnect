@@ -54,7 +54,7 @@ class RecipeAttribute extends DatabaseObject {
      * @return array Array of validation errors
      */
     protected function validate() {
-        return validate_metadata(['name' => $this->name]);
+        return validate_metadata(['name' => $this->name], static::$table_name, $this->id);
     }
 
     /**
@@ -106,5 +106,37 @@ class RecipeAttribute extends DatabaseObject {
             $object_array[] = static::instantiate($record);
         }
         return $object_array;
+    }
+
+    /**
+     * Checks if a name already exists for this attribute type
+     * @param string $name The name to check
+     * @param int|null $exclude_id ID to exclude from the check (for updates)
+     * @return bool True if name exists, false otherwise
+     */
+    public static function name_exists($name, $exclude_id = null) {
+        $sql = "SELECT * FROM " . static::$table_name . " WHERE name = '" . db_escape(static::$database, $name) . "'";
+        if ($exclude_id !== null) {
+            $sql .= " AND " . static::$primary_key . " != '" . db_escape(static::$database, $exclude_id) . "'";
+        }
+        $sql .= " LIMIT 1";
+        $result = static::find_by_sql($sql);
+        return !empty($result);
+    }
+
+    /**
+     * Gets the current table name
+     * @return string The table name
+     */
+    public static function get_table_name() {
+        return static::$table_name;
+    }
+
+    /**
+     * Gets the current primary key column name
+     * @return string The primary key column name
+     */
+    public static function get_primary_key_column() {
+        return static::$primary_key;
     }
 }
