@@ -1,5 +1,5 @@
 <?php
-require_once('../../../private/initialize.php');
+require_once('../../core/initialize.php');
 require_login();
 
 // Only admins and super admins can access this page
@@ -8,7 +8,7 @@ if(!$session->is_admin() && !$session->is_super_admin()) {
     redirect_to(url_for('/index.php'));
 }
 
-$page_title = 'Create New User';
+$page_title = 'Admin';
 $page_style = 'admin';
 
 $user = new User();
@@ -29,8 +29,10 @@ if(is_post_request()) {
     }
 }
 
-include(SHARED_PATH . '/header.php');
+include(SHARED_PATH . '/member_header.php');
 ?>
+
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/admin.css'); ?>">
 
 <div class="admin-content">
     <div class="admin-header">
@@ -40,12 +42,12 @@ include(SHARED_PATH . '/header.php');
     <?php echo display_session_message(); ?>
 
     <div class="form-container">
-        <form action="<?php echo url_for('/admin/users/new.php'); ?>" method="post">
+        <form action="<?php echo private_url_for('/admin/users/new.php'); ?>" method="post">
             <?php include('form_fields.php'); ?>
             
             <div class="form-buttons">
-                <button type="submit" class="btn btn-primary">Create User</button>
-                <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="btn">Cancel</a>
+                <button type="submit" class="action">Create User</button>
+                <a href="<?php echo private_url_for('/admin/users/index.php'); ?>" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
