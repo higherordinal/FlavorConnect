@@ -37,7 +37,7 @@ include(SHARED_PATH . '/member_header.php');
     <div class="admin-header">
         <h1>User Management</h1>
         <div class="actions">
-            <a href="<?php echo url_for('/private/admin/users/new.php'); ?>" class="action">
+            <a href="<?php echo private_url_for('/admin/users/new.php'); ?>" class="action">
                 <i class="fas fa-plus"></i> Create New User
             </a>
         </div>
@@ -83,13 +83,13 @@ include(SHARED_PATH . '/member_header.php');
                             ?>
                         </td>
                         <td class="actions">
-                            <a href="<?php echo url_for('/private/admin/users/edit.php?id=' . h(u($user->user_id))); ?>" 
+                            <a href="<?php echo private_url_for('/admin/users/edit.php?id=' . h(u($user->user_id))); ?>" 
                                class="action" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <?php if($user->user_level !== 's') { ?>
-                                <a href="<?php echo url_for('/private/admin/users/delete.php?id=' . h(u($user->user_id))); ?>" 
-                                   class="action btn-danger" 
+                                <a href="<?php echo private_url_for('/admin/users/delete.php?id=' . h(u($user->user_id))); ?>" 
+                                   class="action delete" 
                                    onclick="return confirm('Are you sure you want to delete this user?');"
                                    title="Delete">
                                     <i class="fas fa-trash"></i>
