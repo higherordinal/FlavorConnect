@@ -247,8 +247,9 @@ abstract class DatabaseObject {
      * @return bool True if deletion was successful
      */
     public function delete() {
+        $pk = static::get_primary_key();
         $sql = "DELETE FROM " . static::$table_name . " ";
-        $sql .= "WHERE " . static::get_primary_key() . "='" . db_escape(static::get_database(), $this->id) . "' ";
+        $sql .= "WHERE " . $pk . "='" . db_escape(static::get_database(), $this->$pk) . "' ";
         $sql .= "LIMIT 1";
 
         $database = static::get_database();
