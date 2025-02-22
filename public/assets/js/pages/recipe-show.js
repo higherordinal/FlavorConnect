@@ -14,20 +14,28 @@ import {
     addSafeEventListener 
 } from '../utils/common.js';
 
+// Initialize API Configuration from window.initialConfig
+const API_CONFIG = window.initialConfig;
+
+// Get recipe data from JSON script tag
+const recipeData = JSON.parse(document.getElementById('recipe-data-json').textContent);
+
 // State management
 const state = {
-    recipe: null,
-    comments: [],
+    recipe: recipeData,
+    comments: recipeData.comments,
     currentRating: 0,
-    isFavorited: false
+    isSubmitting: false
 };
 
 /**
  * Initializes recipe show page functionality
  */
 function initializeRecipeShow() {
-    loadRecipeData();
     setupEventListeners();
+    updateRecipeUI();
+    updateCommentsUI();
+    updateFavoriteButton();
 }
 
 /**

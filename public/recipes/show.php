@@ -372,12 +372,12 @@ echo display_session_message();
 </div>
 
 <script>
-    window.API_CONFIG = {
+    window.initialConfig = {
         baseUrl: '<?php echo 'http://' . $_SERVER['HTTP_HOST'] . url_for('/api/recipes/'); ?>'
     };
 </script>
 
-<script id="recipe-data" type="application/json">
+<script id="recipe-data-json" type="application/json">
 <?php 
     $recipe_data = [
         'recipe_id' => (int)$recipe->recipe_id,
@@ -401,4 +401,5 @@ echo display_session_message();
 
 <script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
 <script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
+
 <?php include(SHARED_PATH . '/footer.php'); ?>
