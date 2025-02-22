@@ -14,13 +14,16 @@ if(is_post_request()) {
     $args['username'] = $_POST['username'] ?? '';
     $args['password'] = $_POST['password'] ?? '';
 
-    $login_user = new User($args);
-    if($login_user->verify_login()) {
-        $session->login($login_user);
-        redirect_to(url_for('/index.php'));
-    } else {
-        $errors = $login_user->errors;
-        $username = $args['username'];
+    $errors = validate_login($args);
+    if(empty($errors)) {
+        $found_user = User::find_by_username($args['username']);
+        if($found_user && $found_user->verify_password($args['password'])) {
+            $session->login($found_user);
+            redirect_to(url_for('/index.php'));
+        } else {
+            $errors['login'] = "Invalid username or password.";
+            $username = $args['username'];
+        }
     }
 }
 
