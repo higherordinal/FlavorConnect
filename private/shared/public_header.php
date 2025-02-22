@@ -1,5 +1,6 @@
 <?php
 if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
+if(!isset($page_style)) { $page_style = ''; }
 ?>
 
 <!DOCTYPE html>
@@ -21,14 +22,11 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=' . time()); ?>">
     
-    <?php if($page_title === 'Home') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
+    <!-- Page Specific Styles -->
+    <?php if(isset($page_style)) { ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=' . time()); ?>">
     <?php } ?>
-    
-    <?php if($page_title === 'About') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/about.css?v=' . time()); ?>">
-    <?php } ?>
-    
+
     <!-- JavaScript -->
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
 </head>

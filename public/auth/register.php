@@ -3,6 +3,7 @@ require_once('../../private/config/config.php');
 require_once(PRIVATE_PATH . '/core/initialize.php');
 
 $page_title = 'Register';
+$page_style = 'register';
 
 $errors = [];
 $username = '';
@@ -11,7 +12,6 @@ $last_name = '';
 $email = '';
 
 if(is_post_request()) {
-    // Get form data
     $args = [];
     $args['username'] = $_POST['username'] ?? '';
     $args['first_name'] = $_POST['first_name'] ?? '';
@@ -20,31 +20,24 @@ if(is_post_request()) {
     $args['password'] = $_POST['password'] ?? '';
     $args['confirm_password'] = $_POST['confirm_password'] ?? '';
 
-    // Store values for form repopulation
-    $username = $args['username'];
-    $first_name = $args['first_name'];
-    $last_name = $args['last_name'];
-    $email = $args['email'];
-
-    // Validate all fields
-    $errors = validate_user($args);
-
-    // If no errors, create user
-    if(empty($errors)) {
-        $user = new User($args);
-        if($user->save()) {
-            $session->message("Registration successful! Please log in.", "success");
-            redirect_to(url_for('/auth/login.php'));
-        } else {
-            // Get any additional validation errors from user object
-            $errors = array_merge($errors, $user->errors);
-        }
+    $user = new User($args);
+    if($user->save()) {
+        $session->message('Registration successful! Please log in.');
+        redirect_to(url_for('/auth/login.php'));
+    } else {
+        $errors = $user->errors;
+        $username = $args['username'];
+        $first_name = $args['first_name'];
+        $last_name = $args['last_name'];
+        $email = $args['email'];
     }
 }
 
 include(SHARED_PATH . '/public_header.php');
 ?>
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/register.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
 
 <div class="content">
     <?php echo display_errors($errors); ?>

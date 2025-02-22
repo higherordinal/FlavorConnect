@@ -23,8 +23,6 @@ $users = User::find_by_sql($sql);
 include(SHARED_PATH . '/member_header.php');
 ?>
 
-<link rel="stylesheet" href="<?php echo url_for('/stylesheets/admin.css'); ?>">
-
 <div class="admin-content">
     <div class="breadcrumbs">
         <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
