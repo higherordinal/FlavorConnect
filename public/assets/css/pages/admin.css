@@ -623,14 +623,25 @@ a.action.delete:hover {
     }
 
     td.actions {
-        display: grid !important;
-        grid-template-columns: repeat(auto-fit, minmax(min-content, max-content)) !important;
+        display: flex !important;
         gap: var(--spacing-sm) !important;
-        justify-content: start !important;
     }
 
     td.actions .action {
-        width: auto;
+        width: 40px;
+        aspect-ratio: 1;
+        padding: var(--spacing-sm);
+        display: grid;
+        place-items: center;
+    }
+
+    .status-badge {
+        width: 80px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    td[data-label="Status"] {
         min-width: max-content;
     }
 
