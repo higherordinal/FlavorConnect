@@ -59,38 +59,45 @@
 
 a.action {
     background: var(--primary-color);
-    color: var(--on-primary-color);
+    color: var(--color-white);
     margin-right: var(--spacing-sm);
 }
 
 a.action:hover {
     background: var(--primary-dark-color);
+    color: var(--primary-dark-color);
     transform: translateY(-1px);
 }
 
 a.action.delete {
     background: var(--error-color);
+    color: var(--color-white);
 }
 
 a.action.delete:hover {
     background: var(--error-dark-color);
+    color: var(--primary-dark-color);
 }
 
 /* Status Toggle Buttons */
 .action.activate {
     background: var(--success-color);
+    color: var(--color-white);
 }
 
 .action.activate:hover {
     background: var(--success-dark-color);
+    color: var(--primary-dark-color);
 }
 
 .action.deactivate {
     background: var(--warning-color);
+    color: var(--color-white);
 }
 
 .action.deactivate:hover {
     background: var(--warning-dark-color);
+    color: var(--primary-dark-color);
 }
 
 /* Forms */
@@ -517,16 +524,17 @@ a.action.delete:hover {
     align-items: center;
     gap: var(--spacing-sm);
     background: var(--primary-color);
-    color: var(--on-primary-color);
+    color: var(--color-white);
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--border-radius-sm);
     text-decoration: none;
     font-weight: 500;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .admin-module .action:hover {
     background: var(--primary-dark-color);
+    color: var(--primary-dark-color);
 }
 
 .admin-module .action i {
