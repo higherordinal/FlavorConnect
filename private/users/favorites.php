@@ -18,7 +18,7 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="recipe-gallery">
     <div class="gallery-header">
-        <h1 class="gallery-title">Your Favorited Recipes</h1>
+        <h1 class="gallery-title">Your Favorite Recipes</h1>
     </div>
 
     <?php if(empty($favorites)) { ?>

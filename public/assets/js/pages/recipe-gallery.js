@@ -2,9 +2,19 @@
  * @fileoverview Recipe gallery functionality
  */
 
-// State management
+// Initialize API Configuration
+const API_CONFIG = {
+    baseUrl: window.initialUserData.apiBaseUrl,
+    endpoints: {
+        favorites: '/favorites'
+    }
+};
+
+// Global state
 const state = {
-    recipes: window.initialRecipes || [],
+    isLoggedIn: window.initialUserData.isLoggedIn,
+    userId: window.initialUserData.userId,
+    recipes: window.initialRecipesData || [],
     currentFilters: {
         search: '',
         style: '',
@@ -117,7 +127,7 @@ function createRecipeCard(recipe) {
     const totalTime = formatTime(recipe.prep_time + recipe.cook_time);
     return `
         <article class="recipe-card">
-            ${window.isLoggedIn ? `
+            ${state.isLoggedIn ? `
                 <button type="button" class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}" 
                         data-recipe-id="${recipe.recipe_id}"
                         aria-label="${recipe.is_favorited ? 'Remove from favorites' : 'Add to favorites'}">
