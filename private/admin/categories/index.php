@@ -8,7 +8,7 @@ if(!$session->is_admin() && !$session->is_super_admin()) {
     redirect_to(url_for('/'));
 }
 
-$page_title = 'Admin';
+$page_title = 'Admin Recipe Metadata Management';
 $page_style = 'admin';
 
 // Get all metadata
