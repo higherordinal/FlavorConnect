@@ -1,5 +1,6 @@
 <?php
 if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
+if(!isset($page_style)) { $page_style = ''; }
 ?>
 
 <!DOCTYPE html>
@@ -19,15 +20,11 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=' . time()); ?>">
     
-    <?php if($page_title === 'Home') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/home.css?v=' . time()); ?>">
-    <?php } else if($page_title === 'Recipes') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=' . time()); ?>">
-    <?php } else if($page_title === 'recipe-form') { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-form.css?v=' . time()); ?>">
-    <?php } else { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . strtolower($page_title) . '.css?v=' . time()); ?>">
+    <!-- Page Specific Styles -->
+    <?php if(isset($page_style)) { ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=' . time()); ?>">
     <?php } ?>
     
     <!-- JavaScript -->
@@ -43,7 +40,7 @@ if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
     <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
-    <?php if($page_title === 'recipe-form') { ?>
+    <?php if($page_style === 'recipe-form') { ?>
     <script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>
     <?php } ?>
 </head>

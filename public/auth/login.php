@@ -3,40 +3,32 @@ require_once('../../private/config/config.php');
 require_once(PRIVATE_PATH . '/core/initialize.php');
 
 $page_title = 'Login';
+$page_style = 'login';
 
 $errors = [];
 $username = '';
+$password = '';
 
 if(is_post_request()) {
     $args = [];
     $args['username'] = $_POST['username'] ?? '';
     $args['password'] = $_POST['password'] ?? '';
 
-    // Store username for form repopulation
-    $username = $args['username'];
-
-    // Basic validations
-    $errors = validate_login($args);
-
-    // If no errors, try to login
-    if(empty($errors)) {
-        $user = User::find_by_username($args['username']);
-        if($user && $user->verify_password($args['password'])) {
-            if($user->is_active) {
-                $session->login($user);
-                redirect_to(url_for('/index.php'));
-            } else {
-                $errors['account'] = "Your account has been deactivated. Please contact an administrator.";
-            }
-        } else {
-            $errors['login'] = "Invalid username or password.";
-        }
+    $login_user = new User($args);
+    if($login_user->verify_login()) {
+        $session->login($login_user);
+        redirect_to(url_for('/index.php'));
+    } else {
+        $errors = $login_user->errors;
+        $username = $args['username'];
     }
 }
 
 include(SHARED_PATH . '/public_header.php');
 ?>
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/login.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
 
 <div class="content">
     <?php echo display_errors($errors); ?>

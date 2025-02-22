@@ -1,6 +1,7 @@
 <?php
 require_once('../private/core/initialize.php');
 $page_title = 'About';
+$page_style = 'about';
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
