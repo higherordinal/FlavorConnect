@@ -7,7 +7,8 @@ require_login();
 error_log("Script Path: " . $_SERVER['SCRIPT_NAME']);
 error_log("WWW_ROOT: " . WWW_ROOT);
 
-$page_title = 'recipe-form';
+$page_title = 'Create Recipe';
+$page_style = 'recipe-create';
 error_log("Page Title: " . $page_title);
 
 include(SHARED_PATH . '/member_header.php');
