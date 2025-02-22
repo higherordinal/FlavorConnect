@@ -35,11 +35,6 @@ include(SHARED_PATH . '/member_header.php');
 
         <div class="admin-header">
             <h1>User Management</h1>
-            <div class="actions">
-                <a href="<?php echo private_url_for('/admin/users/new.php'); ?>" class="action">
-                    <i class="fas fa-plus"></i> Create New User
-                </a>
-            </div>
         </div>
 
         <?php echo display_session_message(); ?>
@@ -58,14 +53,14 @@ include(SHARED_PATH . '/member_header.php');
                 <tbody>
                     <?php foreach($users as $user) { ?>
                         <tr>
-                            <td><?php echo h($user->username); ?></td>
-                            <td><?php echo h($user->email); ?></td>
-                            <td>
+                            <td data-label="Username"><?php echo h($user->username); ?></td>
+                            <td data-label="Email"><?php echo h($user->email); ?></td>
+                            <td data-label="Status">
                                 <span class="status-badge <?php echo $user->is_active ? 'active' : 'inactive'; ?>">
                                     <?php echo $user->is_active ? 'Active' : 'Inactive'; ?>
                                 </span>
                             </td>
-                            <td>
+                            <td data-label="User Level">
                                 <?php
                                 $level = '';
                                 switch($user->user_level) {
@@ -81,7 +76,7 @@ include(SHARED_PATH . '/member_header.php');
                                 echo h($level);
                                 ?>
                             </td>
-                            <td class="actions">
+                            <td data-label="Actions" class="actions">
                                 <a href="<?php echo private_url_for('/admin/users/edit.php?id=' . h(u($user->user_id))); ?>" 
                                    class="action" title="Edit">
                                     <i class="fas fa-edit"></i>
@@ -102,5 +97,11 @@ include(SHARED_PATH . '/member_header.php');
         </div>
     </div>
 </main>
+
+<div class="bottom-actions">
+    <a href="<?php echo private_url_for('/admin/users/new.php'); ?>" class="action create">
+        <i class="fas fa-plus"></i> Create New User
+    </a>
+</div>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

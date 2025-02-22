@@ -51,10 +51,10 @@ include(SHARED_PATH . '/member_header.php');
                         <tbody>
                             <?php foreach($styles as $style) { ?>
                                 <tr>
-                                    <td>
+                                    <td data-label="Name">
                                         <input type="text" name="styles[<?php echo h($style->id); ?>]" value="<?php echo h($style->name); ?>" class="form-control">
                                     </td>
-                                    <td class="actions">
+                                    <td data-label="Actions" class="actions">
                                         <button type="button" class="action delete" data-id="<?php echo h($style->id); ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -62,10 +62,10 @@ include(SHARED_PATH . '/member_header.php');
                                 </tr>
                             <?php } ?>
                             <tr class="new-row">
-                                <td>
+                                <td data-label="Name">
                                     <input type="text" name="new_styles[]" placeholder="Add new style..." class="form-control">
                                 </td>
-                                <td></td>
+                                <td data-label="Actions"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -85,11 +85,11 @@ include(SHARED_PATH . '/member_header.php');
                         <tbody>
                             <?php foreach($diets as $diet) { ?>
                                 <tr>
-                                    <td>
+                                    <td data-label="Name">
                                         <input type="text" name="diets[<?php echo h($diet->id); ?>]" value="<?php echo h($diet->name); ?>" class="form-control">
                                     </td>
-                                    <td><?php echo Recipe::count_by_diet($diet->id); ?></td>
-                                    <td class="actions">
+                                    <td data-label="Recipes"><?php echo Recipe::count_by_diet($diet->id); ?></td>
+                                    <td data-label="Actions" class="actions">
                                         <button type="button" class="action delete" data-id="<?php echo h($diet->id); ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -97,11 +97,11 @@ include(SHARED_PATH . '/member_header.php');
                                 </tr>
                             <?php } ?>
                             <tr class="new-row">
-                                <td>
+                                <td data-label="Name">
                                     <input type="text" name="new_diets[]" placeholder="Add new diet..." class="form-control">
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td data-label="Recipes"></td>
+                                <td data-label="Actions"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -121,11 +121,11 @@ include(SHARED_PATH . '/member_header.php');
                         <tbody>
                             <?php foreach($types as $type) { ?>
                                 <tr>
-                                    <td>
+                                    <td data-label="Name">
                                         <input type="text" name="types[<?php echo h($type->id); ?>]" value="<?php echo h($type->name); ?>" class="form-control">
                                     </td>
-                                    <td><?php echo Recipe::count_by_type($type->id); ?></td>
-                                    <td class="actions">
+                                    <td data-label="Recipes"><?php echo Recipe::count_by_type($type->id); ?></td>
+                                    <td data-label="Actions" class="actions">
                                         <button type="button" class="action delete" data-id="<?php echo h($type->id); ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -133,11 +133,11 @@ include(SHARED_PATH . '/member_header.php');
                                 </tr>
                             <?php } ?>
                             <tr class="new-row">
-                                <td>
+                                <td data-label="Name">
                                     <input type="text" name="new_types[]" placeholder="Add new type..." class="form-control">
                                 </td>
-                                <td></td>
-                                <td></td>
+                                <td data-label="Recipes"></td>
+                                <td data-label="Actions"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -156,10 +156,10 @@ include(SHARED_PATH . '/member_header.php');
                         <tbody>
                             <?php foreach($measurements as $measurement) { ?>
                                 <tr>
-                                    <td>
+                                    <td data-label="Name">
                                         <input type="text" name="measurements[<?php echo h($measurement->measurement_id); ?>]" value="<?php echo h($measurement->name); ?>" class="form-control">
                                     </td>
-                                    <td class="actions">
+                                    <td data-label="Actions" class="actions">
                                         <button type="button" class="action delete" data-id="<?php echo h($measurement->measurement_id); ?>">
                                             <i class="fas fa-trash"></i>
                                         </button>
@@ -167,10 +167,10 @@ include(SHARED_PATH . '/member_header.php');
                                 </tr>
                             <?php } ?>
                             <tr class="new-row">
-                                <td>
+                                <td data-label="Name">
                                     <input type="text" name="new_measurements[]" placeholder="Add new measurement..." class="form-control">
                                 </td>
-                                <td></td>
+                                <td data-label="Actions"></td>
                             </tr>
                         </tbody>
                     </table>
