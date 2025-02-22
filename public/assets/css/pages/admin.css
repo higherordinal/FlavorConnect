@@ -49,10 +49,14 @@
 /* Action Buttons */
 .actions {
     margin-bottom: var(--spacing-lg);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: var(--spacing-sm);
+    justify-content: start;
 }
 
 .action {
-    display: inline-block;
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--border-radius-sm);
     text-decoration: none;
@@ -63,7 +67,6 @@
 a.action {
     background: var(--primary-color);
     color: var(--color-white);
-    margin-right: var(--spacing-sm);
 }
 
 a.action:hover {
@@ -113,16 +116,17 @@ a.action.delete:hover {
     box-shadow: var(--shadow-sm);
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto;
 }
 
 .form-group {
     margin-bottom: var(--spacing-md);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: var(--spacing-xs);
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: var(--spacing-xs);
     color: var(--text-color);
     font-weight: 500;
 }
@@ -152,14 +156,17 @@ a.action.delete:hover {
 
 .form-buttons {
     margin-top: var(--spacing-lg);
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
     gap: var(--spacing-sm);
+    justify-content: start;
 }
 
 .form-buttons input[type="submit"] {
     padding: var(--spacing-sm) var(--spacing-md);
     background: var(--primary-color);
-    color: var(--on-primary-color);
+    color: var(--color-white);
     border: none;
     border-radius: var(--border-radius-sm);
     cursor: pointer;
@@ -297,8 +304,8 @@ a.action.delete:hover {
 }
 
 .admin-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     margin-bottom: var(--spacing-lg);
 }
@@ -362,13 +369,16 @@ a.action.delete:hover {
 
 /* Action Buttons */
 .actions {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
     gap: var(--spacing-sm);
     align-items: center;
 }
 
 .btn {
-    display: inline-flex;
+    display: inline-grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm) var(--spacing-md);
@@ -415,8 +425,8 @@ a.action.delete:hover {
 }
 
 .section-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     margin-bottom: var(--spacing-md);
 }
@@ -441,8 +451,8 @@ a.action.delete:hover {
 }
 
 .user-header {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
     margin-bottom: var(--spacing-md);
 }
@@ -456,10 +466,11 @@ a.action.delete:hover {
 /* Breadcrumbs */
 .breadcrumbs {
     margin-bottom: var(--spacing-md);
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
     gap: var(--spacing-xs);
+    align-items: center;
 }
 
 .breadcrumb-item {
@@ -495,6 +506,9 @@ a.action.delete:hover {
 
 .admin-header {
     margin-bottom: var(--spacing-xl);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
 }
 
 .admin-modules {
@@ -504,40 +518,30 @@ a.action.delete:hover {
     align-content: start;
 }
 
-.admin-modules {
-    margin-top: var(--spacing-lg);
-}
-
 .admin-module {
     background: var(--surface-color);
     border-radius: var(--border-radius);
-    padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.admin-module:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    padding: var(--spacing-lg);
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    gap: var(--spacing-md);
 }
 
 .admin-module h2 {
     color: var(--text-color);
-    margin-bottom: var(--spacing-sm);
-    font-size: 1.5rem;
+    font-size: var(--font-size-large);
+    margin: 0;
 }
 
 .admin-module p {
-    color: var(--text-secondary-color);
-    margin-bottom: var(--spacing-md);
-}
-
-.admin-module .actions {
-    margin-top: var(--spacing-md);
+    color: var(--text-muted);
+    margin: 0;
 }
 
 .admin-module .action {
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: var(--spacing-sm);
     background: var(--primary-color);
@@ -546,7 +550,7 @@ a.action.delete:hover {
     border-radius: var(--border-radius-sm);
     text-decoration: none;
     font-weight: 500;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .admin-module .action:hover {
@@ -554,31 +558,163 @@ a.action.delete:hover {
     color: var(--primary-dark-color);
 }
 
-.admin-module .action i {
-    font-size: 1.25rem;
+/* Bottom Actions */
+.bottom-actions {
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .bottom-actions {
+        margin-top: var(--spacing-lg);
+    }
+
+    .bottom-actions .action {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 1024px) {
+    .admin-management,
+    .admin-dashboard {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .admin-modules {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .list {
+        overflow-x: auto;
+        display: block;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .list thead {
+        display: none;
+    }
+
+    .list tbody tr {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-md);
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .list tbody td {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: var(--spacing-md);
+        padding: 0;
+        border: none;
+    }
+
+    .list tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    td.actions {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(min-content, max-content)) !important;
+        gap: var(--spacing-sm) !important;
+        justify-content: start !important;
+    }
+
+    td.actions .action {
+        width: auto;
+        min-width: max-content;
+    }
+
+    .actions:not(td) {
+        grid-auto-flow: row;
+        grid-auto-rows: max-content;
+        justify-content: stretch;
+    }
+
+    .action:not(td .action) {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-management,
+    .admin-dashboard {
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
     .admin-header {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         gap: var(--spacing-md);
         text-align: center;
     }
 
-    .admin-header h1 {
-        margin-bottom: var(--spacing-md);
+    .admin-modules {
+        grid-template-columns: 1fr;
     }
 
-    .table {
-        font-size: 0.875rem;
+    .breadcrumbs {
+        grid-auto-flow: row;
+        justify-content: center;
+        text-align: center;
     }
 
-    .table td, .table th {
+    .form-buttons {
+        grid-auto-flow: row;
+        justify-content: stretch;
+    }
+
+    .form-buttons input[type="submit"],
+    .form-buttons .cancel {
+        width: 100%;
+        text-align: center;
+    }
+
+    .form-group {
+        grid-template-rows: auto auto;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="password"],
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    .message {
         padding: var(--spacing-sm);
     }
+}
 
-    .btn {
-        padding: var(--spacing-xs) var(--spacing-sm);
+@media (max-width: 480px) {
+    .admin-management h1,
+    .admin-dashboard h1 {
+        font-size: 1.5rem;
+    }
+
+    .admin-module {
+        padding: var(--spacing-md);
+    }
+
+    .admin-module h2 {
+        font-size: 1.25rem;
+    }
+
+    .form-group label {
+        font-size: 0.9rem;
+    }
+
+    .action {
+        padding: var(--spacing-sm) var(--spacing-sm);
+        font-size: 0.9rem;
     }
 }
