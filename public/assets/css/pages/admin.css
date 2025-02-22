@@ -1,8 +1,11 @@
 /* Admin Management Styles */
 .admin-management {
     max-width: var(--container-width);
-    margin: var(--spacing-xl) auto;
-    padding: 0 var(--spacing-md);
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
+    display: grid;
+    grid-template-rows: auto 1fr;
 }
 
 .admin-management h1 {
@@ -103,11 +106,14 @@ a.action.delete:hover {
 /* Forms */
 .admin.edit, .admin.new, .admin.delete {
     max-width: 800px;
-    margin: var(--spacing-lg) auto;
-    padding: var(--spacing-lg);
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-lg);
     background: var(--surface-color);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-sm);
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
+    display: grid;
+    grid-template-rows: auto 1fr;
 }
 
 .form-group {
@@ -480,14 +486,25 @@ a.action.delete:hover {
 /* Admin Dashboard */
 .admin-dashboard {
     max-width: var(--container-width);
-    margin: var(--spacing-xl) auto;
-    padding: 0 var(--spacing-md);
+    margin: 0 auto;
+    padding: var(--spacing-xl) var(--spacing-md);
+    min-height: calc(100vh - var(--header-height) - var(--footer-height));
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.admin-header {
+    margin-bottom: var(--spacing-xl);
 }
 
 .admin-modules {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--spacing-lg);
+    align-content: start;
+}
+
+.admin-modules {
     margin-top: var(--spacing-lg);
 }
 
