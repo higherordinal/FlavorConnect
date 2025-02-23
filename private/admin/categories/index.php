@@ -55,9 +55,12 @@ include(SHARED_PATH . '/member_header.php');
                                         <input type="text" name="styles[<?php echo h($style->id); ?>]" value="<?php echo h($style->name); ?>" class="form-control">
                                     </td>
                                     <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" data-id="<?php echo h($style->id); ?>">
+                                        <a href="<?php echo private_url_for('/admin/categories/style/delete.php?id=' . h(u($style->id))); ?>" 
+                                           class="action delete" 
+                                           onclick="return confirm('Are you sure you want to delete this style?');"
+                                           title="Delete">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -90,9 +93,12 @@ include(SHARED_PATH . '/member_header.php');
                                     </td>
                                     <td data-label="Recipes"><?php echo Recipe::count_by_diet($diet->id); ?></td>
                                     <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" data-id="<?php echo h($diet->id); ?>">
+                                        <a href="<?php echo private_url_for('/admin/categories/diet/delete.php?id=' . h(u($diet->id))); ?>" 
+                                           class="action delete" 
+                                           onclick="return confirm('Are you sure you want to delete this diet?');"
+                                           title="Delete">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -126,9 +132,12 @@ include(SHARED_PATH . '/member_header.php');
                                     </td>
                                     <td data-label="Recipes"><?php echo Recipe::count_by_type($type->id); ?></td>
                                     <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" data-id="<?php echo h($type->id); ?>">
+                                        <a href="<?php echo private_url_for('/admin/categories/type/delete.php?id=' . h(u($type->id))); ?>" 
+                                           class="action delete" 
+                                           onclick="return confirm('Are you sure you want to delete this type?');"
+                                           title="Delete">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -160,9 +169,12 @@ include(SHARED_PATH . '/member_header.php');
                                         <input type="text" name="measurements[<?php echo h($measurement->measurement_id); ?>]" value="<?php echo h($measurement->name); ?>" class="form-control">
                                     </td>
                                     <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" data-id="<?php echo h($measurement->measurement_id); ?>">
+                                        <a href="<?php echo private_url_for('/admin/categories/measurement/delete.php?id=' . h(u($measurement->measurement_id))); ?>" 
+                                           class="action delete" 
+                                           onclick="return confirm('Are you sure you want to delete this measurement?');"
+                                           title="Delete">
                                             <i class="fas fa-trash"></i>
-                                        </button>
+                                        </a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -178,7 +190,7 @@ include(SHARED_PATH . '/member_header.php');
             </div>
 
             <div class="form-buttons">
-                <button type="submit" class="action">Save Changes</button>
+                <button type="submit" class="action save">Save Changes</button>
             </div>
         </form>
     </div>

@@ -62,27 +62,78 @@
     text-decoration: none;
     font-weight: 500;
     transition: all 0.2s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
 }
 
-a.action {
+/* Default action button */
+a.action,
+button.action {
     background: var(--primary-color);
     color: var(--color-white);
 }
 
-a.action:hover {
-    background: var(--primary-dark-color);
-    color: var(--primary-dark-color);
+/* Default hover state */
+a.action:hover,
+button.action:hover {
+    background: var(--color-white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     transform: translateY(-1px);
 }
 
+/* Create button style */
+a.action.create,
+button.action.create {
+    background: var(--primary-color);
+    color: var(--color-white);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+a.action.create:hover,
+button.action.create:hover {
+    background: var(--color-white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* Save button style */
+a.action.save,
+button.action.save {
+    background: var(--primary-color);
+    color: var(--color-white);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+a.action.save:hover,
+button.action.save:hover {
+    background: var(--color-white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* Delete button style */
 a.action.delete {
     background: var(--error-color);
     color: var(--color-white);
 }
 
 a.action.delete:hover {
-    background: var(--error-dark-color);
-    color: var(--primary-dark-color);
+    background: var(--color-white);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
 }
 
 /* Status Toggle Buttons */
@@ -92,8 +143,9 @@ a.action.delete:hover {
 }
 
 .action.activate:hover {
-    background: var(--success-dark-color);
-    color: var(--primary-dark-color);
+    background: var(--color-white);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
 }
 
 .action.deactivate {
@@ -102,8 +154,9 @@ a.action.delete:hover {
 }
 
 .action.deactivate:hover {
-    background: var(--warning-dark-color);
-    color: var(--primary-dark-color);
+    background: var(--color-white);
+    color: var(--warning-color);
+    border: 1px solid var(--warning-color);
 }
 
 /* Forms */
@@ -154,12 +207,15 @@ a.action.delete:hover {
     box-shadow: 0 0 0 2px var(--primary-light-color);
 }
 
+/* Form Buttons */
 .form-buttons {
-    margin-top: var(--spacing-lg);
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    gap: var(--spacing-sm);
+    place-items: center;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+}
+
+.form-buttons.delete {
     justify-content: start;
 }
 
@@ -176,7 +232,9 @@ a.action.delete:hover {
 }
 
 .form-buttons input[type="submit"]:hover {
-    background: var(--primary-dark-color);
+    background: var(--color-white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 .form-buttons.delete input[type="submit"] {
@@ -184,7 +242,9 @@ a.action.delete:hover {
 }
 
 .form-buttons.delete input[type="submit"]:hover {
-    background: var(--error-dark-color);
+    background: var(--color-white);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
 }
 
 .cancel {
@@ -394,7 +454,9 @@ a.action.delete:hover {
 }
 
 .btn-primary:hover {
-    background: var(--primary-dark-color);
+    background: var(--color-white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 .btn-sm {
@@ -408,7 +470,9 @@ a.action.delete:hover {
 }
 
 .btn-danger:hover {
-    background: var(--error-dark-color);
+    background: var(--color-white);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
 }
 
 /* Category Management */
@@ -554,8 +618,9 @@ a.action.delete:hover {
 }
 
 .admin-module .action:hover {
-    background: var(--primary-dark-color);
-    color: var(--primary-dark-color);
+    background: var(--color-white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 /* Bottom Actions */
