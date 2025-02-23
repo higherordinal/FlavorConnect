@@ -32,7 +32,9 @@ include(SHARED_PATH . '/member_header.php');
             <span class="breadcrumb-item active">Recipe Metadata</span>
         </div>
 
-        <h1>Recipe Metadata Management</h1>
+        <div class="admin-header">
+            <h1>Recipe Metadata Management</h1>
+        </div>
         
         <?php echo display_session_message(); ?>
         

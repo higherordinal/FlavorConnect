@@ -8,13 +8,6 @@
     grid-template-rows: auto 1fr;
 }
 
-.admin-management h1 {
-    color: var(--text-color);
-    margin-bottom: var(--spacing-lg);
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: var(--spacing-sm);
-}
-
 /* Table Styles */
 .list {
     width: 100%;
@@ -371,10 +364,11 @@ a.action.delete:hover {
 }
 
 .admin-header h1 {
+    background: var(--primary-color);
     color: var(--text-color);
     margin: 0;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: var(--spacing-xs);
+    border-bottom: 2px solid var(--color-white);
+    padding: var(--spacing-sm);
 }
 
 /* Table Styles */
