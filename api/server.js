@@ -26,11 +26,11 @@ app.use((req, res, next) => {
 
 // Database connection
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
+    host: 'localhost',
+    port: 3306,
     user: process.env.DB_USER || 'hcvaughn',
     password: process.env.DB_PASSWORD || '@connect4Establish',
     database: process.env.DB_NAME || 'flavorconnect',
-    port: process.env.DB_PORT || 3307,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

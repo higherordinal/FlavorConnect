@@ -207,21 +207,20 @@ $userData = [
                 $style = $recipe->style();
                 $diet = $recipe->diet();
                 $type = $recipe->type();
+                $recipe->is_favorited = $session->is_logged_in() ? RecipeFavorite::is_favorited($session->get_user_id(), $recipe->recipe_id) : false;
             ?>
                 <article class="recipe-card" role="article">
-                    <?php if($session->is_logged_in()) { 
-                        $is_favorited = $recipe->is_favorited_by($session->get_user_id());
-                    ?>
-                    <button class="favorite-btn <?php echo $is_favorited ? 'favorited' : ''; ?>"
-                            data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
-                            aria-label="<?php echo $is_favorited ? 'Remove from' : 'Add to'; ?> favorites">
-                        <i class="<?php echo $is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
-                    </button>
-                    <?php } ?>
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" 
                        class="recipe-link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
                         <div class="recipe-image-container">
+                            <?php if($session->is_logged_in()) { ?>
+                            <button class="favorite-btn <?php echo $recipe->is_favorited ? 'favorited' : ''; ?>"
+                                    data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
+                                    aria-label="<?php echo $recipe->is_favorited ? 'Remove from' : 'Add to'; ?> favorites">
+                                <i class="<?php echo $recipe->is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
+                            </button>
+                            <?php } ?>
                             <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
                                  alt="Photo of <?php echo h($recipe->title); ?>" 
                                  class="recipe-image">
@@ -324,7 +323,7 @@ $userData = [
 <?php include(SHARED_PATH . '/footer.php'); ?>
 
 <!-- Load JavaScript files -->
-<script src="<?php echo url_for('/assets/js/pages/recipe-gallery.js?v=1.0'); ?>"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-gallery.js'); ?>" type="module"></script>
 
 <?php
 // Helper function to maintain query parameters

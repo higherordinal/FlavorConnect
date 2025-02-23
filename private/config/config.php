@@ -4,7 +4,7 @@
  */
 
 // Database Configuration - Local Development
-define('DB_HOST', 'localhost:3307');
+define('DB_HOST', 'localhost:3306');
 define('DB_USER', 'hcvaughn');
 define('DB_PASS', '@connect4Establish');
 define('DB_NAME', 'flavorconnect');
