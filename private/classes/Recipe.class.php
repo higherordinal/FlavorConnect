@@ -42,6 +42,8 @@ class Recipe extends DatabaseObject {
     public $is_featured;
     /** @var string Timestamp when recipe was created */
     public $created_at;
+    /** @var bool Whether the recipe is favorited by the current user */
+    public $is_favorited = false;
 
     /**
      * Get prep time hours

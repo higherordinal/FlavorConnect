@@ -4,14 +4,28 @@ const mysql = require('mysql2/promise');
 
 // Create database pool
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
+    host: 'localhost',
+    port: 3306,
     user: process.env.DB_USER || 'hcvaughn',
     password: process.env.DB_PASSWORD || '@connect4Establish',
     database: process.env.DB_NAME || 'flavorconnect',
-    port: process.env.DB_PORT || 3307,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
+});
+
+// Check if a recipe is favorited by a user
+router.get('/:userId/:recipeId', async (req, res) => {
+    try {
+        const [rows] = await pool.execute(
+            'SELECT COUNT(*) as count FROM user_favorite WHERE user_id = ? AND recipe_id = ?',
+            [req.params.userId, req.params.recipeId]
+        );
+        res.json({ isFavorited: rows[0].count > 0 });
+    } catch (error) {
+        console.error('Error checking favorite status:', error);
+        res.status(500).json({ message: 'Error checking favorite status', error: error.message });
+    }
 });
 
 // Get user favorites
@@ -29,7 +43,7 @@ router.get('/:userId', async (req, res) => {
 });
 
 // Toggle favorite status
-router.post('/', async (req, res) => {
+router.post('/toggle', async (req, res) => {
     const { userId, recipeId } = req.body;
     try {
         if (!userId || !recipeId) {
@@ -60,7 +74,7 @@ router.post('/', async (req, res) => {
 
         res.json({
             success: true,
-            is_favorited: !isFavorited,
+            isFavorited: !isFavorited,
             message: !isFavorited ? 'Added to favorites' : 'Removed from favorites'
         });
     } catch (error) {

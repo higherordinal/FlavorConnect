@@ -113,9 +113,8 @@ echo display_session_message();
                 <div class="recipe-title-section">
                     <h1><?php echo h($recipe->title); ?></h1>
                     <?php if($session->is_logged_in()) { ?>
-                        <button class="favorite-btn <?php echo $is_favorited ? 'favorited' : ''; ?>" 
-                                data-recipe-id="<?php echo $recipe->recipe_id; ?>">
-                            <i class="fas fa-heart"></i>
+                        <button class="favorite-btn" data-recipe-id="<?php echo $recipe->recipe_id; ?>">
+                            <i class="far fa-heart"></i>
                         </button>
                     <?php } ?>
                 </div>
@@ -400,6 +399,37 @@ echo display_session_message();
 </script>
 
 <script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
+
+<script>
+    window.initialUserData = <?php echo json_encode([
+        'isLoggedIn' => $session->is_logged_in(),
+        'userId' => $session->get_user_id(),
+        'apiBaseUrl' => 'http://localhost:3000'
+    ]); ?>;
+</script>
+
+<script type="module">
+    import { initializeFavoriteButtons, checkFavoriteStatus } from '<?php echo url_for('/assets/js/utils/favorites.js'); ?>';
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+        const favoriteBtn = document.querySelector('.favorite-btn');
+        if (favoriteBtn) {
+            const recipeId = favoriteBtn.dataset.recipeId;
+            
+            // Check initial favorite status
+            const isFavorited = await checkFavoriteStatus(recipeId);
+            if (isFavorited) {
+                favoriteBtn.classList.add('favorited');
+                favoriteBtn.querySelector('i').classList.remove('far');
+                favoriteBtn.querySelector('i').classList.add('fas');
+            }
+            
+            // Initialize favorite button functionality
+            initializeFavoriteButtons();
+        }
+    });
+</script>
+
 <script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

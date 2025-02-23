@@ -30,14 +30,14 @@ if(!isset($page_style)) { $page_style = ''; }
     <!-- JavaScript -->
     <script>
         // API Configuration
-        window.API_CONFIG = {
-            baseUrl: 'http://localhost:3000',
-            endpoints: {
-                favorites: '/api/favorites'
-            }
+        window.initialUserData = {
+            isLoggedIn: <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>,
+            userId: <?php echo $session->get_user_id(); ?>,
+            apiBaseUrl: 'http://localhost:3000'
         };
     </script>
     <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>
+    <script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>" type="module"></script>
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
     <?php if($page_style === 'recipe-form') { ?>

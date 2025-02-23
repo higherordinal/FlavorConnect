@@ -2,18 +2,12 @@
  * @fileoverview Recipe gallery functionality
  */
 
-// Initialize API Configuration
-const API_CONFIG = {
-    baseUrl: window.initialUserData.apiBaseUrl,
-    endpoints: {
-        favorites: '/favorites'
-    }
-};
+import { initializeFavoriteButtons } from '../utils/favorites.js';
 
 // Global state
 const state = {
-    isLoggedIn: window.initialUserData.isLoggedIn,
-    userId: window.initialUserData.userId,
+    isLoggedIn: window.initialUserData?.isLoggedIn || false,
+    userId: window.initialUserData?.userId || null,
     recipes: window.initialRecipesData || [],
     currentFilters: {
         search: '',
@@ -25,23 +19,23 @@ const state = {
     }
 };
 
+// Initialize API Configuration
+const API_CONFIG = {
+    baseUrl: window.initialUserData?.apiBaseUrl,
+    endpoints: {
+        favorites: '/favorites'
+    }
+};
+
 // Initialize gallery
 function initializeGallery() {
     setupEventListeners();
     loadFiltersFromURL();
+    initializeFavoriteButtons();
 }
 
 // Set up event listeners
 function setupEventListeners() {
-    // Event delegation for favorite buttons
-    document.querySelector('.recipe-grid').addEventListener('click', async (e) => {
-        const favoriteBtn = e.target.closest('.favorite-btn');
-        if (favoriteBtn) {
-            e.preventDefault();
-            await handleFavoriteToggle(e);
-        }
-    });
-
     // Sort field listener
     const sortSelect = document.querySelector('#sort');
     if (sortSelect) {
@@ -113,9 +107,16 @@ function applyFilters() {
  * @param {Array} recipes - Array of recipe objects to display
  */
 function updateRecipeGrid(recipes) {
-    const grid = document.querySelector('.recipe-grid');
-    grid.innerHTML = recipes.length ? recipes.map(recipe => createRecipeCard(recipe)).join('') 
-                                  : createEmptyState();
+    const recipeGrid = document.querySelector('.recipe-grid');
+    if (!recipeGrid) return;
+
+    if (recipes.length === 0) {
+        recipeGrid.innerHTML = createEmptyState();
+    } else {
+        recipeGrid.innerHTML = recipes.map(recipe => createRecipeCard(recipe)).join('');
+        // Initialize favorite buttons for new cards
+        initializeFavoriteButtons();
+    }
 }
 
 /**
@@ -124,47 +125,69 @@ function updateRecipeGrid(recipes) {
  * @returns {string} HTML string for the recipe card
  */
 function createRecipeCard(recipe) {
-    const totalTime = formatTime(recipe.prep_time + recipe.cook_time);
     return `
-        <article class="recipe-card">
-            ${state.isLoggedIn ? `
-                <button type="button" class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}" 
-                        data-recipe-id="${recipe.recipe_id}"
-                        aria-label="${recipe.is_favorited ? 'Remove from favorites' : 'Add to favorites'}">
-                    <i class="fa-heart ${recipe.is_favorited ? 'fas' : 'far'}"></i>
-                </button>
-            ` : ''}
-            <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.recipe_id}" class="recipe-link">
-                <div class="recipe-image">
-                    <img src="${recipe.img_file_path ? '/FlavorConnect/public' + recipe.img_file_path : '/FlavorConnect/public/assets/images/recipe-placeholder.jpg'}" 
-                         alt="${recipe.title}">
+        <article class="recipe-card" role="article">
+            <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.recipe_id}" 
+               class="recipe-link"
+               aria-labelledby="recipe-title-${recipe.recipe_id}">
+                <div class="recipe-image-container">
+                    ${state.isLoggedIn ? `
+                        <button class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}"
+                                data-recipe-id="${recipe.recipe_id}"
+                                aria-label="${recipe.is_favorited ? 'Remove from' : 'Add to'} favorites">
+                            <i class="${recipe.is_favorited ? 'fas' : 'far'} fa-heart"></i>
+                        </button>
+                    ` : ''}
+                    <img src="${recipe.img_file_path}" 
+                         alt="Photo of ${recipe.title}" 
+                         class="recipe-image">
                 </div>
+                
                 <div class="recipe-content">
-                    <h2 class="recipe-title">${recipe.title}</h2>
+                    <h2 class="recipe-title" id="recipe-title-${recipe.recipe_id}">${recipe.title}</h2>
                     
                     <div class="recipe-meta">
-                        ${recipe.style ? `<span class="recipe-tag"><i class="fas fa-utensils"></i>${recipe.style}</span>` : ''}
-                        ${recipe.diet ? `<span class="recipe-tag"><i class="fas fa-leaf"></i>${recipe.diet}</span>` : ''}
-                        ${recipe.type ? `<span class="recipe-tag"><i class="fas fa-tag"></i>${recipe.type}</span>` : ''}
+                        <span class="rating" aria-label="Rating: ${recipe.rating || 0} out of 5 stars">
+                            ${createRatingStars(recipe.rating, recipe.rating_count)}
+                        </span>
+                        <span class="time">
+                            ${recipe.prep_time + recipe.cook_time} mins
+                        </span>
                     </div>
 
-                    <div class="recipe-time">
-                        <span><i class="fas fa-clock"></i>${totalTime}</span>
+                    <div class="recipe-attributes" role="list">
+                        ${recipe.style ? `<span class="recipe-attribute">${recipe.style}</span>` : ''}
+                        ${recipe.diet ? `<span class="recipe-attribute">${recipe.diet}</span>` : ''}
+                        ${recipe.type ? `<span class="recipe-attribute">${recipe.type}</span>` : ''}
                     </div>
+                </div>
 
-                    <div class="recipe-footer">
-                        <div class="recipe-author">
-                            <span class="author-name">By ${recipe.username}</span>
-                        </div>
-                        <div class="recipe-rating">
-                            <i class="fas fa-star"></i>
-                            <span>${recipe.rating ? recipe.rating.toFixed(1) : 'No ratings'}</span>
-                            ${recipe.rating_count ? `<span class="rating-count">(${recipe.rating_count})</span>` : ''}
-                        </div>
+                <div class="recipe-footer">
+                    <div class="recipe-author">
+                        <span class="author-name">By ${recipe.username}</span>
                     </div>
                 </div>
             </a>
         </article>
+    `;
+}
+
+/**
+ * Creates rating stars HTML
+ * @param {number} rating - Rating value
+ * @param {number} count - Number of ratings
+ * @returns {string} HTML string for rating stars
+ */
+function createRatingStars(rating = 0, count = 0) {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating - fullStars >= 0.5;
+    const emptyStars = 5 - Math.ceil(rating);
+    
+    return `
+        ${'★'.repeat(fullStars)}
+        ${hasHalfStar ? '⯨' : ''}
+        ${'☆'.repeat(emptyStars)}
+        <span class="review-count">(${count})</span>
     `;
 }
 
