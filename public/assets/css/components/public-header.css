@@ -25,12 +25,13 @@
 .auth-links .sign-up {
     background-color: var(--accent-color);
     border-radius: var(--border-radius-sm);
+    color: var(--primary-color);
     padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .auth-links .sign-up:hover {
     background-color: var(--accent-color-dark);
-    color: var(--color-white);
+    color: var(--primary-color);
 }
 
 @media (max-width: 768px) {

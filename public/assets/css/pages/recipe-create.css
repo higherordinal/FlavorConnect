@@ -2,7 +2,7 @@
     max-width: 1000px;
     margin: 0 auto;
     padding: 1rem;
-    background: white;
+    background: var(--color-white);
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     border-top: 6px solid var(--primary-color);
@@ -33,14 +33,14 @@
     display: grid;
     grid-template-columns: auto 1fr;
     gap: var(--spacing-sm);
-    color: var(--accent-color);
+    color: var(--color-white);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .recipe-form .back-link:hover {
-    color: var(--accent-color-dark);
+    color: var(--color-white);
 }
 
 .recipe-form .back-link i {
