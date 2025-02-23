@@ -232,6 +232,7 @@ a.action.delete:hover {
 
 .form-buttons.delete input[type="submit"] {
     background: var(--error-color);
+    color: var(--color-white);
 }
 
 .form-buttons.delete input[type="submit"]:hover {
@@ -276,17 +277,53 @@ a.action.delete:hover {
 /* Delete Confirmation */
 .delete-confirmation {
     text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
     padding: var(--spacing-lg);
 }
 
 .delete-confirmation p {
-    font-size: 1.1rem;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-lg);
 }
 
-.delete-confirmation .warning {
-    color: var(--error-color);
+.form-buttons.delete {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+}
+
+.form-buttons.delete input[type="submit"] {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--error-color);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 1rem;
     font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.form-buttons.delete input[type="submit"]:hover {
+    background: var(--color-white);
+    color: var(--error-color);
+    border: 1px solid var(--error-color);
+}
+
+.form-buttons.delete .cancel {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--surface-color);
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.form-buttons.delete .cancel:hover {
+    background: var(--hover-color);
 }
 
 /* Status Indicators */
