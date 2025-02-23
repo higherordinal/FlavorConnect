@@ -29,12 +29,10 @@ if(!isset($page_style)) { $page_style = ''; }
     
     <!-- JavaScript -->
     <script>
-        // API Configuration
-        window.API_CONFIG = {
-            baseUrl: 'http://localhost:3000',
-            endpoints: {
-                favorites: '/api/favorites'
-            }
+        // Initialize user data
+        window.initialUserData = {
+            isLoggedIn: <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>,
+            userId: <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>
         };
     </script>
     <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>

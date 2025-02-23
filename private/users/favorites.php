@@ -6,15 +6,14 @@ require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 // Require login
 require_login();
 
-$page_title = 'favorites';
+$page_title = 'Favorites';
+$page_style = 'recipe-gallery';
 
 // Get user's favorite recipes
 $favorites = Recipe::find_favorites_by_user_id($session->get_user_id());
 
 include(SHARED_PATH . '/member_header.php');
 ?>
-
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
 
 <div class="recipe-gallery">
     <div class="gallery-header">

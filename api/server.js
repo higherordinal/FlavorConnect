@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,25 +26,26 @@ app.use((req, res, next) => {
 
 // Database connection
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'hcvaughn',
-    password: process.env.DB_PASSWORD || '@connect4Establish',
-    database: process.env.DB_NAME || 'flavorconnect',
-    port: process.env.DB_PORT || 3307,
+    host: '127.0.0.1', 
+    port: 3307,
+    user: 'hcvaughn',
+    password: '@connect4Establish',
+    database: 'flavorconnect',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
 // Test database connection
-pool.getConnection((err, connection) => {
-    if (err) {
+(async () => {
+    try {
+        const connection = await pool.getConnection();
+        console.log('Successfully connected to database');
+        connection.release();
+    } catch (err) {
         console.error('Error connecting to database:', err);
-        return;
     }
-    console.log('Successfully connected to database');
-    connection.release();
-});
+})();
 
 // Routes
 const favoritesRouter = require('./routes/favorites');

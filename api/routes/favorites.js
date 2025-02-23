@@ -4,11 +4,11 @@ const mysql = require('mysql2/promise');
 
 // Create database pool
 const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'hcvaughn',
-    password: process.env.DB_PASSWORD || '@connect4Establish',
-    database: process.env.DB_NAME || 'flavorconnect',
-    port: process.env.DB_PORT || 3307,
+    host: '127.0.0.1',
+    port: 3307,
+    user: 'hcvaughn',
+    password: '@connect4Establish',
+    database: 'flavorconnect',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
