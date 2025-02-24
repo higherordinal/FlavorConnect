@@ -47,6 +47,7 @@ include(SHARED_PATH . '/member_header.php');
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Recipes</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -56,6 +57,7 @@ include(SHARED_PATH . '/member_header.php');
                                     <td data-label="Name">
                                         <input type="text" name="styles[<?php echo h($style->id); ?>]" value="<?php echo h($style->name); ?>" class="form-control">
                                     </td>
+                                    <td data-label="Recipes"><?php echo Recipe::count_by_style($style->id); ?></td>
                                     <td data-label="Actions" class="actions">
                                         <a href="<?php echo private_url_for('/admin/categories/style/delete.php?id=' . h(u($style->id))); ?>" 
                                            class="action delete" 
@@ -70,6 +72,7 @@ include(SHARED_PATH . '/member_header.php');
                                 <td data-label="Name">
                                     <input type="text" name="new_styles[]" placeholder="Add new style..." class="form-control">
                                 </td>
+                                <td data-label="Recipes"></td>
                                 <td data-label="Actions"></td>
                             </tr>
                         </tbody>
