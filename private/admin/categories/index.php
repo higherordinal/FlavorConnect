@@ -73,7 +73,11 @@ include(SHARED_PATH . '/member_header.php');
                                     <input type="text" name="new_styles[]" placeholder="Add new style..." class="form-control">
                                 </td>
                                 <td data-label="Recipes"></td>
-                                <td data-label="Actions"></td>
+                                <td data-label="Actions" class="actions">
+                                    <button type="submit" name="add_style" class="action add" title="Add">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -112,7 +116,11 @@ include(SHARED_PATH . '/member_header.php');
                                     <input type="text" name="new_diets[]" placeholder="Add new diet..." class="form-control">
                                 </td>
                                 <td data-label="Recipes"></td>
-                                <td data-label="Actions"></td>
+                                <td data-label="Actions" class="actions">
+                                    <button type="submit" name="add_diet" class="action add" title="Add">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -151,7 +159,11 @@ include(SHARED_PATH . '/member_header.php');
                                     <input type="text" name="new_types[]" placeholder="Add new type..." class="form-control">
                                 </td>
                                 <td data-label="Recipes"></td>
-                                <td data-label="Actions"></td>
+                                <td data-label="Actions" class="actions">
+                                    <button type="submit" name="add_type" class="action add" title="Add">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -187,7 +199,11 @@ include(SHARED_PATH . '/member_header.php');
                                 <td data-label="Name">
                                     <input type="text" name="new_measurements[]" placeholder="Add new measurement..." class="form-control">
                                 </td>
-                                <td data-label="Actions"></td>
+                                <td data-label="Actions" class="actions">
+                                    <button type="submit" name="add_measurement" class="action add" title="Add">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

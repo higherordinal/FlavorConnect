@@ -141,6 +141,21 @@ a.action.delete:hover {
     border: 1px solid var(--error-color);
 }
 
+/* Add button style */
+a.action.add,
+button.action.add {
+    color: var(--success);
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+a.action.add:hover,
+button.action.add:hover {
+    color: var(--success-dark);
+}
+
 /* Status Toggle Buttons */
 .action.activate {
     background: var(--success-color);
