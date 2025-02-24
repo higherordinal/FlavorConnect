@@ -23,6 +23,8 @@ class RecipeAttribute extends DatabaseObject {
     public $id;
     /** @var string Name/value of the attribute */
     public $name;
+    /** @var string Type of attribute (style, diet, type) */
+    private $type;
 
     /**
      * Constructor for RecipeAttribute class
@@ -31,6 +33,10 @@ class RecipeAttribute extends DatabaseObject {
     public function __construct($args=[]) {
         $this->id = $args['id'] ?? '';
         $this->name = $args['name'] ?? '';
+        if (isset($args['type'])) {
+            $this->type = $args['type'];
+            self::setup_for_type($this->type);
+        }
     }
 
     /**
@@ -75,6 +81,40 @@ class RecipeAttribute extends DatabaseObject {
     }
 
     /**
+     * Finds one attribute by ID
+     * @param int $id The attribute ID
+     * @return RecipeAttribute|false RecipeAttribute object or false if not found
+     */
+    public static function find_by_id($id) {
+        if (!isset(static::$table_name)) {
+            throw new Exception("Type must be set before calling find_by_id");
+        }
+        
+        $sql = "SELECT " . self::$primary_key . " as id, name FROM " . self::$table_name;
+        $sql .= " WHERE " . self::$primary_key . " = ?";
+        
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $obj_array = static::instantiate_result($result);
+        $obj = !empty($obj_array) ? array_shift($obj_array) : false;
+        
+        if ($obj) {
+            // Determine type from table name
+            foreach (self::$valid_types as $type => $info) {
+                if ($info['table'] === static::$table_name) {
+                    $obj->type = $type;
+                    break;
+                }
+            }
+        }
+        
+        return $obj;
+    }
+
+    /**
      * Finds one attribute by ID and type
      * @param int $id The attribute ID
      * @param string $type The attribute type (style, diet, type)
@@ -109,6 +149,31 @@ class RecipeAttribute extends DatabaseObject {
     }
 
     /**
+     * Instantiates a RecipeAttribute object from a database record
+     * @param array $record Database record
+     * @return RecipeAttribute RecipeAttribute object
+     */
+    protected static function instantiate($record) {
+        $object = new static();
+        
+        foreach($record as $property => $value) {
+            if(property_exists($object, $property)) {
+                $object->$property = $value;
+            }
+        }
+        
+        // Set type based on current table
+        foreach (self::$valid_types as $type => $info) {
+            if ($info['table'] === static::$table_name) {
+                $object->type = $type;
+                break;
+            }
+        }
+        
+        return $object;
+    }
+
+    /**
      * Checks if a name already exists for this attribute type
      * @param string $name The name to check
      * @param int|null $exclude_id ID to exclude from the check (for updates)
@@ -138,5 +203,18 @@ class RecipeAttribute extends DatabaseObject {
      */
     public static function get_primary_key_column() {
         return static::$primary_key;
+    }
+
+    /**
+     * Saves the attribute to the database
+     * @return bool True if save was successful, false otherwise
+     */
+    public function save() {
+        if (!isset($this->type)) {
+            throw new Exception("Type must be set before saving");
+        }
+        
+        self::setup_for_type($this->type);
+        return parent::save();
     }
 }
