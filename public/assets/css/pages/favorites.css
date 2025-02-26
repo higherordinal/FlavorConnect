@@ -26,3 +26,8 @@
 .no-recipes .btn:hover {
     background-color: var(--accent-color-dark);
 }
+
+/* Override recipe-gallery styles for favorited state */
+.favorite-btn.is-favorited {
+    color: #ff4b4b;
+}
