@@ -2,7 +2,7 @@
 .admin-management {
     max-width: var(--container-width);
     margin: 0 auto;
-    padding: var(--spacing-xl) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-md);
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
     display: grid;
     grid-template-rows: auto 1fr;
@@ -560,12 +560,12 @@ button.action.add:hover {
 }
 
 /* User Management */
-.user-sections {
+.admin-dashboard .user-sections {
     display: grid;
     gap: var(--spacing-lg);
 }
 
-.user-section {
+.admin-dashboard .user-section {
     background: var(--surface-color);
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
