@@ -2,6 +2,7 @@
 require_once('../core/initialize.php');
 require_once(PRIVATE_PATH . '/classes/Recipe.class.php');
 require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
+require_once(PRIVATE_PATH . '/classes/TimeUtility.class.php');
 
 // Require login
 require_login();
@@ -16,6 +17,7 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/favorites.css'); ?>">
 
 <div class="recipe-gallery">
     <div class="gallery-header">
@@ -29,7 +31,13 @@ include(SHARED_PATH . '/member_header.php');
         </div>
     <?php } else { ?>
         <div class="recipe-grid">
-            <?php foreach($favorites as $recipe) { ?>
+            <?php foreach($favorites as $recipe) { 
+                $style = $recipe->style();
+                $diet = $recipe->diet();
+                $type = $recipe->type();
+                $rating = $recipe->get_average_rating();
+                $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
+            ?>
                 <div class="recipe-card">
                     <div class="recipe-image-container">
                         <?php if($recipe->img_file_path) { ?>
@@ -45,20 +53,46 @@ include(SHARED_PATH . '/member_header.php');
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
-                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=favorites'); ?>" class="recipe-link">
-                        <div class="recipe-info">
+                    <div class="recipe-content">
+                        <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=favorites'); ?>" class="recipe-link">
                             <h2 class="recipe-title"><?php echo h($recipe->title); ?></h2>
-                            <p class="recipe-description"><?php echo h($recipe->description); ?></p>
-                            <div class="recipe-meta">
-                                <?php if($recipe->style()) { ?>
-                                    <span class="recipe-tag"><?php echo h($recipe->style()->name); ?></span>
-                                <?php } ?>
-                                <?php if($recipe->diet()) { ?>
-                                    <span class="recipe-tag"><?php echo h($recipe->diet()->name); ?></span>
-                                <?php } ?>
-                            </div>
+                        </a>
+                        <div class="recipe-meta">
+                            <span class="rating" aria-label="Rating: <?php echo $rating; ?> out of 5 stars">
+                                <?php 
+                                    // Full stars
+                                    for ($i = 1; $i <= floor($rating); $i++) {
+                                        echo '&#9733;';
+                                    }
+                                    // Half star if needed
+                                    if ($rating - floor($rating) >= 0.5) {
+                                        echo '&#189;';
+                                    }
+                                    // Empty stars
+                                    $remaining = 5 - ceil($rating);
+                                    for ($i = 1; $i <= $remaining; $i++) {
+                                        echo '&#9734;';
+                                    }
+                                    echo ' <span class="review-count" aria-label="' . $recipe->rating_count() . ' reviews">(' . $recipe->rating_count() . ')</span>';
+                                ?>
+                            </span>
+                            <span class="time" aria-label="Total time: <?php echo $total_time; ?>">
+                                <?php echo $total_time; ?>
+                            </span>
                         </div>
-                    </a>
+                        <div class="recipe-attributes" role="list">
+                            <?php if($style) { ?>
+                                <span class="recipe-attribute"><?php echo h($style->name); ?></span>
+                            <?php } ?>
+                            <?php if($diet) { ?>
+                                <span class="recipe-attribute"><?php echo h($diet->name); ?></span>
+                            <?php } ?>
+                            <?php if($type) { ?>
+                                <span class="recipe-attribute"><?php echo h($type->name); ?></span>
+                            <?php } ?>
+                        </div>
+                        <p class="recipe-description"><?php echo h($recipe->description); ?></p>
+                    </div>
                 </div>
             <?php } ?>
         </div>
