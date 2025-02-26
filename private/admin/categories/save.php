@@ -25,8 +25,7 @@ if(is_post_request()) {
                     }
                 }
             } else {
-                RecipeAttribute::setup_for_type('style');
-                $style = RecipeAttribute::find_by_id($id);
+                $style = RecipeAttribute::find_one($id, 'style');
                 if($style && $style->name !== $name) {
                     $style->name = $name;
                     $result = $style->save();
@@ -51,8 +50,7 @@ if(is_post_request()) {
                     }
                 }
             } else {
-                RecipeAttribute::setup_for_type('diet');
-                $diet = RecipeAttribute::find_by_id($id);
+                $diet = RecipeAttribute::find_one($id, 'diet');
                 if($diet && $diet->name !== $name) {
                     $diet->name = $name;
                     $result = $diet->save();
@@ -77,8 +75,7 @@ if(is_post_request()) {
                     }
                 }
             } else {
-                RecipeAttribute::setup_for_type('type');
-                $type = RecipeAttribute::find_by_id($id);
+                $type = RecipeAttribute::find_one($id, 'type');
                 if($type && $type->name !== $name) {
                     $type->name = $name;
                     $result = $type->save();
@@ -118,8 +115,7 @@ if(is_post_request()) {
     // Process deletions
     if(isset($_POST['delete_styles'])) {
         foreach($_POST['delete_styles'] as $id) {
-            RecipeAttribute::setup_for_type('style');
-            $style = RecipeAttribute::find_by_id($id);
+            $style = RecipeAttribute::find_one($id, 'style');
             if($style) {
                 $style->delete();
             }
@@ -128,8 +124,7 @@ if(is_post_request()) {
 
     if(isset($_POST['delete_diets'])) {
         foreach($_POST['delete_diets'] as $id) {
-            RecipeAttribute::setup_for_type('diet');
-            $diet = RecipeAttribute::find_by_id($id);
+            $diet = RecipeAttribute::find_one($id, 'diet');
             if($diet) {
                 $diet->delete();
             }
@@ -138,8 +133,7 @@ if(is_post_request()) {
 
     if(isset($_POST['delete_types'])) {
         foreach($_POST['delete_types'] as $id) {
-            RecipeAttribute::setup_for_type('type');
-            $type = RecipeAttribute::find_by_id($id);
+            $type = RecipeAttribute::find_one($id, 'type');
             if($type) {
                 $type->delete();
             }

@@ -206,8 +206,21 @@ class RecipeAttribute extends DatabaseObject {
     }
 
     /**
+     * Gets all attributes except the primary key
+     * @return array Array of object attributes
+     */
+    public function attributes() {
+        $attributes = [];
+        foreach(static::$db_columns as $column) {
+            if($column == static::$primary_key) { continue; }
+            $attributes[$column] = $this->$column;
+        }
+        return $attributes;
+    }
+
+    /**
      * Saves the attribute to the database
-     * @return bool True if save was successful, false otherwise
+     * @return bool True if save was successful
      */
     public function save() {
         if (!isset($this->type)) {
