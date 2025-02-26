@@ -235,15 +235,17 @@ $userData = [
                                         $rating = $recipe->get_average_rating();
                                         // Full stars
                                         for ($i = 1; $i <= floor($rating); $i++) {
-                                            echo '★';
+                                            echo '&#9733;';
                                         }
                                         // Half star if needed
                                         if ($rating - floor($rating) >= 0.5) {
-                                            echo '⯨';
+                                            echo '&#189;';
                                         }
                                         // Empty stars
                                         $remaining = 5 - ceil($rating);
-                                        echo str_repeat('☆', $remaining);
+                                        for ($i = 1; $i <= $remaining; $i++) {
+                                            echo '&#9734;';
+                                        }
                                         echo ' <span class="review-count" aria-label="' . $recipe->rating_count() . ' reviews">(' . $recipe->rating_count() . ')</span>';
                                     ?>
                                 </span>
