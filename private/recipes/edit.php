@@ -4,6 +4,7 @@ require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
 $page_title = 'recipe-form';
+$page_style = 'recipe-create';
 include(SHARED_PATH . '/member_header.php');
 
 if(!isset($_GET['id'])) {
