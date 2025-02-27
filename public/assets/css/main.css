@@ -28,6 +28,9 @@
     --text-color: #2C3E50;
     --text-muted: #95A5A6;
     --warning-color: #E74C3C;
+    --danger-color: #DC3545;
+    --danger-color-dark: #C82333;
+    --danger-color-light: #FFF5F5;
 
     /* Spacing */
     --spacing-2xl: clamp(3rem, 6vw, 4rem);

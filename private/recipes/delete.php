@@ -47,13 +47,17 @@ if(is_post_request()) {
     }
 }
 
-$page_title = 'recipe-form'; // This needs to match the condition in member_header.php
+$page_title = 'Delete Recipe';
+$page_style = 'recipe-create';
 include(SHARED_PATH . '/member_header.php');
 ?>
 
 <main>
     <div class="recipe-form">
         <header class="page-header">
+            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
             <h1>Delete Recipe</h1>
         </header>
 
@@ -62,7 +66,7 @@ include(SHARED_PATH . '/member_header.php');
 
         <div class="delete-confirmation">
             <p>Are you sure you want to delete <strong><?php echo h($recipe->title); ?></strong>?</p>
-            <p class="warning">This action cannot be undone.</p>
+            <p class="warning"><i class="fas fa-exclamation-triangle"></i> This action cannot be undone.</p>
         </div>
 
         <form action="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
