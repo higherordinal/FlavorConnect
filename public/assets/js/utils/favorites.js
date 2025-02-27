@@ -68,15 +68,43 @@ export function initializeFavoriteButtons() {
                 const recipeId = btn.dataset.recipeId;
                 const isFavorited = await toggleFavorite(recipeId);
                 
-                // Update button appearance
-                if (isFavorited) {
-                    btn.classList.add('favorited');
-                    btn.querySelector('i').classList.remove('far');
-                    btn.querySelector('i').classList.add('fas');
+                // Check if we're on the favorites page
+                const isFavoritesPage = window.location.pathname.includes('/users/favorites.php');
+                
+                if (isFavoritesPage && !isFavorited) {
+                    // If unfavorited from favorites page, remove the card with animation
+                    const card = btn.closest('.recipe-card');
+                    if (card) {
+                        card.style.transition = 'opacity 0.3s ease-out';
+                        card.style.opacity = '0';
+                        setTimeout(() => {
+                            card.remove();
+                            
+                            // If no more recipes, show the empty state
+                            const recipeGrid = document.querySelector('.recipe-grid');
+                            if (recipeGrid && recipeGrid.children.length === 0) {
+                                const emptyState = `
+                                    <div class="no-recipes">
+                                        <p>You haven't favorited any recipes yet. Browse our recipes and click the heart icon to add them to your favorites!</p>
+                                        <a href="/recipes/index.php" class="btn btn-primary">Browse Recipes</a>
+                                    </div>
+                                `;
+                                recipeGrid.insertAdjacentHTML('beforebegin', emptyState);
+                                recipeGrid.remove();
+                            }
+                        }, 300);
+                    }
                 } else {
-                    btn.classList.remove('favorited');
-                    btn.querySelector('i').classList.remove('fas');
-                    btn.querySelector('i').classList.add('far');
+                    // Update button appearance for non-favorites pages
+                    if (isFavorited) {
+                        btn.classList.add('favorited');
+                        btn.querySelector('i').classList.remove('far');
+                        btn.querySelector('i').classList.add('fas');
+                    } else {
+                        btn.classList.remove('favorited');
+                        btn.querySelector('i').classList.remove('fas');
+                        btn.querySelector('i').classList.add('far');
+                    }
                 }
             });
         }
