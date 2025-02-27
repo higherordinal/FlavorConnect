@@ -9,26 +9,12 @@ if(!isset($page_style)) { $page_style = ''; }
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlavorConnect - <?php echo h($page_title); ?></title>
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Base Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css?v=' . time()); ?>">
-    
-    <!-- Component Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/public-header.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=' . time()); ?>">
-    
-    <!-- Page Specific Styles -->
-    <?php if(isset($page_style)) { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=' . time()); ?>">
-    <?php } ?>
-
-    <!-- JavaScript -->
-    <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css'); ?>">
+    <?php if($page_title === '404 - Page Not Found'): ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/404.css'); ?>">
+    <?php endif; ?>
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/public.css'); ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <header class="header" role="banner">
