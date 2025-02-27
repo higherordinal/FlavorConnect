@@ -19,6 +19,13 @@ include(SHARED_PATH . '/member_header.php');
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/favorites.css'); ?>">
 
+<div class="container">
+    <a href="<?php echo url_for('/recipes/index.php'); ?>" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Recipes
+    </a>
+</div>
+
 <div class="recipe-gallery">
     <div class="gallery-header">
         <h1 class="gallery-title">Your Favorite Recipes</h1>

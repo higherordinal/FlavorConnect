@@ -13,6 +13,13 @@ if($session->is_logged_in()) {
 ?>
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=1.0'); ?>">
 
+<div class="container">
+    <a href="<?php echo url_for('/index.php'); ?>" class="back-link">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+    </a>
+</div>
+
 <?php
 // Get filter values
 $search = $_GET['search'] ?? '';
