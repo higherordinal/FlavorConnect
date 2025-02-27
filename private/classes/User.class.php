@@ -33,6 +33,8 @@ class User extends DatabaseObject {
     public $is_active;
     /** @var string Password before hashing */
     protected $password;
+    /** @var string Confirm password */
+    public $confirm_password;
     /** @var array Array of validation errors */
     public $errors = [];
     /** @var bool Whether password is required for validation */
@@ -56,6 +58,7 @@ class User extends DatabaseObject {
         $this->last_name = $args['last_name'] ?? '';
         $this->email = $args['email'] ?? '';
         $this->password = $args['password'] ?? '';
+        $this->confirm_password = $args['confirm_password'] ?? '';
         $this->user_level = $args['user_level'] ?? 'u';
         $this->is_active = $args['is_active'] ?? true;
     }
@@ -135,58 +138,72 @@ class User extends DatabaseObject {
      * @return array Array of validation errors
      */
     protected function validate() {
-        $user_data = [
-            'username' => $this->username,
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'password' => $this->password,
-            'user_level' => $this->user_level
-        ];
-        
-        return validate_user($user_data, $this->user_id ?? "0", $this->password_required);
-    }
+        $this->errors = [];
 
-    /**
-     * Check if a username is unique
-     * @param string $username Username to check
-     * @param string $current_id Current user ID to exclude from check
-     * @return bool True if username is unique
-     */
-    public static function check_unique_username($username, $current_id="0") {
-        $database = static::get_database();
-        $sql = "SELECT * FROM user_account ";
-        $sql .= "WHERE username = '" . $database->real_escape_string($username) . "' ";
-        $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
-        $result = $database->query($sql);
-        if(!$result) {
-            error_log("Database error in check_unique_username: " . $database->error);
-            return false;
+        if(is_blank($this->username)) {
+            $this->errors[] = "Username cannot be blank.";
+        } elseif (!has_length($this->username, array('min' => 3, 'max' => 255))) {
+            $this->errors[] = "Username must be between 3 and 255 characters.";
+        } elseif (!has_unique_username($this->username, $this->user_id ?? 0)) {
+            $this->errors[] = "Username is already taken. Please choose another.";
         }
-        $user_count = $result->num_rows;
-        $result->free();
-        return $user_count === 0;
-    }
 
-    /**
-     * Check if an email is unique
-     * @param string $email Email to check
-     * @param string $current_id Current user ID to exclude from check
-     * @return bool True if email is unique
-     */
-    public static function check_unique_email($email, $current_id="0") {
-        $database = static::get_database();
-        $sql = "SELECT * FROM user_account ";
-        $sql .= "WHERE email = '" . $database->real_escape_string($email) . "' ";
-        $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
-        $result = $database->query($sql);
-        if(!$result) {
-            error_log("Database error in check_unique_email: " . $database->error);
-            return false;
+        if(is_blank($this->email)) {
+            $this->errors[] = "Email cannot be blank.";
+        } elseif (!has_length($this->email, array('max' => 255))) {
+            $this->errors[] = "Email must be less than 255 characters.";
+        } elseif (!has_valid_email_format($this->email)) {
+            $this->errors[] = "Email must be a valid format.";
+        } elseif (!has_unique_email($this->email, $this->user_id ?? 0)) {
+            $this->errors[] = "Email is already taken. Please choose another.";
         }
-        $user_count = $result->num_rows;
-        $result->free();
-        return $user_count === 0;
+
+        if(is_blank($this->first_name)) {
+            $this->errors[] = "First name cannot be blank.";
+        } elseif (!has_length($this->first_name, array('min' => 2, 'max' => 255))) {
+            $this->errors[] = "First name must be between 2 and 255 characters.";
+        }
+
+        if(is_blank($this->last_name)) {
+            $this->errors[] = "Last name cannot be blank.";
+        } elseif (!has_length($this->last_name, array('min' => 2, 'max' => 255))) {
+            $this->errors[] = "Last name must be between 2 and 255 characters.";
+        }
+
+        if(!isset($this->user_id)) {
+            // New user requires password
+            if(is_blank($this->password)) {
+                $this->errors[] = "Password cannot be blank.";
+            } elseif (!has_length($this->password, array('min' => 8))) {
+                $this->errors[] = "Password must contain 8 or more characters.";
+            } elseif (!preg_match('/[A-Z]/', $this->password)) {
+                $this->errors[] = "Password must contain at least one uppercase letter.";
+            } elseif (!preg_match('/[a-z]/', $this->password)) {
+                $this->errors[] = "Password must contain at least one lowercase letter.";
+            } elseif (!preg_match('/[0-9]/', $this->password)) {
+                $this->errors[] = "Password must contain at least one number.";
+            }
+
+            // Validate confirm password
+            if(isset($this->confirm_password) && $this->password !== $this->confirm_password) {
+                $this->errors[] = "Password and confirm password must match.";
+            }
+        } else {
+            // Existing user, password is optional
+            if(!is_blank($this->password)) {
+                if(!has_length($this->password, array('min' => 8))) {
+                    $this->errors[] = "Password must contain 8 or more characters.";
+                } elseif (!preg_match('/[A-Z]/', $this->password)) {
+                    $this->errors[] = "Password must contain at least one uppercase letter.";
+                } elseif (!preg_match('/[a-z]/', $this->password)) {
+                    $this->errors[] = "Password must contain at least one lowercase letter.";
+                } elseif (!preg_match('/[0-9]/', $this->password)) {
+                    $this->errors[] = "Password must contain at least one number.";
+                }
+            }
+        }
+
+        return $this->errors;
     }
 
     /**

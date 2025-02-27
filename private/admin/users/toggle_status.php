@@ -9,19 +9,15 @@ if(!$session->is_admin()) {
 }
 
 // Get user ID from URL
-$id = $_GET['id'] ?? '';
-
-// Find user by ID
-$user = User::find_by_id($id);
-if(!$user) {
-    $session->message('User not found.', 'error');
+if(!isset($_GET['user_id'])) {
+    $session->message('No user ID was provided.');
     redirect_to(url_for('/private/admin/users/index.php'));
 }
 
-// Get current user
-$current_user = User::find_by_id($session->get_user_id());
-if(!$current_user) {
-    $session->message('Current user not found.', 'error');
+// Find user by ID
+$user = User::find_by_id($_GET['user_id']);
+if(!$user) {
+    $session->message('User not found.', 'error');
     redirect_to(url_for('/private/admin/users/index.php'));
 }
 
@@ -31,18 +27,23 @@ if(!$session->is_super_admin() && ($user->is_admin() || $user->is_super_admin())
     redirect_to(url_for('/private/admin/users/index.php'));
 }
 
+// Check if this would deactivate the last active admin
+$new_status = !$user->is_active;
+if(($user->is_admin() || $user->is_super_admin()) && !$new_status) {
+    if(!has_remaining_active_admin($user->user_id, false)) {
+        $session->message('Cannot deactivate the last active admin user.', 'error');
+        redirect_to(url_for('/private/admin/users/index.php'));
+    }
+}
+
 // Toggle user status
-$user->is_active = !$user->is_active;
+$user->is_active = $new_status;
 $result = $user->save();
 
 if($result) {
     $status = $user->is_active ? 'activated' : 'deactivated';
     $session->message("User {$user->username} has been {$status}.");
-    if($user->is_admin() || $user->is_super_admin()) {
-        redirect_to(url_for('/private/admin/users/admin_management.php'));
-    } else {
-        redirect_to(url_for('/private/admin/users/user_management.php'));
-    }
+    redirect_to(url_for('/private/admin/users/index.php'));
 } else {
     $session->message('Failed to update user status.', 'error');
     redirect_to(url_for('/private/admin/users/index.php'));

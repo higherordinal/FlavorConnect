@@ -8,12 +8,12 @@ if(!$session->is_admin() && !$session->is_super_admin()) {
     redirect_to(url_for('/index.php'));
 }
 
-if(!isset($_GET['id'])) {
+if(!isset($_GET['user_id'])) {
     $session->message('No user ID was provided.');
     redirect_to(url_for('/admin/users/index.php'));
 }
 
-$user = User::find_by_id($_GET['id']);
+$user = User::find_by_id($_GET['user_id']);
 if(!$user) {
     $session->message('The user could not be found.');
     redirect_to(url_for('/admin/users/index.php'));
@@ -25,9 +25,10 @@ if(!$session->is_super_admin() && $user->user_level !== 'u') {
     redirect_to(url_for('/admin/users/index.php'));
 }
 
-// Can't delete super admin users
-if($user->user_level === 's') {
-    $session->message('Super admin users cannot be deleted.');
+// Validate the deletion
+$errors = validate_user_deletion($_GET['user_id']);
+if(!empty($errors)) {
+    $session->message($errors[0]);
     redirect_to(url_for('/admin/users/index.php'));
 }
 
@@ -54,7 +55,8 @@ if(is_post_request()) {
 
 $page_title = 'Delete User';
 $page_style = 'admin';
-include(SHARED_PATH . '/header.php');
+
+include(SHARED_PATH . '/member_header.php');
 ?>
 
 <div class="admin-content">
@@ -66,18 +68,33 @@ include(SHARED_PATH . '/header.php');
 
     <div class="delete-confirmation">
         <p>Are you sure you want to delete this user?</p>
-        <p class="warning">Warning: This action cannot be undone. All of the user's recipes and favorites will also be deleted.</p>
+        <p>This action cannot be undone.</p>
         
-        <div class="user-info">
+        <div class="user-details">
             <p><strong>Username:</strong> <?php echo h($user->username); ?></p>
             <p><strong>Email:</strong> <?php echo h($user->email); ?></p>
+            <p><strong>Full Name:</strong> <?php echo h($user->full_name()); ?></p>
+            <?php 
+            $level = '';
+            switch($user->user_level) {
+                case 's':
+                    $level = 'Super Admin';
+                    break;
+                case 'a':
+                    $level = 'Admin';
+                    break;
+                default:
+                    $level = 'User';
+            }
+            ?>
+            <p><strong>User Level:</strong> <?php echo h($level); ?></p>
             <p><strong>Status:</strong> <?php echo $user->is_active ? 'Active' : 'Inactive'; ?></p>
         </div>
 
-        <form action="<?php echo url_for('/admin/users/delete.php?id=' . h(u($user->user_id))); ?>" method="post">
+        <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" method="post">
             <div class="form-buttons">
-                <button type="submit" class="btn btn-danger">Delete User</button>
-                <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="btn">Cancel</a>
+                <button type="submit" class="action delete">Delete User</button>
+                <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
