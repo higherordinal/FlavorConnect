@@ -967,3 +967,22 @@
         box-shadow: none;
     }
 }
+
+.recipe-show .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--color-white);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: fit-content;
+}
+
+.recipe-show .back-link:hover {
+    transform: translateX(-4px);
+}
+
+.recipe-show .back-link i {
+    font-size: var(--font-size-sm);
+}
