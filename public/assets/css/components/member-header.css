@@ -175,7 +175,8 @@
     .main-nav {
         grid-column: 1 / -1;
         margin-top: var(--spacing-sm);
-        width: 100%;
+        width: fit-content;
+        margin-inline: auto;
         order: 2;
     }
 
@@ -193,12 +194,13 @@
         display: none;
         position: absolute;
         top: 100%;
-        left: 0;
-        right: 0;
+        left: 50%;
+        transform: translateX(-50%);
         background-color: var(--primary-color);
         padding: var(--spacing-md);
         flex-direction: column;
         gap: var(--spacing-sm);
+        min-width: 200px;
         box-shadow: var(--shadow-md);
     }
 
