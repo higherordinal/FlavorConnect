@@ -167,17 +167,16 @@
     }
 
     .header-grid {
-        grid-template-areas: "logo user" "nav nav";
-        grid-template-columns: auto auto;
+        grid-template-areas: "logo nav user";
+        grid-template-columns: auto 1fr auto;
         gap: var(--spacing-md);
+        align-items: center;
     }
 
     .main-nav {
-        grid-column: 1 / -1;
-        margin-top: var(--spacing-sm);
         width: fit-content;
         margin-inline: auto;
-        order: 2;
+        justify-self: center;
     }
 
     .logo {
@@ -187,7 +186,6 @@
     .user-section {
         gap: var(--spacing-sm);
         justify-self: end;
-        order: 1;
     }
 
     .main-nav ul {
@@ -215,6 +213,10 @@
 
     .main-nav ul li a:hover {
         background-color: var(--primary-color-dark);
+    }
+
+    .mobile-menu-btn {
+        margin-right: var(--spacing-sm);
     }
 }
 
