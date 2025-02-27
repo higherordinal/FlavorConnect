@@ -192,97 +192,141 @@ button.action.add:hover {
     grid-template-rows: auto 1fr auto;
 }
 
+.form-container {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-sm);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-header h1 {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.admin-content {
+    max-width: var(--container-width);
+    margin: 2rem auto;
+    padding: 0 var(--spacing-md);
+}
+
 .form-group {
-    margin-bottom: var(--spacing-md);
-    display: grid;
-    grid-template-rows: auto 1fr;
-    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-lg);
 }
 
 .form-group label {
-    color: var(--text-color);
+    display: block;
+    margin-bottom: var(--spacing-sm);
     font-weight: 500;
+    color: var(--text-color);
 }
 
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"],
-.form-group select,
-.form-group textarea {
+.form-group select {
     width: 100%;
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md);
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-sm);
-    background: var(--surface-color);
-    color: var(--text-color);
+    background: var(--color-white);
+    font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
-.form-group input[type="text"]:focus,
-.form-group input[type="email"]:focus,
-.form-group input[type="password"]:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus,
+.form-group select:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px var(--primary-light-color);
 }
 
-/* Form Buttons */
 .form-buttons {
-    display: grid;
-    place-items: center;
-    margin-top: var(--spacing-lg);
-    padding: var(--spacing-md);
+    display: flex;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
 }
 
-.form-buttons.delete {
-    justify-content: start;
-}
-
-.form-buttons input[type="submit"] {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background: var(--primary-color);
-    color: var(--color-white);
-    border: none;
+.form-buttons .action {
+    padding: var(--spacing-md) var(--spacing-xl);
     border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    font-size: 1rem;
     font-weight: 500;
-    transition: all 0.2s ease;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
 }
 
-.form-buttons input[type="submit"]:hover {
-    background: var(--color-white);
-    color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+.form-buttons .action:hover {
+    transform: translateY(-1px);
 }
 
-.form-buttons.delete input[type="submit"] {
-    background: var(--error-color);
-    color: var(--color-white);
-}
-
-.form-buttons.delete input[type="submit"]:hover {
-    background: var(--color-white);
-    color: var(--error-color);
-    border: 1px solid var(--error-color);
-}
-
-.cancel {
-    padding: var(--spacing-sm) var(--spacing-md);
+.form-buttons .cancel {
     background: var(--surface-color);
     color: var(--text-color);
-    text-decoration: none;
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-md) var(--spacing-xl);
     border-radius: var(--border-radius-sm);
     font-weight: 500;
-    transition: all 0.2s ease;
+    text-decoration: none;
+    transition: all 0.3s ease;
 }
 
-.cancel:hover {
+.form-buttons .cancel:hover {
     background: var(--hover-color);
+    transform: translateY(-1px);
 }
 
-/* Messages */
+.errors {
+    color: var(--error-color);
+    background: var(--error-light-color);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+}
+
+.errors ul {
+    margin: 0;
+    padding-left: var(--spacing-lg);
+}
+
+.errors li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.errors li:last-child {
+    margin-bottom: 0;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--text-color);
+    text-decoration: none;
+    margin-bottom: var(--spacing-lg);
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--primary-color);
+}
+
+.back-link i {
+    font-size: 0.9em;
+}
+
+/* Message */
 .message {
     padding: var(--spacing-md);
     margin-bottom: var(--spacing-md);
