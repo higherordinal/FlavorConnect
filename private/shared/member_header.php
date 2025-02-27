@@ -38,6 +38,14 @@ if(!isset($page_style)) { $page_style = ''; }
     </script>
     <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>
     <script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>" type="module"></script>
+    <script>
+        // Initialize favorite buttons after module loads
+        document.addEventListener('DOMContentLoaded', () => {
+            import('<?php echo url_for('/assets/js/utils/favorites.js'); ?>').then(module => {
+                module.initializeFavoriteButtons();
+            });
+        });
+    </script>
     <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
     <?php if($page_style === 'recipe-form') { ?>

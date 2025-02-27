@@ -106,6 +106,28 @@ include(SHARED_PATH . '/member_header.php');
     <?php } ?>
 </div>
 
+<?php
+// Prepare data for JavaScript
+$favoritesData = array_map(function($recipe) use ($session) {
+    return [
+        'recipe_id' => $recipe->recipe_id,
+        'user_id' => $session->get_user_id()
+    ];
+}, $favorites);
+
+$userData = [
+    'isLoggedIn' => $session->is_logged_in(),
+    'userId' => $session->get_user_id(),
+    'apiBaseUrl' => 'http://localhost:3000'
+];
+?>
+
+<script>
+    // Initialize data for JavaScript
+    window.initialUserData = <?php echo json_encode($userData); ?>;
+    window.initialFavoritesData = <?php echo json_encode($favoritesData); ?>;
+</script>
+
 <script type="module" src="<?php echo url_for('/assets/js/pages/favorites.js'); ?>"></script>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
