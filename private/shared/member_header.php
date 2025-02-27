@@ -84,8 +84,8 @@ if(!isset($page_style)) { $page_style = ''; }
                 <div class="user-menu">
                     <button class="user-menu-button" aria-expanded="false" aria-haspopup="true">
                         <?php 
-                        $user = User::find_by_id($session->get_user_id());
-                        $username = $user ? h($user->username) : 'Guest';
+                        $current_user = User::find_by_id($session->get_user_id());
+                        $username = $current_user ? h($current_user->username) : 'Guest';
                         ?>
                         <span class="username"><?php echo $username; ?></span>
                     </button>

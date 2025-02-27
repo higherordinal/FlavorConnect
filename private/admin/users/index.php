@@ -77,12 +77,12 @@ include(SHARED_PATH . '/member_header.php');
                                 ?>
                             </td>
                             <td data-label="Actions" class="actions">
-                                <a href="<?php echo private_url_for('/admin/users/edit.php?id=' . h(u($user->user_id))); ?>" 
+                                <a href="<?php echo private_url_for('/admin/users/edit.php?user_id=' . h(u($user->user_id))); ?>" 
                                    class="action" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <?php if($user->user_level !== 's') { ?>
-                                    <a href="<?php echo private_url_for('/admin/users/delete.php?id=' . h(u($user->user_id))); ?>" 
+                                    <a href="<?php echo private_url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" 
                                        class="action delete" 
                                        onclick="return confirm('Are you sure you want to delete this user?');"
                                        title="Delete">

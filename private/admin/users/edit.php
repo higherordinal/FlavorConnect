@@ -11,12 +11,12 @@ if(!$session->is_admin() && !$session->is_super_admin()) {
 $page_title = 'Admin';
 $page_style = 'admin';
 
-if(!isset($_GET['id'])) {
+if(!isset($_GET['user_id'])) {
     $session->message('No user ID was provided.');
     redirect_to(private_url_for('/admin/users/index.php'));
 }
 
-$user = User::find_by_id($_GET['id']);
+$user = User::find_by_id($_GET['user_id']);
 if(!$user) {
     $session->message('The user could not be found.');
     redirect_to(private_url_for('/admin/users/index.php'));
@@ -61,7 +61,7 @@ include(SHARED_PATH . '/member_header.php');
     <?php echo display_session_message(); ?>
 
     <div class="form-container">
-        <form action="<?php echo private_url_for('/admin/users/edit.php?id=' . h(u($user->user_id))); ?>" method="post">
+        <form action="<?php echo private_url_for('/admin/users/edit.php?user_id=' . h(u($user->user_id))); ?>" method="post">
             <?php include('form_fields.php'); ?>
             
             <div class="form-buttons">
