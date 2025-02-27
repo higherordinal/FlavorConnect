@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+      - api
+    environment:
+      - PHP_MEMORY_LIMIT=256M
+    networks:
+      - flavorconnect-network
+
+  api:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=db
+      - DB_USER=hcvaughn
+      - DB_PASSWORD=@connect4Establish
+      - DB_NAME=flavorconnect
+    depends_on:
+      - db
+    networks:
+      - flavorconnect-network
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: flavorconnect
+      MYSQL_USER: hcvaughn
+      MYSQL_PASSWORD: "@connect4Establish"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - flavorconnect-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: hcvaughn
+      PMA_PASSWORD: "@connect4Establish"
+    depends_on:
+      - db
+    networks:
+      - flavorconnect-network
+
+volumes:
+  mysql_data:
+
+networks:
+  flavorconnect-network:
+    driver: bridge

@@ -3,8 +3,8 @@
  * Application Configuration
  */
 
-// Database Configuration - Local Development
-define('DB_HOST', 'localhost:3306');
+// Database Configuration - Docker Development
+define('DB_HOST', 'db:3306');  // 'db' is the service name in docker-compose
 define('DB_USER', 'hcvaughn');
 define('DB_PASS', '@connect4Establish');
 define('DB_NAME', 'flavorconnect');
@@ -18,8 +18,8 @@ define('UPLOADS_PATH', PUBLIC_PATH . '/uploads');
 define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 
 // URL Configuration
-define('WWW_ROOT', '/FlavorConnect/public');  // Base URL for the application
-define("PRIVATE_WWW_ROOT", str_replace('/public', '/private', WWW_ROOT));
+define('WWW_ROOT', '');  // Base URL for the application in Docker
+define("PRIVATE_WWW_ROOT", '/private');  // Direct path to private directory
 
 // Upload Settings
 define('MAX_FILE_SIZE', 5242880);  // 5MB in bytes
