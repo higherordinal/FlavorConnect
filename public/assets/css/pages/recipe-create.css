@@ -310,12 +310,12 @@
 }
 
 .btn-danger {
-    background: var(--error-color);
-    color: white;
+    background-color: var(--danger-color);
+    color: var(--color-white);
 }
 
 .btn-danger:hover {
-    background: var(--secondary-color);
+    background-color: var(--danger-color-dark);
 }
 
 /* Common styles for all delete buttons */
@@ -498,15 +498,27 @@
 
 .delete-confirmation {
     text-align: center;
-    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
+    border: 2px solid var(--danger-color);
+    border-radius: var(--border-radius-lg);
+    background-color: var(--danger-color-light);
 }
 
 .delete-confirmation p {
-    font-size: var(--font-size-large);
-    margin-bottom: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    font-size: var(--font-size-lg);
 }
 
 .delete-confirmation .warning {
     color: var(--danger-color);
-    font-weight: var(--font-weight-medium);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.delete-confirmation .warning i {
+    color: var(--danger-color);
 }
