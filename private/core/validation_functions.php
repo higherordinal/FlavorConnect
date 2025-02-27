@@ -393,4 +393,72 @@ function has_unique_metadata_name($name, $table, $current_id="0") {
     }
 }
 
+/**
+ * Checks if there would still be at least one active admin user after a change
+ * @param string $user_id ID of the user being modified
+ * @param bool $is_active Whether the user will be active
+ * @return bool True if at least one active admin would remain
+ */
+function has_remaining_active_admin($user_id, $is_active=false) {
+    $database = User::get_database();
+    
+    // Get the user being modified to check if they're an admin
+    $user = User::find_by_id($user_id);
+    if(!$user || !($user->is_admin() || $user->is_super_admin())) {
+        return true; // Not an admin, so no impact on admin count
+    }
+    
+    // Count active admins excluding this user
+    $sql = "SELECT COUNT(*) FROM user_account ";
+    $sql .= "WHERE user_id != '" . db_escape($database, $user_id) . "' ";
+    $sql .= "AND (user_level = 'a' OR user_level = 's') ";
+    $sql .= "AND is_active = 1";
+    
+    $result = $database->query($sql);
+    if(!$result) {
+        error_log("Database error in has_remaining_active_admin: " . $database->error);
+        return false;
+    }
+    
+    $row = $result->fetch_row();
+    $active_admin_count = $row[0];
+    $result->free();
+    
+    // If this user will be active, add 1 to the count
+    if($is_active) {
+        $active_admin_count++;
+    }
+    
+    return $active_admin_count > 0;
+}
+
+/**
+ * Validates user deletion
+ * @param string $user_id ID of the user to delete
+ * @return array Array of validation errors
+ */
+function validate_user_deletion($user_id) {
+    $errors = [];
+    
+    $user = User::find_by_id($user_id);
+    if(!$user) {
+        $errors[] = "User not found.";
+        return $errors;
+    }
+    
+    // Check if this is a super admin
+    if($user->is_super_admin()) {
+        $errors[] = "Super admin users cannot be deleted.";
+    }
+    
+    // Check if this would remove the last active admin
+    if(($user->is_admin() || $user->is_super_admin()) && $user->is_active) {
+        if(!has_remaining_active_admin($user_id)) {
+            $errors[] = "Cannot delete the last active admin user.";
+        }
+    }
+    
+    return $errors;
+}
+
 ?>
