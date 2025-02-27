@@ -4,8 +4,8 @@ const mysql = require('mysql2/promise');
 
 // Create database pool
 const pool = mysql.createPool({
-    host: 'localhost',
-    port: 3306,
+    host: process.env.DB_HOST || 'db',
+    port: parseInt(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || 'hcvaughn',
     password: process.env.DB_PASSWORD || '@connect4Establish',
     database: process.env.DB_NAME || 'flavorconnect',
