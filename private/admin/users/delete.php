@@ -1,5 +1,5 @@
 <?php
-require_once('../../../private/initialize.php');
+require_once('../../core/initialize.php');
 require_login();
 
 // Only admins and super admins can access this page
@@ -94,7 +94,7 @@ include(SHARED_PATH . '/member_header.php');
         <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" method="post">
             <div class="form-buttons">
                 <button type="submit" class="action delete">Delete User</button>
-                <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="cancel">Cancel</a>
+                <a href="#" onclick="history.back(); return false;" class="cancel">Cancel</a>
             </div>
         </form>
     </div>
