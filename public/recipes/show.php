@@ -24,11 +24,11 @@ switch ($ref) {
         $back_text = 'Back to Home';
         break;
     case 'favorites':
-        $back_link = private_url_for('/users/favorites.php');
+        $back_link = url_for('/users/favorites.php');
         $back_text = 'Back to Favorites';
         break;
     case 'profile':
-        $back_link = private_url_for('/users/profile.php');
+        $back_link = url_for('/users/profile.php');
         $back_text = 'Back to Profile';
         break;
     case 'gallery':
@@ -200,10 +200,10 @@ echo display_session_message();
                 </div>
                 <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
                     <div class="recipe-actions">
-                        <a href="<?php echo private_url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
+                        <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
                             <i class="fas fa-edit"></i> Edit Recipe
                         </a>
-                        <a href="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
+                        <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
                             <i class="fas fa-trash"></i> Delete Recipe
                         </a>
                     </div>

@@ -1,6 +1,6 @@
 <?php
-require_once('../core/initialize.php');
-require_once('../core/validation_functions.php');
+require_once('../../private/core/initialize.php');
+require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
 // Debug output
@@ -131,7 +131,7 @@ if(is_post_request()) {
 
 $ref = $_GET['ref'] ?? '';
 $back_link = match($ref) {
-    'profile' => private_url_for('/users/profile.php'),
+    'profile' => url_for('/users/profile.php'),
     'home' => url_for('/index.php'),
     'header' => url_for('/recipes/index.php'),
     default => url_for('/recipes/index.php')
@@ -148,7 +148,7 @@ $back_link = match($ref) {
     
     <?php echo display_errors($errors); ?>
     
-    <form action="<?php echo private_url_for('/recipes/new.php'); ?>" method="post" enctype="multipart/form-data">
+    <form action="<?php echo url_for('/recipes/new.php'); ?>" method="post" enctype="multipart/form-data">
         <?php include('form_fields.php'); ?>
         
         <div class="form-buttons">

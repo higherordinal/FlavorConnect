@@ -1,5 +1,5 @@
 <?php
-require_once('../core/initialize.php');
+require_once('../../private/core/initialize.php');
 require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
@@ -69,7 +69,7 @@ include(SHARED_PATH . '/member_header.php');
             <p class="warning"><i class="fas fa-exclamation-triangle"></i> This action cannot be undone.</p>
         </div>
 
-        <form action="<?php echo private_url_for('/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
+        <form action="<?php echo url_for('/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
             <div class="form-buttons">
                 <button type="submit" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
