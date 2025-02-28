@@ -1,5 +1,5 @@
 <?php
-require_once('../core/initialize.php');
+require_once('../../private/core/initialize.php');
 require_once(PRIVATE_PATH . '/classes/Recipe.class.php');
 require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 require_once(PRIVATE_PATH . '/classes/TimeUtility.class.php');
