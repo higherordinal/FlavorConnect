@@ -10,7 +10,11 @@ function url_for($script_path) {
   if($script_path[0] != '/') {
     $script_path = "/" . $script_path;
   }
-  return WWW_ROOT . $script_path;
+  // Get the base URL from the server
+  $base_url = isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST']) 
+    ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] 
+    : '';
+  return $base_url . $script_path;
 }
 
 /**
