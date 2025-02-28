@@ -6,13 +6,13 @@ require_admin();
 $id = $_GET['id'] ?? '';
 if(!isset($_GET['id'])) {
     $session->message('No diet ID was provided.');
-    redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
-$diet = RecipeDiet::find_by_id($id);
+$diet = Diet::find_by_id($id);
 if(!$diet) {
     $session->message('Diet not found.');
-    redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 if(is_post_request()) {
@@ -20,7 +20,7 @@ if(is_post_request()) {
     $diet->merge_attributes($args);
     if($diet->save()) {
         $session->message('The diet was updated successfully.');
-        redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+        redirect_to(url_for('/admin/categories/index.php'));
     }
 }
 
@@ -39,8 +39,8 @@ include(SHARED_PATH . '/header.php');
                 <?php include('form_fields.php'); ?>
                 
                 <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">Update Diet</button>
-                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/recipe_metadata.php'); ?>">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Diet Restriction</button>
+                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
                 </div>
             </form>
         </div>

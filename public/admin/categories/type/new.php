@@ -1,5 +1,5 @@
 <?php
-require_once('../../../private/core/initialize.php');
+require_once('../../../../private/core/initialize.php');
 require_login();
 require_admin();
 
@@ -8,7 +8,7 @@ if(is_post_request()) {
     $type = new RecipeType($args);
     if($type->save()) {
         $session->message('Recipe type created successfully.');
-        redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+        redirect_to(url_for('/admin/categories/index.php'));
     }
 } else {
     $type = new RecipeType;
@@ -30,7 +30,7 @@ include(SHARED_PATH . '/header.php');
                 
                 <div class="form-group mt-4">
                     <button type="submit" class="btn btn-primary">Create Type</button>
-                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/recipe_metadata.php'); ?>">Cancel</a>
+                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
                 </div>
             </form>
         </div>

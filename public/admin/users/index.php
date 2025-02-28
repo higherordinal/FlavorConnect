@@ -20,14 +20,14 @@ include(SHARED_PATH . '/member_header.php');
 
 <main class="main-content">
     <div class="admin-content">
-        <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="back-link">
+        <a href="<?php echo url_for('/admin/index.php'); ?>" class="back-link">
             <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
         </a>
 
         <div class="breadcrumbs">
             <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
             <span class="breadcrumb-separator">/</span>
-            <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
+            <a href="<?php echo url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
             <span class="breadcrumb-separator">/</span>
             <span class="breadcrumb-item active">User Management</span>
         </div>
@@ -76,12 +76,12 @@ include(SHARED_PATH . '/member_header.php');
                                 ?>
                             </td>
                             <td data-label="Actions" class="actions">
-                                <a href="<?php echo private_url_for('/admin/users/edit.php?user_id=' . h(u($user->user_id))); ?>" 
+                                <a href="<?php echo url_for('/admin/users/edit.php?user_id=' . h(u($user->user_id))); ?>" 
                                    class="action" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <?php if($user->user_level !== 's') { ?>
-                                    <a href="<?php echo private_url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" 
+                                    <a href="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" 
                                        class="action delete" 
                                        onclick="return confirm('Are you sure you want to delete this user?');"
                                        title="Delete">
@@ -98,7 +98,7 @@ include(SHARED_PATH . '/member_header.php');
 </main>
 
 <div class="bottom-actions">
-    <a href="<?php echo private_url_for('/admin/users/new.php'); ?>" class="action create">
+    <a href="<?php echo url_for('/admin/users/new.php'); ?>" class="action create">
         <i class="fas fa-plus"></i> Create New User
     </a>
 </div>

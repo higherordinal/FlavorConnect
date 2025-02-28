@@ -1,5 +1,5 @@
 <?php
-require_once('../../core/initialize.php');
+require_once('../../../private/core/initialize.php');
 require_login();
 require_admin();
 

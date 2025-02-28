@@ -3,18 +3,18 @@ require_once('../../../private/core/initialize.php');
 require_login();
 require_admin();
 
-$diet = new RecipeDiet();
+$diet = new Diet();
 
 if(is_post_request()) {
     $args = $_POST['diet'];
-    $diet->merge_attributes($args);
+    $diet = new Diet($args);
     if($diet->save()) {
-        $session->message('Diet type created successfully.');
-        redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+        $session->message('Diet restriction created successfully.');
+        redirect_to(url_for('/admin/categories/index.php'));
     }
 } 
 
-$page_title = 'Create Diet Type';
+$page_title = 'Create Diet Restriction';
 include(SHARED_PATH . '/header.php');
 ?>
 
@@ -29,8 +29,8 @@ include(SHARED_PATH . '/header.php');
                 <?php include('form_fields.php'); ?>
                 
                 <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">Create Diet</button>
-                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/recipe_metadata.php'); ?>">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Create Diet Restriction</button>
+                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
                 </div>
             </form>
         </div>
