@@ -1,14 +1,9 @@
 <?php
 require_once('../../../private/core/initialize.php');
 require_login();
+require_admin();
 
-// Only admins and super admins can access this page
-if(!$session->is_admin() && !$session->is_super_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/'));
-}
-
-$page_title = 'Admin Recipe Metadata Management';
+$page_title = 'Admin: Recipe Metadata Management';
 $page_style = 'admin';
 
 // Get all metadata

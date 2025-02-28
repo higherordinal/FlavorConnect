@@ -1,8 +1,10 @@
 <?php
 require_once('../../private/core/initialize.php');
+
+require_login();
 require_admin();
 
-$page_title = 'admin';
+$page_title = 'Admin Dashboard';
 $page_style = 'admin';
 include(SHARED_PATH . '/member_header.php');
 ?>
