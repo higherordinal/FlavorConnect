@@ -71,11 +71,11 @@ include(SHARED_PATH . '/member_header.php');
                                        class="btn btn-secondary">
                                         <i class="fas fa-eye"></i> View
                                     </a>
-                                    <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id))); ?>" 
+                                    <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id)) . '&ref=profile'); ?>" 
                                        class="btn btn-primary">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
-                                    <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id))); ?>" 
+                                    <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id)) . '&ref=profile'); ?>" 
                                        class="btn btn-danger"
                                        onclick="return confirm('Are you sure you want to delete this recipe?');">
                                         <i class="fas fa-trash"></i> Delete
