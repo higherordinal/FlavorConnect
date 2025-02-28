@@ -52,8 +52,8 @@ if (is_post_request()) {
     // Check if user has already reviewed this recipe
     $existing_review = RecipeReview::find_by_sql(
         "SELECT * FROM recipe_rating " .
-        "WHERE recipe_id = '" . db_escape($recipe->recipe_id) . "' " .
-        "AND user_id = '" . db_escape($current_user_id) . "' LIMIT 1"
+        "WHERE recipe_id = '" . db_escape($db, $recipe->recipe_id) . "' " .
+        "AND user_id = '" . db_escape($db, $current_user_id) . "' LIMIT 1"
     );
 
     if (!empty($existing_review)) {

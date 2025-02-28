@@ -167,6 +167,7 @@ class RecipeEndpoints {
      */
     private static function toggleFavorite($recipe_id, $favorite) {
         global $session;
+        global $db;
         
         $user_id = $session->get_user_id();
         
@@ -175,14 +176,14 @@ class RecipeEndpoints {
             $sql = "INSERT INTO recipe_favorite ";
             $sql .= "(user_id, recipe_id) ";
             $sql .= "VALUES (";
-            $sql .= "'" . db_escape($user_id) . "',";
-            $sql .= "'" . db_escape($recipe_id) . "'";
+            $sql .= "'" . db_escape($db, $user_id) . "',";
+            $sql .= "'" . db_escape($db, $recipe_id) . "'";
             $sql .= ")";
         } else {
             // Remove from favorites
             $sql = "DELETE FROM recipe_favorite ";
-            $sql .= "WHERE user_id = '" . db_escape($user_id) . "' ";
-            $sql .= "AND recipe_id = '" . db_escape($recipe_id) . "'";
+            $sql .= "WHERE user_id = '" . db_escape($db, $user_id) . "' ";
+            $sql .= "AND recipe_id = '" . db_escape($db, $recipe_id) . "'";
         }
         
         $result = db_query($sql);

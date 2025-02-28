@@ -1,5 +1,8 @@
 RewriteEngine On
 
+# Redirect old API endpoint to new API endpoint
+RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
+
 # Redirect all requests to non-existent files/directories to 404.php
 ErrorDocument 404 /404.php
 
