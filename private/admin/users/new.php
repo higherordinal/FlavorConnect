@@ -24,7 +24,9 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <div class="admin-content">
-    <a href="<?php echo private_url_for('/admin/users/index.php'); ?>" class="back-link">&laquo; Back to User List</a>
+    <a href="<?php echo private_url_for('/admin/users/index.php'); ?>" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to User List
+    </a>
 
     <div class="admin-header">
         <h1>Create New User</h1>
