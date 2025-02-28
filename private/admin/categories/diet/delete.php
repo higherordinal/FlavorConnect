@@ -1,12 +1,7 @@
 <?php
 require_once('../../../../private/core/initialize.php');
 require_login();
-
-// Only admins and super admins can access this page
-if(!$session->is_admin() && !$session->is_super_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/'));
-}
+require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No diet ID was provided.');

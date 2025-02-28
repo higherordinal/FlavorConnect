@@ -1,11 +1,7 @@
 <?php
 require_once('../../core/initialize.php');
 require_login();
-
-if(!$session->is_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/index.php'));
-}
+require_admin();
 
 $user = new User();
 if(is_post_request()) {

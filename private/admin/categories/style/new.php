@@ -1,23 +1,9 @@
 <?php
 require_once('../../../../private/core/initialize.php');
 require_login();
+require_admin();
 
-// Only admins and super admins can access this page
-if(!$session->is_admin() && !$session->is_super_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/'));
-}
-
-if(is_post_request()) {
-    $args = $_POST['style'] ?? [];
-    $style = new RecipeStyle($args);
-    if($style->save()) {
-        $session->message('Style created successfully.');
-        redirect_to(url_for('/admin/categories/'));
-    }
-} else {
-    $style = new RecipeStyle;
-}
+$style = new RecipeStyle();
 
 $page_title = 'Create Style';
 include(SHARED_PATH . '/header.php');
