@@ -25,6 +25,10 @@ include(SHARED_PATH . '/member_header.php');
 
 <main class="main-content">
     <div class="admin-content">
+        <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
+        </a>
+
         <div class="breadcrumbs">
             <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
             <span class="breadcrumb-separator">/</span>
