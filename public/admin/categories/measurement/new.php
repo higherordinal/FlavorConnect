@@ -7,10 +7,10 @@ $measurement = new Measurement();
 
 if(is_post_request()) {
     $args = $_POST['measurement'];
-    $measurement->merge_attributes($args);
+    $measurement = new Measurement($args);
     if($measurement->save()) {
-        $session->message('Measurement created successfully.');
-        redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+        $session->message('Measurement unit created successfully.');
+        redirect_to(url_for('/admin/categories/index.php'));
     }
 } 
 
@@ -30,7 +30,7 @@ include(SHARED_PATH . '/header.php');
                 
                 <div class="form-group mt-4">
                     <button type="submit" class="btn btn-primary">Create Measurement</button>
-                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/recipe_metadata.php'); ?>">Cancel</a>
+                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
                 </div>
             </form>
         </div>

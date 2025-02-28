@@ -1,7 +1,7 @@
 <?php
 // Prevent direct access to this template
 if(!isset($type)) {
-    redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 ?>
 

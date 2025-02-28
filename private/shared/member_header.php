@@ -75,6 +75,13 @@ if(!isset($page_style)) { $page_style = ''; }
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
                     <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
                     <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
+                    <?php if($session->is_admin() || $session->is_super_admin()) { ?>
+                    <li class="nav-item">
+                        <a href="<?php echo url_for('/admin/index.php'); ?>" class="nav-link">
+                            <i class="fas fa-cog"></i> Admin
+                        </a>
+                    </li>
+                    <?php } ?>
                 </ul>
             </nav>
 
@@ -91,7 +98,7 @@ if(!isset($page_style)) { $page_style = ''; }
                     <div class="dropdown-menu">
                         <a href="<?php echo url_for('/users/profile.php'); ?>">Profile</a>
                         <?php if($session->is_admin() || $session->is_super_admin()) { ?>
-                        <a href="<?php echo private_url_for('/admin/index.php'); ?>" class="dropdown-item">
+                        <a href="<?php echo url_for('/admin/index.php'); ?>" class="dropdown-item">
                             <i class="fas fa-cog"></i>
                             Admin (Dashboard)
                         </a>

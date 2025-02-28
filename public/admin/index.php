@@ -1,5 +1,5 @@
 <?php
-require_once('../core/initialize.php');
+require_once('../../private/core/initialize.php');
 require_admin();
 
 $page_title = 'admin';
@@ -18,7 +18,7 @@ include(SHARED_PATH . '/member_header.php');
                 <h2>User Management</h2>
                 <p>Manage user accounts, roles, and permissions.</p>
                 <div class="actions">
-                    <a href="<?php echo private_url_for('/admin/users/index.php'); ?>" class="action">
+                    <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="action">
                         <i class="fas fa-users"></i>
                         Manage Users
                     </a>
@@ -29,7 +29,7 @@ include(SHARED_PATH . '/member_header.php');
                 <h2>Category Management</h2>
                 <p>Manage recipe categories and organization.</p>
                 <div class="actions">
-                    <a href="<?php echo private_url_for('/admin/categories/index.php'); ?>" class="action">
+                    <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action">
                         <i class="fas fa-tags"></i>
                         Manage Categories
                     </a>

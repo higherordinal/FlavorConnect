@@ -5,13 +5,13 @@ require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No measurement ID was provided.');
-    redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 $id = $_GET['id'];
 $measurement = Measurement::find_by_id($id);
 if($measurement === false) {
     $session->message('Measurement not found.');
-    redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 if(is_post_request()) {
@@ -22,10 +22,10 @@ if(is_post_request()) {
     } else {
         if($measurement->delete()) {
             $session->message('The measurement was deleted successfully.');
-            redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+            redirect_to(url_for('/admin/categories/index.php'));
         }
     }
-    redirect_to(url_for('/admin/categories/recipe_metadata.php'));
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 $page_title = 'Delete Measurement Unit';
@@ -52,7 +52,7 @@ include(SHARED_PATH . '/header.php');
             <form action="<?php echo url_for('/admin/categories/measurement/delete.php?id=' . h(u($id))); ?>" method="post">
                 <div class="form-buttons delete">
                     <button type="submit" class="btn btn-danger">Delete Measurement</button>
-                    <a class="cancel" href="<?php echo url_for('/admin/categories/recipe_metadata.php'); ?>">Cancel</a>
+                    <a class="cancel" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
                 </div>
             </form>
         <?php } ?>
