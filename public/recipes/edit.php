@@ -97,8 +97,10 @@ if(is_post_request()) {
 $ref = $_GET['ref'] ?? '';
 $back_link = match($ref) {
     'profile' => url_for('/users/profile.php'),
+    'show' => url_for('/recipes/show.php?id=' . h(u($id))),
     'home' => url_for('/index.php'),
     'header' => url_for('/recipes/index.php'),
+    'favorites' => url_for('/users/favorites.php'),
     default => url_for('/recipes/show.php?id=' . h(u($id)))
 };
 ?>
