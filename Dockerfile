@@ -7,20 +7,16 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install zip pdo pdo_mysql mysqli
 
 # Enable Apache modules
-RUN a2enmod rewrite
-RUN a2enmod alias
+RUN a2enmod rewrite headers
 
-# Set the working directory
+# Set working directory
 WORKDIR /var/www/html
 
-# Copy the application files
-COPY . /var/www/html/
+# Configure Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Copy Apache configuration
+# Update the default apache site configuration
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-# Move users directory to public
-RUN cp -r /var/www/html/private/users /var/www/html/public/
-
-# Set permissions
+# Set proper permissions
 RUN chown -R www-data:www-data /var/www/html

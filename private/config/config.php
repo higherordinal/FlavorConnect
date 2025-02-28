@@ -4,7 +4,7 @@
  */
 
 // Database Configuration - Docker Development
-define('DB_HOST', 'db:3306');  // 'db' is the service name in docker-compose
+define('DB_HOST', 'db');  // 'db' is the service name in docker-compose
 define('DB_USER', 'hcvaughn');
 define('DB_PASS', '@connect4Establish');
 define('DB_NAME', 'flavorconnect');
@@ -18,7 +18,7 @@ define('UPLOADS_PATH', PUBLIC_PATH . '/uploads');
 define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 
 // URL Configuration
-define('WWW_ROOT', '');  // Base URL for the application in Docker
+define('WWW_ROOT', isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] : '');  // Base URL for the application
 define("PRIVATE_WWW_ROOT", '/private');  // Direct path to private directory
 
 // Upload Settings
