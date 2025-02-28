@@ -788,7 +788,7 @@
 
 .star-rating {
     display: inline-flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     gap: 3px;
 }
 
@@ -800,16 +800,23 @@
     cursor: pointer;
     color: var(--color-gray-300);
     font-size: 24px;
-    transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease;
 }
 
+/* When hovering the container, ensure proper hover states */
+.star-rating:hover label {
+    color: var(--color-gray-300);
+}
+
+/* Color all stars up to and including the hovered one */
 .star-rating label:hover,
-.star-rating label:hover ~ label,
-.star-rating input:checked ~ label {
-    color: #ffd700;
+.star-rating:hover label:hover ~ label {
+    color: #ffd700 !important;
 }
 
-.star-rating label:has(~ input:checked) {
+/* Keep the selected stars colored */
+.star-rating input:checked + label,
+.star-rating input:checked + label ~ label {
     color: #ffd700;
 }
 
