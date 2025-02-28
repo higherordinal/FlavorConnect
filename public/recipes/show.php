@@ -47,28 +47,48 @@ if (is_post_request()) {
         redirect_to(url_for('/login.php'));
     }
 
+    $current_user_id = $session->get_user_id();
+    
+    // Check if user has already reviewed this recipe
+    $existing_review = RecipeReview::find_by_sql(
+        "SELECT * FROM recipe_rating " .
+        "WHERE recipe_id = '" . db_escape($recipe->recipe_id) . "' " .
+        "AND user_id = '" . db_escape($current_user_id) . "' LIMIT 1"
+    );
+
+    if (!empty($existing_review)) {
+        $session->message('You have already reviewed this recipe.');
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+    }
+
     $review_data = [
         'recipe_id' => $recipe->recipe_id,
-        'user_id' => $session->get_user_id(),
+        'user_id' => $current_user_id,
         'rating_value' => $_POST['review']['rating'] ?? '',
         'comment_text' => $_POST['review']['comment'] ?? ''
     ];
 
+    // Debug logging
+    error_log("Submitting review with data: " . print_r($review_data, true));
+
     $errors = validate_recipe_comment($review_data);
     
     if (empty($errors)) {
-        $review = new Review($review_data);
+        $review = new RecipeReview($review_data);
         if ($review->save()) {
             $session->message('Review submitted successfully.');
             redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
         } else {
             $errors[] = 'Failed to save review.';
+            error_log("Failed to save review: " . print_r($errors, true));
         }
+    } else {
+        error_log("Validation errors: " . print_r($errors, true));
     }
 }
 
 // Get all reviews for this recipe
-$reviews = Review::find_by_recipe_id($recipe->recipe_id);
+$reviews = RecipeReview::find_by_recipe_id($recipe->recipe_id);
 
 // Get recipe ingredients and steps
 $ingredients = $recipe->ingredients();
@@ -329,39 +349,40 @@ echo display_session_message();
         <?php } ?>
 
         <div class="comments-list">
-            <?php foreach($reviews as $review) { 
+            <?php 
+            foreach($reviews as $review) { 
                 $user = $review->user();
+                // Debug logging
+                error_log("Review data: " . print_r($review, true));
             ?>
                 <div class="comment">
                     <div class="comment-header">
                         <span class="comment-author">
                             <i class="fas fa-user"></i>
-                            <?php echo h($user ? $user->username : 'Anonymous'); ?>
+                            <?php echo h($review->username ?? 'Anonymous'); ?>
                         </span>
-                        <?php if($review->created_at) { ?>
-                            <span class="comment-date">
-                                <i class="fas fa-calendar"></i>
-                                <?php echo date('M j, Y', strtotime($review->created_at)); ?>
-                            </span>
-                        <?php } ?>
-                        <div class="comment-rating">
+                        <div class="rating-display">
                             <?php 
-                            $rating = $review->rating_value;
                             for($i = 1; $i <= 5; $i++) {
-                                if ($rating >= $i) {
+                                if ($review->rating_value >= $i) {
                                     echo '<i class="fas fa-star"></i>';
-                                } elseif ($rating > $i - 1) {
-                                    echo '<i class="fas fa-star-half-alt"></i>';
                                 } else {
                                     echo '<i class="far fa-star"></i>';
                                 }
                             }
                             ?>
                         </div>
+                        <span class="comment-date">
+                            <i class="fas fa-clock"></i>
+                            <?php echo h(date('M j, Y g:i A', strtotime($review->comment_created_at ?? 'now'))); ?>
+                        </span>
                     </div>
-                    <?php if($review->comment_text) { ?>
-                        <div class="comment-text">
-                            <?php echo h($review->comment_text); ?>
+                    <?php 
+                    $comment_text = trim($review->comment_text ?? '');
+                    if(!empty($comment_text)) { 
+                    ?>
+                        <div class="comment-content">
+                            <?php echo h($comment_text); ?>
                         </div>
                     <?php } ?>
                 </div>
