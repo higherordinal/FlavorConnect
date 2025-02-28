@@ -1,10 +1,7 @@
 <?php
 require_once('../../../private/core/initialize.php');
 require_login();
-
-if(!$session->is_admin()) {
-    redirect_to(url_for('/index.php'));
-}
+require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No measurement ID was provided.');

@@ -1,22 +1,18 @@
 <?php
 require_once('../../../private/core/initialize.php');
 require_login();
+require_admin();
 
-if(!$session->is_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/index.php'));
-}
+$measurement = new Measurement();
 
 if(is_post_request()) {
     $args = $_POST['measurement'];
-    $measurement = new Measurement($args);
+    $measurement->merge_attributes($args);
     if($measurement->save()) {
         $session->message('Measurement created successfully.');
         redirect_to(url_for('/admin/categories/recipe_metadata.php'));
     }
-} else {
-    $measurement = new Measurement;
-}
+} 
 
 $page_title = 'Create Measurement';
 include(SHARED_PATH . '/header.php');

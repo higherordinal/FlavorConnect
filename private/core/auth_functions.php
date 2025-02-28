@@ -26,13 +26,22 @@ function require_login() {
 
 /**
  * Requires admin privileges for accessing protected pages
- * Redirects to home page if user is not an admin
+ * Redirects to home page if user is not an admin or super admin
+ * @param bool $require_super_admin If true, requires super admin privileges
  * @return void
  */
-function require_admin() {
+function require_admin($require_super_admin = false) {
     global $session;
-    if(!$session->is_admin()) {
-        redirect_to(url_for('/index.php'));
+    if ($require_super_admin) {
+        if (!$session->is_super_admin()) {
+            $session->message('Access denied. Super Admin privileges required.');
+            redirect_to(url_for('/index.php'));
+        }
+    } else {
+        if (!$session->is_admin() && !$session->is_super_admin()) {
+            $session->message('Access denied. Admin privileges required.');
+            redirect_to(url_for('/index.php'));
+        }
     }
 }
 

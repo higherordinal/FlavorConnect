@@ -1,22 +1,18 @@
 <?php
 require_once('../../../private/core/initialize.php');
 require_login();
+require_admin();
 
-if(!$session->is_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/index.php'));
-}
+$diet = new RecipeDiet();
 
 if(is_post_request()) {
     $args = $_POST['diet'];
-    $diet = new RecipeDiet($args);
+    $diet->merge_attributes($args);
     if($diet->save()) {
         $session->message('Diet type created successfully.');
         redirect_to(url_for('/admin/categories/recipe_metadata.php'));
     }
-} else {
-    $diet = new RecipeDiet;
-}
+} 
 
 $page_title = 'Create Diet Type';
 include(SHARED_PATH . '/header.php');

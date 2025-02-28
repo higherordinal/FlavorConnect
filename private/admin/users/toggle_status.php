@@ -1,12 +1,7 @@
 <?php
 require_once('../../core/initialize.php');
 require_login();
-
-// Only admins can toggle user status
-if(!$session->is_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/admin/users/index.php'));
-}
+require_admin();
 
 // Get user ID from URL
 if(!isset($_GET['user_id'])) {

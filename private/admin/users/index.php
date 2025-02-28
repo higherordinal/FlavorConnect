@@ -2,12 +2,7 @@
 require_once('../../../private/core/initialize.php');
 require_once('../../../private/classes/User.class.php');
 require_login();
-
-// Only admins and super admins can access this page
-if(!$session->is_admin() && !$session->is_super_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/index.php'));
-}
+require_admin();
 
 $page_title = 'User Management';
 $page_style = 'admin';

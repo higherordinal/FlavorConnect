@@ -1,11 +1,7 @@
 <?php
 require_once('../../../private/core/initialize.php');
 require_login();
-
-if(!$session->is_admin()) {
-    $session->message('Access denied. Admin privileges required.');
-    redirect_to(url_for('/index.php'));
-}
+require_admin();
 
 $id = $_GET['id'] ?? '';
 if(!isset($_GET['id'])) {
