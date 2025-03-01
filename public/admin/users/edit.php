@@ -47,7 +47,7 @@ include(SHARED_PATH . '/member_header.php');
     </a>
 
     <div class="admin-header">
-        <h1>Edit User: <span style="color: var(--color-white);"><?php echo h($user->username); ?></span></h1>
+        <h1>Edit User: <span class="username-highlight"><?php echo h($user->username); ?></span></h1>
     </div>
 
     <?php echo display_session_message(); ?>
