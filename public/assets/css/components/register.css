@@ -1,46 +1,47 @@
-/* Register form grid layout */
 .content {
     display: grid;
     min-height: calc(100vh - var(--header-height) - var(--footer-height));
-    padding: var(--spacing-lg);
+    padding: 0.5rem;
     place-items: center;
 }
 
-.content > h1 {
-    margin-bottom: var(--spacing-xl);
-    text-align: center;
+.content .form {
+    padding: 1.5rem;
+    gap: 0.75rem;
+    margin: 0.5rem auto;
 }
 
-form {
-    display: grid;
-    gap: var(--spacing-lg);
-    max-width: 500px;
-    width: 100%;
+.content .form .form-header {
+    margin: -1.5rem -1.5rem 1rem -1.5rem;
+    padding: 1rem;
 }
 
-form > div {
-    display: grid;
-    gap: var(--spacing-sm);
+.content .form .form-group {
+    gap: 0.25rem;
+    margin-bottom: 0;
 }
 
-/* Two-column layout for name fields on wider screens */
+.content .form .form-footer {
+    margin-top: 0.75rem;
+}
+
 @media (min-width: 480px) {
-    form {
+    .content .form {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    /* Full width items */
-    form > div:first-child,  /* username */
-    form > div:nth-child(4), /* email */
-    form > div:nth-child(5), /* password */
-    form > div:nth-child(6), /* confirm password */
-    form > div:last-child {  /* submit button */
+    .content .form .form-header,
+    .content .form .form-group:first-of-type,
+    .content .form .form-group:nth-of-type(4),
+    .content .form .form-group:nth-of-type(5),
+    .content .form .form-group:nth-of-type(6),
+    .content .form button.form-button,
+    .content .form .form-footer {
         grid-column: 1 / -1;
     }
 }
 
-/* Link container */
 form + div {
-    margin-top: var(--spacing-lg);
+    margin-top: 1rem;
     text-align: center;
 }
