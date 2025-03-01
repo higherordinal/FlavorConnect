@@ -4,7 +4,7 @@ require_once('../../../private/classes/User.class.php');
 require_login();
 require_admin();
 
-$page_title = 'User Management';
+$page_title = 'Admin: User Management';
 $page_style = 'admin';
 
 // Get all users except super admins (only super admins can manage other admins)
