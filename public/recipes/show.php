@@ -16,6 +16,10 @@ if (!$recipe) {
     redirect_to(url_for('/recipes/index.php'));
 }
 
+// Set page title and style
+$page_title = $recipe->title;
+$page_style = 'recipe-show';
+
 // Determine back link based on referrer
 $ref = $_GET['ref'] ?? '';
 switch ($ref) {
@@ -68,9 +72,6 @@ if (is_post_request()) {
         'comment_text' => $_POST['review']['comment'] ?? ''
     ];
 
-    // Debug logging
-    error_log("Submitting review with data: " . print_r($review_data, true));
-
     $errors = validate_recipe_comment($review_data);
     
     if (empty($errors)) {
@@ -93,9 +94,6 @@ $reviews = RecipeReview::find_by_recipe_id($recipe->recipe_id);
 // Get recipe ingredients and steps
 $ingredients = $recipe->ingredients();
 $steps = $recipe->steps();
-
-$page_title = 'recipe-show';
-$page_style = 'recipe-show';
 
 // Include the appropriate header based on login status
 if($session->is_logged_in()) {
