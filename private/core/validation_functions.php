@@ -180,9 +180,6 @@ function validate_recipe($recipe_data) {
     if(!has_number_between($cook_minutes, 0, 59)) {
         $errors['cook_minutes'] = "Cook minutes must be between 0 and 59.";
     }
-    if($cook_hours == 0 && $cook_minutes == 0) {
-        $errors['cook_time'] = "Please specify cooking time.";
-    }
 
     // Video URL validation (optional)
     if(!empty($recipe_data['video_url'])) {
