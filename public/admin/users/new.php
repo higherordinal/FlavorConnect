@@ -3,7 +3,11 @@ require_once('../../../private/core/initialize.php');
 require_login();
 require_admin();
 
+// Initialize user with default values
 $user = new User();
+$user->user_level = 'u'; // Default to regular user
+$user->is_active = 1;    // Default to active
+
 if(is_post_request()) {
     $args = $_POST['user'];
     $user->merge_attributes($args);
