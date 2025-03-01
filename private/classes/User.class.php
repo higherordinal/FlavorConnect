@@ -200,6 +200,11 @@ class User extends DatabaseObject {
                 } elseif (!preg_match('/[0-9]/', $this->password)) {
                     $this->errors[] = "Password must contain at least one number.";
                 }
+                
+                // Validate confirm password for existing users when changing password
+                if(isset($this->confirm_password) && $this->password !== $this->confirm_password) {
+                    $this->errors[] = "Password and confirm password must match.";
+                }
             }
         }
 
