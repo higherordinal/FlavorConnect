@@ -17,17 +17,30 @@ document.addEventListener('DOMContentLoaded', function() {
             // Create new row for the item
             const newRow = document.createElement('tr');
             const timestamp = Date.now();
-            newRow.innerHTML = `
+            
+            // Check if we're in the measurements section by counting table headers
+            const headers = section.querySelectorAll('thead th');
+            const hasTwoColumns = headers.length === 2; // Measurements only has Name and Actions
+            
+            // Create HTML based on the table structure
+            let rowHtml = `
                 <td data-label="Name">
                     <input type="text" name="${type}s[new_${timestamp}][name]" value="${input.value}" class="form-control">
-                </td>
-                ${type !== 'measurement' ? '<td data-label="Recipes">0</td>' : ''}
+                </td>`;
+                
+            // Only add Recipes column if the table has 3 columns
+            if (!hasTwoColumns) {
+                rowHtml += `<td data-label="Recipes">0</td>`;
+            }
+            
+            rowHtml += `
                 <td data-label="Actions" class="actions">
                     <button type="button" class="action delete" title="Delete">
                         <i class="fas fa-trash"></i>
                     </button>
-                </td>
-            `;
+                </td>`;
+                
+            newRow.innerHTML = rowHtml;
 
             // Insert new row before the "new" row
             const newItemRow = tbody.querySelector('.new-row');
@@ -85,26 +98,10 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.textContent = 'Saving...';
 
         // Create a new FormData object
-        const formData = new FormData();
+        const formData = new FormData(this);
         
-        // Track original values
-        const inputs = this.querySelectorAll('input[type="text"]');
-        inputs.forEach(input => {
-            const originalValue = input.getAttribute('data-original-value') || input.defaultValue;
-            const currentValue = input.value.trim();
-            
-            // Only include if value has changed or it's a new item
-            if (currentValue !== originalValue || input.name.includes('new_')) {
-                formData.append(input.name, currentValue);
-            }
-        });
-
-        // Add any delete markers
-        const deleteInputs = this.querySelectorAll('input[type="hidden"][name^="delete_"]');
-        deleteInputs.forEach(input => {
-            formData.append(input.name, input.value);
-        });
-
+        // No need to manually append inputs - FormData constructor handles this
+        
         // Submit form data
         fetch(this.action, {
             method: 'POST',
