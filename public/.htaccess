@@ -34,3 +34,9 @@ Options -Indexes
 
 # Set default character set
 AddDefaultCharset UTF-8
+
+# Set correct MIME type for JavaScript modules
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType application/javascript .mjs
+</IfModule>
