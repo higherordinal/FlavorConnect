@@ -226,7 +226,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                     <img src="<?php echo url_for('/assets/uploads/recipes/' . $recipe->img_file_path); ?>" alt="Current recipe image" class="img-thumbnail" style="max-width: 200px;">
                 </div>
             <?php } ?>
-            <small class="form-text text-muted">Upload a high-quality image of your recipe</small>
+            <small class="form-text text-muted">Upload a high-quality image of your recipe (maximum file size: 2MB). Allowed formats: JPG, PNG</small>
         </div>
 
         <div class="form-group">
