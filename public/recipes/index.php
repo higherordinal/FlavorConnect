@@ -28,6 +28,31 @@ $diet_id = !empty($_GET['diet']) ? (int)$_GET['diet'] : null;
 $type_id = !empty($_GET['type']) ? (int)$_GET['type'] : null;
 $sort = $_GET['sort'] ?? 'newest';
 
+// Validate filter IDs against database to ensure they exist
+if (!empty($diet_id)) {
+    $diet = RecipeAttribute::find_one($diet_id, 'diet');
+    if (!$diet) {
+        // If diet doesn't exist, keep the filter but it will return 0 results
+        // This is intentional to avoid showing all recipes when a non-existent diet is selected
+    }
+}
+
+if (!empty($style_id)) {
+    $style = RecipeAttribute::find_one($style_id, 'style');
+    if (!$style) {
+        // If style doesn't exist, keep the filter but it will return 0 results
+        // This is intentional to avoid showing all recipes when a non-existent style is selected
+    }
+}
+
+if (!empty($type_id)) {
+    $type = RecipeAttribute::find_one($type_id, 'type');
+    if (!$type) {
+        // If type doesn't exist, keep the filter but it will return 0 results
+        // This is intentional to avoid showing all recipes when a non-existent type is selected
+    }
+}
+
 // Get current page
 $current_page = $_GET['page'] ?? 1;
 $current_page = max(1, (int)$current_page);
