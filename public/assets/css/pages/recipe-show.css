@@ -845,6 +845,11 @@
 .add-comment .btn-primary {
     padding: 10px 20px;
     font-weight: 600;
+    background-color: var(--primary-color);
+}
+
+.add-comment .btn-primary:hover {
+    background-color: var(--secondary-color);
 }
 
 /* Responsive adjustments */
