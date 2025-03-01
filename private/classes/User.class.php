@@ -152,7 +152,7 @@ class User extends DatabaseObject {
             $this->errors[] = "Email cannot be blank.";
         } elseif (!has_length($this->email, array('max' => 255))) {
             $this->errors[] = "Email must be less than 255 characters.";
-        } elseif (!has_valid_email_format($this->email)) {
+        } elseif (!is_valid_email($this->email)) {
             $this->errors[] = "Email must be a valid format.";
         } elseif (!has_unique_email($this->email, $this->user_id ?? 0)) {
             $this->errors[] = "Email is already taken. Please choose another.";
@@ -277,5 +277,37 @@ class User extends DatabaseObject {
     public function toggle_active() {
         $this->is_active = !$this->is_active;
         return $this->save();
+    }
+
+    /**
+     * Checks if a username is unique in the database
+     * @param string $username Username to check
+     * @param int $current_id Current user ID (to exclude from check)
+     * @return bool True if username is unique
+     */
+    public static function check_unique_username($username, $current_id=0) {
+        $database = static::get_database();
+        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " ";
+        $sql .= "WHERE username='" . $database->real_escape_string($username) . "' ";
+        $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
+        $result = $database->query($sql);
+        $row = $result->fetch_assoc();
+        return $row['count'] == 0;
+    }
+
+    /**
+     * Checks if an email is unique in the database
+     * @param string $email Email to check
+     * @param int $current_id Current user ID (to exclude from check)
+     * @return bool True if email is unique
+     */
+    public static function check_unique_email($email, $current_id=0) {
+        $database = static::get_database();
+        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " ";
+        $sql .= "WHERE email='" . $database->real_escape_string($email) . "' ";
+        $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
+        $result = $database->query($sql);
+        $row = $result->fetch_assoc();
+        return $row['count'] == 0;
     }
 }
