@@ -63,7 +63,7 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-content">
     <div class="admin-header">
-        <h1>Delete User: <?php echo h($user->username); ?></h1>
+        <h1>Delete User: <span style="color: var(--color-white);"><?php echo h($user->username); ?></span></h1>
     </div>
 
     <?php echo display_session_message(); ?>
