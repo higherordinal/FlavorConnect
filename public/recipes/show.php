@@ -44,6 +44,58 @@ switch ($ref) {
         $back_text = 'Back to Recipes';
 }
 
+// Handle review deletion by ID (admin only)
+if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset($_GET['rating_id'])) {
+    if (!$session->is_logged_in()) {
+        $session->message('You must be logged in to delete a review.');
+        redirect_to(url_for('/login.php'));
+    }
+    
+    // Check if user is admin or super admin
+    if (!$session->is_admin() && !$session->is_super_admin()) {
+        $session->message('You do not have permission to delete this review.');
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+    }
+    
+    $rating_id = $_GET['rating_id'];
+    
+    // Delete the review
+    if (RecipeReview::delete_by_id($rating_id)) {
+        $session->message('Review deleted successfully by admin.');
+    } else {
+        $session->message('Failed to delete review.');
+    }
+    
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+}
+
+// Handle review deletion (user's own reviews)
+if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
+    if (!$session->is_logged_in()) {
+        $session->message('You must be logged in to delete a review.');
+        redirect_to(url_for('/login.php'));
+    }
+    
+    $current_user_id = $session->get_user_id();
+    
+    // Check if the review exists and belongs to the current user
+    $review = RecipeReview::find_by_recipe_and_user($recipe->recipe_id, $current_user_id);
+    
+    if (!$review) {
+        $session->message('Review not found or you do not have permission to delete it.');
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+    }
+    
+    // Delete the review
+    if (RecipeReview::delete_review($recipe->recipe_id, $current_user_id)) {
+        $session->message('Review deleted successfully.');
+    } else {
+        $session->message('Failed to delete review.');
+    }
+    
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+}
+
 // Handle new review submission
 if (is_post_request()) {
     if (!$session->is_logged_in()) {
@@ -311,7 +363,7 @@ echo display_session_message();
                     <div class="form-group rating-input">
                         <label>Rating:</label>
                         <div class="star-rating">
-                            <input type="radio" id="star1" name="review[rating]" value="1">
+                            <input type="radio" id="star1" name="review[rating]" value="1" required>
                             <label for="star1"><i class="fas fa-star"></i></label>
                             <input type="radio" id="star2" name="review[rating]" value="2">
                             <label for="star2"><i class="fas fa-star"></i></label>
@@ -325,12 +377,11 @@ echo display_session_message();
                     </div>
                     
                     <div class="form-group comment-input">
-                        <label for="comment">Your Comment:</label>
+                        <label for="comment">Your Comment (optional):</label>
                         <textarea 
                             id="comment" 
                             name="review[comment]" 
                             rows="4" 
-                            required 
                             placeholder="Share your thoughts about this recipe..."
                         ></textarea>
                     </div>
@@ -374,6 +425,15 @@ echo display_session_message();
                             <i class="fas fa-clock"></i>
                             <?php echo h(date('M j, Y g:i A', strtotime($review->comment_created_at ?? 'now'))); ?>
                         </span>
+                        <?php if($session->is_logged_in() && $session->get_user_id() == $review->user_id) { ?>
+                            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=delete_review'); ?>" class="delete-comment">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        <?php } elseif($session->is_logged_in() && ($session->is_admin() || $session->is_super_admin())) { ?>
+                            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment">
+                                <i class="fas fa-trash-alt"></i>
+                            </a>
+                        <?php } ?>
                     </div>
                     <?php 
                     $comment_text = trim($review->comment_text ?? '');

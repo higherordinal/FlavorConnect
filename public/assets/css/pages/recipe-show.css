@@ -912,6 +912,23 @@
     line-height: 1.5;
 }
 
+.delete-comment {
+    color: #e74c3c;
+    margin-left: 10px;
+    font-size: 0.9em;
+    transition: color 0.2s;
+}
+
+.delete-comment:hover {
+    color: #c0392b;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 .print-recipe-btn {
     background-color: var(--primary-color) !important;
     color: var(--color-white) !important;
