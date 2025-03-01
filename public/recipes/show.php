@@ -428,7 +428,7 @@ echo display_session_message();
 </script>
 
 <script type="module">
-    import { initializeFavoriteButtons, checkFavoriteStatus } from '<?php echo url_for('/assets/js/utils/favorites.js'); ?>';
+    import { initializeFavoriteButtons, checkFavoriteStatus } from '<?php echo url_for('/assets/js/utils/serve-module.php?file=favorites.js'); ?>';
     
     document.addEventListener('DOMContentLoaded', async () => {
         const favoriteBtn = document.querySelector('.favorite-btn');

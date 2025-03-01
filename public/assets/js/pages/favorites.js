@@ -1,4 +1,4 @@
-import { toggleFavorite } from '../../utils/favorites.js';
+import { toggleFavorite } from '../utils/serve-module.php?file=favorites.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Handle favorite button clicks

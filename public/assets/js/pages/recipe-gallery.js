@@ -2,7 +2,7 @@
  * @fileoverview Recipe gallery functionality
  */
 
-import { initializeFavoriteButtons } from '../utils/favorites.js';
+import { initializeFavoriteButtons } from '../utils/serve-module.php?file=favorites.js';
 
 // Global state
 const state = {

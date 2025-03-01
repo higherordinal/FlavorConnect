@@ -36,11 +36,10 @@ if(!isset($page_style)) { $page_style = ''; }
         };
     </script>
     <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>
-    <script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>" type="module"></script>
     <script>
         // Initialize favorite buttons after module loads
         document.addEventListener('DOMContentLoaded', () => {
-            import('<?php echo url_for('/assets/js/utils/favorites.js'); ?>').then(module => {
+            import('<?php echo url_for('/assets/js/utils/serve-module.php?file=favorites.js'); ?>').then(module => {
                 module.initializeFavoriteButtons();
             });
         });
