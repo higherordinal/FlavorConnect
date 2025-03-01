@@ -234,10 +234,14 @@ button.action.add:hover {
     margin: 0;
 }
 
+.admin-header .username-highlight {
+    color: var(--color-white);
+}
+
 .admin-content {
     max-width: var(--container-width);
     margin: 2rem auto;
-    padding: 0 var(--spacing-md);
+    padding: 0 1rem;
 }
 
 .form-group {
@@ -458,6 +462,10 @@ button.action.add:hover {
     margin: 0;
     border-bottom: 2px solid var(--color-white);
     padding: var(--spacing-sm);
+}
+
+.admin-header .username-highlight {
+    color: var(--color-white);
 }
 
 /* Table Styles */
