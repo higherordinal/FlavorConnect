@@ -184,7 +184,7 @@ function createRecipeCard(recipe) {
             <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.id}" 
                class="recipe-link">
                 <div class="recipe-image">
-                    <img src="${recipe.image_url || '/FlavorConnect/public/assets/images/recipe-placeholder.jpg'}" 
+                    <img src="${recipe.image_url || '/FlavorConnect/public/assets/images/recipe-placeholder.png'}" 
                          alt="${recipe.title}">
                 </div>
                 <div class="recipe-content">

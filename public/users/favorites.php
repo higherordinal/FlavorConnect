@@ -51,7 +51,7 @@ include(SHARED_PATH . '/member_header.php');
                                  alt="<?php echo h($recipe->alt_text); ?>" 
                                  class="recipe-image">
                         <?php } else { ?>
-                            <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+                            <img src="<?php echo url_for('/assets/images/recipe-placeholder.png'); ?>" 
                                  alt="Recipe placeholder image" 
                                  class="recipe-image">
                         <?php } ?>
