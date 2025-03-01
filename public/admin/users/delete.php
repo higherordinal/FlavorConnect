@@ -94,7 +94,7 @@ include(SHARED_PATH . '/member_header.php');
         </div>
 
         <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" method="post">
-            <div class="form-buttons">
+            <div class="form-buttons" style="justify-content: center;">
                 <button type="submit" class="action delete">Delete User</button>
                 <a href="#" onclick="history.back(); return false;" class="cancel">Cancel</a>
             </div>
