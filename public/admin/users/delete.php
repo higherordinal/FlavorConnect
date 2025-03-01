@@ -28,11 +28,18 @@ if(!empty($errors)) {
 }
 
 if(is_post_request()) {
-    // Delete user's favorites and recipes first
-    $favorites = RecipeFavorite::find_by_user_id($user->user_id);
-    foreach($favorites as $favorite) {
-        $favorite->delete();
-    }
+    // Delete user's favorites directly with SQL
+    $db = DatabaseObject::get_database();
+    $sql = "DELETE FROM user_favorite WHERE user_id = ?";
+    $stmt = $db->prepare($sql);
+    $stmt->bind_param("i", $user->user_id);
+    $stmt->execute();
+    
+    // Delete user's comments
+    $sql = "DELETE FROM recipe_comment WHERE user_id = ?";
+    $stmt = $db->prepare($sql);
+    $stmt->bind_param("i", $user->user_id);
+    $stmt->execute();
     
     $recipes = Recipe::find_by_user_id($user->user_id);
     foreach($recipes as $recipe) {
