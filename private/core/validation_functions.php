@@ -254,11 +254,18 @@ function validate_recipe_comment($comment_data) {
         $errors['user_id'] = "User ID is required.";
     }
 
-    // Comment text validation
-    if(is_blank($comment_data['comment_text'])) {
-        $errors['comment_text'] = "Comment cannot be blank.";
-    } elseif(!has_length($comment_data['comment_text'], ['min' => 2, 'max' => 255])) {
-        $errors['comment_text'] = "Comment must be between 2 and 255 characters.";
+    // Rating validation
+    if(!isset($comment_data['rating_value']) || $comment_data['rating_value'] === '') {
+        $errors['rating_value'] = "Rating is required.";
+    } elseif(!is_numeric($comment_data['rating_value']) || !has_number_between($comment_data['rating_value'], 1, 5)) {
+        $errors['rating_value'] = "Rating must be between 1 and 5.";
+    }
+
+    // Comment text validation - only validate if provided
+    if(isset($comment_data['comment_text']) && $comment_data['comment_text'] !== '') {
+        if(!has_length($comment_data['comment_text'], ['min' => 2, 'max' => 255])) {
+            $errors['comment_text'] = "Comment must be between 2 and 255 characters.";
+        }
     }
 
     return $errors;
