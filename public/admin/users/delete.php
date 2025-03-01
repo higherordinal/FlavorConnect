@@ -29,7 +29,7 @@ if(!empty($errors)) {
 
 if(is_post_request()) {
     // Delete user's favorites and recipes first
-    $favorites = UserFavorite::find_by_user_id($user->user_id);
+    $favorites = RecipeFavorite::find_by_user_id($user->user_id);
     foreach($favorites as $favorite) {
         $favorite->delete();
     }
