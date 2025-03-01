@@ -19,7 +19,6 @@ define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 
 // URL Configuration
 define('WWW_ROOT', isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] : '');  // Base URL for the application
-define("PRIVATE_WWW_ROOT", '/private');  // Direct path to private directory
 
 // Upload Settings
 define('MAX_FILE_SIZE', 5242880);  // 5MB in bytes
