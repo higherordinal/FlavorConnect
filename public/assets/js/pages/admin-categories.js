@@ -107,7 +107,18 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            // Check if the response is valid JSON
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json();
+            } else {
+                // If not JSON, throw an error with the text content
+                return response.text().then(text => {
+                    throw new Error('Server returned non-JSON response: ' + text);
+                });
+            }
+        })
         .then(data => {
             if (data.success) {
                 // Show success message
@@ -138,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show error message
             const message = document.createElement('div');
             message.className = 'message error';
-            message.textContent = 'An error occurred while saving changes.';
+            message.textContent = 'An error occurred while saving changes: ' + error.message;
             form.insertBefore(message, form.firstChild);
 
             // Reset button state
