@@ -33,12 +33,10 @@ $is_new = !isset($user->user_id);
     <input type="password" name="user[password]" id="password" placeholder="Enter password" <?php if($is_new) { echo "required"; } ?>>
 </div>
 
-<?php if($is_new) { ?>
 <div class="form-group">
-    <label for="confirm_password">Confirm Password</label>
-    <input type="password" name="user[confirm_password]" id="confirm_password" placeholder="Re-enter the password" required>
+    <label for="confirm_password">Confirm Password <?php if(!$is_new) { echo "(leave blank to keep current password)"; } ?></label>
+    <input type="password" name="user[confirm_password]" id="confirm_password" placeholder="Re-enter the password" <?php if($is_new) { echo "required"; } ?>>
 </div>
-<?php } ?>
 
 <?php if($session->is_super_admin()) { ?>
 <div class="form-group">
