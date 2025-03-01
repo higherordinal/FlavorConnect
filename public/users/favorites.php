@@ -4,11 +4,10 @@ require_once(PRIVATE_PATH . '/classes/Recipe.class.php');
 require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 require_once(PRIVATE_PATH . '/classes/TimeUtility.class.php');
 
-// Require login
 require_login();
 
+$page_title = 'User Favorites';
 $page_style = 'favorites';
-$page_title = 'Favorites';
 
 // Get user's favorite recipes
 $favorites = Recipe::find_favorites_by_user_id($session->get_user_id());

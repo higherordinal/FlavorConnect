@@ -13,7 +13,7 @@ if(!$user) {
 // Get all recipes created by this user
 $recipes = Recipe::find_by_user_id($user_id);
 
-$page_title = 'profile';
+$page_title = 'User Profile';
 $page_style = 'profile';
 include(SHARED_PATH . '/member_header.php');
 ?>

@@ -3,10 +3,6 @@ require_once('../../private/core/initialize.php');
 require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
-// Debug output
-error_log("Script Path: " . $_SERVER['SCRIPT_NAME']);
-error_log("WWW_ROOT: " . WWW_ROOT);
-
 $page_title = 'Create Recipe';
 $page_style = 'recipe-create';
 error_log("Page Title: " . $page_title);
