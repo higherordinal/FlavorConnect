@@ -260,7 +260,7 @@ class Recipe extends DatabaseObject {
      * @return string Full image path or default placeholder path
      */
     public function get_image_path() {
-        return $this->img_file_path ? '/assets/uploads/recipes/' . $this->img_file_path : '/assets/images/recipe-placeholder.jpg';
+        return $this->img_file_path ? '/assets/uploads/recipes/' . $this->img_file_path : '/assets/images/recipe-placeholder.png';
     }
 
     /**
