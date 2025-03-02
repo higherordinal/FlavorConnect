@@ -451,19 +451,49 @@
 }
 
 .recipe-description {
-    font-size: 1.2rem;
-    line-height: 1.8;
+    line-height: 1.6;
+    font-size: 1.1rem;
     color: var(--text-color);
     padding: 1.5rem 2rem;
     background-color: var(--background-color);
     border-radius: var(--radius-md);
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     border-left: 4px solid var(--primary-color);
-    margin: 1rem 0;
+    margin-bottom: 0;
     font-style: italic;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+.recipe-description-container {
+    display: grid;
+    grid-template-columns: 1fr minmax(auto, 800px) 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    align-items: flex-start;
+}
+
+.recipe-description-container .recipe-description {
+    grid-column: 2;
+    margin-bottom: 0;
+    line-height: 1.6;
+    font-size: 1.1rem;
+    color: var(--text-color);
+}
+
+.print-recipe-btn {
+    grid-column: 3;
+    justify-self: start;
+    align-self: center;
+    background-color: var(--primary-color) !important;
+    color: var(--color-white) !important;
+    border: none;
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    width: fit-content;
 }
 
 .recipe-ingredients {
@@ -977,21 +1007,23 @@
     gap: 0.5rem;
     font-weight: 500;
     width: fit-content;
-    justify-self: end;
-    margin-bottom: 1rem;
+    flex-shrink: 0;
+    align-self: flex-start;
 }
 
-.print-recipe-btn:hover {
-    background-color: #0d2235 !important;
-}
-
-@media (min-width: 768px) {
-    .recipe-content {
-        grid-template-columns: 300px 1fr;
+@media (max-width: 768px) {
+    .recipe-description-container {
+        grid-template-columns: 1fr;
     }
-
-    .recipe-description {
-        grid-column: 1 / -1;
+    
+    .recipe-description-container .recipe-description {
+        grid-column: 1;
+    }
+    
+    .print-recipe-btn {
+        grid-column: 1;
+        justify-self: center;
+        margin-top: 1rem;
     }
 }
 
@@ -1002,10 +1034,43 @@
         padding: 0;
     }
 
-    .recipe-header-image {
-        height: 300px;
+    /* Hide elements not needed for printing */
+    header, footer, .back-link, .breadcrumbs, .favorite-btn, 
+    .recipe-actions, .print-recipe-btn, .comments-section,
+    .scaling-buttons {
+        display: none !important;
     }
 
+    /* Ensure recipe image prints nicely */
+    .recipe-header-image {
+        height: 300px;
+        page-break-after: avoid;
+    }
+
+    .recipe-header-overlay {
+        background: none;
+        color: black;
+    }
+
+    .recipe-header-content h1 {
+        color: black;
+        font-size: 24pt;
+    }
+
+    .recipe-meta {
+        color: black;
+    }
+
+    /* Adjust description container for print */
+    .recipe-description-container {
+        display: block;
+    }
+
+    .recipe-description {
+        max-width: 100%;
+    }
+
+    /* Ensure recipe sections don't break across pages */
     .recipe-ingredients,
     .recipe-directions {
         break-inside: avoid;
@@ -1013,5 +1078,48 @@
         margin: 1rem 0;
         padding: 1rem 0;
         box-shadow: none;
+    }
+
+    /* Add page breaks where appropriate */
+    .recipe-directions {
+        page-break-before: auto;
+    }
+
+    /* Ensure text is readable when printed */
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: black;
+    }
+
+    /* Remove background colors and shadows */
+    * {
+        background-color: white !important;
+        box-shadow: none !important;
+    }
+}
+
+.print-recipe-btn:hover {
+    background-color: #0d2235 !important;
+}
+
+@media (min-width: 768px) {
+    .recipe-content {
+        grid-template-columns: 300px 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .recipe-description-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .recipe-description-container .recipe-description {
+        width: 100%;
+    }
+    
+    .print-recipe-btn {
+        margin-top: 1rem;
     }
 }
