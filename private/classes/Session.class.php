@@ -26,8 +26,6 @@ class Session {
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-        error_log("Session constructor called");
-        error_log("Session data in constructor: " . print_r($_SESSION, true));
         $this->check_stored_login();
         $this->check_message();
     }
@@ -49,12 +47,6 @@ class Session {
             $this->username = $user->username;
             $this->is_admin = $user->is_admin();
             $this->is_super_admin = $user->is_super_admin();
-            error_log("User logged in: " . print_r($_SESSION, true));
-            error_log("Session object state after login:");
-            error_log("user_id: " . $this->user_id);
-            error_log("username: " . $this->username);
-            error_log("is_admin: " . ($this->is_admin ? "true" : "false"));
-            error_log("is_super_admin: " . ($this->is_super_admin ? "true" : "false"));
         }
         return true;
     }
@@ -65,9 +57,6 @@ class Session {
      */
     public function is_logged_in() {
         $logged_in = isset($this->user_id) && isset($_SESSION['user_id']) && ($this->user_id === $_SESSION['user_id']);
-        error_log("is_logged_in check: " . ($logged_in ? "true" : "false"));
-        error_log("user_id property: " . (isset($this->user_id) ? $this->user_id : "not set"));
-        error_log("session user_id: " . (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : "not set"));
         return $logged_in;
     }
 
@@ -112,7 +101,6 @@ class Session {
         unset($this->username);
         unset($this->is_admin);
         unset($this->is_super_admin);
-        error_log("User logged out: " . print_r($_SESSION, true));
         return true;
     }
 
@@ -135,7 +123,6 @@ class Session {
     /**
      * Checks and loads stored login data from session into object properties
      * Retrieves user_id, username, and admin status from $_SESSION
-     * Logs debug information about the session state
      */
     private function check_stored_login() {
         if(isset($_SESSION['user_id'])) {
@@ -143,11 +130,6 @@ class Session {
             $this->username = $_SESSION['username'];
             $this->is_admin = $_SESSION['is_admin'];
             $this->is_super_admin = $_SESSION['is_super_admin'];
-            error_log("Restored session values:");
-            error_log("user_id: " . $this->user_id);
-            error_log("username: " . $this->username);
-            error_log("is_admin: " . ($this->is_admin ? "true" : "false"));
-            error_log("is_super_admin: " . ($this->is_super_admin ? "true" : "false"));
         }
     }
 

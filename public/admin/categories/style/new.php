@@ -9,15 +9,11 @@ if(is_post_request()) {
     $args = $_POST['style'];
     $style->name = $args['name'] ?? '';
     
-    // Debug
-    error_log("Style new - Name: " . $style->name);
-    
     if($style->save()) {
         $session->message('Style created successfully.');
         redirect_to(url_for('/admin/categories/index.php'));
-    } else {
-        error_log("Style save failed. Errors: " . print_r($style->errors, true));
     }
+    // Error handling is preserved in the form display below
 }
 
 $page_title = 'Create Recipe Style';

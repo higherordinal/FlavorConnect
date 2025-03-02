@@ -5,7 +5,6 @@ require_login();
 
 $page_title = 'Create Recipe';
 $page_style = 'recipe-create';
-error_log("Page Title: " . $page_title);
 
 include(SHARED_PATH . '/member_header.php');
 

@@ -17,19 +17,13 @@ if(!$type) {
 
 if(is_post_request()) {
     $args = $_POST['type'] ?? [];
-    $type->name = $args['name'] ?? '';
-    
-    // Make sure the id is preserved for update
-    $type->id = $id;
-    
-    // Debug
-    error_log("Type ID before save: " . $type->id);
-    
-    if($type->save()) {
-        $session->message('Recipe type updated successfully.');
-        redirect_to(url_for('/admin/categories/index.php'));
+    $type->merge_attributes($args);
+    $result = $type->save();
+    if($result === true) {
+        $session->message('Type updated successfully.');
+        redirect_to(url_for('/admin/categories/type/show.php?id=' . $type->id));
     } else {
-        error_log("Type save failed. Errors: " . print_r($type->errors, true));
+        // Show errors
     }
 }
 
