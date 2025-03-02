@@ -8,43 +8,63 @@ if(!isset($_GET['id'])) {
     redirect_to(url_for('/admin/categories/index.php'));
 }
 
-$id = $_GET['id'] ?? '';
-$type = RecipeType::find_by_id($id);
+$id = $_GET['id'];
+$type = RecipeAttribute::find_one($id, 'type');
 if(!$type) {
     $session->message('Recipe type not found.');
     redirect_to(url_for('/admin/categories/index.php'));
 }
 
 if(is_post_request()) {
-    $args = $_POST['type'];
-    $type->merge_attributes($args);
+    $args = $_POST['type'] ?? [];
+    $type->name = $args['name'] ?? '';
+    
     if($type->save()) {
-        $session->message('The recipe type was updated successfully.');
+        $session->message('Recipe type updated successfully.');
         redirect_to(url_for('/admin/categories/index.php'));
     }
 }
 
 $page_title = 'Edit Recipe Type';
-include(SHARED_PATH . '/header.php');
+$page_style = 'admin';
+include(SHARED_PATH . '/member_header.php');
 ?>
 
-<div class="container py-4">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h1><?php echo h($page_title); ?></h1>
-            
-            <?php echo display_errors($type->errors); ?>
-            
-            <form action="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($id))); ?>" method="post">
-                <?php include('form_fields.php'); ?>
-                
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">Update Type</button>
-                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
-                </div>
-            </form>
+<main class="main-content">
+    <div class="admin-content">
+        <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Recipe Metadata
+        </a>
+
+        <div class="breadcrumbs">
+            <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="breadcrumb-item">Recipe Metadata</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">Edit Recipe Type</span>
         </div>
+
+        <div class="admin-header">
+            <h1>Edit Recipe Type</h1>
+        </div>
+        
+        <?php echo display_session_message(); ?>
+        <?php echo display_errors($type->errors); ?>
+        
+        <form action="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
+            <div class="form-group">
+                <label for="type_name">Type Name</label>
+                <input type="text" id="type_name" name="type[name]" value="<?php echo h($type->name); ?>" class="form-control" required>
+            </div>
+            
+            <div class="form-buttons">
+                <button type="submit" class="action save">Update Type</button>
+                <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
+            </div>
+        </form>
     </div>
-</div>
+</main>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

@@ -7,42 +7,38 @@ if(!isset($_GET['id'])) {
     $session->message('No diet ID was provided.');
     redirect_to(url_for('/admin/categories/index.php'));
 }
-$id = $_GET['id'];
-$diet = RecipeAttribute::find_by_type('diet');
-$diet = array_filter($diet, function($d) use ($id) { return $d->id == $id; });
-$diet = !empty($diet) ? array_values($diet)[0] : null;
 
+$id = $_GET['id'];
+$diet = RecipeAttribute::find_one($id, 'diet');
 if(!$diet) {
     $session->message('Diet not found.');
     redirect_to(url_for('/admin/categories/index.php'));
 }
 
-// Check if diet is in use
-$recipes_count = Recipe::count_by_diet($id);
-if($recipes_count > 0) {
-    $session->message("Cannot delete diet. It is used by {$recipes_count} recipe(s).", 'error');
+if(is_post_request()) {
+    // Check if diet is being used by any recipes
+    $recipe_count = Recipe::count_by_attribute_id($id, 'diet');
+    if($recipe_count > 0) {
+        $session->message("Cannot delete diet. It is used by {$recipe_count} recipes.", 'error');
+    } else {
+        if($diet->delete()) {
+            $session->message('Diet deleted successfully.');
+        }
+    }
     redirect_to(url_for('/admin/categories/index.php'));
 }
 
-if(is_post_request()) {
-    // Delete diet
-    if($diet->delete()) {
-        $session->message('Diet deleted successfully.');
-        redirect_to(url_for('/admin/categories/index.php'));
-    } else {
-        $session->message('Failed to delete diet.', 'error');
-        redirect_to(url_for('/admin/categories/index.php'));
-    }
-} else {
-    // Show confirmation page
-    $page_title = 'Delete Diet';
-    $page_style = 'admin';
-    include(SHARED_PATH . '/member_header.php');
-}
+$page_title = 'Delete Diet Restriction';
+$page_style = 'admin';
+include(SHARED_PATH . '/member_header.php');
 ?>
 
 <main class="main-content">
     <div class="admin-content">
+        <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Recipe Metadata
+        </a>
+
         <div class="breadcrumbs">
             <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
             <span class="breadcrumb-separator">/</span>
@@ -54,19 +50,37 @@ if(is_post_request()) {
         </div>
 
         <div class="admin-header">
-            <h1>Delete Diet</h1>
+            <h1>Delete Diet Restriction</h1>
         </div>
-
+        
         <?php echo display_session_message(); ?>
-
-        <div class="delete-confirmation">
-            <p>Are you sure you want to delete the diet "<?php echo h($diet->name); ?>"?</p>
-            <form action="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($id))); ?>" method="post">
-                <div class="form-buttons delete">
-                    <input type="submit" value="Delete Diet">
-                    <a class="cancel" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
+        
+        <div class="confirmation-box">
+            <p>Are you sure you want to delete this diet restriction?</p>
+            <p class="item-name"><?php echo h($diet->name); ?></p>
+            
+            <?php
+            // Check if diet is being used by any recipes
+            $recipe_count = Recipe::count_by_attribute_id($id, 'diet');
+            if($recipe_count > 0) { ?>
+                <div class="alert warning">
+                    <p>Cannot delete this diet restriction. It is currently used by <?php echo $recipe_count; ?> recipe(s).</p>
+                    <p>Please reassign these recipes to a different diet restriction before deleting.</p>
                 </div>
-            </form>
+                
+                <div class="form-buttons">
+                    <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Back to Metadata</a>
+                </div>
+            <?php } else { ?>
+                <p class="warning-text">This action cannot be undone.</p>
+                
+                <form action="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($id))); ?>" method="post" class="form">
+                    <div class="form-buttons">
+                        <button type="submit" class="action delete">Delete Diet</button>
+                        <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
+                    </div>
+                </form>
+            <?php } ?>
         </div>
     </div>
 </main>

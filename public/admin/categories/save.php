@@ -3,8 +3,9 @@ require_once('../../../private/core/initialize.php');
 require_login();
 require_admin();
 
-// Turn off error reporting to prevent PHP warnings from being output
-error_reporting(0);
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 // Initialize errors array
 $errors = [];
@@ -150,20 +151,17 @@ if(is_post_request()) {
         }
     }
 
-    header('Content-Type: application/json');
+    // Set session message and redirect
     if(empty($errors)) {
-        echo json_encode(['success' => true, 'message' => 'Changes saved successfully.']);
+        $session->message('Changes saved successfully.');
     } else {
-        echo json_encode([
-            'success' => false, 
-            'message' => 'Failed to save some changes: ' . implode(', ', $errors)
-        ]);
+        $session->message('Failed to save some changes: ' . implode(', ', $errors), 'error');
     }
-    exit;
+    
+    // Redirect back to the categories page
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 // If not a POST request, redirect to index
-header('Content-Type: application/json');
-echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
-exit;
+redirect_to(url_for('/admin/categories/index.php'));
 ?>

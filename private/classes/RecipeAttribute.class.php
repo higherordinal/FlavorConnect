@@ -60,7 +60,34 @@ class RecipeAttribute extends DatabaseObject {
      * @return array Array of validation errors
      */
     protected function validate() {
-        return validate_metadata(['name' => $this->name], static::$table_name, $this->id);
+        $this->errors = [];
+        
+        // Check if name is blank
+        if(is_blank($this->name)) {
+            $this->errors[] = "Name cannot be blank.";
+        } elseif (!has_length($this->name, ['min' => 2, 'max' => 255])) {
+            $this->errors[] = "Name must be between 2 and 255 characters.";
+        }
+        
+        // Check if name is unique
+        $sql = "SELECT COUNT(*) FROM " . static::$table_name;
+        $sql .= " WHERE name='" . db_escape(self::$database, $this->name) . "'";
+        if($this->id != '') {
+            $sql .= " AND " . static::$primary_key . " != '" . db_escape(self::$database, $this->id) . "'";
+        }
+        
+        $result = mysqli_query(self::$database, $sql);
+        if(!$result) {
+            $this->errors[] = "Database error: " . mysqli_error(self::$database);
+            return $this->errors;
+        }
+        
+        $row = mysqli_fetch_row($result);
+        if($row[0] > 0) {
+            $this->errors[] = "A " . $this->type . " with this name already exists.";
+        }
+        
+        return $this->errors;
     }
 
     /**

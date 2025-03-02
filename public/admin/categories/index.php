@@ -15,8 +15,6 @@ $measurements = Measurement::find_all_ordered();
 include(SHARED_PATH . '/member_header.php');
 ?>
 
-<script src="<?php echo url_for('/assets/js/pages/admin-categories.js'); ?>"></script>
-
 <main class="main-content">
     <div class="admin-management metadata">
         <a href="<?php echo url_for('/admin/index.php'); ?>" class="back-link">
@@ -37,170 +35,153 @@ include(SHARED_PATH . '/member_header.php');
         
         <?php echo display_session_message(); ?>
         
-        <form action="<?php echo url_for('/admin/categories/save.php'); ?>" method="post">
-            <div class="metadata-sections">
-                <!-- Recipe Styles Section -->
-                <section class="metadata-section">
+        <div class="metadata-sections">
+            <!-- Recipe Styles Section -->
+            <section class="metadata-section">
+                <div class="section-header">
                     <h2>Recipe Styles</h2>
-                    <table class="list">
-                        <thead>
+                </div>
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Recipes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($styles as $style) { ?>
                             <tr>
-                                <th>Name</th>
-                                <th>Recipes</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($styles as $style) { ?>
-                                <tr>
-                                    <td data-label="Name">
-                                        <input type="text" name="styles[<?php echo h($style->id); ?>][name]" value="<?php echo h($style->name); ?>" class="form-control">
-                                    </td>
-                                    <td data-label="Recipes"><?php echo Recipe::count_by_style($style->id); ?></td>
-                                    <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" title="Delete" data-id="<?php echo h($style->id); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            <tr class="new-row">
-                                <td data-label="Name">
-                                    <input type="text" name="styles[new_<?php echo time(); ?>][name]" placeholder="Add new style..." class="form-control">
-                                </td>
-                                <td data-label="Recipes"></td>
+                                <td data-label="Name"><?php echo h($style->name); ?></td>
+                                <td data-label="Recipes"><?php echo Recipe::count_by_style($style->id); ?></td>
                                 <td data-label="Actions" class="actions">
-                                    <button type="button" class="action add" title="Add">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <a href="<?php echo url_for('/admin/categories/style/edit.php?id=' . h(u($style->id))); ?>" class="action edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="<?php echo url_for('/admin/categories/style/delete.php?id=' . h(u($style->id))); ?>" class="action delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </section>
+                        <?php } ?>
+                    </tbody>
+                </table>
+                <div class="add-new-button">
+                    <a href="<?php echo url_for('/admin/categories/style/new.php'); ?>" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Style
+                    </a>
+                </div>
+            </section>
 
-                <!-- Recipe Diets Section -->
-                <section class="metadata-section">
+            <!-- Recipe Diets Section -->
+            <section class="metadata-section">
+                <div class="section-header">
                     <h2>Recipe Diets</h2>
-                    <table class="list">
-                        <thead>
+                </div>
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Recipes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($diets as $diet) { ?>
                             <tr>
-                                <th>Name</th>
-                                <th>Recipes</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($diets as $diet) { ?>
-                                <tr>
-                                    <td data-label="Name">
-                                        <input type="text" name="diets[<?php echo h($diet->id); ?>][name]" value="<?php echo h($diet->name); ?>" class="form-control">
-                                    </td>
-                                    <td data-label="Recipes"><?php echo Recipe::count_by_diet($diet->id); ?></td>
-                                    <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" title="Delete" data-id="<?php echo h($diet->id); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            <tr class="new-row">
-                                <td data-label="Name">
-                                    <input type="text" name="diets[new_<?php echo time(); ?>][name]" placeholder="Add new diet..." class="form-control">
-                                </td>
-                                <td data-label="Recipes"></td>
+                                <td data-label="Name"><?php echo h($diet->name); ?></td>
+                                <td data-label="Recipes"><?php echo Recipe::count_by_diet($diet->id); ?></td>
                                 <td data-label="Actions" class="actions">
-                                    <button type="button" class="action add" title="Add">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <a href="<?php echo url_for('/admin/categories/diet/edit.php?id=' . h(u($diet->id))); ?>" class="action edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($diet->id))); ?>" class="action delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </section>
+                        <?php } ?>
+                    </tbody>
+                </table>
+                <div class="add-new-button">
+                    <a href="<?php echo url_for('/admin/categories/diet/new.php'); ?>" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Diet
+                    </a>
+                </div>
+            </section>
 
-                <!-- Recipe Types Section -->
-                <section class="metadata-section">
+            <!-- Recipe Types Section -->
+            <section class="metadata-section">
+                <div class="section-header">
                     <h2>Recipe Types</h2>
-                    <table class="list">
-                        <thead>
+                </div>
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Recipes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($types as $type) { ?>
                             <tr>
-                                <th>Name</th>
-                                <th>Recipes</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($types as $type) { ?>
-                                <tr>
-                                    <td data-label="Name">
-                                        <input type="text" name="types[<?php echo h($type->id); ?>][name]" value="<?php echo h($type->name); ?>" class="form-control">
-                                    </td>
-                                    <td data-label="Recipes"><?php echo Recipe::count_by_type($type->id); ?></td>
-                                    <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" title="Delete" data-id="<?php echo h($type->id); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            <tr class="new-row">
-                                <td data-label="Name">
-                                    <input type="text" name="types[new_<?php echo time(); ?>][name]" placeholder="Add new type..." class="form-control">
-                                </td>
-                                <td data-label="Recipes"></td>
+                                <td data-label="Name"><?php echo h($type->name); ?></td>
+                                <td data-label="Recipes"><?php echo Recipe::count_by_type($type->id); ?></td>
                                 <td data-label="Actions" class="actions">
-                                    <button type="button" class="action add" title="Add">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <a href="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($type->id))); ?>" class="action edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="<?php echo url_for('/admin/categories/type/delete.php?id=' . h(u($type->id))); ?>" class="action delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </section>
+                        <?php } ?>
+                    </tbody>
+                </table>
+                <div class="add-new-button">
+                    <a href="<?php echo url_for('/admin/categories/type/new.php'); ?>" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Type
+                    </a>
+                </div>
+            </section>
 
-                <!-- Recipe Measurements Section -->
-                <section class="metadata-section">
+            <!-- Recipe Measurements Section -->
+            <section class="metadata-section">
+                <div class="section-header">
                     <h2>Recipe Measurements</h2>
-                    <table class="list">
-                        <thead>
+                </div>
+                <table class="list">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($measurements as $measurement) { ?>
                             <tr>
-                                <th>Name</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach($measurements as $measurement) { ?>
-                                <tr>
-                                    <td data-label="Name">
-                                        <input type="text" name="measurements[<?php echo h($measurement->measurement_id); ?>][name]" value="<?php echo h($measurement->name); ?>" class="form-control">
-                                    </td>
-                                    <td data-label="Actions" class="actions">
-                                        <button type="button" class="action delete" title="Delete" data-id="<?php echo h($measurement->measurement_id); ?>">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            <?php } ?>
-                            <tr class="new-row">
-                                <td data-label="Name">
-                                    <input type="text" name="measurements[new_<?php echo time(); ?>][name]" placeholder="Add new measurement..." class="form-control">
-                                </td>
+                                <td data-label="Name"><?php echo h($measurement->name); ?></td>
                                 <td data-label="Actions" class="actions">
-                                    <button type="button" class="action add" title="Add">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
+                                    <a href="<?php echo url_for('/admin/categories/measurement/edit.php?id=' . h(u($measurement->measurement_id))); ?>" class="action edit" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="<?php echo url_for('/admin/categories/measurement/delete.php?id=' . h(u($measurement->measurement_id))); ?>" class="action delete" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </section>
-            </div>
-
-            <div class="form-buttons">
-                <button type="submit" class="action save">Save Changes</button>
-            </div>
-        </form>
+                        <?php } ?>
+                    </tbody>
+                </table>
+                <div class="add-new-button">
+                    <a href="<?php echo url_for('/admin/categories/measurement/new.php'); ?>" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Measurement
+                    </a>
+                </div>
+            </section>
+        </div>
     </div>
 </main>
 

@@ -9,16 +9,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Debug session state
-error_log("Session state in initialize.php:");
-error_log("Session ID: " . session_id());
-error_log("Session Data: " . print_r($_SESSION, true));
-
-// Prevent caching during development
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-
 // Custom autoloader for FlavorConnect classes
 spl_autoload_register(function($class) {
     // Keep the original class name for the file
@@ -29,7 +19,7 @@ spl_autoload_register(function($class) {
     }
 });
 
-// Load core functions and classes
+// Load core functions
 require_once(PRIVATE_PATH . '/core/functions.php');
 require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_once(PRIVATE_PATH . '/core/api_functions.php');
@@ -45,7 +35,3 @@ DatabaseObject::set_database($db);
 
 // Initialize a session
 $session = new Session();
-
-// Debug session object
-error_log("Session object created:");
-error_log("Is logged in: " . ($session->is_logged_in() ? "true" : "false"));
