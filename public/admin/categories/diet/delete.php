@@ -28,7 +28,7 @@ if(is_post_request()) {
     redirect_to(url_for('/admin/categories/index.php'));
 }
 
-$page_title = 'Delete Diet Restriction';
+$page_title = 'Delete Diet';
 $page_style = 'admin';
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -50,13 +50,13 @@ include(SHARED_PATH . '/member_header.php');
         </div>
 
         <div class="admin-header">
-            <h1>Delete Diet Restriction</h1>
+            <h1>Delete Diet</h1>
         </div>
         
         <?php echo display_session_message(); ?>
         
         <div class="confirmation-box">
-            <p>Are you sure you want to delete this diet restriction?</p>
+            <p>Are you sure you want to delete this diet?</p>
             <p class="item-name"><?php echo h($diet->name); ?></p>
             
             <?php
@@ -64,8 +64,8 @@ include(SHARED_PATH . '/member_header.php');
             $recipe_count = RecipeAttribute::count_by_attribute_id($id, 'diet');
             if($recipe_count > 0) { ?>
                 <div class="alert warning">
-                    <p>Cannot delete this diet restriction. It is currently used by <?php echo $recipe_count; ?> recipe(s).</p>
-                    <p>Please reassign these recipes to a different diet restriction before deleting.</p>
+                    <p>Cannot delete this diet. It is currently used by <?php echo $recipe_count; ?> recipe(s).</p>
+                    <p>Please reassign these recipes to a different diet before deleting.</p>
                 </div>
                 
                 <div class="form-buttons">

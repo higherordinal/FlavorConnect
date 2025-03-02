@@ -33,7 +33,7 @@ if(is_post_request()) {
     }
 }
 
-$page_title = 'Edit Diet Restriction';
+$page_title = 'Edit Diet';
 $page_style = 'admin';
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -51,11 +51,11 @@ include(SHARED_PATH . '/member_header.php');
             <span class="breadcrumb-separator">/</span>
             <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="breadcrumb-item">Recipe Metadata</a>
             <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">Edit Diet Restriction</span>
+            <span class="breadcrumb-item active">Edit Diet</span>
         </div>
 
         <div class="admin-header">
-            <h1>Edit Diet Restriction</h1>
+            <h1>Edit Diet</h1>
         </div>
         
         <?php echo display_session_message(); ?>
@@ -63,12 +63,12 @@ include(SHARED_PATH . '/member_header.php');
         
         <form action="<?php echo url_for('/admin/categories/diet/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
             <div class="form-group">
-                <label for="diet_name">Diet Restriction Name</label>
+                <label for="diet_name">Diet Name</label>
                 <input type="text" id="diet_name" name="diet[name]" value="<?php echo h($diet->name); ?>" class="form-control" required>
             </div>
             
             <div class="form-buttons">
-                <button type="submit" class="action save">Update Diet Restriction</button>
+                <button type="submit" class="action save">Update Diet</button>
                 <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
             </div>
         </form>

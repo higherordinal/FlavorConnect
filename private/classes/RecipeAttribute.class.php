@@ -269,6 +269,46 @@ class RecipeAttribute extends DatabaseObject {
     }
 
     /**
+     * Creates a new record in the database
+     * @return bool True if creation was successful
+     */
+    protected function create() {
+        $this->validate();
+        if(!empty($this->errors)) { return false; }
+
+        $attributes = $this->sanitized_attributes();
+        $sql = "INSERT INTO " . static::$table_name . " (";
+        $sql .= join(', ', array_keys($attributes));
+        $sql .= ") VALUES ('";
+        $sql .= join("', '", array_values($attributes));
+        $sql .= "')";
+
+        error_log("RecipeAttribute create SQL: " . $sql);
+
+        try {
+            $database = static::$database;
+            $result = mysqli_query($database, $sql);
+            if($result) {
+                $insert_id = mysqli_insert_id($database);
+                if($insert_id) {
+                    $this->id = $insert_id;
+                    // Also set the specific primary key property
+                    $pk = static::$primary_key;
+                    $this->$pk = $insert_id;
+                }
+                return true;
+            }
+        } catch(mysqli_sql_exception $e) {
+            if($e->getCode() == 1062) { // Duplicate entry error
+                $this->errors[] = "This name already exists.";
+            } else {
+                $this->errors[] = "Database error: " . $e->getMessage();
+            }
+        }
+        return false;
+    }
+
+    /**
      * Updates an existing record in the database
      * @return bool True if update was successful
      */
