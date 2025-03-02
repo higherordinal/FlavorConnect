@@ -502,4 +502,45 @@ function validate_recipe_ingredient_data($ingredient_data) {
     return $errors;
 }
 
+/**
+ * Validates measurement data
+ * @param array $measurement_data The measurement data to validate
+ * @param string $current_id Current ID for uniqueness check
+ * @return array Array of validation errors
+ */
+function validate_measurement_data($measurement_data, $current_id = '') {
+    $errors = [];
+    
+    // Name validation
+    if(is_blank($measurement_data['name'])) {
+        $errors['name'] = "Name cannot be blank.";
+    } elseif (!has_length($measurement_data['name'], ['min' => 2, 'max' => 255])) {
+        $errors['name'] = "Name must be between 2 and 255 characters.";
+    } else {
+        // Check if name is unique
+        global $db;
+        $sql = "SELECT COUNT(*) FROM measurement";
+        $sql .= " WHERE name='" . db_escape($db, $measurement_data['name']) . "'";
+        if($current_id != '') {
+            $sql .= " AND measurement_id != '" . db_escape($db, $current_id) . "'";
+        }
+        
+        try {
+            $result = mysqli_query($db, $sql);
+            if(!$result) {
+                $errors['name'] = "Database error checking name uniqueness.";
+            } else {
+                $row = mysqli_fetch_row($result);
+                if($row[0] > 0) {
+                    $errors['name'] = "A measurement with this name already exists.";
+                }
+            }
+        } catch(Exception $e) {
+            $errors['name'] = "Error checking name uniqueness: " . $e->getMessage();
+        }
+    }
+    
+    return $errors;
+}
+
 ?>
