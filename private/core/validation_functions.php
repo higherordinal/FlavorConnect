@@ -375,7 +375,7 @@ function validate_recipe_attribute_data($attribute_data, $type = '', $current_id
  * @return bool True if name is unique
  */
 function has_unique_metadata_name($name, $table, $current_id="0") {
-    global $db;
+    $database = RecipeAttribute::get_database();
     
     // Map table names to their primary key columns
     $primary_keys = [
@@ -390,13 +390,13 @@ function has_unique_metadata_name($name, $table, $current_id="0") {
     }
     
     $sql = "SELECT COUNT(*) FROM " . $table;
-    $sql .= " WHERE name='" . db_escape($db, $name) . "'";
+    $sql .= " WHERE name='" . db_escape($database, $name) . "'";
     if($current_id != "0") {
-        $sql .= " AND " . $primary_key . " != '" . db_escape($db, $current_id) . "'";
+        $sql .= " AND " . $primary_key . " != '" . db_escape($database, $current_id) . "'";
     }
     
     try {
-        $result = mysqli_query($db, $sql);
+        $result = mysqli_query($database, $sql);
         if (!$result) {
             return false;
         }
@@ -518,15 +518,15 @@ function validate_measurement_data($measurement_data, $current_id = '') {
         $errors['name'] = "Name must be between 2 and 255 characters.";
     } else {
         // Check if name is unique
-        global $db;
+        $database = Measurement::get_database();
         $sql = "SELECT COUNT(*) FROM measurement";
-        $sql .= " WHERE name='" . db_escape($db, $measurement_data['name']) . "'";
+        $sql .= " WHERE name='" . db_escape($database, $measurement_data['name']) . "'";
         if($current_id != '') {
-            $sql .= " AND measurement_id != '" . db_escape($db, $current_id) . "'";
+            $sql .= " AND measurement_id != '" . db_escape($database, $current_id) . "'";
         }
         
         try {
-            $result = mysqli_query($db, $sql);
+            $result = mysqli_query($database, $sql);
             if(!$result) {
                 $errors['name'] = "Database error checking name uniqueness.";
             } else {
