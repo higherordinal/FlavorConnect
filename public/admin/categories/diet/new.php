@@ -12,12 +12,12 @@ if(is_post_request()) {
     $diet->name = $args['name'] ?? '';
     
     if($diet->save()) {
-        $session->message('Diet restriction created successfully.');
+        $session->message('Diet created successfully.');
         redirect_to(url_for('/admin/categories/index.php'));
     }
 }
 
-$page_title = 'Create Diet Restriction';
+$page_title = 'Create Diet';
 $page_style = 'admin';
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -47,7 +47,7 @@ include(SHARED_PATH . '/member_header.php');
         
         <form action="<?php echo url_for('/admin/categories/diet/new.php'); ?>" method="post" class="form">
             <div class="form-group">
-                <label for="diet_name">Diet Restriction Name</label>
+                <label for="diet_name">Diet Name</label>
                 <input type="text" id="diet_name" name="diet[name]" value="<?php echo h($diet->name); ?>" class="form-control" required>
             </div>
             
