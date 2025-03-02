@@ -17,7 +17,7 @@ if(!$type) {
 
 if(is_post_request()) {
     // Check if type is being used by any recipes
-    $recipe_count = Recipe::count_by_attribute_id($id, 'type');
+    $recipe_count = RecipeAttribute::count_by_attribute_id($id, 'type');
     if($recipe_count > 0) {
         $session->message("Cannot delete type. It is used by {$recipe_count} recipes.", 'error');
     } else {
@@ -61,7 +61,7 @@ include(SHARED_PATH . '/member_header.php');
             
             <?php
             // Check if type is being used by any recipes
-            $recipe_count = Recipe::count_by_attribute_id($id, 'type');
+            $recipe_count = RecipeAttribute::count_by_attribute_id($id, 'type');
             if($recipe_count > 0) { ?>
                 <div class="alert warning">
                     <p>Cannot delete this recipe type. It is currently used by <?php echo $recipe_count; ?> recipe(s).</p>
