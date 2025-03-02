@@ -414,6 +414,9 @@ button.action.add:hover {
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .metadata-section h2 {
@@ -426,10 +429,41 @@ button.action.add:hover {
 
 .metadata-section .list {
     margin-top: var(--spacing-md);
+    margin-bottom: 0;
 }
 
-.metadata-section .actions {
-    margin-bottom: var(--spacing-md);
+.metadata-section table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    margin: 0;
+}
+
+/* Add New Button Styling */
+.add-new-button {
+    margin-top: var(--spacing-md);
+    display: flex;
+    justify-content: flex-start;
+}
+
+.add-new-button .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-white);
+}
+
+.add-new-button .fas {
+    font-size: 0.875rem;
 }
 
 /* Count Badges */
@@ -577,19 +611,6 @@ button.action.add:hover {
     border-radius: var(--border-radius);
     padding: var(--spacing-lg);
     box-shadow: var(--shadow-sm);
-}
-
-.section-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    margin-bottom: var(--spacing-md);
-}
-
-.section-header h2 {
-    color: var(--text-color);
-    margin: 0;
-    font-size: 1.5rem;
 }
 
 /* User Management */
