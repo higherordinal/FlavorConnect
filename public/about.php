@@ -59,12 +59,21 @@ if($session->is_logged_in()) {
         </div>
 
         <div class="join-section">
-            <h2>Join Our Community</h2>
-            <p>Whether you're a seasoned chef or just starting your culinary journey, FlavorConnect welcomes you. Sign up today to start sharing your recipes and connecting with fellow food lovers!</p>
-            <div class="cta-buttons">
-                <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn btn-primary">Join Now</a>
-                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-secondary">Browse Recipes</a>
-            </div>
+            <?php if($session->is_logged_in()) { ?>
+                <h2>Enhance Your Experience</h2>
+                <p>Thank you for being part of our FlavorConnect community! Continue your culinary journey by creating new recipes, exploring trending dishes, or connecting with fellow food enthusiasts.</p>
+                <div class="cta-buttons">
+                    <a href="<?php echo url_for('/recipes/new.php'); ?>" class="btn btn-primary">Create Recipe</a>
+                    <a href="<?php echo url_for('/users/profile.php'); ?>" class="btn btn-secondary">View Profile</a>
+                </div>
+            <?php } else { ?>
+                <h2>Join Our Community</h2>
+                <p>Whether you're a seasoned chef or just starting your culinary journey, FlavorConnect welcomes you. Sign up today to start sharing your recipes and connecting with fellow food lovers!</p>
+                <div class="cta-buttons">
+                    <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn btn-primary">Join Now</a>
+                    <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-secondary">Browse Recipes</a>
+                </div>
+            <?php } ?>
         </div>
     </section>
 </main>
