@@ -35,11 +35,11 @@ include(SHARED_PATH . '/member_header.php');
             <span class="breadcrumb-separator">/</span>
             <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="breadcrumb-item">Recipe Metadata</a>
             <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">Create Diet Restriction</span>
+            <span class="breadcrumb-item active">Create Diet</span>
         </div>
 
         <div class="admin-header">
-            <h1>Create Diet Restriction</h1>
+            <h1>Create Diet</h1>
         </div>
         
         <?php echo display_session_message(); ?>
@@ -52,7 +52,7 @@ include(SHARED_PATH . '/member_header.php');
             </div>
             
             <div class="form-buttons">
-                <button type="submit" class="action save">Create Diet Restriction</button>
+                <button type="submit" class="action save">Create Diet</button>
                 <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
