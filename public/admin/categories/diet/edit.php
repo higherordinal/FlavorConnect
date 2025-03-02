@@ -19,9 +19,17 @@ if(is_post_request()) {
     $args = $_POST['diet'] ?? [];
     $diet->name = $args['name'] ?? '';
     
+    // Make sure the id is preserved for update
+    $diet->id = $id;
+    
+    // Debug
+    error_log("Diet ID before save: " . $diet->id);
+    
     if($diet->save()) {
-        $session->message('Diet restriction updated successfully.');
+        $session->message('Diet updated successfully.');
         redirect_to(url_for('/admin/categories/index.php'));
+    } else {
+        error_log("Diet save failed. Errors: " . print_r($diet->errors, true));
     }
 }
 

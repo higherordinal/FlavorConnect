@@ -19,9 +19,18 @@ if(is_post_request()) {
     $args = $_POST['style'] ?? [];
     $style->name = $args['name'] ?? '';
     
+    // Make sure the id is preserved for update
+    $style->id = $id;
+    
+    // Debug
+    error_log("Style ID before save: " . $style->id);
+    error_log("Style primary key: " . RecipeAttribute::get_primary_key_column());
+    
     if($style->save()) {
         $session->message('Style updated successfully.');
         redirect_to(url_for('/admin/categories/index.php'));
+    } else {
+        error_log("Style save failed. Errors: " . print_r($style->errors, true));
     }
 }
 
