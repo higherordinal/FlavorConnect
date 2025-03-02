@@ -23,6 +23,14 @@ include(SHARED_PATH . '/member_header.php');
         <i class="fas fa-arrow-left"></i>
         Back to Recipes
     </a>
+    
+    <div class="breadcrumbs">
+        <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Favorites</span>
+    </div>
 </div>
 
 <div class="recipe-gallery">

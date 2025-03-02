@@ -349,6 +349,37 @@
     box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
 }
 
+/* Breadcrumbs */
+.breadcrumbs {
+    margin-bottom: var(--spacing-md);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.breadcrumb-item {
+    color: var(--text-secondary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item:not(.active):hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.breadcrumb-separator {
+    color: var(--text-secondary-color);
+    font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
     .recipe-form {
         padding: var(--spacing-md);

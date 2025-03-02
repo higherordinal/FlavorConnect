@@ -18,6 +18,12 @@ if($session->is_logged_in()) {
         <i class="fas fa-arrow-left"></i>
         Back to Home
     </a>
+    
+    <div class="breadcrumbs">
+        <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Recipes</span>
+    </div>
 </div>
 
 <?php
