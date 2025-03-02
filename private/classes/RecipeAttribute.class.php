@@ -255,7 +255,43 @@ class RecipeAttribute extends DatabaseObject {
         }
         
         self::setup_for_type($this->type);
+        
+        error_log("RecipeAttribute save - Type: " . $this->type);
+        error_log("RecipeAttribute save - Table: " . self::$table_name);
+        error_log("RecipeAttribute save - PK: " . self::$primary_key);
+        error_log("RecipeAttribute save - ID: " . $this->id);
+        
+        // Map the id property to the specific primary key property
+        $pk = self::$primary_key;
+        $this->$pk = $this->id;
+        
         return parent::save();
+    }
+
+    /**
+     * Updates an existing record in the database
+     * @return bool True if update was successful
+     */
+    protected function update() {
+        $this->validate();
+        if(!empty($this->errors)) { return false; }
+
+        $attributes = $this->sanitized_attributes();
+        $attribute_pairs = [];
+        foreach($attributes as $key => $value) {
+            $attribute_pairs[] = "{$key}='{$value}'";
+        }
+
+        $sql = "UPDATE " . static::$table_name . " SET ";
+        $sql .= join(', ', $attribute_pairs);
+        $sql .= " WHERE " . static::$primary_key . "='" . db_escape(static::$database, $this->id) . "' ";
+        $sql .= "LIMIT 1";
+
+        error_log("RecipeAttribute update SQL: " . $sql);
+        
+        $database = static::$database;
+        $result = mysqli_query($database, $sql);
+        return $result;
     }
 
     /**
@@ -278,5 +314,27 @@ class RecipeAttribute extends DatabaseObject {
         
         $row = $result->fetch_row();
         return $row[0] ?? 0;
+    }
+    
+    /**
+     * Deletes the attribute from the database
+     * @return bool True if deletion was successful
+     */
+    public function delete() {
+        if (!isset($this->type)) {
+            throw new Exception("Type must be set before deleting");
+        }
+        
+        self::setup_for_type($this->type);
+        
+        $sql = "DELETE FROM " . static::$table_name;
+        $sql .= " WHERE " . static::$primary_key . " = ?";
+        $sql .= " LIMIT 1";
+        
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $this->id);
+        $result = $stmt->execute();
+        
+        return $result;
     }
 }

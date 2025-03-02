@@ -202,9 +202,14 @@ abstract class DatabaseObject {
      */
     public function save() {
         $pk = static::get_primary_key();
-        if(isset($this->$pk)) {
+        error_log("DatabaseObject save - PK: " . $pk);
+        error_log("DatabaseObject save - this->$pk: " . (isset($this->$pk) ? $this->$pk : 'not set'));
+        
+        if(isset($this->$pk) && !empty($this->$pk)) {
+            error_log("DatabaseObject save - Updating record");
             return $this->update();
         } else {
+            error_log("DatabaseObject save - Creating new record");
             return $this->create();
         }
     }
