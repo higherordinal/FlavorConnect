@@ -46,10 +46,25 @@ function error_500() {
  * @return string HTML formatted message or empty string if no message
  */
 function display_session_message() {
-    global $session;
-    $msg = $session->message();
-    if(isset($msg) && $msg != '') {
-        return '<div class="message success">' . h($msg) . '</div>';
+    $session = Session::get_instance();
+    if($session) {
+        $msg = $session->message();
+        if(isset($msg) && $msg != '') {
+            return '<div class="message success">' . h($msg) . '</div>';
+        }
+    }
+    return '';
+}
+
+/**
+ * Displays an error message for a specific form field
+ * @param array $errors Array of errors indexed by field name
+ * @param string $field Field name to display error for
+ * @return string HTML formatted error message or empty string if no error
+ */
+function display_field_error($errors, $field) {
+    if(isset($errors[$field]) && !empty($errors[$field])) {
+        return '<span class="error">' . h($errors[$field]) . '</span>';
     }
     return '';
 }

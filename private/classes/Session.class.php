@@ -147,5 +147,16 @@ class Session {
             $this->message_type = '';
         }
     }
+    
+    /**
+     * Gets the current session instance
+     * @return Session|null The current session instance or null if not available
+     */
+    public static function get_instance() {
+        if(isset($GLOBALS['session']) && $GLOBALS['session'] instanceof Session) {
+            return $GLOBALS['session'];
+        }
+        return null;
+    }
 }
 ?>
