@@ -31,7 +31,34 @@ class Measurement extends DatabaseObject {
      * @return array Array of validation errors
      */
     protected function validate() {
-        return validate_metadata(['name' => $this->name]);
+        $this->errors = [];
+        
+        // Check if name is blank
+        if(is_blank($this->name)) {
+            $this->errors[] = "Name cannot be blank.";
+        } elseif (!has_length($this->name, ['min' => 2, 'max' => 255])) {
+            $this->errors[] = "Name must be between 2 and 255 characters.";
+        }
+        
+        // Check if name is unique
+        $sql = "SELECT COUNT(*) FROM " . static::$table_name;
+        $sql .= " WHERE name='" . db_escape(self::$database, $this->name) . "'";
+        if($this->measurement_id != '') {
+            $sql .= " AND measurement_id != '" . db_escape(self::$database, $this->measurement_id) . "'";
+        }
+        
+        $result = mysqli_query(self::$database, $sql);
+        if(!$result) {
+            $this->errors[] = "Database error: " . mysqli_error(self::$database);
+            return $this->errors;
+        }
+        
+        $row = mysqli_fetch_row($result);
+        if($row[0] > 0) {
+            $this->errors[] = "A measurement with this name already exists.";
+        }
+        
+        return $this->errors;
     }
 
     /**

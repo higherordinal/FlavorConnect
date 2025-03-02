@@ -1,5 +1,5 @@
 <?php
-require_once('../../../private/core/initialize.php');
+require_once('../../../../private/core/initialize.php');
 require_login();
 require_admin();
 
@@ -8,7 +8,7 @@ if(!isset($_GET['id'])) {
     redirect_to(url_for('/admin/categories/index.php'));
 }
 
-$id = $_GET['id'] ?? '';
+$id = $_GET['id'];
 $measurement = Measurement::find_by_id($id);
 if(!$measurement) {
     $session->message('Measurement not found.');
@@ -16,35 +16,55 @@ if(!$measurement) {
 }
 
 if(is_post_request()) {
-    $args = $_POST['measurement'];
-    $measurement->merge_attributes($args);
+    $args = $_POST['measurement'] ?? [];
+    $measurement->name = $args['name'] ?? '';
+    
     if($measurement->save()) {
-        $session->message('The measurement was updated successfully.');
+        $session->message('Measurement unit updated successfully.');
         redirect_to(url_for('/admin/categories/index.php'));
     }
 }
 
-$page_title = 'Edit Measurement';
-include(SHARED_PATH . '/header.php');
+$page_title = 'Edit Measurement Unit';
+$page_style = 'admin';
+include(SHARED_PATH . '/member_header.php');
 ?>
 
-<div class="container py-4">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-            <h1><?php echo h($page_title); ?></h1>
-            
-            <?php echo display_errors($measurement->errors); ?>
-            
-            <form action="<?php echo url_for('/admin/categories/measurement/edit.php?id=' . h(u($id))); ?>" method="post">
-                <?php include('form_fields.php'); ?>
-                
-                <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">Update Measurement</button>
-                    <a class="btn btn-secondary" href="<?php echo url_for('/admin/categories/index.php'); ?>">Cancel</a>
-                </div>
-            </form>
+<main class="main-content">
+    <div class="admin-content">
+        <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Recipe Metadata
+        </a>
+
+        <div class="breadcrumbs">
+            <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="breadcrumb-item">Recipe Metadata</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">Edit Measurement Unit</span>
         </div>
+
+        <div class="admin-header">
+            <h1>Edit Measurement Unit</h1>
+        </div>
+        
+        <?php echo display_session_message(); ?>
+        <?php echo display_errors($measurement->errors); ?>
+        
+        <form action="<?php echo url_for('/admin/categories/measurement/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
+            <div class="form-group">
+                <label for="measurement_name">Measurement Name</label>
+                <input type="text" id="measurement_name" name="measurement[name]" value="<?php echo h($measurement->name); ?>" class="form-control" required>
+            </div>
+            
+            <div class="form-buttons">
+                <button type="submit" class="action save">Update Measurement</button>
+                <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
+            </div>
+        </form>
     </div>
-</div>
+</main>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
