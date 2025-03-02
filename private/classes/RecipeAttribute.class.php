@@ -257,4 +257,26 @@ class RecipeAttribute extends DatabaseObject {
         self::setup_for_type($this->type);
         return parent::save();
     }
+
+    /**
+     * Counts recipes using a specific attribute
+     * @param int $id The attribute ID
+     * @param string $type The attribute type (style, diet, type)
+     * @return int Number of recipes using this attribute
+     */
+    public static function count_by_attribute_id($id, $type) {
+        self::setup_for_type($type);
+        
+        $column = self::$valid_types[$type]['id'];
+        
+        $sql = "SELECT COUNT(*) FROM recipe WHERE {$column} = ?";
+        
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $row = $result->fetch_row();
+        return $row[0] ?? 0;
+    }
 }

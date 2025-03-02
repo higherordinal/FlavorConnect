@@ -17,7 +17,7 @@ if(!$style) {
 
 if(is_post_request()) {
     // Check if style is being used by any recipes
-    $recipe_count = Recipe::count_by_attribute_id($id, 'style');
+    $recipe_count = RecipeAttribute::count_by_attribute_id($id, 'style');
     if($recipe_count > 0) {
         $session->message("Cannot delete style. It is used by {$recipe_count} recipes.", 'error');
     } else {
@@ -61,7 +61,7 @@ include(SHARED_PATH . '/member_header.php');
             
             <?php
             // Check if style is being used by any recipes
-            $recipe_count = Recipe::count_by_attribute_id($id, 'style');
+            $recipe_count = RecipeAttribute::count_by_attribute_id($id, 'style');
             if($recipe_count > 0) { ?>
                 <div class="alert warning">
                     <p>Cannot delete this style. It is currently used by <?php echo $recipe_count; ?> recipe(s).</p>
