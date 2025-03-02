@@ -271,8 +271,13 @@ echo display_session_message();
         </div>
     </div>
 
-    <div class="recipe-description">
-        <?php echo h($recipe->description); ?>
+    <div class="recipe-description-container">
+        <div class="recipe-description">
+            <?php echo h($recipe->description); ?>
+        </div>
+        <button class="print-recipe-btn" id="printRecipeBtn">
+            <i class="fas fa-print"></i> Print Recipe
+        </button>
     </div>
 
     <div class="recipe-ingredients">
@@ -484,7 +489,7 @@ echo display_session_message();
 ?>
 </script>
 
-<script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>"></script>
 
 <script>
     window.initialUserData = <?php echo json_encode([
@@ -516,6 +521,18 @@ echo display_session_message();
     });
 </script>
 
-<script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>" type="module"></script>
+<script>
+    // Print button functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const printBtn = document.getElementById('printRecipeBtn');
+        if (printBtn) {
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+        }
+    });
+</script>
+
+<script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>"></script>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
