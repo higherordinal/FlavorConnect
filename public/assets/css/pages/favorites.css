@@ -31,3 +31,37 @@
 .favorite-btn.is-favorited {
     color: #ff4b4b;
 }
+
+/* ==========================================================================
+   Breadcrumbs
+   ========================================================================== */
+
+.breadcrumbs {
+    margin-bottom: var(--spacing-md);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.breadcrumb-item {
+    color: var(--text-secondary-color);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item:not(.active):hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.breadcrumb-separator {
+    color: var(--text-secondary-color);
+    font-size: 0.9rem;
+}

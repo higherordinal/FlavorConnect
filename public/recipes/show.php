@@ -172,9 +172,20 @@ echo display_session_message();
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-show.css'); ?>">
 
 <div class="recipe-show">
-    <a href="<?php echo $back_link; ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i> <?php echo $back_text; ?>
-    </a>
+    <div class="container">
+        <a href="<?php echo $back_link; ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> <?php echo $back_text; ?>
+        </a>
+        
+        <div class="breadcrumbs">
+            <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active"><?php echo h($recipe->title); ?></span>
+        </div>
+    </div>
+    
     <div class="recipe-header-image">
         <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
              alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
@@ -194,7 +205,7 @@ echo display_session_message();
                         $avg_rating = $recipe->average_rating();
                         ?>
                         <div class="stars">
-                            <?php
+                            <?php 
                             if ($avg_rating) {
                                 // Full stars
                                 for ($i = 1; $i <= floor($avg_rating); $i++) {

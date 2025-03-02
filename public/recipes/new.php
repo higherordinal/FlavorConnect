@@ -152,11 +152,22 @@ $back_link = match($ref) {
 };
 ?>
 
+<div class="container">
+    <a href="<?php echo $back_link; ?>" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back
+    </a>
+    
+    <div class="breadcrumbs">
+        <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
+        <span class="breadcrumb-separator">/</span>
+        <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item active">Create Recipe</span>
+    </div>
+</div>
+
 <div class="recipe-form">
     <div class="page-header">
-        <a href="<?php echo $back_link; ?>" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back
-        </a>
         <h1>Create New Recipe</h1>
     </div>
     
