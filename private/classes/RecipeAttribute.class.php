@@ -60,33 +60,11 @@ class RecipeAttribute extends DatabaseObject {
      * @return array Array of validation errors
      */
     protected function validate() {
-        $this->errors = [];
+        $attribute_data = [
+            'name' => $this->name
+        ];
         
-        // Check if name is blank
-        if(is_blank($this->name)) {
-            $this->errors[] = "Name cannot be blank.";
-        } elseif (!has_length($this->name, ['min' => 2, 'max' => 255])) {
-            $this->errors[] = "Name must be between 2 and 255 characters.";
-        }
-        
-        // Check if name is unique
-        $sql = "SELECT COUNT(*) FROM " . static::$table_name;
-        $sql .= " WHERE name='" . db_escape(self::$database, $this->name) . "'";
-        if($this->id != '') {
-            $sql .= " AND " . static::$primary_key . " != '" . db_escape(self::$database, $this->id) . "'";
-        }
-        
-        $result = mysqli_query(self::$database, $sql);
-        if(!$result) {
-            $this->errors[] = "Database error: " . mysqli_error(self::$database);
-            return $this->errors;
-        }
-        
-        $row = mysqli_fetch_row($result);
-        if($row[0] > 0) {
-            $this->errors[] = "A " . $this->type . " with this name already exists.";
-        }
-        
+        $this->errors = validate_recipe_attribute_data($attribute_data, $this->type, $this->id);
         return $this->errors;
     }
 
@@ -201,22 +179,6 @@ class RecipeAttribute extends DatabaseObject {
     }
 
     /**
-     * Checks if a name already exists for this attribute type
-     * @param string $name The name to check
-     * @param int|null $exclude_id ID to exclude from the check (for updates)
-     * @return bool True if name exists, false otherwise
-     */
-    public static function name_exists($name, $exclude_id = null) {
-        $sql = "SELECT * FROM " . static::$table_name . " WHERE name = '" . db_escape(static::$database, $name) . "'";
-        if ($exclude_id !== null) {
-            $sql .= " AND " . static::$primary_key . " != '" . db_escape(static::$database, $exclude_id) . "'";
-        }
-        $sql .= " LIMIT 1";
-        $result = static::find_by_sql($sql);
-        return !empty($result);
-    }
-
-    /**
      * Gets the current table name
      * @return string The table name
      */
@@ -256,11 +218,6 @@ class RecipeAttribute extends DatabaseObject {
         
         self::setup_for_type($this->type);
         
-        error_log("RecipeAttribute save - Type: " . $this->type);
-        error_log("RecipeAttribute save - Table: " . self::$table_name);
-        error_log("RecipeAttribute save - PK: " . self::$primary_key);
-        error_log("RecipeAttribute save - ID: " . $this->id);
-        
         // Map the id property to the specific primary key property
         $pk = self::$primary_key;
         $this->$pk = $this->id;
@@ -283,28 +240,19 @@ class RecipeAttribute extends DatabaseObject {
         $sql .= join("', '", array_values($attributes));
         $sql .= "')";
 
-        error_log("RecipeAttribute create SQL: " . $sql);
-
-        try {
-            $database = static::$database;
-            $result = mysqli_query($database, $sql);
-            if($result) {
-                $insert_id = mysqli_insert_id($database);
-                if($insert_id) {
-                    $this->id = $insert_id;
-                    // Also set the specific primary key property
-                    $pk = static::$primary_key;
-                    $this->$pk = $insert_id;
-                }
-                return true;
+        $database = static::$database;
+        $result = mysqli_query($database, $sql);
+        if($result) {
+            $insert_id = mysqli_insert_id($database);
+            if($insert_id) {
+                $this->id = $insert_id;
+                // Also set the specific primary key property
+                $pk = static::$primary_key;
+                $this->$pk = $insert_id;
             }
-        } catch(mysqli_sql_exception $e) {
-            if($e->getCode() == 1062) { // Duplicate entry error
-                $this->errors[] = "This name already exists.";
-            } else {
-                $this->errors[] = "Database error: " . $e->getMessage();
-            }
+            return true;
         }
+        $this->errors[] = "Database error: " . mysqli_error($database);
         return false;
     }
 
@@ -327,8 +275,6 @@ class RecipeAttribute extends DatabaseObject {
         $sql .= " WHERE " . static::$primary_key . "='" . db_escape(static::$database, $this->id) . "' ";
         $sql .= "LIMIT 1";
 
-        error_log("RecipeAttribute update SQL: " . $sql);
-        
         $database = static::$database;
         $result = mysqli_query($database, $sql);
         return $result;

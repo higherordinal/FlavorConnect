@@ -335,23 +335,33 @@ function validate_login($login_data) {
 }
 
 /**
- * Validates metadata (style, diet, type, measurement) data
- * @param array $data The metadata to validate
- * @param string $table The table name for uniqueness check
+ * Validates recipe attribute data (style, diet, type)
+ * @param array $attribute_data The attribute data to validate
+ * @param string $type The attribute type (style, diet, type)
  * @param string $current_id Current ID for uniqueness check
  * @return array Array of validation errors
  */
-function validate_metadata($data, $table = '', $current_id = '0') {
+function validate_recipe_attribute_data($attribute_data, $type = '', $current_id = '0') {
     $errors = [];
 
     // Name validation
-    if(is_blank($data['name'])) {
-        $errors[] = "Name cannot be blank.";
-    } elseif (!has_length($data['name'], ['min' => 2, 'max' => 255])) {
-        $errors[] = "Name must be between 2 and 255 characters.";
-    } elseif ($table && !has_unique_metadata_name($data['name'], $table, $current_id)) {
-        $type = str_replace('recipe_', '', $table);
-        $errors[] = "A " . $type . " with the name '" . h($data['name']) . "' already exists.";
+    if(is_blank($attribute_data['name'])) {
+        $errors['name'] = "Name cannot be blank.";
+    } elseif (!has_length($attribute_data['name'], ['min' => 2, 'max' => 255])) {
+        $errors['name'] = "Name must be between 2 and 255 characters.";
+    } elseif ($type) {
+        // Map type to table name
+        $tables = [
+            'style' => 'recipe_style',
+            'diet' => 'recipe_diet',
+            'type' => 'recipe_type'
+        ];
+        
+        $table = $tables[$type] ?? '';
+        
+        if ($table && !has_unique_metadata_name($attribute_data['name'], $table, $current_id)) {
+            $errors['name'] = "A " . $type . " with the name '" . h($attribute_data['name']) . "' already exists.";
+        }
     }
 
     return $errors;
@@ -420,7 +430,6 @@ function has_remaining_active_admin($user_id, $is_active=false) {
     
     $result = $database->query($sql);
     if(!$result) {
-        error_log("Database error in has_remaining_active_admin: " . $database->error);
         return false;
     }
     
@@ -462,6 +471,34 @@ function validate_user_deletion($user_id) {
         }
     }
     
+    return $errors;
+}
+
+/**
+ * Validates recipe ingredient data
+ * @param array $ingredient_data The ingredient data to validate
+ * @return array Array of validation errors
+ */
+function validate_recipe_ingredient_data($ingredient_data) {
+    $errors = [];
+
+    // Recipe ID validation
+    if(!isset($ingredient_data['recipe_id']) || !is_numeric($ingredient_data['recipe_id'])) {
+        $errors['recipe_id'] = "Recipe ID is required.";
+    }
+
+    // Measurement ID validation
+    if(!isset($ingredient_data['measurement_id']) || !is_numeric($ingredient_data['measurement_id'])) {
+        $errors['measurement_id'] = "Measurement is required.";
+    }
+
+    // Quantity validation
+    if(is_blank($ingredient_data['quantity'])) {
+        $errors['quantity'] = "Quantity cannot be blank.";
+    } elseif(!is_numeric($ingredient_data['quantity']) || !has_number_between($ingredient_data['quantity'], 0.01, 9999)) {
+        $errors['quantity'] = "Quantity must be a positive number.";
+    }
+
     return $errors;
 }
 

@@ -17,19 +17,13 @@ if(!$diet) {
 
 if(is_post_request()) {
     $args = $_POST['diet'] ?? [];
-    $diet->name = $args['name'] ?? '';
-    
-    // Make sure the id is preserved for update
-    $diet->id = $id;
-    
-    // Debug
-    error_log("Diet ID before save: " . $diet->id);
-    
-    if($diet->save()) {
+    $diet->merge_attributes($args);
+    $result = $diet->save();
+    if($result === true) {
         $session->message('Diet updated successfully.');
-        redirect_to(url_for('/admin/categories/index.php'));
+        redirect_to(url_for('/admin/categories/diet/show.php?id=' . $diet->id));
     } else {
-        error_log("Diet save failed. Errors: " . print_r($diet->errors, true));
+        // Show errors
     }
 }
 

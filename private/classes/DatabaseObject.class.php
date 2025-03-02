@@ -26,10 +26,6 @@ abstract class DatabaseObject {
      */
     public static function set_database($database) {
         self::$database = $database;
-        error_log("Database connection set: " . (self::$database ? "true" : "false"));
-        if (self::$database) {
-            error_log("Connected to database: " . self::$database->host_info);
-        }
     }
 
     /**
@@ -202,14 +198,10 @@ abstract class DatabaseObject {
      */
     public function save() {
         $pk = static::get_primary_key();
-        error_log("DatabaseObject save - PK: " . $pk);
-        error_log("DatabaseObject save - this->$pk: " . (isset($this->$pk) ? $this->$pk : 'not set'));
         
         if(isset($this->$pk) && !empty($this->$pk)) {
-            error_log("DatabaseObject save - Updating record");
             return $this->update();
         } else {
-            error_log("DatabaseObject save - Creating new record");
             return $this->create();
         }
     }

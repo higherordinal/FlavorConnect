@@ -77,14 +77,12 @@ class RecipeReview extends DatabaseObject {
                 $comment_result = self::$database->query($sql);
                 
                 if (!$comment_result) {
-                    error_log("Failed to save comment: " . self::$database->error);
                     // Don't return false here, as the rating was saved successfully
                 }
             }
             
             return true;
         } else {
-            error_log("Failed to save rating: " . self::$database->error);
             return false;
         }
     }
@@ -98,7 +96,6 @@ class RecipeReview extends DatabaseObject {
     public static function delete_review($recipe_id, $user_id) {
         // Validate parameters
         if (empty($recipe_id) || empty($user_id)) {
-            error_log("Invalid parameters for delete_review: recipe_id={$recipe_id}, user_id={$user_id}");
             return false;
         }
         
@@ -111,7 +108,6 @@ class RecipeReview extends DatabaseObject {
         
         $comment_result = $database->query($sql);
         if (!$comment_result) {
-            error_log("Failed to delete comment: " . $database->error);
             // Continue anyway to delete the rating
         }
         
@@ -122,7 +118,6 @@ class RecipeReview extends DatabaseObject {
         
         $rating_result = $database->query($sql);
         if (!$rating_result) {
-            error_log("Failed to delete rating: " . $database->error);
             return false;
         }
         
@@ -137,7 +132,6 @@ class RecipeReview extends DatabaseObject {
     public static function delete_by_id($rating_id) {
         // Validate parameter
         if (empty($rating_id)) {
-            error_log("Invalid parameter for delete_by_id: rating_id={$rating_id}");
             return false;
         }
         
@@ -149,7 +143,6 @@ class RecipeReview extends DatabaseObject {
         
         $result = $database->query($sql);
         if (!$result || $result->num_rows === 0) {
-            error_log("Rating not found: rating_id={$rating_id}");
             return false;
         }
         
@@ -164,7 +157,6 @@ class RecipeReview extends DatabaseObject {
         
         $comment_result = $database->query($sql);
         if (!$comment_result) {
-            error_log("Failed to delete comment: " . $database->error);
             // Continue anyway to delete the rating
         }
         
@@ -174,7 +166,6 @@ class RecipeReview extends DatabaseObject {
         
         $rating_result = $database->query($sql);
         if (!$rating_result) {
-            error_log("Failed to delete rating: " . $database->error);
             return false;
         }
         
@@ -277,20 +268,10 @@ class RecipeComment extends DatabaseObject {
      * @return bool True if comment was saved successfully
      */
     public function save() {
-        // Debug logging
-        error_log("Saving comment with data: " . print_r([
-            'recipe_id' => $this->recipe_id,
-            'user_id' => $this->user_id,
-            'comment_text' => $this->comment_text
-        ], true));
-        
         // Save the comment
         $result = parent::save();
         
-        // Debug logging
-        error_log("Comment save result: " . ($result ? "true" : "false"));
         if (!$result) {
-            error_log("Comment save error: " . self::$database->error);
             return false;
         }
         
@@ -306,13 +287,7 @@ class RecipeComment extends DatabaseObject {
         $sql = "SELECT * FROM " . static::$table_name . " ";
         $sql .= "WHERE recipe_id='" . self::$database->escape_string($recipe_id) . "' ";
         
-        // Debug logging
-        error_log("Find comments SQL: " . $sql);
-        
         $result = static::find_by_sql($sql);
-        
-        // Debug the results
-        error_log("Comments found for recipe " . $recipe_id . ": " . print_r($result, true));
         
         return $result;
     }

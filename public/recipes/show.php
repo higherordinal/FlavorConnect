@@ -133,10 +133,8 @@ if (is_post_request()) {
             redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
         } else {
             $errors[] = 'Failed to save review.';
-            error_log("Failed to save review: " . print_r($errors, true));
         }
     } else {
-        error_log("Validation errors: " . print_r($errors, true));
     }
 }
 
@@ -412,8 +410,6 @@ echo display_session_message();
             <?php 
             foreach($reviews as $review) { 
                 $user = $review->user();
-                // Debug logging
-                error_log("Review data: " . print_r($review, true));
             ?>
                 <div class="comment">
                     <div class="comment-header">
