@@ -62,9 +62,9 @@
     justify-content: start;
 }
 
-/* Custom button styles for hero section */
 .hero-section .btn-primary:hover {
-    box-shadow: 0 4px 8px var(--secondary-color);
+    background-color: var(--color-white);
+    color: var(--primary-color);
     transform: translateY(-2px);
 }
 

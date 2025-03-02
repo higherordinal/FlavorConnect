@@ -10,6 +10,10 @@ if(!isset($page_style)) { $page_style = ''; }
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlavorConnect - <?php echo h($page_title); ?></title>
     
+    <!-- Favicon -->
+    <link rel="icon" href="<?php echo url_for('/assets/images/flavorconnect_favicon.ico'); ?>" type="image/x-icon">
+    <link rel="shortcut icon" href="<?php echo url_for('/assets/images/flavorconnect_favicon.ico'); ?>" type="image/x-icon">
+    
     <!-- Base Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css'); ?>">
     
