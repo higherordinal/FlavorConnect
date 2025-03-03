@@ -18,7 +18,8 @@
     border-radius: var(--border-radius-lg);
     overflow: hidden;
     position: relative;
-    width: 100%;
+    width: 85%;
+    margin: 0 auto;
 }
 
 .recipe-header-image img {
@@ -372,7 +373,8 @@
 .recipe-header-image {
     position: relative;
     grid-column: 1 / -1;
-    width: 100%;
+    width: 85%;
+    margin: 0 auto;
     height: 60vh;
     min-height: 400px;
     overflow: hidden;
@@ -1044,6 +1046,8 @@
     /* Ensure recipe image prints nicely */
     .recipe-header-image {
         height: 300px;
+        width: 85%;
+        margin: 0 auto;
         page-break-after: avoid;
     }
 
