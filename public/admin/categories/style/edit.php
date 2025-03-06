@@ -21,7 +21,7 @@ if(is_post_request()) {
     $result = $style->save();
     if($result === true) {
         $session->message('Style updated successfully.');
-        redirect_to(url_for('/admin/categories/style/show.php?id=' . $style->id));
+        redirect_to(url_for('/admin/categories/index.php'));
     } else {
         // Show errors
     }

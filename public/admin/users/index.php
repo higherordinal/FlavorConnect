@@ -1,6 +1,6 @@
 <?php
 require_once('../../../private/core/initialize.php');
-require_once('../../../private/classes/User.class.php');
+
 require_login();
 require_admin();
 
@@ -43,6 +43,8 @@ include(SHARED_PATH . '/member_header.php');
                 <thead>
                     <tr>
                         <th>Username</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                         <th>Email</th>
                         <th>Status</th>
                         <th>User Level</th>
@@ -53,6 +55,8 @@ include(SHARED_PATH . '/member_header.php');
                     <?php foreach($users as $user) { ?>
                         <tr>
                             <td data-label="Username"><?php echo h($user->username); ?></td>
+                            <td data-label="First Name"><?php echo h($user->first_name); ?></td>
+                            <td data-label="Last Name"><?php echo h($user->last_name); ?></td>
                             <td data-label="Email"><?php echo h($user->email); ?></td>
                             <td data-label="Status">
                                 <span class="status-badge <?php echo $user->is_active ? 'active' : 'inactive'; ?>">
