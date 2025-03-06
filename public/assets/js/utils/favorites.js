@@ -26,13 +26,13 @@ export async function checkFavoriteStatus(recipeId) {
 /**
  * Toggle the favorite status of a recipe
  * @param {number} recipeId - The ID of the recipe to toggle
- * @returns {Promise<boolean>} - The new favorite status
+ * @returns {Promise<Object>} - Object with success and isFavorited properties
  */
 export async function toggleFavorite(recipeId) {
     try {
         if (!window.initialUserData?.isLoggedIn) {
             window.location.href = '/FlavorConnect/public/login.php';
-            return false;
+            return { success: false, error: 'User not logged in' };
         }
 
         const userId = window.initialUserData.userId;
@@ -49,10 +49,10 @@ export async function toggleFavorite(recipeId) {
         }
 
         const data = await response.json();
-        return data.isFavorited;
+        return { success: true, isFavorited: data.isFavorited };
     } catch (error) {
         console.error('Error toggling favorite:', error);
-        return false;
+        return { success: false, error: error.message };
     }
 }
 
@@ -66,12 +66,12 @@ export function initializeFavoriteButtons() {
             btn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const recipeId = btn.dataset.recipeId;
-                const isFavorited = await toggleFavorite(recipeId);
+                const result = await toggleFavorite(recipeId);
                 
                 // Check if we're on the favorites page
                 const isFavoritesPage = window.location.pathname.includes('/users/favorites.php');
                 
-                if (isFavoritesPage && !isFavorited) {
+                if (isFavoritesPage && !result.isFavorited) {
                     // If unfavorited from favorites page, remove the card with animation
                     const card = btn.closest('.recipe-card');
                     if (card) {
@@ -96,7 +96,7 @@ export function initializeFavoriteButtons() {
                     }
                 } else {
                     // Update button appearance for non-favorites pages
-                    if (isFavorited) {
+                    if (result.isFavorited) {
                         btn.classList.add('favorited');
                         btn.querySelector('i').classList.remove('far');
                         btn.querySelector('i').classList.add('fas');
