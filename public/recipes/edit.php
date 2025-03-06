@@ -17,14 +17,42 @@ if(!$recipe) {
     redirect_to(url_for('/recipes/index.php'));
 }
 
-// Load recipe ingredients and steps
-$ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
-$steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
-
 // Check if user has permission to edit this recipe
 if($recipe->user_id != $session->get_user_id() && !$session->is_admin()) {
     $session->message('You do not have permission to edit this recipe.', 'error');
     redirect_to(url_for('/recipes/show.php?id=' . $id));
+}
+
+// Load recipe ingredients and steps
+$ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
+$steps = RecipeStep::find_by_recipe_id($recipe->recipe_id);
+
+// Initialize ingredients and instructions arrays in the recipe object
+$recipe->ingredients = [];
+$recipe->instructions = [];
+
+// Populate the recipe object with existing ingredients and steps
+if (!empty($ingredients)) {
+    foreach ($ingredients as $ingredient) {
+        $recipe->ingredients[] = [
+            'ingredient_id' => $ingredient->ingredient_id,
+            'recipe_id' => $ingredient->recipe_id,
+            'name' => $ingredient->name,
+            'quantity' => $ingredient->quantity,
+            'measurement_id' => $ingredient->measurement_id
+        ];
+    }
+}
+
+if (!empty($steps)) {
+    foreach ($steps as $step) {
+        $recipe->instructions[] = [
+            'step_id' => $step->step_id,
+            'recipe_id' => $step->recipe_id,
+            'instruction' => $step->instruction,
+            'step_number' => $step->step_number
+        ];
+    }
 }
 
 $errors = [];
@@ -48,6 +76,12 @@ if(is_post_request()) {
                 } else {
                     $filename = uniqid('recipe_') . '.' . $extension;
                     $target_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename;
+                    
+                    // Ensure the directory exists
+                    $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes/';
+                    if (!is_dir($upload_dir)) {
+                        mkdir($upload_dir, 0755, true);
+                    }
 
                     // Move file to target location
                     if(move_uploaded_file($temp_path, $target_path)) {
@@ -94,14 +128,56 @@ if(is_post_request()) {
                 $recipe->img_file_path = $_POST['img_file_path'];
             }
             $recipe->alt_text = $_POST['alt_text'] ?? $recipe->alt_text;
-
-            if($recipe->save()) {
+            $recipe->updated_at = date('Y-m-d H:i:s');
+            
+            // Process ingredients
+            if(isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
+                // Reset ingredients array
+                $recipe->ingredients = [];
+                
+                foreach($_POST['ingredients'] as $i => $ingredient_data) {
+                    if(!empty($ingredient_data['name'])) {
+                        $recipe->ingredients[] = [
+                            'name' => $ingredient_data['name'],
+                            'quantity' => $ingredient_data['quantity'] ?? '',
+                            'measurement_id' => $ingredient_data['measurement_id'] ?? ''
+                        ];
+                    }
+                }
+            }
+            
+            // Process instructions
+            if(isset($_POST['steps']) && is_array($_POST['steps'])) {
+                // Reset instructions array
+                $recipe->instructions = [];
+                
+                foreach($_POST['steps'] as $i => $step_data) {
+                    if(!empty($step_data['instruction'])) {
+                        $recipe->instructions[] = [
+                            'instruction' => $step_data['instruction'],
+                            'step_number' => $i + 1
+                        ];
+                    }
+                }
+            }
+            
+            // Save the recipe
+            $result = $recipe->save();
+            
+            if($result === true) {
+                // Success
                 $session->message('Recipe updated successfully.');
-                redirect_to(url_for('/recipes/show.php?id=' . $id));
+                // Ensure we redirect to the show page
+                header("Location: " . url_for('/recipes/show.php?id=' . $id));
+                exit;
             } else {
                 // Database save failed
-                $errors = array_merge($errors, $recipe->errors);
-                $session->message('Failed to update recipe. Please try again.', 'error');
+                $errors[] = "Failed to save recipe.";
+                
+                // Merge recipe errors with form errors
+                if (!empty($recipe->errors)) {
+                    $errors = array_merge($errors, $recipe->errors);
+                }
             }
         }
     }
@@ -118,23 +194,7 @@ $back_link = match($ref) {
 };
 ?>
 
-<div class="container">
-    <a href="<?php echo $back_link; ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back
-    </a>
-    
-    <div class="breadcrumbs">
-        <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
-        <span class="breadcrumb-separator">/</span>
-        <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
-        <span class="breadcrumb-separator">/</span>
-        <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="breadcrumb-item"><?php echo h($recipe->title); ?></a>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item active">Edit</span>
-    </div>
-</div>
-
-<main>
+<main class="main-content">
     <div class="recipe-form">
         <header class="page-header">
             <h1>Edit Recipe: <?php echo h($recipe->title); ?></h1>
@@ -151,10 +211,10 @@ $back_link = match($ref) {
                     Save Changes
                 </button>
                 <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($id))); ?>" class="btn btn-danger">
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash-alt"></i>
                     Delete Recipe
                 </a>
-                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="btn btn-secondary">
+                <a href="<?php echo $back_link; ?>" class="btn btn-secondary">
                     <i class="fas fa-times"></i>
                     Cancel
                 </a>
