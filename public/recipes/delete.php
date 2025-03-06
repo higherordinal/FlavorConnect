@@ -35,16 +35,6 @@ $back_link = match($ref) {
 // Handle POST request for deletion
 if(is_post_request()) {
     try {
-        // Delete recipe image if exists
-        if(!empty($recipe->img_file_path)) {
-            $image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $recipe->img_file_path;
-            if(file_exists($image_path)) {
-                if(!unlink($image_path)) {
-                    throw new Exception("Failed to delete recipe image.");
-                }
-            }
-        }
-
         // Delete recipe
         if($recipe->delete()) {
             $session->message('Recipe deleted successfully.');
