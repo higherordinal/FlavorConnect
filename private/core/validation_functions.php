@@ -5,6 +5,41 @@ require_once('functions.php');
 // Validation functions
 
 /**
+ * Generic validation function that validates data against a set of rules
+ * @param array $data The data to validate
+ * @param array $rules The validation rules
+ * @return array Array of validation errors
+ */
+function validate($data, $rules) {
+    $errors = [];
+    
+    foreach ($rules as $field => $rule) {
+        $value = $data[$field] ?? '';
+        
+        // Handle different validation types
+        if ($rule === 'required' && is_blank($value)) {
+            $errors[$field] = ucfirst($field) . " cannot be blank.";
+        } elseif ($rule === 'email' && !empty($value) && !is_valid_email($value)) {
+            $errors[$field] = "Please enter a valid email address.";
+        } elseif ($rule === 'numeric' && !empty($value) && !is_numeric($value)) {
+            $errors[$field] = ucfirst($field) . " must be a number.";
+        } elseif ($rule === 'url' && !empty($value) && !is_valid_url($value)) {
+            $errors[$field] = "Please enter a valid URL.";
+        } elseif (is_array($rule)) {
+            // Handle min/max rules
+            if (isset($rule['min']) && $value < $rule['min']) {
+                $errors[$field] = ucfirst($field) . " must be at least " . $rule['min'] . ".";
+            }
+            if (isset($rule['max']) && $value > $rule['max']) {
+                $errors[$field] = ucfirst($field) . " must be at most " . $rule['max'] . ".";
+            }
+        }
+    }
+    
+    return $errors;
+}
+
+/**
  * Validates if a value is present
  * @param string|null $value The value to check
  * @return bool True if value is blank

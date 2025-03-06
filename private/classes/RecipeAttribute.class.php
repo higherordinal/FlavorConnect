@@ -1,7 +1,7 @@
 <?php
 
 /**
- * RecipeAttribute class for managing recipe attributes (style, diet, type)
+ * RecipeAttribute class for managing recipe attributes (style, diet, type, measurement)
  * Extends DatabaseObject for database operations
  */
 class RecipeAttribute extends DatabaseObject {
@@ -16,14 +16,15 @@ class RecipeAttribute extends DatabaseObject {
     private static $valid_types = [
         'style' => ['table' => 'recipe_style', 'id' => 'style_id'],
         'diet' => ['table' => 'recipe_diet', 'id' => 'diet_id'],
-        'type' => ['table' => 'recipe_type', 'id' => 'type_id']
+        'type' => ['table' => 'recipe_type', 'id' => 'type_id'],
+        'measurement' => ['table' => 'measurement', 'id' => 'measurement_id']
     ];
 
     /** @var int Unique identifier for the attribute */
     public $id;
     /** @var string Name/value of the attribute */
     public $name;
-    /** @var string Type of attribute (style, diet, type) */
+    /** @var string Type of attribute (style, diet, type, measurement) */
     private $type;
 
     /**
@@ -41,7 +42,7 @@ class RecipeAttribute extends DatabaseObject {
 
     /**
      * Sets up the class for a specific attribute type
-     * @param string $type The attribute type (style, diet, type)
+     * @param string $type The attribute type (style, diet, type, measurement)
      * @throws InvalidArgumentException if type is invalid
      */
     private static function setup_for_type($type) {
@@ -70,7 +71,7 @@ class RecipeAttribute extends DatabaseObject {
 
     /**
      * Gets all attributes of a specific type
-     * @param string $type The attribute type (style, diet, type)
+     * @param string $type The attribute type (style, diet, type, measurement)
      * @return array Array of RecipeAttribute objects
      */
     public static function find_by_type($type) {
@@ -122,7 +123,7 @@ class RecipeAttribute extends DatabaseObject {
     /**
      * Finds one attribute by ID and type
      * @param int $id The attribute ID
-     * @param string $type The attribute type (style, diet, type)
+     * @param string $type The attribute type (style, diet, type, measurement)
      * @return RecipeAttribute|false RecipeAttribute object or false if not found
      */
     public static function find_one($id, $type) {
@@ -213,16 +214,25 @@ class RecipeAttribute extends DatabaseObject {
      */
     public function save() {
         if (!isset($this->type)) {
-            throw new Exception("Type must be set before saving");
+            $this->errors[] = "Type must be set before saving";
+            return false;
         }
         
+        // Ensure the type is set up correctly
         self::setup_for_type($this->type);
         
         // Map the id property to the specific primary key property
         $pk = self::$primary_key;
         $this->$pk = $this->id;
         
-        return parent::save();
+        // Call parent save method
+        try {
+            $result = parent::save();
+            return $result;
+        } catch (Exception $e) {
+            $this->errors[] = "Exception: " . $e->getMessage();
+            return false;
+        }
     }
 
     /**
@@ -233,26 +243,40 @@ class RecipeAttribute extends DatabaseObject {
         $this->validate();
         if(!empty($this->errors)) { return false; }
 
-        $attributes = $this->sanitized_attributes();
-        $sql = "INSERT INTO " . static::$table_name . " (";
-        $sql .= join(', ', array_keys($attributes));
-        $sql .= ") VALUES ('";
-        $sql .= join("', '", array_values($attributes));
-        $sql .= "')";
-
-        $database = static::$database;
-        $result = mysqli_query($database, $sql);
-        if($result) {
-            $insert_id = mysqli_insert_id($database);
-            if($insert_id) {
-                $this->id = $insert_id;
-                // Also set the specific primary key property
-                $pk = static::$primary_key;
-                $this->$pk = $insert_id;
+        try {
+            $attributes = $this->sanitized_attributes();
+            
+            // Check if we have attributes to insert
+            if (empty($attributes)) {
+                $this->errors[] = "No attributes to insert";
+                return false;
             }
-            return true;
+            
+            $sql = "INSERT INTO " . static::$table_name . " (";
+            $sql .= join(', ', array_keys($attributes));
+            $sql .= ") VALUES ('";
+            $sql .= join("', '", array_values($attributes));
+            $sql .= "')";
+
+            $database = static::$database;
+            $result = mysqli_query($database, $sql);
+            
+            if($result) {
+                $insert_id = mysqli_insert_id($database);
+                if($insert_id) {
+                    $this->id = $insert_id;
+                    // Also set the specific primary key property
+                    $pk = static::$primary_key;
+                    $this->$pk = $insert_id;
+                }
+                return true;
+            } else {
+                $this->errors[] = "Database error: " . mysqli_error($database);
+            }
+        } catch (Exception $e) {
+            $this->errors[] = "Exception in create: " . $e->getMessage();
         }
-        $this->errors[] = "Database error: " . mysqli_error($database);
+        
         return false;
     }
 
@@ -272,7 +296,8 @@ class RecipeAttribute extends DatabaseObject {
 
         $sql = "UPDATE " . static::$table_name . " SET ";
         $sql .= join(', ', $attribute_pairs);
-        $sql .= " WHERE " . static::$primary_key . "='" . db_escape(static::$database, $this->id) . "' ";
+        $pk = static::$primary_key;
+        $sql .= " WHERE " . $pk . "='" . db_escape(static::$database, $this->$pk) . "' ";
         $sql .= "LIMIT 1";
 
         $database = static::$database;

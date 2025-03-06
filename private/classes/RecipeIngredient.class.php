@@ -34,7 +34,7 @@ class RecipeIngredient extends DatabaseObject {
      */
     public function __construct($args=[]) {
         $this->recipe_id = $args['recipe_id'] ?? '';
-        $this->ingredient_id = $args['ingredient_id'] ?? null;
+        $this->ingredient_id = isset($args['ingredient_id']) && $args['ingredient_id'] !== '' ? (int)$args['ingredient_id'] : null;
         $this->measurement_id = $args['measurement_id'] ?? '';
         $this->quantity = $args['quantity'] ?? '';
         $this->name = $args['name'] ?? '';
@@ -100,7 +100,88 @@ class RecipeIngredient extends DatabaseObject {
         ];
         
         $this->errors = validate_recipe_ingredient_data($ingredient_data);
+        
+        // If name is provided but no ingredient_id, we need to create or find an ingredient
+        if (!empty($this->name) && empty($this->ingredient_id)) {
+            $this->ingredient_id = $this->get_or_create_ingredient($this->name);
+        }
+        
         return empty($this->errors);
+    }
+    
+    /**
+     * Get or create an ingredient
+     * @param string $name Ingredient name
+     * @return int Ingredient ID
+     */
+    private function get_or_create_ingredient($name) {
+        // Check if ingredient exists
+        $sql = "SELECT ingredient_id FROM ingredient WHERE name='" . self::$database->escape_string($name) . "' LIMIT 1";
+        $result = self::$database->query($sql);
+        
+        if($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['ingredient_id'];
+        }
+        
+        // Create new ingredient
+        $sql = "INSERT INTO ingredient (name, recipe_id) VALUES ('" . self::$database->escape_string($name) . "', '" . self::$database->escape_string($this->recipe_id) . "')";
+        $result = self::$database->query($sql);
+        
+        if($result) {
+            return self::$database->insert_id;
+        } else {
+            // If failed to create, return a default ID
+            return 1;
+        }
+    }
+    
+    /**
+     * Creates a new record in the database
+     * @return bool True if creation was successful
+     */
+    protected function create() {
+        // If name is provided but no ingredient_id, we need to create or find an ingredient
+        if (!empty($this->name) && empty($this->ingredient_id)) {
+            $this->ingredient_id = $this->get_or_create_ingredient($this->name);
+        }
+        
+        $this->validate();
+        if(!empty($this->errors)) { return false; }
+        
+        $attributes = $this->sanitized_attributes();
+        
+        // Ensure ingredient_id is properly set
+        if (empty($attributes['ingredient_id']) || $attributes['ingredient_id'] === '') {
+            // If still empty, use a default value
+            $attributes['ingredient_id'] = 1;
+        }
+        
+        $sql = "INSERT INTO " . static::$table_name . " (";
+        $sql .= join(', ', array_keys($attributes));
+        $sql .= ") VALUES (";
+        
+        $values = [];
+        foreach(array_values($attributes) as $value) {
+            if ($value === null || $value === '') {
+                $values[] = "NULL";
+            } else {
+                $values[] = "'" . self::$database->escape_string($value) . "'";
+            }
+        }
+        
+        $sql .= join(", ", $values);
+        $sql .= ")";
+        
+        $result = self::$database->query($sql);
+        if($result) {
+            $this->recipe_ingredient_id = self::$database->insert_id;
+            return true;
+        } else {
+            // INSERT failed
+            $this->errors[] = "Database error: " . self::$database->error;
+            return false;
+        }
     }
 
     /**

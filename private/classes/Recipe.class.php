@@ -1,5 +1,12 @@
 <?php
 
+// Define is_blank function if it doesn't exist
+if (!function_exists('is_blank')) {
+    function is_blank($value) {
+        return !isset($value) || trim($value) === '';
+    }
+}
+
 /**
  * Recipe class for managing recipe data and operations
  * Extends DatabaseObject for database operations
@@ -10,7 +17,7 @@ class Recipe extends DatabaseObject {
     /** @var array Database columns */
     static protected $db_columns = ['recipe_id', 'user_id', 'title', 'description', 'style_id', 
                                   'diet_id', 'type_id', 'prep_time', 'cook_time', 'video_url', 
-                                  'img_file_path', 'alt_text', 'is_featured', 'created_at'];
+                                  'img_file_path', 'alt_text', 'is_featured', 'created_at', 'updated_at'];
     /** @var string Primary key column */
     static protected $primary_key = 'recipe_id';
 
@@ -42,8 +49,14 @@ class Recipe extends DatabaseObject {
     public $is_featured;
     /** @var string Timestamp when recipe was created */
     public $created_at;
+    /** @var string Timestamp when recipe was last updated */
+    public $updated_at;
     /** @var bool Whether the recipe is favorited by the current user */
     public $is_favorited = false;
+    /** @var array Array of ingredients for this recipe */
+    public $ingredients = [];
+    /** @var array Array of instructions for this recipe */
+    public $instructions = [];
 
     /**
      * Get prep time hours
@@ -78,7 +91,7 @@ class Recipe extends DatabaseObject {
     }
 
     /**
-     * Magic getter for time properties
+     * Getter for time properties
      */
     public function __get($name) {
         switch($name) {
@@ -100,6 +113,9 @@ class Recipe extends DatabaseObject {
      * @param array $args Associative array of property values
      */
     public function __construct($args=[]) {
+        // Explicitly set recipe_id to null for new recipes
+        $this->recipe_id = $args['recipe_id'] ?? null;
+        
         $this->title = $args['title'] ?? '';
         $this->description = $args['description'] ?? '';
         $this->user_id = $args['user_id'] ?? '';
@@ -109,8 +125,9 @@ class Recipe extends DatabaseObject {
         $this->video_url = $args['video_url'] ?? '';
         $this->img_file_path = $args['img_file_path'] ?? '';
         $this->alt_text = $args['alt_text'] ?? '';
-        $this->is_featured = $args['is_featured'] ?? 0;
+        $this->is_featured = $args['is_featured'] ?? false; // Allow boolean value
         $this->created_at = $args['created_at'] ?? date('Y-m-d H:i:s');
+        $this->updated_at = $args['updated_at'] ?? date('Y-m-d H:i:s');
 
         // Convert hours and minutes to seconds for prep_time
         if (isset($args['prep_hours']) || isset($args['prep_minutes'])) {
@@ -129,6 +146,10 @@ class Recipe extends DatabaseObject {
         } else {
             $this->cook_time = isset($args['cook_time']) ? intval($args['cook_time']) : 0;
         }
+        
+        // Initialize ingredients and instructions if provided
+        $this->ingredients = $args['ingredients'] ?? [];
+        $this->instructions = $args['instructions'] ?? [];
     }
 
     /**
@@ -143,26 +164,126 @@ class Recipe extends DatabaseObject {
         if (array_key_exists('img_file_path', $this->attributes())) {
             $old_recipe = self::find_by_id($this->recipe_id);
             if ($old_recipe && $old_recipe->img_file_path && $old_recipe->img_file_path !== $this->img_file_path) {
-                $old_image_path = PRIVATE_PATH . '/../public/assets/uploads/recipes/' . $old_recipe->img_file_path;
+                $old_image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $old_recipe->img_file_path;
                 if (file_exists($old_image_path)) {
                     unlink($old_image_path);
                 }
             }
         }
-
-        $attributes = $this->sanitized_attributes();
+        
+        $attributes = $this->attributes();
         $attribute_pairs = [];
+        
         foreach($attributes as $key => $value) {
-            $attribute_pairs[] = "{$key}='{$value}'";
+            // Handle NULL values properly
+            if($value === '' || $value === null) {
+                // Skip img_file_path if it's empty to keep the existing value
+                if($key === 'img_file_path') {
+                    continue; // Skip this attribute
+                }
+                if (in_array($key, ['style_id', 'diet_id', 'type_id', 'prep_time', 'cook_time'])) {
+                    $attribute_pairs[] = "{$key}=NULL";
+                } else {
+                    $attribute_pairs[] = "{$key}=''"; // Set to empty string instead of NULL
+                }
+            } else {
+                $attribute_pairs[] = "{$key}='" . db_escape(static::get_database(), $value) . "'";
+            }
         }
-
+        
         $sql = "UPDATE " . static::$table_name . " SET ";
         $sql .= join(', ', $attribute_pairs);
-        $sql .= " WHERE recipe_id='" . db_escape(static::get_database(), $this->recipe_id) . "' ";
-        $sql .= "LIMIT 1";
-
+        $sql .= " WHERE recipe_id='" . db_escape(static::get_database(), $this->recipe_id) . "'";
+        $sql .= " LIMIT 1";
+        
         $result = mysqli_query(static::get_database(), $sql);
+        if(!$result) {
+            $this->errors[] = "Update failed: " . mysqli_error(static::get_database());
+        }
         return $result;
+    }
+
+    /**
+     * Saves the recipe to the database (creates or updates)
+     * @return bool True if save was successful
+     */
+    public function save() {
+        // Store ingredients and instructions temporarily
+        $temp_ingredients = $this->ingredients;
+        $temp_instructions = $this->instructions;
+        
+        // Call parent save method
+        $result = parent::save();
+        
+        // Restore ingredients and instructions
+        $this->ingredients = $temp_ingredients;
+        $this->instructions = $temp_instructions;
+        
+        if($result) {
+            // Save ingredients and instructions
+            $ingredients_result = $this->save_ingredients();
+            $instructions_result = $this->save_instructions();
+            
+            // If either save failed, return false
+            if(!$ingredients_result || !$instructions_result) {
+                return false;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Validates the recipe's attributes
+     * @return array Array of validation errors
+     */
+    protected function validate() {
+        $this->errors = [];
+        
+        if(is_blank($this->title)) {
+            $this->errors[] = "Title cannot be blank.";
+        }
+        
+        if(is_blank($this->description)) {
+            $this->errors[] = "Description cannot be blank.";
+        }
+        
+        if(is_blank($this->user_id)) {
+            $this->errors[] = "User ID cannot be blank.";
+        }
+        
+        // Validate style_id, diet_id, and type_id if they are set
+        if(!empty($this->style_id) && !RecipeAttribute::find_one($this->style_id, 'style')) {
+            $this->errors[] = "Invalid style selected.";
+        }
+        
+        if(!empty($this->diet_id) && !RecipeAttribute::find_one($this->diet_id, 'diet')) {
+            $this->errors[] = "Invalid diet selected.";
+        }
+        
+        if(!empty($this->type_id) && !RecipeAttribute::find_one($this->type_id, 'type')) {
+            $this->errors[] = "Invalid type selected.";
+        }
+        
+        // Validate prep_time and cook_time are numeric
+        if(!empty($this->prep_time) && !is_numeric($this->prep_time)) {
+            $this->errors[] = "Prep time must be a number.";
+        }
+        
+        if(!empty($this->cook_time) && !is_numeric($this->cook_time)) {
+            $this->errors[] = "Cook time must be a number.";
+        }
+        
+        // Validate video_url is a valid URL if provided
+        if(!empty($this->video_url) && !is_valid_url($this->video_url)) {
+            $this->errors[] = "Video URL must be a valid URL.";
+        }
+        
+        // Validate alt_text is provided if img_file_path is set
+        if(!empty($this->img_file_path) && is_blank($this->alt_text)) {
+            $this->errors[] = "Alt text is required for the image.";
+        }
+        
+        return $this->errors;
     }
 
     /**
@@ -260,7 +381,10 @@ class Recipe extends DatabaseObject {
      * @return string Full image path or default placeholder path
      */
     public function get_image_path() {
-        return $this->img_file_path ? '/assets/uploads/recipes/' . $this->img_file_path : '/assets/images/recipe-placeholder.png';
+        if(empty($this->img_file_path) || $this->img_file_path === '') {
+            return '/assets/images/recipe-placeholder.png';
+        }
+        return '/assets/uploads/recipes/' . $this->img_file_path;
     }
 
     /**
@@ -649,6 +773,119 @@ class Recipe extends DatabaseObject {
         $result = $stmt->get_result();
         $count = $result->fetch_array()[0];
         return $count;
+    }
+
+    /**
+     * Save ingredients for this recipe
+     * @return bool True if successful
+     */
+    protected function save_ingredients() {
+        // First, delete any existing recipe ingredients
+        $sql = "DELETE FROM recipe_ingredient WHERE recipe_id='" . self::$database->escape_string($this->recipe_id) . "'";
+        self::$database->query($sql);
+        
+        // Then add all recipe ingredients
+        if(!empty($this->ingredients)) {
+            foreach($this->ingredients as $i => $ingredient) {
+                // Skip empty ingredients
+                if(empty($ingredient['name'])) {
+                    continue;
+                }
+                
+                // Check if ingredient exists or create it
+                $ingredient_id = $this->get_or_create_ingredient($ingredient['name']);
+                
+                // Handle measurement_id - convert empty values to NULL
+                $measurement_id = !empty($ingredient['measurement_id']) ? "'" . self::$database->escape_string($ingredient['measurement_id']) . "'" : "NULL";
+                
+                $sql = "INSERT INTO recipe_ingredient (";
+                $sql .= "recipe_id, ingredient_id, quantity, measurement_id";
+                $sql .= ") VALUES (";
+                $sql .= "'" . self::$database->escape_string($this->recipe_id) . "', ";
+                $sql .= "'" . self::$database->escape_string($ingredient_id) . "', ";
+                $sql .= "'" . self::$database->escape_string($ingredient['quantity'] ?? '') . "', ";
+                $sql .= $measurement_id;
+                $sql .= ")";
+                
+                $result = self::$database->query($sql);
+                
+                if(!$result) {
+                    $this->errors[] = "Failed to save ingredient: " . self::$database->error;
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return true; // No ingredients to save is not an error
+        }
+    }
+    
+    /**
+     * Get or create an ingredient
+     * @param string $name Ingredient name
+     * @return int Ingredient ID
+     */
+    private function get_or_create_ingredient($name) {
+        // Check if ingredient exists
+        $sql = "SELECT ingredient_id FROM ingredient WHERE name='" . self::$database->escape_string($name) . "' LIMIT 1";
+        $result = self::$database->query($sql);
+        
+        if($result && $result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['ingredient_id'];
+        }
+        
+        // Create new ingredient
+        $sql = "INSERT INTO ingredient (name, recipe_id) VALUES ('" . self::$database->escape_string($name) . "', '" . self::$database->escape_string($this->recipe_id) . "')";
+        $result = self::$database->query($sql);
+        
+        if($result) {
+            return self::$database->insert_id;
+        } else {
+            $this->errors[] = "Failed to create ingredient: " . self::$database->error;
+            // Return a default value if insert fails
+            return 1;
+        }
+    }
+    
+    /**
+     * Save instructions for this recipe
+     * @return bool True if successful
+     */
+    protected function save_instructions() {
+        // First, delete any existing recipe instructions
+        $sql = "DELETE FROM recipe_step WHERE recipe_id='" . self::$database->escape_string($this->recipe_id) . "'";
+        self::$database->query($sql);
+        
+        // Then add all recipe instructions
+        if(!empty($this->instructions)) {
+            foreach($this->instructions as $i => $instruction) {
+                // Skip empty instructions
+                if(empty($instruction['instruction'])) {
+                    continue;
+                }
+                
+                $step_number = isset($instruction['step_number']) ? $instruction['step_number'] : $i + 1;
+                
+                $sql = "INSERT INTO recipe_step (";
+                $sql .= "recipe_id, instruction, step_number";
+                $sql .= ") VALUES (";
+                $sql .= "'" . self::$database->escape_string($this->recipe_id) . "', ";
+                $sql .= "'" . self::$database->escape_string($instruction['instruction']) . "', ";
+                $sql .= "'" . self::$database->escape_string($step_number) . "'";
+                $sql .= ")";
+                
+                $result = self::$database->query($sql);
+                
+                if(!$result) {
+                    $this->errors[] = "Failed to save instruction: " . self::$database->error;
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return true; // No instructions to save is not an error
+        }
     }
 }
 ?>
