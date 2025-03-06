@@ -3,11 +3,11 @@
    ========================================================================== */
 
 .about-section {
-    display: grid;
-    gap: var(--spacing-xl);
-    margin: 0 auto;
-    max-width: 1200px;
-    padding: var(--spacing-xl);
+  display: grid;
+  gap: var(--spacing-xl);
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: var(--spacing-xl);
 }
 
 /* ==========================================================================
@@ -15,57 +15,61 @@
    ========================================================================== */
 
 .about-hero {
-    align-items: center;
-    background: linear-gradient(135deg, var(--primary-color) 60%, var(--accent-color-dark) 100%);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-lg);
-    color: var(--color-white);
-    display: grid;
-    gap: var(--spacing-xl);
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-    padding: var(--spacing-xl);
-    position: relative;
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 60%,
+    var(--accent-color-dark) 100%
+  );
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  color: var(--color-white);
+  display: grid;
+  gap: var(--spacing-xl);
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  padding: var(--spacing-xl);
+  position: relative;
 }
 
 .about-hero-content {
-    display: grid;
-    gap: var(--spacing-md);
+  display: grid;
+  gap: var(--spacing-md);
 }
 
 .about-hero h1 {
-    font-size: var(--font-size-xxlarge);
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0;
+  font-size: var(--font-size-xxlarge);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
 }
 
 .about-hero p {
-    font-size: var(--font-size-large);
-    line-height: 1.6;
-    margin: 0;
-    opacity: 0.9;
+  font-size: var(--font-size-large);
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.9;
 }
 
 .about-hero-image {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: var(--border-radius-lg);
-    height: 100%;
-    min-height: 400px;
-    overflow: hidden;
-    width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: var(--border-radius-lg);
+  height: 100%;
+  min-height: 400px;
+  overflow: hidden;
+  width: 100%;
 }
 
 .about-hero-img {
-    border-radius: var(--border-radius-lg);
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-    width: 100%;
+  border-radius: var(--border-radius-lg);
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  width: 100%;
 }
 
 .about-hero-img:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* ==========================================================================
@@ -73,27 +77,27 @@
    ========================================================================== */
 
 .mission-section {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    display: grid;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-xl);
-    text-align: center;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
 }
 
 .mission-section h2 {
-    color: var(--primary-color);
-    font-size: var(--font-size-xlarge);
-    margin: 0;
+  color: var(--primary-color);
+  font-size: var(--font-size-xlarge);
+  margin: 0;
 }
 
 .mission-section p {
-    color: var(--text-color);
-    font-size: var(--font-size-large);
-    line-height: 1.6;
-    margin: 0 auto;
-    max-width: 800px;
+  color: var(--text-color);
+  font-size: var(--font-size-large);
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 800px;
 }
 
 /* ==========================================================================
@@ -101,56 +105,56 @@
    ========================================================================== */
 
 .features-section {
-    background-color: var(--background-color);
-    border-radius: var(--border-radius-lg);
-    display: grid;
-    gap: var(--spacing-xl);
-    padding: var(--spacing-xl);
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-lg);
+  display: grid;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-xl);
 }
 
 .features-section h2 {
-    color: var(--primary-color);
-    font-size: var(--font-size-xlarge);
-    margin: 0;
-    text-align: center;
+  color: var(--primary-color);
+  font-size: var(--font-size-xlarge);
+  margin: 0;
+  text-align: center;
 }
 
 .features-grid {
-    display: grid;
-    gap: var(--spacing-lg);
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
 .feature-card {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    display: grid;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .feature-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
 }
 
 .feature-icon {
-    color: var(--primary-color);
-    font-size: 2.5rem;
+  color: var(--primary-color);
+  font-size: 2.5rem;
 }
 
 .feature-card h3 {
-    color: var(--primary-color);
-    font-size: var(--font-size-large);
-    margin: 0;
+  color: var(--primary-color);
+  font-size: var(--font-size-large);
+  margin: 0;
 }
 
 .feature-card p {
-    color: var(--text-color);
-    line-height: 1.6;
-    margin: 0;
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
 }
 
 /* ==========================================================================
@@ -158,34 +162,38 @@
    ========================================================================== */
 
 .join-section {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: var(--border-radius-lg);
-    color: var(--color-white);
-    display: grid;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-xl);
-    text-align: center;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
+  border-radius: var(--border-radius-lg);
+  color: var(--color-white);
+  display: grid;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
 }
 
 .join-section h2 {
-    font-size: var(--font-size-xlarge);
-    margin: 0;
+  font-size: var(--font-size-xlarge);
+  margin: 0;
 }
 
 .join-section p {
-    font-size: var(--font-size-large);
-    line-height: 1.6;
-    margin: 0 auto;
-    max-width: 800px;
-    opacity: 0.9;
+  font-size: var(--font-size-large);
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 800px;
+  opacity: 0.9;
 }
 
 .cta-buttons {
-    display: grid;
-    gap: var(--spacing-md);
-    grid-template-columns: auto auto;
-    justify-content: center;
-    margin-top: var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: auto auto;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
 }
 
 /* ==========================================================================
@@ -193,26 +201,26 @@
    ========================================================================== */
 
 @media (max-width: 1024px) {
-    .about-hero {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .about-hero-image {
-        min-height: 300px;
-    }
+  .about-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .about-hero-image {
+    min-height: 300px;
+  }
 }
 
 @media (max-width: 768px) {
-    .about-section {
-        padding: var(--spacing-lg);
-    }
-    
-    .features-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .cta-buttons {
-        grid-template-columns: 1fr;
-    }
+  .about-section {
+    padding: var(--spacing-lg);
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-buttons {
+    grid-template-columns: 1fr;
+  }
 }

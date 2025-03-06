@@ -3,44 +3,50 @@
    ========================================================================== */
 
 .favorite-btn {
-    position: absolute;
-    top: var(--spacing-sm);
-    right: var(--spacing-sm);
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 2;
-    box-shadow: var(--shadow-sm);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: grid;
+  height: 36px;
+  place-items: center;
+  position: absolute;
+  right: var(--spacing-sm);
+  top: var(--spacing-sm);
+  transition: all 0.2s ease;
+  width: 36px;
+  z-index: 2;
 }
 
 .favorite-btn i {
-    color: var(--accent-color);
-    font-size: var(--font-size-large);
-    transition: transform 0.2s ease;
+  color: var(--accent-color);
+  font-size: var(--font-size-large);
+  transition: transform 0.2s ease;
 }
 
 .favorite-btn:hover {
-    background: var(--color-white);
-    transform: scale(1.1);
+  background: var(--color-white);
+  transform: scale(1.1);
 }
 
 .favorite-btn:hover i {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .favorite-btn.favorited i {
-    color: var(--accent-color);
-    animation: favorite-pop 0.3s ease-out;
+  animation: favorite-pop 0.3s ease-out;
+  color: var(--accent-color);
 }
 
 @keyframes favorite-pop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.2); }
-    100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+ }
+  50% {
+    transform: scale(1.2);
+ }
+  100% {
+    transform: scale(1);
+ }
 }
