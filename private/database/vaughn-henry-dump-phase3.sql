@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Mar 02, 2025 at 01:40 AM
+-- Generation Time: Mar 06, 2025 at 02:38 PM
 -- Server version: 8.0.41
 -- PHP Version: 8.2.27
 
@@ -20,18 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `flavorconnect`
 --
-
--- SQL to drop the database if it exists
-DROP DATABASE IF EXISTS `flavorconnect`;
-
--- SQL to create the database
 CREATE DATABASE IF NOT EXISTS `flavorconnect` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `flavorconnect`;
-
--- Create user and grant privileges
-CREATE USER IF NOT EXISTS 'hcvaughn'@'%' IDENTIFIED BY '@connect4Establish';
-GRANT ALL PRIVILEGES ON flavorconnect.* TO 'hcvaughn'@'%';
-FLUSH PRIVILEGES;
 
 -- --------------------------------------------------------
 
@@ -250,30 +240,31 @@ CREATE TABLE `recipe` (
   `img_file_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `alt_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `is_featured` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `recipe`
 --
 
-INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`, `style_id`, `diet_id`, `prep_time`, `cook_time`, `video_url`, `img_file_path`, `alt_text`, `is_featured`, `created_at`) VALUES
-(1, 3, 'Classic Spaghetti Carbonara', 'A traditional Italian pasta dish made with eggs, cheese, pancetta, and black pepper.', 10, 2, 8, 1200, 1800, '', 'recipe_67c31a7bdca1c.jpg', 'Classic Spaghetti Carbonara', 1, '2025-02-05 14:50:27'),
-(2, 4, 'Breakfast Burrito', 'A hearty breakfast wrap filled with scrambled eggs, cheese, and fresh vegetables.', 1, 3, 7, 900, 600, '', '', 'Breakfast Burrito image', 0, '2025-02-05 14:50:27'),
-(3, 5, 'Vegetarian Buddha Bowl', 'A nourishing bowl of grains, roasted vegetables, and protein-rich toppings.', 10, 11, 1, 1800, 2400, '', 'recipe_67c31dfe1939b.jpg', 'Vegetarian Buddha Bowl image', 1, '2025-02-05 14:50:27'),
-(4, 2, 'Mediterranean Quinoa Salad', 'A refreshing salad with quinoa, fresh vegetables, and Mediterranean flavors.', 9, 8, 1, 1200, 1800, '', 'recipe_67c340f42b61c.jpg', 'Mediterranean Quinoa Salad image', 0, '2025-02-05 14:50:27'),
-(5, 3, 'Spicy Thai Curry', 'A flavorful and aromatic curry with vegetables and tofu in coconut milk.', 10, 7, 2, 1500, 2400, '', 'recipe_67c3703f6bda3.jpg', 'Spicy Thai Curry image', 1, '2025-02-05 14:50:27'),
-(6, 6, 'Mushroom Risotto', 'A creamy and flavorful risotto with mushrooms and parmesan.', 10, 2, 8, 1800, 2400, '', 'recipe_67c32ae999f64.jpg', 'Mushroom Risotto', 1, '2025-02-27 15:07:22'),
-(7, 1, 'BBQ Pulled Pork Sandwich', 'Slow-cooked pulled pork with BBQ sauce served on a bun.', 3, 1, 12, 3600, 18000, '', 'recipe_67c31e7275f33.jpg', 'BBQ Pulled Pork Sandwich image', 0, '2025-02-27 15:07:37'),
-(8, 2, 'Lemon Garlic Roasted Chicken', 'Juicy roasted chicken with lemon, garlic, and herbs.', 10, 9, 12, 1200, 5400, '', 'recipe_67c3408fe0d9c.jpg', 'Lemon Garlic Roasted Chicken image', 1, '2025-02-27 15:08:08'),
-(9, 6, 'Vegetable Pad Thai', 'A delicious Thai stir-fried noodle dish with vegetables and peanuts.', 10, 7, 2, 1500, 2400, '', 'recipe_67c37774b5b71.jpg', 'Vegetable Pad Thai image', 1, '2025-02-27 15:08:42'),
-(10, 4, 'Classic Margherita Pizza', 'Traditional Neapolitan pizza with tomato, mozzarella, and basil.', 10, 2, 1, 2400, 900, '', 'recipe_67c376fd3102e.jpg', 'Classic Margherita Pizza image', 1, '2025-02-27 15:09:02'),
-(11, 4, 'Homemade Hummus', 'A smooth and creamy hummus made from chickpeas and tahini.', 9, 8, 1, 600, 0, '', 'recipe_67c377e1ee040.jpg', 'Homemade Hummus image', 0, '2025-02-27 15:09:24'),
-(12, 3, 'Spicy Black Bean Tacos', 'Delicious and spicy black bean tacos topped with fresh ingredients.', 10, 3, 2, 1200, 600, '', 'recipe_67c314f0569d0.jpg', 'Spicy Black Bean Tacos image', 1, '2025-02-27 15:10:03'),
-(13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, '', 'recipe_67c318a1b739c.jpg', 'Thai Green Curry image', 1, '2025-02-27 15:10:17'),
-(14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', 'recipe_67c283f5882ba.jpg', 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17'),
-(15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', 'recipe_67c28600ddeda.jpg', 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49'),
-(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49');
+INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`, `style_id`, `diet_id`, `prep_time`, `cook_time`, `video_url`, `img_file_path`, `alt_text`, `is_featured`, `created_at`, `updated_at`) VALUES
+(1, 3, 'Classic Spaghetti Carbonara', 'A traditional Italian pasta dish made with eggs, cheese, pancetta, and black pepper.', 10, 2, 8, 1200, 1800, '', 'recipe_67c31a7bdca1c.jpg', 'Classic Spaghetti Carbonara', 1, '2025-02-05 14:50:27', '2025-03-06 02:55:09'),
+(2, 4, 'Breakfast Burrito', 'A hearty breakfast wrap filled with scrambled eggs, cheese, and fresh vegetables.', 1, 3, 7, 900, 600, '', '', 'Breakfast Burrito image', 0, '2025-02-05 14:50:27', '2025-03-06 02:55:09'),
+(3, 5, 'Vegetarian Buddha Bowl', 'A nourishing bowl of grains, roasted vegetables, and protein-rich toppings.', 10, 11, 1, 1800, 2400, '', 'recipe_67c31dfe1939b.jpg', 'Vegetarian Buddha Bowl image', 1, '2025-02-05 14:50:27', '2025-03-06 02:55:09'),
+(4, 2, 'Mediterranean Quinoa Salad', 'A refreshing salad with quinoa, fresh vegetables, and Mediterranean flavors.', 9, 8, 1, 1200, 1800, '', 'recipe_67c340f42b61c.jpg', 'Mediterranean Quinoa Salad image', 0, '2025-02-05 14:50:27', '2025-03-06 02:55:09'),
+(5, 3, 'Spicy Thai Curry', 'A flavorful and aromatic curry with vegetables and tofu in coconut milk.', 10, 7, 2, 1500, 2400, '', 'recipe_67c3703f6bda3.jpg', 'Spicy Thai Curry image', 1, '2025-02-05 14:50:27', '2025-03-06 02:55:09'),
+(6, 6, 'Mushroom Risotto', 'A creamy and flavorful risotto with mushrooms and parmesan.', 10, 2, 8, 1800, 2400, '', 'recipe_67c32ae999f64.jpg', 'Mushroom Risotto', 1, '2025-02-27 15:07:22', '2025-03-06 02:55:09'),
+(7, 1, 'BBQ Pulled Pork Sandwich', 'Slow-cooked pulled pork with BBQ sauce served on a bun.', 3, 1, 12, 3600, 18000, '', 'recipe_67c31e7275f33.jpg', 'BBQ Pulled Pork Sandwich image', 0, '2025-02-27 15:07:37', '2025-03-06 02:55:09'),
+(8, 2, 'Lemon Garlic Roasted Chicken', 'Juicy roasted chicken with lemon, garlic, and herbs.', 10, 9, 12, 1200, 5400, '', 'recipe_67c3408fe0d9c.jpg', 'Lemon Garlic Roasted Chicken image', 1, '2025-02-27 15:08:08', '2025-03-06 02:55:09'),
+(9, 6, 'Vegetable Pad Thai', 'A delicious Thai stir-fried noodle dish with vegetables and peanuts.', 10, 7, 2, 1500, 2400, '', 'recipe_67c37774b5b71.jpg', 'Vegetable Pad Thai image', 1, '2025-02-27 15:08:42', '2025-03-06 02:55:09'),
+(10, 4, 'Classic Margherita Pizza', 'Traditional Neapolitan pizza with tomato, mozzarella, and basil.', 10, 2, 1, 2400, 900, '', 'recipe_67c376fd3102e.jpg', 'Classic Margherita Pizza image', 1, '2025-02-27 15:09:02', '2025-03-06 02:55:09'),
+(11, 4, 'Homemade Hummus', 'A smooth and creamy hummus made from chickpeas and tahini.', 9, 8, 1, 600, 0, '', 'recipe_67c377e1ee040.jpg', 'Homemade Hummus image', 0, '2025-02-27 15:09:24', '2025-03-06 02:55:09'),
+(12, 3, 'Spicy Black Bean Tacos', 'Delicious and spicy black bean tacos topped with fresh ingredients.', 10, 3, 2, 1200, 600, '', 'recipe_67c314f0569d0.jpg', 'Spicy Black Bean Tacos image', 1, '2025-02-27 15:10:03', '2025-03-06 02:55:09'),
+(13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, '', 'recipe_67c318a1b739c.jpg', 'Thai Green Curry image', 1, '2025-02-27 15:10:17', '2025-03-06 02:55:09'),
+(14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', 'recipe_67c283f5882ba.jpg', 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17', '2025-03-06 02:55:09'),
+(15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', 'recipe_67c28600ddeda.jpg', 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49', '2025-03-06 02:55:09'),
+(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-06 02:55:09');
 
 -- --------------------------------------------------------
 
@@ -318,7 +309,9 @@ INSERT INTO `recipe_comment` (`comment_id`, `recipe_id`, `user_id`, `comment_tex
 (23, 10, 3, 'The fresh basil really makes a difference! Loved it.', '2025-02-27 15:11:24'),
 (24, 11, 3, 'Creamy and so much better than store-bought!', '2025-02-27 15:11:24'),
 (25, 11, 3, 'Super easy and delicious. Perfect with pita bread!', '2025-02-27 15:11:24'),
-(27, 7, 6, 'Bad', '2025-03-01 15:33:13');
+(27, 7, 6, 'Bad', '2025-03-01 15:33:13'),
+(28, 15, 6, 'It\'s ok.', '2025-03-02 17:23:15'),
+(31, 16, 6, 'meh', '2025-03-06 04:10:45');
 
 -- --------------------------------------------------------
 
@@ -536,7 +529,9 @@ INSERT INTO `recipe_rating` (`rating_id`, `recipe_id`, `user_id`, `rating_value`
 (30, 10, 1, 5),
 (31, 11, 2, 5),
 (32, 11, 4, 4),
-(34, 7, 6, 4);
+(34, 7, 6, 4),
+(35, 15, 6, 3),
+(38, 16, 6, 4);
 
 -- --------------------------------------------------------
 
@@ -694,6 +689,7 @@ INSERT INTO `recipe_style` (`style_id`, `name`) VALUES
 (1, 'American'),
 (11, 'Asian'),
 (4, 'Chinese'),
+(14, 'Ethiopian'),
 (9, 'French'),
 (5, 'Indian'),
 (2, 'Italian'),
@@ -752,12 +748,14 @@ CREATE TABLE `user_account` (
 --
 
 INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `email`, `password_hash`, `user_level`, `is_active`) VALUES
-(1, 'super_admin', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 's', 1),
+(1, 'hcvaughn', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 'a', 1),
 (2, 'admin_chef', 'Michael', 'Brown', 'michael@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'a', 1),
 (3, 'chef_maria', 'Maria', 'Garcia', 'maria@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
 (4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
 (5, 'foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
-(6, 'test_user', 'Test', 'User', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 'u', 1);
+(6, 'test_user', 'Test', 'User', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1),
+(7, 'registertest', 'Register', 'Test', 'register@test.com', '$2y$10$okviEeJFAngD/xM6Fa.lkekRGP2Tkas4w8lnqwFVh1i8ARXxjt8oS', 'u', 1),
+(8, 'jolieta', 'Joliet', 'Jake', 'jake@joliet.com', '$2y$10$wHsvWt/lfBf9yj.AG27HtOQbjM91eOSDjTofDcpfiV6Or4ixsxtye', 'u', 1);
 
 -- --------------------------------------------------------
 
@@ -776,11 +774,19 @@ CREATE TABLE `user_favorite` (
 --
 
 INSERT INTO `user_favorite` (`user_id`, `recipe_id`, `created_at`) VALUES
-(6, 1, '2025-02-27 14:35:27'),
-(6, 2, '2025-02-27 14:45:23'),
-(6, 3, '2025-02-27 14:35:38'),
+(6, 4, '2025-03-03 21:44:57'),
 (6, 5, '2025-02-27 14:35:42'),
-(6, 9, '2025-02-27 21:17:46');
+(6, 6, '2025-03-03 21:46:54'),
+(6, 8, '2025-03-03 21:45:24'),
+(6, 9, '2025-02-27 21:17:46'),
+(6, 10, '2025-03-03 21:46:47'),
+(6, 12, '2025-03-06 04:29:45'),
+(6, 14, '2025-03-03 21:45:22'),
+(6, 16, '2025-03-06 03:45:37'),
+(7, 3, '2025-03-04 16:55:05'),
+(8, 9, '2025-03-06 03:14:05'),
+(8, 13, '2025-03-06 02:33:40'),
+(8, 14, '2025-03-06 02:33:45');
 
 --
 -- Indexes for dumped tables
@@ -899,67 +905,67 @@ ALTER TABLE `user_favorite`
 -- AUTO_INCREMENT for table `ingredient`
 --
 ALTER TABLE `ingredient`
-  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `measurement`
 --
 ALTER TABLE `measurement`
-  MODIFY `measurement_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `measurement_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `recipe`
 --
 ALTER TABLE `recipe`
-  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `recipe_comment`
 --
 ALTER TABLE `recipe_comment`
-  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `recipe_diet`
 --
 ALTER TABLE `recipe_diet`
-  MODIFY `diet_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `diet_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `recipe_ingredient`
 --
 ALTER TABLE `recipe_ingredient`
-  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `recipe_rating`
 --
 ALTER TABLE `recipe_rating`
-  MODIFY `rating_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `rating_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `recipe_step`
 --
 ALTER TABLE `recipe_step`
-  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT for table `recipe_style`
 --
 ALTER TABLE `recipe_style`
-  MODIFY `style_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `style_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `recipe_type`
 --
 ALTER TABLE `recipe_type`
-  MODIFY `type_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `type_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables
