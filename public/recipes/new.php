@@ -41,7 +41,14 @@ if(is_post_request()) {
                     $session->message('Invalid file type. Allowed formats: JPG, PNG', 'error');
                 } else {
                     $filename = uniqid('recipe_') . '.' . $extension;
-                    $target_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename;
+                    $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes/';
+                    
+                    // Check if directory exists and create it if it doesn't
+                    if(!file_exists($upload_dir)) {
+                        mkdir($upload_dir, 0755, true);
+                    }
+                    
+                    $target_path = $upload_dir . $filename;
 
                     // Move file to target location
                     if(move_uploaded_file($temp_path, $target_path)) {
@@ -61,7 +68,7 @@ if(is_post_request()) {
         // Only proceed if there are no errors
         if(empty($errors)) {
             // Set recipe properties
-            $recipe->user_id = $session->user_id;
+            $recipe->user_id = $session->get_user_id();
             $recipe->title = $_POST['title'] ?? '';
             $recipe->description = $_POST['description'] ?? '';
             $recipe->style_id = $_POST['style_id'] ?? '';
@@ -80,7 +87,7 @@ if(is_post_request()) {
             $recipe->video_url = $_POST['video_url'] ?? '';
             $recipe->img_file_path = $_POST['img_file_path'] ?? '';
             $recipe->alt_text = $_POST['alt_text'] ?? '';
-            $recipe->is_featured = false;
+            $recipe->is_featured = 0; // Set to integer 0 instead of boolean false
             $recipe->created_date = date('Y-m-d');
             $recipe->created_time = date('H:i:s');
 
@@ -88,26 +95,16 @@ if(is_post_request()) {
                 // Save ingredients
                 if(isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
                     foreach($_POST['ingredients'] as $ingredient_data) {
-                        // Create or find ingredient
-                        $ingredient = new Ingredient([
+                        // Create recipe ingredient directly
+                        $recipe_ingredient = new RecipeIngredient([
                             'recipe_id' => $recipe->recipe_id,
-                            'name' => $ingredient_data['name']
+                            'name' => $ingredient_data['name'],
+                            'measurement_id' => $ingredient_data['measurement_id'],
+                            'quantity' => $ingredient_data['quantity']
                         ]);
                         
-                        if($ingredient->save()) {
-                            // Create recipe ingredient relationship
-                            $recipe_ingredient = new RecipeIngredient([
-                                'recipe_id' => $recipe->recipe_id,
-                                'ingredient_id' => $ingredient->ingredient_id,
-                                'measurement_id' => $ingredient_data['measurement_id'],
-                                'quantity' => $ingredient_data['quantity']
-                            ]);
-                            
-                            if(!$recipe_ingredient->save()) {
-                                $errors = array_merge($errors, $recipe_ingredient->errors);
-                            }
-                        } else {
-                            $errors = array_merge($errors, $ingredient->errors);
+                        if(!$recipe_ingredient->save()) {
+                            $errors = array_merge($errors, $recipe_ingredient->errors);
                         }
                     }
                 }

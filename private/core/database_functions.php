@@ -26,12 +26,15 @@ function confirm_db_connect($connection) {
 }
 
 /**
- * Escapes special characters in a string for use in SQL statements
+ * Escapes a string for database insertion
  * @param mysqli $connection The database connection
  * @param string $string The string to escape
  * @return string The escaped string
  */
 function db_escape($connection, $string) {
+  if ($string === null) {
+    return '';
+  }
   return mysqli_real_escape_string($connection, $string);
 }
 

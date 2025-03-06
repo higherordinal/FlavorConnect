@@ -72,7 +72,7 @@ class RecipeStep extends DatabaseObject {
             'instruction' => $this->instruction
         ];
         
-        $this->errors = validate_recipe_step_data($step_data);
+        $this->errors = validate_recipe_step($step_data);
         return empty($this->errors);
     }
 }
