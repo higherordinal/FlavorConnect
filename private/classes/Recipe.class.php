@@ -1,12 +1,5 @@
 <?php
 
-// Define is_blank function if it doesn't exist
-if (!function_exists('is_blank')) {
-    function is_blank($value) {
-        return !isset($value) || trim($value) === '';
-    }
-}
-
 /**
  * Recipe class for managing recipe data and operations
  * Extends DatabaseObject for database operations
@@ -886,6 +879,23 @@ class Recipe extends DatabaseObject {
         } else {
             return true; // No instructions to save is not an error
         }
+    }
+
+    /**
+     * Deletes the recipe and its associated image file from the server
+     * @return bool True if deletion was successful
+     */
+    public function delete() {
+        // Delete the associated image file if it exists
+        if (!empty($this->img_file_path)) {
+            $image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
+            if (file_exists($image_path)) {
+                unlink($image_path);
+            }
+        }
+        
+        // Call the parent delete method to remove from database
+        return parent::delete();
     }
 }
 ?>
