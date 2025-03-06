@@ -24,10 +24,10 @@
         <h3 id="social-links">Connect With Us</h3>
         <nav aria-labelledby="social-links">
             <ul>
-                <li><a href="#" aria-label="Visit our Facebook page">Facebook</a></li>
-                <li><a href="#" aria-label="Follow us on Twitter">Twitter</a></li>
-                <li><a href="#" aria-label="Follow us on Instagram">Instagram</a></li>
-                <li><a href="#" aria-label="Connect with us on LinkedIn">LinkedIn</a></li>
+                <li><a href="https://www.facebook.com" aria-label="Visit our Facebook page">Facebook</a></li>
+                <li><a href="https://www.instagram.com" aria-label="Follow us on Instagram">Instagram</a></li>
+                <li><a href="https://www.linkedin.com" aria-label="Connect with us on LinkedIn">LinkedIn</a></li>
+                <li><a href="https://www.x.com" aria-label="Follow us on X">X</a></li>
             </ul>
         </nav>
     </div>

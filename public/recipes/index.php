@@ -1,6 +1,5 @@
 <?php
 require_once('../../private/core/initialize.php');
-require_once(PRIVATE_PATH . '/classes/RecipeAttribute.class.php');
 
 $page_title = 'Recipes';
 $page_style = 'recipe-gallery';

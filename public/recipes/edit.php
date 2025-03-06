@@ -1,6 +1,5 @@
 <?php
 require_once('../../private/core/initialize.php');
-require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
 $page_title = 'Edit Recipe';
@@ -192,9 +191,34 @@ $back_link = match($ref) {
     'favorites' => url_for('/users/favorites.php'),
     default => url_for('/recipes/show.php?id=' . h(u($id)))
 };
+
+$back_text = match($ref) {
+    'profile' => 'Back to Profile',
+    'show' => 'Back to Recipe',
+    'home' => 'Back to Home',
+    'header' => 'Back to Recipes',
+    'favorites' => 'Back to Favorites',
+    default => 'Back to Recipe'
+};
 ?>
 
 <main class="main-content">
+    <div class="container">
+        <a href="<?php echo $back_link; ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> <?php echo $back_text; ?>
+        </a>
+        
+        <div class="breadcrumbs">
+            <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="breadcrumb-item"><?php echo h($recipe->title); ?></a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-item active">Edit Recipe</span>
+        </div>
+    </div>
+
     <div class="recipe-form">
         <header class="page-header">
             <h1>Edit Recipe: <?php echo h($recipe->title); ?></h1>

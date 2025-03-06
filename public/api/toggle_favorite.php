@@ -1,6 +1,5 @@
 <?php
-require_once('../../private/initialize.php');
-require_once(PRIVATE_PATH . '/classes/RecipeFavorite.class.php');
+require_once('../../private/core/initialize.php');
 
 // Ensure request is POST and user is logged in
 if(!is_post_request() || !$session->is_logged_in()) {

@@ -1,6 +1,5 @@
 <?php
 require_once('../../private/core/initialize.php');
-require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_login();
 
 $page_title = 'Create Recipe';
