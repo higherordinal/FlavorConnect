@@ -1,51 +1,52 @@
 /* Public Header Grid */
+
 .header-grid {
-    grid-template-areas: "logo nav auth";
+  grid-template-areas: "logo nav auth";
 }
 
 /* Auth Links */
+
 .auth-links {
-    align-items: center;
-    display: flex;
-    gap: var(--spacing-md);
-    grid-area: auth;
-    justify-self: end;
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-md);
+  grid-area: auth;
+  justify-self: end;
 }
 
 .auth-links a {
-    color: var(--color-white);
-    text-decoration: none;
-    padding: var(--spacing-sm);
+  color: var(--color-white);
+  padding: var(--spacing-sm);
+  text-decoration: none;
 }
 
 .auth-links a:hover {
-    color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 .auth-links .sign-up {
-    background-color: var(--accent-color);
-    border-radius: var(--border-radius-sm);
-    color: var(--primary-color);
-    padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--accent-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--primary-color);
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .auth-links .sign-up:hover {
-    background-color: var(--accent-color-dark);
-    color: var(--primary-color);
+  background-color: var(--accent-color-dark);
+  color: var(--primary-color);
 }
 
 @media (max-width: 768px) {
-    .auth-links {
-        gap: var(--spacing-sm);
-    }
+  .auth-links {
+    gap: var(--spacing-sm);
+  }
 }
 
 @media (max-width: 480px) {
-    .auth-links a {
-        padding: var(--spacing-xs);
-    }
-
-    .auth-links .sign-up {
-        padding: var(--spacing-xs) var(--spacing-sm);
-    }
+  .auth-links a {
+    padding: var(--spacing-xs);
+  }
+  .auth-links .sign-up {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
 }

@@ -1,46 +1,50 @@
 /* Register form grid layout */
+
 .content {
-    display: grid;
-    min-height: calc(100vh - var(--header-height) - var(--footer-height));
-    padding: var(--spacing-lg);
-    place-items: center;
+  display: grid;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  padding: var(--spacing-lg);
+  place-items: center;
 }
 
 .content > h1 {
-    margin-bottom: var(--spacing-xl);
-    text-align: center;
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
 }
 
 form {
-    display: grid;
-    gap: var(--spacing-lg);
-    max-width: 500px;
-    width: 100%;
+  display: grid;
+  gap: var(--spacing-lg);
+  max-width: 500px;
+  width: 100%;
 }
 
 form > div {
-    display: grid;
-    gap: var(--spacing-sm);
+  display: grid;
+  gap: var(--spacing-sm);
 }
 
 /* Two-column layout for name fields on wider screens */
-@media (min-width: 480px) {
-    form {
-        grid-template-columns: repeat(2, 1fr);
-    }
 
-    /* Full width items */
+@media (min-width: 480px) {
+  form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Full width items */
     form > div:first-child,  /* username */
     form > div:nth-child(4), /* email */
     form > div:nth-child(5), /* password */
     form > div:nth-child(6), /* confirm password */
-    form > div:last-child {  /* submit button */
-        grid-column: 1 / -1;
-    }
+    form > div:last-child {
+    /* submit button */
+    grid-column: 1 / -1;
+  }
 }
 
 /* Link container */
+
 form + div {
-    margin-top: var(--spacing-lg);
-    text-align: center;
+  margin-top: var(--spacing-lg);
+  text-align: center;
 }
