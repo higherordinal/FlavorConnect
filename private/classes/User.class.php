@@ -1,11 +1,11 @@
-    <?php
+<?php
 
 /**
  * User class for managing user accounts and authentication
  * Extends DatabaseObject for database operations
  * 
  * Handles user registration, authentication, profile management,
- * and role-based access control (admin vs regular users)
+ * and role-based access control (super admin vs admin vs regular users)
  */
 class User extends DatabaseObject {
     /** @var string Database table name */
