@@ -7,10 +7,10 @@ require_admin();
 $page_title = 'Admin: User Management';
 $page_style = 'admin';
 
-// Get all users except super admins (only super admins can manage other admins)
+// Get all users, but regular admins can't see super admins
 $sql = "SELECT * FROM user_account";
 if(!$session->is_super_admin()) {
-    $sql .= " WHERE user_level = 'u'";
+    $sql .= " WHERE user_level != 's'";
 }
 $sql .= " ORDER BY username ASC";
 $users = User::find_by_sql($sql);
