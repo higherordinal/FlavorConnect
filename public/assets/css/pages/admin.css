@@ -41,6 +41,11 @@
   background: var(--hover-color);
 }
 
+/* Alternating row colors */
+.list tbody tr:nth-child(even) {
+  background-color: var(--light-gray);
+}
+
 /* Action Buttons */
 
 .admin-content > .actions {
