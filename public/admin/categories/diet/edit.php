@@ -21,7 +21,7 @@ if(is_post_request()) {
     $result = $diet->save();
     if($result === true) {
         $session->message('Diet updated successfully.');
-        redirect_to(url_for('/admin/categories/diet/show.php?id=' . $diet->id));
+        redirect_to(url_for('/admin/categories/index.php'));
     } else {
         // Show errors
     }

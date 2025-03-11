@@ -21,7 +21,7 @@ if(is_post_request()) {
     $result = $type->save();
     if($result === true) {
         $session->message('Type updated successfully.');
-        redirect_to(url_for('/admin/categories/type/show.php?id=' . $type->id));
+        redirect_to(url_for('/admin/categories/index.php'));
     } else {
         // Show errors
     }
