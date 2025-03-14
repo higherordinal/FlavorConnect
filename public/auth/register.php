@@ -50,32 +50,38 @@ include(SHARED_PATH . '/public_header.php');
 
         <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input class="form-input" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" required>
+            <input class="form-input <?php echo error_class('username', $errors); ?>" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" required>
+            <?php echo display_error('username', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="first_name">First Name</label>
-            <input class="form-input" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required>
+            <input class="form-input <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required>
+            <?php echo display_error('first_name', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="last_name">Last Name</label>
-            <input class="form-input" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required>
+            <input class="form-input <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required>
+            <?php echo display_error('last_name', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="email">Email</label>
-            <input class="form-input" type="email" name="email" id="email" value="<?php echo h($email ?? ''); ?>" required>
+            <input class="form-input <?php echo error_class('email', $errors); ?>" type="email" name="email" id="email" value="<?php echo h($email ?? ''); ?>" required>
+            <?php echo display_error('email', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="password">Password</label>
-            <input class="form-input" type="password" name="password" id="password" required>
+            <input class="form-input <?php echo error_class('password', $errors); ?>" type="password" name="password" id="password" required>
+            <?php echo display_error('password', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="confirm_password">Confirm Password</label>
-            <input class="form-input" type="password" name="confirm_password" id="confirm_password" required>
+            <input class="form-input <?php echo error_class('confirm_password', $errors); ?>" type="password" name="confirm_password" id="confirm_password" required>
+            <?php echo display_error('confirm_password', $errors); ?>
         </div>
 
         <button type="submit" class="form-button" name="submit">Register</button>

@@ -95,6 +95,7 @@ function initializeIngredients() {
             <div class="form-group">
                 <label for="quantity_${index}">Quantity</label>
                 <input type="number" name="ingredients[${index}][quantity]" id="quantity_${index}" class="form-control" step="0.01" min="0" required>
+                <div class="form-error" style="display: none;"></div>
             </div>
             
             <div class="form-group">
@@ -102,11 +103,13 @@ function initializeIngredients() {
                 <select name="ingredients[${index}][measurement_id]" id="measurement_${index}" class="form-control" required>
                     ${measurementOptions}
                 </select>
+                <div class="form-error" style="display: none;"></div>
             </div>
             
             <div class="form-group">
                 <label for="ingredient_${index}">Ingredient</label>
                 <input type="text" name="ingredients[${index}][name]" id="ingredient_${index}" class="form-control" required>
+                <div class="form-error" style="display: none;"></div>
             </div>
             
             <button type="button" class="btn btn-danger remove-ingredient">×</button>
@@ -158,6 +161,7 @@ function initializeDirections() {
             <div class="form-group">
                 <label for="step_${index}">Step ${stepNumber} Instructions</label>
                 <textarea name="steps[${index}][instruction]" id="step_${index}" class="form-control" rows="2" required></textarea>
+                <div class="form-error" style="display: none;"></div>
                 <input type="hidden" name="steps[${index}][step_number]" value="${stepNumber}">
             </div>
             <button type="button" class="btn btn-danger remove-step">×</button>
@@ -219,29 +223,56 @@ function initializeFormValidation() {
             const requiredFields = form.querySelectorAll('[required]');
             
             // Remove existing error messages
-            form.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
-            form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+            form.querySelectorAll('.form-error').forEach(el => {
+                el.style.display = 'none';
+                el.textContent = '';
+            });
+            form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
 
             // Check each required field
             requiredFields.forEach(field => {
                 if (!field.value.trim()) {
                     isValid = false;
-                    field.classList.add('is-invalid');
+                    field.classList.add('error');
                     
-                    // Add error message
-                    const feedback = document.createElement('div');
-                    feedback.className = 'invalid-feedback';
-                    feedback.textContent = 'This field is required';
-                    field.parentNode.appendChild(feedback);
+                    // Find or create error message container
+                    let errorContainer = field.nextElementSibling;
+                    if (!errorContainer || !errorContainer.classList.contains('form-error')) {
+                        errorContainer = document.createElement('div');
+                        errorContainer.className = 'form-error';
+                        field.parentNode.insertBefore(errorContainer, field.nextSibling);
+                    }
+                    
+                    // Set error message
+                    errorContainer.textContent = field.getAttribute('data-error-message') || 'This field is required';
+                    errorContainer.style.display = 'block';
                 }
             });
+
+            // Check file input if required
+            const fileInput = form.querySelector('input[type="file"][required]');
+            if (fileInput && !fileInput.files.length) {
+                isValid = false;
+                fileInput.classList.add('error');
+                
+                let errorContainer = fileInput.nextElementSibling;
+                if (!errorContainer || !errorContainer.classList.contains('form-error')) {
+                    errorContainer = document.createElement('div');
+                    errorContainer.className = 'form-error';
+                    fileInput.parentNode.insertBefore(errorContainer, fileInput.nextSibling);
+                }
+                
+                errorContainer.textContent = 'Please select a file';
+                errorContainer.style.display = 'block';
+            }
 
             if (!isValid) {
                 e.preventDefault();
                 // Scroll to first error
-                const firstError = form.querySelector('.is-invalid');
+                const firstError = form.querySelector('.error');
                 if (firstError) {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    firstError.focus();
                 }
             }
         });

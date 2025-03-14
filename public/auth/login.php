@@ -44,12 +44,14 @@ include(SHARED_PATH . '/public_header.php');
         
         <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input class="form-input" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" required>
+            <input class="form-input <?php echo error_class('username', $errors); ?>" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" required>
+            <?php echo display_error('username', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="password">Password</label>
-            <input class="form-input" type="password" name="password" id="password" required>
+            <input class="form-input <?php echo error_class('password', $errors); ?>" type="password" name="password" id="password" required>
+            <?php echo display_error('password', $errors); ?>
         </div>
 
         <div class="form-group">

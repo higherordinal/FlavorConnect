@@ -6,19 +6,28 @@
 /**
  * Displays validation errors in a formatted list
  * @param array $errors Array of error messages to display
+ * @param string $display_type Type of error display (traditional or inline)
  * @return string HTML formatted error messages
  */
-function display_errors($errors=array()) {
+function display_errors($errors=array(), $display_type='traditional') {
     $output = '';
     if(!empty($errors)) {
-        $output .= "<div class=\"message error\">";
-        $output .= "<p>Please fix the following errors:</p>";
-        $output .= "<ul>";
-        foreach($errors as $error) {
-            $output .= "<li>" . h($error) . "</li>";
+        if($display_type == 'traditional') {
+            $output .= "<div class=\"message error\">";
+            $output .= "<p>Please fix the following errors:</p>";
+            $output .= "<ul>";
+            foreach($errors as $error) {
+                $output .= "<li>" . h($error) . "</li>";
+            }
+            $output .= "</ul>";
+            $output .= "</div>";
+        } elseif($display_type == 'inline') {
+            $output .= "<div class=\"message error\">";
+            foreach($errors as $error) {
+                $output .= "<p>" . h($error) . "</p>";
+            }
+            $output .= "</div>";
         }
-        $output .= "</ul>";
-        $output .= "</div>";
     }
     return $output;
 }

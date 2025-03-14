@@ -18,20 +18,40 @@ function validate($data, $rules) {
         
         // Handle different validation types
         if ($rule === 'required' && is_blank($value)) {
-            $errors[$field] = ucfirst($field) . " cannot be blank.";
+            $errors[$field] = [
+                'type' => 'required',
+                'message' => ucfirst($field) . " cannot be blank."
+            ];
         } elseif ($rule === 'email' && !empty($value) && !is_valid_email($value)) {
-            $errors[$field] = "Please enter a valid email address.";
+            $errors[$field] = [
+                'type' => 'email',
+                'message' => "Please enter a valid email address."
+            ];
         } elseif ($rule === 'numeric' && !empty($value) && !is_numeric($value)) {
-            $errors[$field] = ucfirst($field) . " must be a number.";
+            $errors[$field] = [
+                'type' => 'numeric',
+                'message' => ucfirst($field) . " must be a number."
+            ];
         } elseif ($rule === 'url' && !empty($value) && !is_valid_url($value)) {
-            $errors[$field] = "Please enter a valid URL.";
+            $errors[$field] = [
+                'type' => 'url',
+                'message' => "Please enter a valid URL."
+            ];
         } elseif (is_array($rule)) {
             // Handle min/max rules
             if (isset($rule['min']) && $value < $rule['min']) {
-                $errors[$field] = ucfirst($field) . " must be at least " . $rule['min'] . ".";
+                $errors[$field] = [
+                    'type' => 'min',
+                    'message' => ucfirst($field) . " must be at least " . $rule['min'] . ".",
+                    'min' => $rule['min']
+                ];
             }
             if (isset($rule['max']) && $value > $rule['max']) {
-                $errors[$field] = ucfirst($field) . " must be at most " . $rule['max'] . ".";
+                $errors[$field] = [
+                    'type' => 'max',
+                    'message' => ucfirst($field) . " must be at most " . $rule['max'] . ".",
+                    'max' => $rule['max']
+                ];
             }
         }
     }
@@ -576,6 +596,31 @@ function validate_measurement_data($measurement_data, $current_id = '') {
     }
     
     return $errors;
+}
+
+/**
+ * Displays an inline error message for a form field if it exists in the errors array
+ * @param string $field The field name to check for errors
+ * @param array $errors The array of validation errors
+ * @return string HTML for the error message or empty string if no error
+ */
+function display_error($field, $errors) {
+    if (isset($errors[$field])) {
+        $error = $errors[$field];
+        $message = is_array($error) ? $error['message'] : $error;
+        return '<div class="form-error">' . h($message) . '</div>';
+    }
+    return '';
+}
+
+/**
+ * Adds error class to form field if it has an error
+ * @param string $field The field name to check for errors
+ * @param array $errors The array of validation errors
+ * @return string 'error' class or empty string
+ */
+function error_class($field, $errors) {
+    return isset($errors[$field]) ? ' error' : '';
 }
 
 ?>
