@@ -21,3 +21,9 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Docker image files
+*.tar
+*.zip
+flavorconnect-api-image.*
+flavorconnect-web-image.*
