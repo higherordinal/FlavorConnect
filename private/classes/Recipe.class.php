@@ -14,6 +14,14 @@ class Recipe extends DatabaseObject {
     /** @var string Primary key column */
     static protected $primary_key = 'recipe_id';
 
+    /**
+     * Gets the table name for Recipe class
+     * @return string Table name
+     */
+    public static function table_name() {
+        return static::$table_name;
+    }
+
     /** @var int Unique identifier for the recipe */
     public $recipe_id;
     /** @var int ID of user who created the recipe */
@@ -576,6 +584,15 @@ class Recipe extends DatabaseObject {
             $object_array[] = parent::instantiate($record);
         }
         return $object_array;
+    }
+
+    /**
+     * Public wrapper for instantiate_result to be used by RecipeFilter
+     * @param mysqli_result $result Database result set
+     * @return array Array of Recipe objects
+     */
+    public static function create_objects_from_result($result) {
+        return static::instantiate_result($result);
     }
 
     /**

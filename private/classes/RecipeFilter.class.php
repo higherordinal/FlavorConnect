@@ -27,7 +27,7 @@ class RecipeFilter extends DatabaseObject {
     /** @var int|null User ID for favorite status */
     private $user_id;
     /** @var array Error messages */
-    private $errors = [];
+    public $errors = [];
 
     /**
      * Constructor for RecipeFilter class
@@ -113,7 +113,7 @@ class RecipeFilter extends DatabaseObject {
      */
     public function apply() {
         try {
-            $sql = "SELECT r.* FROM " . Recipe::get_table_name() . " r";
+            $sql = "SELECT r.* FROM " . Recipe::table_name() . " r";
             
             if($this->sort === 'rating') {
                 $sql .= " LEFT JOIN (
@@ -141,7 +141,7 @@ class RecipeFilter extends DatabaseObject {
             
             $stmt->execute();
             $result = $stmt->get_result();
-            $recipes = Recipe::instantiate_result($result);
+            $recipes = Recipe::create_objects_from_result($result);
             
             // Add favorite status if requested
             if($this->include_favorites && !empty($this->user_id)) {
@@ -208,7 +208,7 @@ class RecipeFilter extends DatabaseObject {
      */
     public function count() {
         try {
-            $sql = "SELECT COUNT(*) as count FROM " . Recipe::get_table_name() . " r";
+            $sql = "SELECT COUNT(*) as count FROM " . Recipe::table_name() . " r";
             $where_data = $this->build_where_clause();
             $sql .= $where_data['where'];
             
