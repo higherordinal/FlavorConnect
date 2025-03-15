@@ -1,5 +1,3 @@
-import { toggleFavorite } from '../utils/serve-module.php?file=favorites.js';
-
 document.addEventListener('DOMContentLoaded', () => {
     // Handle favorite button clicks
     document.querySelectorAll('.favorite-btn').forEach(button => {
@@ -8,7 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             
             const recipeId = button.dataset.recipeId;
-            const result = await toggleFavorite(recipeId);
+            let result;
+            
+            if (typeof window.toggleFavorite === 'function') {
+                result = await window.toggleFavorite(recipeId);
+            } else {
+                console.error('toggleFavorite function not available');
+                return;
+            }
             
             if (result && result.success) {
                 // If unfavorited from favorites page, remove the card with animation
@@ -25,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             const emptyState = `
                                 <div class="no-recipes">
                                     <p>You haven't favorited any recipes yet. Browse our recipes and click the heart icon to add them to your favorites!</p>
-                                    <a href="/FlavorConnect/public/recipes/index.php" class="btn btn-primary">Browse Recipes</a>
+                                    <a href="/recipes/index.php" class="btn btn-primary">Browse Recipes</a>
                                 </div>
                             `;
                             recipeGrid.insertAdjacentHTML('beforebegin', emptyState);

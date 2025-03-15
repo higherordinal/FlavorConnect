@@ -5,12 +5,10 @@
  * @license MIT
  */
 
-import { fetchData } from '../utils/common.js';
-
 /**
  * Initializes the favorites page functionality
  */
-function initializeFavorites() {
+window.initializeFavorites = function() {
     setupEventListeners();
     loadFavorites();
 }
@@ -76,7 +74,7 @@ function setupEventListeners() {
 async function loadFavorites() {
     try {
         showLoadingState(true);
-        const response = await fetchData('/api/recipes?action=get_favorites');
+        const response = await window.fetchData('/api/recipes?action=get_favorites');
         
         if (response.success) {
             updateFavoritesList(response.favorites);
@@ -101,7 +99,7 @@ async function handleUnfavorite(e) {
     const card = button.closest('.recipe-card');
 
     try {
-        const response = await fetchData('/api/recipes', {
+        const response = await window.fetchData('/api/recipes', {
             method: 'POST',
             body: JSON.stringify({
                 action: 'toggle_favorite',
@@ -173,22 +171,21 @@ function updateFavoritesList(favorites) {
  */
 function createRecipeCard(recipe) {
     return `
-        <article class="recipe-card" 
-                 data-name="${recipe.title}"
-                 data-date="${recipe.favorited_at}">
-            <button type="button" 
-                    class="unfavorite-btn" 
-                    data-recipe-id="${recipe.id}">
-                <i class="fas fa-heart"></i>
-            </button>
-            <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.id}" 
-               class="recipe-link">
-                <div class="recipe-image">
-                    <img src="${recipe.image_url || '/FlavorConnect/public/assets/images/recipe-placeholder.png'}" 
-                         alt="${recipe.title}">
+        <article class="recipe-card" role="article">
+            <a href="/recipes/show.php?id=${recipe.id}" 
+               class="recipe-link"
+               aria-labelledby="recipe-title-${recipe.id}">
+                <div class="recipe-image-container">
+                    <button class="favorite-btn favorited" data-recipe-id="${recipe.id}" aria-label="Remove from favorites">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                    <img src="${recipe.image_url || '/assets/images/recipe-placeholder.png'}" 
+                         alt="Photo of ${recipe.title}" 
+                         class="recipe-image">
                 </div>
+                
                 <div class="recipe-content">
-                    <h2 class="recipe-title">${recipe.title}</h2>
+                    <h2 class="recipe-title" id="recipe-title-${recipe.id}">${recipe.title}</h2>
                     <div class="recipe-meta">
                         <span class="favorited-date">
                             <i class="far fa-clock"></i>
@@ -210,7 +207,7 @@ function createEmptyState() {
         <div class="empty-state">
             <h3>No favorite recipes yet</h3>
             <p>Start exploring recipes and save your favorites!</p>
-            <a href="/FlavorConnect/public/recipes" class="btn btn-primary">
+            <a href="/recipes" class="btn btn-primary">
                 Browse Recipes
             </a>
         </div>
@@ -251,4 +248,4 @@ function showError(message) {
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeFavorites);
+document.addEventListener('DOMContentLoaded', window.initializeFavorites);

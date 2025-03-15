@@ -129,7 +129,7 @@ function updateRecipeGrid(recipes) {
 function createRecipeCard(recipe) {
     return `
         <article class="recipe-card" role="article">
-            <a href="/FlavorConnect/public/recipes/show.php?id=${recipe.recipe_id}" 
+            <a href="/recipes/show.php?id=${recipe.recipe_id}" 
                class="recipe-link"
                aria-labelledby="recipe-title-${recipe.recipe_id}">
                 <div class="recipe-image-container">
