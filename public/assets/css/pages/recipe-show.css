@@ -5,12 +5,14 @@
     max-width: 1200px;
     margin-inline: auto;
     padding-inline: var(--container-padding);
+    box-sizing: border-box;
 }
 
 .recipe-header {
     display: grid;
     gap: var(--grid-gap);
     position: relative;
+    width: 100%;
 }
 
 .recipe-header-image {
@@ -19,6 +21,7 @@
     overflow: hidden;
     position: relative;
     width: 85%;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -282,6 +285,7 @@
 
 .recipe-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-md);
     margin-top: var(--spacing-md);
 }
@@ -333,11 +337,20 @@
     .instruction-step {
         gap: var(--spacing-sm);
     }
+    
+    .recipe-header-image {
+        width: 95%;
+    }
+    
+    .recipe-title-section h1 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
 }
 
 @media (max-width: 480px) {
     .recipe-container {
         gap: var(--grid-gap-sm);
+        padding-inline: var(--spacing-sm);
     }
     
     .recipe-meta {
@@ -356,6 +369,68 @@
     .step-number {
         justify-self: center;
         margin-bottom: var(--spacing-xs);
+    }
+    
+    .recipe-header-image {
+        width: 100%;
+    }
+    
+    .recipe-time {
+        gap: var(--spacing-sm);
+    }
+    
+    .recipe-attributes {
+        gap: var(--spacing-sm);
+    }
+    
+    .recipe-actions .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 390px) {
+    .recipe-container {
+        padding-inline: var(--spacing-xs);
+    }
+    
+    .recipe-title-section h1 {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+    }
+    
+    .recipe-time, .recipe-attributes {
+        font-size: 0.8rem;
+        gap: var(--spacing-xs);
+    }
+    
+    .recipe-details {
+        gap: var(--spacing-xs);
+    }
+    
+    .recipe-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .recipe-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .recipe-meta {
+        gap: var(--spacing-sm);
+    }
+    
+    .recipe-header-overlay {
+        padding: var(--spacing-sm);
+    }
+    
+    .breadcrumbs {
+        font-size: 0.8rem;
+    }
+    
+    .back-link {
+        font-size: 0.9rem;
     }
 }
 
