@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const favoriteButtons = document.querySelectorAll('.favorite-btn');
 
     favoriteButtons.forEach(button => {
+        // Skip if already initialized
+        if (button.dataset.initialized) return;
+        
         button.addEventListener('click', async function(e) {
             e.preventDefault();
             
@@ -10,35 +13,43 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!recipeId) return;
 
             try {
-                // Send request to toggle favorite
-                const formData = new FormData();
-                formData.append('recipe_id', recipeId);
-
-                const response = await fetch('/api/toggle_favorite.php', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                const data = await response.json();
+                // Use the namespaced approach with fallback to global function
+                let result;
+                if (window.FlavorConnect && window.FlavorConnect.favorites) {
+                    result = await window.FlavorConnect.favorites.toggle(recipeId);
+                } else if (typeof window.toggleFavorite === 'function') {
+                    result = await window.toggleFavorite(recipeId);
+                } else {
+                    console.error('Favorite functionality not available');
+                    return;
+                }
                 
-                if (data.success) {
+                if (result && result.success) {
                     // Update button state
-                    this.classList.toggle('favorited', data.is_favorited);
-                    
-                    // Update aria-label
-                    const actionText = data.is_favorited ? 'Remove from' : 'Add to';
-                    this.setAttribute('aria-label', `${actionText} favorites`);
+                    this.classList.toggle('favorited', result.isFavorited);
                     
                     // Update icon
                     const icon = this.querySelector('i');
                     if (icon) {
-                        icon.classList.toggle('fas', data.is_favorited);
-                        icon.classList.toggle('far', !data.is_favorited);
+                        if (result.isFavorited) {
+                            icon.classList.remove('far');
+                            icon.classList.add('fas');
+                        } else {
+                            icon.classList.remove('fas');
+                            icon.classList.add('far');
+                        }
                     }
+                    
+                    // Update aria-label
+                    const actionText = result.isFavorited ? 'Remove from' : 'Add to';
+                    this.setAttribute('aria-label', `${actionText} favorites`);
                 }
             } catch (error) {
                 console.error('Error toggling favorite:', error);
             }
         });
+        
+        // Mark as initialized
+        button.dataset.initialized = 'true';
     });
 });

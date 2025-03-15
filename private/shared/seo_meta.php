@@ -42,7 +42,11 @@ if(!isset($page_image)) {
 <meta property="twitter:description" content="<?php echo h($page_description); ?>">
 <meta property="twitter:image" content="<?php echo h($page_image); ?>">
 
-<?php if(isset($is_recipe_page) && $is_recipe_page === true && isset($recipe)): ?>
+<?php 
+// Only include recipe structured data if we have a valid recipe object
+// and all required methods and properties are available
+if(isset($is_recipe_page) && $is_recipe_page === true && isset($recipe) && is_object($recipe)): 
+?>
 <!-- Recipe Structured Data -->
 <script type="application/ld+json">
 {
@@ -51,18 +55,18 @@ if(!isset($page_image)) {
   "name": "<?php echo h($recipe->title); ?>",
   "author": {
     "@type": "Person",
-    "name": "<?php echo h($recipe->author()->full_name()); ?>"
+    "name": "<?php echo method_exists($recipe, 'author') ? h($recipe->author()->full_name()) : (method_exists($recipe, 'user') ? h($recipe->user()->full_name()) : 'FlavorConnect User'); ?>"
   },
   "datePublished": "<?php echo h($recipe->created_at); ?>",
   "description": "<?php echo h(substr(strip_tags($recipe->description), 0, 160)); ?>",
   "image": "<?php echo 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path()); ?>",
-  "recipeCategory": "<?php echo h($recipe->type()->name); ?>",
-  "recipeCuisine": "<?php echo h($recipe->style()->name); ?>",
-  "keywords": "<?php echo h($recipe->title . ', ' . $recipe->type()->name . ', ' . $recipe->style()->name . ', ' . $recipe->diet()->name); ?>",
-  "recipeYield": "<?php echo h($recipe->servings); ?> servings",
-  "prepTime": "PT<?php echo h($recipe->prep_time); ?>M",
-  "cookTime": "PT<?php echo h($recipe->cook_time); ?>M",
-  "totalTime": "PT<?php echo h($recipe->prep_time + $recipe->cook_time); ?>M"
+  "recipeCategory": "<?php echo method_exists($recipe, 'type') && $recipe->type() ? h($recipe->type()->name) : ''; ?>",
+  "recipeCuisine": "<?php echo method_exists($recipe, 'style') && $recipe->style() ? h($recipe->style()->name) : ''; ?>",
+  "keywords": "<?php echo h($recipe->title) . (method_exists($recipe, 'type') && $recipe->type() ? ', ' . h($recipe->type()->name) : '') . (method_exists($recipe, 'style') && $recipe->style() ? ', ' . h($recipe->style()->name) : '') . (method_exists($recipe, 'diet') && $recipe->diet() ? ', ' . h($recipe->diet()->name) : ''); ?>",
+  "recipeYield": "<?php echo isset($recipe->servings) ? h($recipe->servings) . ' servings' : ''; ?>",
+  "prepTime": "PT<?php echo isset($recipe->prep_time) ? h($recipe->prep_time) : '0'; ?>M",
+  "cookTime": "PT<?php echo isset($recipe->cook_time) ? h($recipe->cook_time) : '0'; ?>M",
+  "totalTime": "PT<?php echo isset($recipe->prep_time) && isset($recipe->cook_time) ? h($recipe->prep_time + $recipe->cook_time) : '0'; ?>M"
 }
 </script>
 <?php endif; ?>

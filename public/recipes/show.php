@@ -23,7 +23,16 @@ $page_style = 'recipe-show';
 // Set SEO variables for recipe structured data
 $is_recipe_page = true;
 $page_description = substr(strip_tags($recipe->description), 0, 160);
-$page_keywords = $recipe->title . ', ' . $recipe->type()->name . ', ' . $recipe->style()->name . ', ' . $recipe->diet()->name;
+$page_keywords = $recipe->title;
+if (method_exists($recipe, 'type') && $recipe->type()) {
+    $page_keywords .= ', ' . $recipe->type()->name;
+}
+if (method_exists($recipe, 'style') && $recipe->style()) {
+    $page_keywords .= ', ' . $recipe->style()->name;
+}
+if (method_exists($recipe, 'diet') && $recipe->diet()) {
+    $page_keywords .= ', ' . $recipe->diet()->name;
+}
 $page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path());
 
 // Determine back link based on referrer
@@ -471,6 +480,12 @@ echo display_session_message();
     window.initialConfig = {
         baseUrl: '<?php echo 'http://' . $_SERVER['HTTP_HOST'] . url_for('/api/recipes/'); ?>'
     };
+    
+    window.initialUserData = <?php echo json_encode([
+        'isLoggedIn' => $session->is_logged_in(),
+        'userId' => $session->get_user_id(),
+        'apiBaseUrl' => 'http://localhost:3000'
+    ]); ?>;
 </script>
 
 <script id="recipe-data-json" type="application/json">
@@ -496,15 +511,6 @@ echo display_session_message();
 </script>
 
 <script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>"></script>
-
-<script>
-    window.initialUserData = <?php echo json_encode([
-        'isLoggedIn' => $session->is_logged_in(),
-        'userId' => $session->get_user_id(),
-        'apiBaseUrl' => 'http://localhost:3000'
-    ]); ?>;
-</script>
-
 <script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>?v=<?php echo time(); ?>"></script>
 
 <script>

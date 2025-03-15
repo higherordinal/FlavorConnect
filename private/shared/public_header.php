@@ -39,8 +39,25 @@ if(!isset($page_style)) { $page_style = ''; }
         <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/404.css'); ?>">
     <?php endif; ?>
     
-    <!-- External Dependencies -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Global Configuration -->
+    <script>
+        // Initialize FlavorConnect namespace
+        window.FlavorConnect = window.FlavorConnect || {};
+        
+        // Global configuration
+        window.FlavorConnect.config = {
+            baseUrl: '<?php echo url_for('/'); ?>',
+            isLoggedIn: <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>,
+            userId: <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>,
+            csrfToken: '<?php echo $session->get_csrf_token(); ?>'
+        };
+    </script>
+    
+    <!-- Core Utility Scripts -->
+    <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
 </head>
 <body>
     <header class="header" role="banner">

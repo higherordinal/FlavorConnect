@@ -2,7 +2,7 @@
    Favorite Button
    ========================================================================== */
 
-.favorite-btn {
+.favorite-btn, .unfavorite-btn {
   background: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 50%;
@@ -19,22 +19,22 @@
   z-index: 2;
 }
 
-.favorite-btn i {
+.favorite-btn i, .unfavorite-btn i {
   color: var(--danger-color-dark);
   font-size: var(--font-size-large);
   transition: transform 0.2s ease;
 }
 
-.favorite-btn:hover {
+.favorite-btn:hover, .unfavorite-btn:hover {
   background: var(--color-white);
   transform: scale(1.1);
 }
 
-.favorite-btn:hover i {
+.favorite-btn:hover i, .unfavorite-btn:hover i {
   transform: scale(1.1);
 }
 
-.favorite-btn.favorited i {
+.favorite-btn.favorited i, .unfavorite-btn i {
   animation: favorite-pop 0.3s ease-out;
   color: var(--danger-color-dark);
 }

@@ -35,25 +35,37 @@ if(!isset($page_style)) { $page_style = ''; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=' . time()); ?>">
     <?php } ?>
     
-    <!-- JavaScript -->
+    <!-- Global Configuration -->
     <script>
-        // API Configuration
-        window.initialUserData = {
+        // Initialize FlavorConnect namespace
+        window.FlavorConnect = window.FlavorConnect || {};
+        
+        // Global configuration
+        window.FlavorConnect.config = {
+            baseUrl: '<?php echo url_for('/'); ?>',
+            apiBaseUrl: '<?php echo url_for('/api/'); ?>',
             isLoggedIn: <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>,
-            userId: <?php echo $session->get_user_id(); ?>,
-            apiBaseUrl: 'http://localhost:3000'
+            userId: <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>,
+            csrfToken: '<?php echo $session->get_csrf_token(); ?>'
         };
+        
+        // For backward compatibility
+        window.initialUserData = {
+            isLoggedIn: window.FlavorConnect.config.isLoggedIn,
+            userId: window.FlavorConnect.config.userId,
+            apiBaseUrl: window.FlavorConnect.config.apiBaseUrl
+        };
+        
+        // Debug configuration to console
+        console.log('FlavorConnect Config:', window.FlavorConnect.config);
     </script>
+    
+    <!-- Core Utility Scripts -->
+    <script src="<?php echo url_for('/assets/js/utils/api.js?v=' . time()); ?>"></script>
     <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
     <script src="<?php echo url_for('/assets/js/utils/favorites.js?v=' . time()); ?>"></script>
-    <script>
-        // Initialize favorite buttons after DOM loads
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof window.initializeFavoriteButtons === 'function') {
-                window.initializeFavoriteButtons();
-            }
-        });
-    </script>
+    
+    <!-- Component Scripts -->
     <script src="<?php echo url_for('/assets/js/components/header.js?v=' . time()); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js?v=' . time()); ?>" defer></script>
     <?php if($page_style === 'recipe-form') { ?>
