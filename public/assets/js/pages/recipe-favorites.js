@@ -1,6 +1,6 @@
 /**
  * @fileoverview Recipe Favorites page functionality for FlavorConnect
- * @author FlavorConnect Team
+ * @author Henry Vaughn
  * @version 1.0.0
  * @license MIT
  */
@@ -181,20 +181,15 @@ window.FlavorConnect.favoritesPage = {
         this.showLoadingState(true);
         
         try {
-            // Use the API namespace if available
-            let response;
-            if (window.FlavorConnect.api) {
-                response = await window.FlavorConnect.api.get(`recipes/favorites?sort=${sortBy}`);
-            } else {
-                response = await fetch(`${window.FlavorConnect.config.apiBaseUrl}recipes/favorites?sort=${sortBy}`);
-                response = await response.json();
+            // Directly use fetch for API requests
+            const response = await fetch(`${window.FlavorConnect.config.apiBaseUrl}recipes/favorites?sort=${sortBy}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
             }
             
-            if (response.error) {
-                throw new Error(response.error);
-            }
-            
-            this.updateFavoritesList(response.favorites || []);
+            this.updateFavoritesList(data.favorites || []);
         } catch (error) {
             console.error('Error sorting favorites:', error);
             this.showError('Failed to sort recipes. Please try again.');

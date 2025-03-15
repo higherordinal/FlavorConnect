@@ -61,7 +61,6 @@ if(!isset($page_style)) { $page_style = ''; }
     </script>
     
     <!-- Core Utility Scripts -->
-    <script src="<?php echo url_for('/assets/js/utils/api.js?v=' . time()); ?>"></script>
     <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
     <script src="<?php echo url_for('/assets/js/utils/favorites.js?v=' . time()); ?>"></script>
     
