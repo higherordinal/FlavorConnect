@@ -115,6 +115,8 @@ class RecipeFilter extends DatabaseObject {
         try {
             $sql = "SELECT r.* FROM " . Recipe::table_name() . " r";
             
+            // Always add the ratings join if we're sorting by rating
+            // This ensures it's available regardless of filtering
             if($this->sort === 'rating') {
                 $sql .= " LEFT JOIN (
                             SELECT recipe_id, AVG(rating_value) as avg_rating 
