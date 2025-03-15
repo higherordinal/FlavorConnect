@@ -93,13 +93,13 @@ include(SHARED_PATH . '/member_header.php');
                         </div>
                         <div class="recipe-attributes" role="list">
                             <?php if($style) { ?>
-                                <span class="recipe-attribute"><?php echo h($style->name); ?></span>
+                                <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
                             <?php } ?>
                             <?php if($diet) { ?>
-                                <span class="recipe-attribute"><?php echo h($diet->name); ?></span>
+                                <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
                             <?php } ?>
                             <?php if($type) { ?>
-                                <span class="recipe-attribute"><?php echo h($type->name); ?></span>
+                                <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
                             <?php } ?>
                         </div>
                         <p class="recipe-description"><?php echo h($recipe->description); ?></p>

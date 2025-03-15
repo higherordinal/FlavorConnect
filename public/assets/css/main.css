@@ -564,3 +564,33 @@ textarea {
   white-space: nowrap;
   width: 1px;
 }
+
+/* ==========================================================================
+   Recipe Attributes
+   ========================================================================== */
+
+/* Base styling for all recipe attributes */
+.recipe-attribute,
+.main-content .recipe-attribute,
+.recipe-card .recipe-attribute {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-white);
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color var(--transition-medium);
+}
+
+.recipe-attribute:hover,
+.recipe-attribute:focus,
+.main-content .recipe-attribute:hover,
+.main-content .recipe-attribute:focus,
+.recipe-card .recipe-attribute:hover,
+.recipe-card .recipe-attribute:focus {
+  background-color: var(--secondary-color);
+  color: var(--color-white);
+}

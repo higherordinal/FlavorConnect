@@ -73,12 +73,28 @@ $types = RecipeAttribute::find_by_type('type');
 // Calculate offset
 $offset = ($current_page - 1) * $per_page;
 
+// Create filter configuration
+$filter_config = [
+    'search' => $search,
+    'style_id' => $style_id,
+    'diet_id' => $diet_id,
+    'type_id' => $type_id,
+    'sort' => $sort,
+    'limit' => $per_page,
+    'offset' => $offset,
+    'include_favorites' => $session->is_logged_in(),
+    'user_id' => $session->is_logged_in() ? $session->get_user_id() : null
+];
+
+// Create and apply the filter
+$recipe_filter = new RecipeFilter($filter_config);
+
 // Get total recipes count for pagination
-$total_recipes = Recipe::count_all_filtered($search, $style_id, $diet_id, $type_id);
+$total_recipes = $recipe_filter->count();
 $total_pages = max(1, ceil($total_recipes / $per_page));
 
 // Get recipes for current page
-$recipes = Recipe::find_all_filtered($search, $style_id, $diet_id, $type_id, $sort, $per_page, $offset);
+$recipes = $recipe_filter->apply();
 
 // Ensure current page is not greater than total pages
 if ($current_page > $total_pages) {
@@ -92,9 +108,7 @@ $recipesData = array_map(function($recipe) use ($session) {
     $type = $recipe->type();
     $user = User::find_by_id($recipe->user_id);
     $rating = $recipe->get_average_rating();
-    $is_favorited = $session->is_logged_in() ? 
-        RecipeFavorite::is_favorited($session->get_user_id(), $recipe->recipe_id) : false;
-
+    
     return [
         'recipe_id' => $recipe->recipe_id,
         'user_id' => $session->is_logged_in() ? $session->get_user_id() : null,
@@ -113,7 +127,7 @@ $recipesData = array_map(function($recipe) use ($session) {
         'created_at' => $recipe->created_at,
         'rating' => $rating['average'] ?? null,
         'rating_count' => $rating['count'] ?? 0,
-        'is_favorited' => $is_favorited
+        'is_favorited' => $recipe->is_favorited ?? false
     ];
 }, $recipes);
 
@@ -199,9 +213,7 @@ $userData = [
         </div>
 
         <?php if($search || $style_id || $diet_id || $type_id) { ?>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
-                <i class="fas fa-times"></i> Clear Filters
-            </a>
+            <!-- Removed clear-filters button from here -->
         <?php } ?>
     </div>
 
@@ -229,6 +241,9 @@ $userData = [
                         Type: <?php echo h($type->name); ?>
                     </span>
                 <?php } ?>
+                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
+                    <i class="fas fa-times"></i> Clear Filters
+                </a>
             </div>
         <?php } ?>
     </div>
@@ -244,7 +259,6 @@ $userData = [
                 $style = $recipe->style();
                 $diet = $recipe->diet();
                 $type = $recipe->type();
-                $recipe->is_favorited = $session->is_logged_in() ? RecipeFavorite::is_favorited($session->get_user_id(), $recipe->recipe_id) : false;
             ?>
                 <article class="recipe-card" role="article">
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" 
@@ -293,13 +307,13 @@ $userData = [
 
                             <div class="recipe-attributes" role="list">
                                 <?php if($style) { ?>
-                                    <span class="recipe-attribute"><?php echo h($style->name); ?></span>
+                                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
                                 <?php } ?>
                                 <?php if($diet) { ?>
-                                    <span class="recipe-attribute"><?php echo h($diet->name); ?></span>
+                                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
                                 <?php } ?>
                                 <?php if($type) { ?>
-                                    <span class="recipe-attribute"><?php echo h($type->name); ?></span>
+                                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
                                 <?php } ?>
                             </div>
                         </div>

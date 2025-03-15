@@ -153,6 +153,31 @@
   grid-template-columns: repeat(auto-fit, minmax(100px, max-content));
 }
 
+/* Clear Filters Button */
+.main-content .clear-filters {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-white);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-small);
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  text-decoration: none;
+  transition: background-color var(--transition-medium), color var(--transition-medium);
+}
+
+.main-content .clear-filters:hover,
+.main-content .clear-filters:focus {
+  background-color: var(--color-white);
+  color: var(--primary-color);
+}
+
+.main-content .clear-filters i {
+  font-size: 0.8em;
+}
+
 /* ==========================================================================
    Tag Styles
    ========================================================================== */
@@ -253,18 +278,6 @@
   min-height: 4rem; /* Set minimum height to accommodate two lines */
   align-items: center; /* Center attributes vertically */
   margin-top: auto;
-}
-
-.main-content .recipe-attribute {
-  background-color: var(--primary-color);
-  border-radius: var(--border-radius-sm);
-  color: var(--color-white);
-  font-size: var(--font-size-small);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  margin: 0;
 }
 
 .main-content .recipe-footer {

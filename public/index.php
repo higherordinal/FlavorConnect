@@ -74,9 +74,9 @@ if($session->is_logged_in()) {
                 echo '</div>';
                 echo '<p class="recipe-description">' . h($recipe->description) . '</p>';
                 echo '<div class="recipe-attributes">';
-                if($recipe->style()) echo '<span class="recipe-attribute">' . h($recipe->style()->name) . '</span>';
-                if($recipe->diet()) echo '<span class="recipe-attribute">' . h($recipe->diet()->name) . '</span>';
-                if($recipe->type()) echo '<span class="recipe-attribute">' . h($recipe->type()->name) . '</span>';
+                if($recipe->style()) echo '<a href="' . url_for('/recipes/index.php?style=' . h(u($recipe->style()->id))) . '" class="recipe-attribute">' . h($recipe->style()->name) . '</a>';
+                if($recipe->diet()) echo '<a href="' . url_for('/recipes/index.php?diet=' . h(u($recipe->diet()->id))) . '" class="recipe-attribute">' . h($recipe->diet()->name) . '</a>';
+                if($recipe->type()) echo '<a href="' . url_for('/recipes/index.php?type=' . h(u($recipe->type()->id))) . '" class="recipe-attribute">' . h($recipe->type()->name) . '</a>';
                 echo '</div>';
                 echo '<a href="' . url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=home') . '" class="btn-text">View Recipe</a>';
                 echo '</div>';
