@@ -1,22 +1,27 @@
 <?php
 /**
  * API Entry Point
- * All API requests are routed through this file
  * 
- * Note: Favorite-related functionality has been moved to the Node.js API
- * running on port 3000. See /api/routes/favorites.js for those endpoints.
+ * This is a simplified API entry point that provides information about the available API endpoints.
+ * Currently, only the toggle_favorite.php endpoint is implemented and in use.
  */
 
 require_once('../../private/core/initialize.php');
-require_once(PRIVATE_PATH . '/core/api/router.php');
-require_once(PRIVATE_PATH . '/core/api/endpoints/recipes.php');
 
-// Create router instance
-$router = new ApiRouter();
+// Set content type to JSON
+header('Content-Type: application/json');
 
-// Register endpoints
-$router->register('recipes', [RecipeEndpoints::class, 'handle'], ['GET']);
-
-// Handle request and send response
-$response = $router->handleRequest();
-$router->sendResponse($response);
+// Return API information
+echo json_encode([
+    'success' => true,
+    'message' => 'FlavorConnect API',
+    'version' => '1.0.0',
+    'endpoints' => [
+        'toggle_favorite' => [
+            'url' => '/api/toggle_favorite.php',
+            'methods' => ['GET', 'POST'],
+            'description' => 'Toggle favorite status for a recipe'
+        ]
+    ],
+    'time' => date('Y-m-d H:i:s')
+]);
