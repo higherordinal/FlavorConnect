@@ -779,11 +779,12 @@
     gap: 1rem;
 }
 
-/* Recipe-show specific favorite button positioning */
-.favorite-btn {
+/* Recipe title section favorite button override */
+.recipe-title-section .favorite-btn {
     position: relative;
     top: auto;
     right: auto;
+    margin-left: auto;
 }
 
 /* Recipe header actions */
