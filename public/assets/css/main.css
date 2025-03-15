@@ -68,16 +68,21 @@
   padding: 0;
 }
 
-html,
-body {
+html {
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: hidden; /* Prevent vertical scrolling on html */
   max-width: 100%;
 }
 
 body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; /* Only body should have vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  max-width: 100%;
   background-color: var(--background-color);
   color: var(--text-color);
   display: grid;
@@ -85,6 +90,7 @@ body {
   grid-template-rows: auto 1fr auto;
   line-height: 1.6;
   min-height: 100vh;
+  position: relative; /* Ensure proper stacking context */
 
   grid-template-areas:
     "header"
