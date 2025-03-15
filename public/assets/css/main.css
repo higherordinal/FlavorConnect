@@ -473,6 +473,102 @@ a:hover {
 }
 
 /* ==========================================================================
+   Recipe Cards (shared between recipe gallery and favorites)
+   ========================================================================== */
+
+/* Base recipe card styling */
+.recipe-card {
+  background: var(--color-white);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--spacing-sm);
+  overflow: hidden;
+  transition: transform var(--transition-medium),
+    box-shadow var(--transition-medium);
+  height: 100%;
+}
+
+/* Recipe image container */
+.recipe-image-container {
+  overflow: hidden;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  position: relative;
+  width: 100%;
+}
+
+.recipe-image {
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  transition: transform var(--transition-medium);
+  width: 100%;
+}
+
+.recipe-card:hover .recipe-image {
+  transform: scale(1.05);
+}
+
+/* Recipe content */
+.recipe-content {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+}
+
+.recipe-title {
+  color: var(--text-color);
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  margin: 0;
+}
+
+.recipe-meta {
+  color: var(--text-color-light);
+  display: grid;
+  font-size: var(--font-size-small);
+  gap: var(--spacing-xs);
+  grid-auto-flow: column;
+  justify-content: start;
+}
+
+.recipe-description {
+  color: var(--text-color-light);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Recipe attributes container */
+.recipe-attributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  min-height: 4rem; /* Set minimum height to accommodate two lines */
+  align-items: center; /* Center attributes vertically */
+  margin-top: auto;
+}
+
+/* Recipe footer */
+.recipe-footer {
+  align-items: center;
+  border-top: 1px solid var(--light-gray);
+  display: grid;
+  gap: var(--spacing-sm);
+  grid-template-columns: repeat(2, 1fr);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.recipe-author {
+  font-size: var(--font-size-small);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
    Transitions & Animations
    ========================================================================== */
 
