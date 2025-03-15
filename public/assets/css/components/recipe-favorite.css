@@ -20,7 +20,7 @@
 }
 
 .favorite-btn i {
-  color: var(--accent-color);
+  color: var(--danger-color-dark);
   font-size: var(--font-size-large);
   transition: transform 0.2s ease;
 }
@@ -36,7 +36,7 @@
 
 .favorite-btn.favorited i {
   animation: favorite-pop 0.3s ease-out;
-  color: var(--accent-color);
+  color: var(--danger-color-dark);
 }
 
 @keyframes favorite-pop {

@@ -704,27 +704,21 @@
     gap: 1rem;
 }
 
+/* Recipe-show specific favorite button positioning */
 .favorite-btn {
-    background: none;
-    border: none;
-    color: var(--color-white);
-    font-size: 1.5rem;
-    cursor: pointer;
-    padding: 0.5rem;
-    transition: transform 0.2s ease;
+    position: relative;
+    top: auto;
+    right: auto;
 }
 
-.favorite-btn:hover {
-    transform: scale(1.1);
-}
-
-.favorite-btn i {
-    color: var(--color-white);
-    transition: color 0.2s ease;
-}
-
-.favorite-btn.favorited i {
-    color: #ff4b4b;
+/* Recipe header actions */
+.recipe-actions {
+    display: flex;
+    gap: 1rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
 }
 
 /* Breadcrumbs */
