@@ -439,50 +439,16 @@ class Recipe extends DatabaseObject {
      * @return int Total number of matching recipes
      */
     public static function count_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null) {
-        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
+        // Delegate to RecipeFilter
+        $filter_config = [
+            'search' => $search,
+            'style_id' => $style_id,
+            'diet_id' => $diet_id,
+            'type_id' => $type_id
+        ];
         
-        $where_clauses = [];
-        $params = [];
-        $types = "";
-        
-        if(!empty($search)) {
-            $where_clauses[] = "(title LIKE ? OR description LIKE ?)";
-            $search_param = "%{$search}%";
-            $params[] = $search_param;
-            $params[] = $search_param;
-            $types .= "ss";
-        }
-        
-        if(!empty($style_id)) {
-            $where_clauses[] = "style_id = ?";
-            $params[] = $style_id;
-            $types .= "i";
-        }
-        
-        if(!empty($diet_id)) {
-            $where_clauses[] = "diet_id = ?";
-            $params[] = $diet_id;
-            $types .= "i";
-        }
-        
-        if(!empty($type_id)) {
-            $where_clauses[] = "type_id = ?";
-            $params[] = $type_id;
-            $types .= "i";
-        }
-        
-        if(!empty($where_clauses)) {
-            $sql .= " WHERE " . implode(" AND ", $where_clauses);
-        }
-
-        $stmt = self::$database->prepare($sql);
-        if(!empty($params)) {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        return (int)$row['count'];
+        $filter = new RecipeFilter($filter_config);
+        return $filter->count();
     }
 
     /**
@@ -497,80 +463,19 @@ class Recipe extends DatabaseObject {
      * @return array Array of Recipe objects
      */
     public static function find_all_filtered($search='', $style_id=null, $diet_id=null, $type_id=null, $sort='newest', $limit=12, $offset=0) {
-        $sql = "SELECT r.* FROM " . static::$table_name . " r";
+        // Delegate to RecipeFilter
+        $filter_config = [
+            'search' => $search,
+            'style_id' => $style_id,
+            'diet_id' => $diet_id,
+            'type_id' => $type_id,
+            'sort' => $sort,
+            'limit' => $limit,
+            'offset' => $offset
+        ];
         
-        if($sort === 'rating') {
-            $sql .= " LEFT JOIN (
-                        SELECT recipe_id, AVG(rating_value) as avg_rating 
-                        FROM recipe_rating 
-                        GROUP BY recipe_id
-                    ) ratings ON r.recipe_id = ratings.recipe_id";
-        }
-        
-        $where_clauses = [];
-        $params = [];
-        $types = "";
-        
-        if(!empty($search)) {
-            $where_clauses[] = "(r.title LIKE ? OR r.description LIKE ?)";
-            $search_param = "%{$search}%";
-            $params[] = $search_param;
-            $params[] = $search_param;
-            $types .= "ss";
-        }
-        
-        if(!empty($style_id)) {
-            $where_clauses[] = "r.style_id = ?";
-            $params[] = $style_id;
-            $types .= "i";
-        }
-        
-        if(!empty($diet_id)) {
-            $where_clauses[] = "r.diet_id = ?";
-            $params[] = $diet_id;
-            $types .= "i";
-        }
-        
-        if(!empty($type_id)) {
-            $where_clauses[] = "r.type_id = ?";
-            $params[] = $type_id;
-            $types .= "i";
-        }
-        
-        if(!empty($where_clauses)) {
-            $sql .= " WHERE " . implode(" AND ", $where_clauses);
-        }
-        
-        switch($sort) {
-            case 'oldest':
-                $sql .= " ORDER BY r.created_at ASC";
-                break;
-            case 'rating':
-                $sql .= " ORDER BY COALESCE(ratings.avg_rating, 0) DESC, r.recipe_id DESC";
-                break;
-            case 'name_asc':
-                $sql .= " ORDER BY r.title ASC";
-                break;
-            case 'name_desc':
-                $sql .= " ORDER BY r.title DESC";
-                break;
-            case 'newest':
-            default:
-                $sql .= " ORDER BY r.created_at DESC";
-        }
-        
-        $sql .= " LIMIT ? OFFSET ?";
-        $params[] = $limit;
-        $params[] = $offset;
-        $types .= "ii";
-        
-        $stmt = self::$database->prepare($sql);
-        if(!empty($params)) {
-            $stmt->bind_param($types, ...$params);
-        }
-        $stmt->execute();
-        $result = $stmt->get_result();
-        return static::instantiate_result($result);
+        $filter = new RecipeFilter($filter_config);
+        return $filter->apply();
     }
 
     /**
