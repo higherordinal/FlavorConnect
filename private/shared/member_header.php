@@ -41,19 +41,20 @@ if(!isset($page_style)) { $page_style = ''; }
             apiBaseUrl: 'http://localhost:3000'
         };
     </script>
-    <script src="<?php echo url_for('/assets/js/utils/common.js'); ?>" type="module"></script>
+    <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
+    <script src="<?php echo url_for('/assets/js/utils/favorites.js?v=' . time()); ?>"></script>
     <script>
-        // Initialize favorite buttons after module loads
+        // Initialize favorite buttons after DOM loads
         document.addEventListener('DOMContentLoaded', () => {
-            import('<?php echo url_for('/assets/js/utils/serve-module.php?file=favorites.js'); ?>').then(module => {
-                module.initializeFavoriteButtons();
-            });
+            if (typeof window.initializeFavoriteButtons === 'function') {
+                window.initializeFavoriteButtons();
+            }
         });
     </script>
-    <script src="<?php echo url_for('/assets/js/components/header.js'); ?>" defer></script>
-    <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>" defer></script>
+    <script src="<?php echo url_for('/assets/js/components/header.js?v=' . time()); ?>" defer></script>
+    <script src="<?php echo url_for('/assets/js/components/member-header.js?v=' . time()); ?>" defer></script>
     <?php if($page_style === 'recipe-form') { ?>
-    <script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>
+    <script src="<?php echo url_for('/assets/js/pages/recipe-form.js?v=' . time()); ?>" defer></script>
     <?php } ?>
 </head>
 <body>

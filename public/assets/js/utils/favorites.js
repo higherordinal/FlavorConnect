@@ -6,7 +6,7 @@ const apiBaseUrl = window.initialUserData?.apiBaseUrl || 'http://localhost:3000'
  * @param {number} recipeId - The ID of the recipe to check
  * @returns {Promise<boolean>} - Whether the recipe is favorited
  */
-export async function checkFavoriteStatus(recipeId) {
+window.checkFavoriteStatus = async function(recipeId) {
     try {
         if (!window.initialUserData?.isLoggedIn) return false;
         
@@ -28,10 +28,10 @@ export async function checkFavoriteStatus(recipeId) {
  * @param {number} recipeId - The ID of the recipe to toggle
  * @returns {Promise<Object>} - Object with success and isFavorited properties
  */
-export async function toggleFavorite(recipeId) {
+window.toggleFavorite = async function(recipeId) {
     try {
         if (!window.initialUserData?.isLoggedIn) {
-            window.location.href = '/FlavorConnect/public/login.php';
+            window.location.href = '/login.php';
             return { success: false, error: 'User not logged in' };
         }
 
@@ -49,24 +49,30 @@ export async function toggleFavorite(recipeId) {
         }
 
         const data = await response.json();
-        return { success: true, isFavorited: data.isFavorited };
+        return {
+            success: true,
+            isFavorited: data.isFavorited
+        };
     } catch (error) {
         console.error('Error toggling favorite:', error);
-        return { success: false, error: error.message };
+        return {
+            success: false,
+            error: error.message
+        };
     }
 }
 
 /**
  * Initialize favorite buttons with click handlers
  */
-export function initializeFavoriteButtons() {
+window.initializeFavoriteButtons = function() {
     document.querySelectorAll('.favorite-btn').forEach(btn => {
         if (!btn.dataset.initialized) {
             btn.dataset.initialized = 'true';
             btn.addEventListener('click', async (e) => {
                 e.preventDefault();
                 const recipeId = btn.dataset.recipeId;
-                const result = await toggleFavorite(recipeId);
+                const result = await window.toggleFavorite(recipeId);
                 
                 // Check if we're on the favorites page
                 const isFavoritesPage = window.location.pathname.includes('/users/favorites.php');

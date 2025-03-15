@@ -2,8 +2,6 @@
  * @fileoverview Recipe gallery functionality
  */
 
-import { initializeFavoriteButtons } from '../utils/serve-module.php?file=favorites.js';
-
 // Global state
 const state = {
     isLoggedIn: window.initialUserData?.isLoggedIn || false,
@@ -28,10 +26,12 @@ const API_CONFIG = {
 };
 
 // Initialize gallery
-function initializeGallery() {
+window.initializeGallery = function() {
     setupEventListeners();
     loadFiltersFromURL();
-    initializeFavoriteButtons();
+    if (typeof window.initializeFavoriteButtons === 'function') {
+        window.initializeFavoriteButtons();
+    }
 }
 
 // Set up event listeners
@@ -115,7 +115,9 @@ function updateRecipeGrid(recipes) {
     } else {
         recipeGrid.innerHTML = recipes.map(recipe => createRecipeCard(recipe)).join('');
         // Initialize favorite buttons for new cards
-        initializeFavoriteButtons();
+        if (typeof window.initializeFavoriteButtons === 'function') {
+            window.initializeFavoriteButtons();
+        }
     }
 }
 
@@ -277,4 +279,4 @@ function showLoadingState(show) {
 }
 
 // Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', initializeGallery);
+document.addEventListener('DOMContentLoaded', window.initializeGallery);

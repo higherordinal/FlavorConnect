@@ -499,24 +499,28 @@ echo display_session_message();
     ]); ?>;
 </script>
 
-<script type="module">
-    import { initializeFavoriteButtons, checkFavoriteStatus } from '<?php echo url_for('/assets/js/utils/serve-module.php?file=favorites.js'); ?>';
-    
+<script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>?v=<?php echo time(); ?>"></script>
+
+<script>
     document.addEventListener('DOMContentLoaded', async () => {
         const favoriteBtn = document.querySelector('.favorite-btn');
         if (favoriteBtn) {
             const recipeId = favoriteBtn.dataset.recipeId;
             
             // Check initial favorite status
-            const isFavorited = await checkFavoriteStatus(recipeId);
-            if (isFavorited) {
-                favoriteBtn.classList.add('favorited');
-                favoriteBtn.querySelector('i').classList.remove('far');
-                favoriteBtn.querySelector('i').classList.add('fas');
+            if (typeof window.checkFavoriteStatus === 'function') {
+                const isFavorited = await window.checkFavoriteStatus(recipeId);
+                if (isFavorited) {
+                    favoriteBtn.classList.add('favorited');
+                    favoriteBtn.querySelector('i').classList.remove('far');
+                    favoriteBtn.querySelector('i').classList.add('fas');
+                }
             }
             
             // Initialize favorite button functionality
-            initializeFavoriteButtons();
+            if (typeof window.initializeFavoriteButtons === 'function') {
+                window.initializeFavoriteButtons();
+            }
         }
     });
 </script>
