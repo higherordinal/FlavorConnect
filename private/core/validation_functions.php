@@ -342,6 +342,8 @@ function validate_user($user_data, $current_id="0") {
         $errors['username'] = "Username must be between 4 and 255 characters.";
     } elseif(!has_unique_username($user_data['username'], $current_id)) {
         $errors['username'] = "Username is already taken.";
+    } elseif(!has_no_spaces($user_data['username'])) {
+        $errors['username'] = "Username cannot contain spaces.";
     }
 
     // Email validation
@@ -460,6 +462,15 @@ function has_unique_metadata_name($name, $table, $current_id="0") {
     } catch(Exception $e) {
         return false;
     }
+}
+
+/**
+ * Validates if a username contains spaces
+ * @param string $username The username to check
+ * @return bool True if username does not contain spaces
+ */
+function has_no_spaces($username) {
+    return strpos($username, ' ') === false;
 }
 
 /**

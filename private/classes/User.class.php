@@ -141,69 +141,71 @@ class User extends DatabaseObject {
         $this->errors = [];
 
         if(is_blank($this->username)) {
-            $this->errors[] = "Username cannot be blank.";
+            $this->errors['username'] = "Username cannot be blank.";
         } elseif (!has_length($this->username, array('min' => 3, 'max' => 255))) {
-            $this->errors[] = "Username must be between 3 and 255 characters.";
+            $this->errors['username'] = "Username must be between 3 and 255 characters.";
+        } elseif (!has_no_spaces($this->username)) {
+            $this->errors['username'] = "Username cannot contain spaces.";
         } elseif (!has_unique_username($this->username, $this->user_id ?? 0)) {
-            $this->errors[] = "Username is already taken. Please choose another.";
+            $this->errors['username'] = "Username is already taken. Please choose another.";
         }
 
         if(is_blank($this->email)) {
-            $this->errors[] = "Email cannot be blank.";
+            $this->errors['email'] = "Email cannot be blank.";
         } elseif (!has_length($this->email, array('max' => 255))) {
-            $this->errors[] = "Email must be less than 255 characters.";
+            $this->errors['email'] = "Email must be less than 255 characters.";
         } elseif (!is_valid_email($this->email)) {
-            $this->errors[] = "Email must be a valid format.";
+            $this->errors['email'] = "Email must be a valid format.";
         } elseif (!has_unique_email($this->email, $this->user_id ?? 0)) {
-            $this->errors[] = "Email is already taken. Please choose another.";
+            $this->errors['email'] = "Email is already taken. Please choose another.";
         }
 
         if(is_blank($this->first_name)) {
-            $this->errors[] = "First name cannot be blank.";
+            $this->errors['first_name'] = "First name cannot be blank.";
         } elseif (!has_length($this->first_name, array('min' => 2, 'max' => 255))) {
-            $this->errors[] = "First name must be between 2 and 255 characters.";
+            $this->errors['first_name'] = "First name must be between 2 and 255 characters.";
         }
 
         if(is_blank($this->last_name)) {
-            $this->errors[] = "Last name cannot be blank.";
+            $this->errors['last_name'] = "Last name cannot be blank.";
         } elseif (!has_length($this->last_name, array('min' => 2, 'max' => 255))) {
-            $this->errors[] = "Last name must be between 2 and 255 characters.";
+            $this->errors['last_name'] = "Last name must be between 2 and 255 characters.";
         }
 
         if(!isset($this->user_id)) {
             // New user requires password
             if(is_blank($this->password)) {
-                $this->errors[] = "Password cannot be blank.";
+                $this->errors['password'] = "Password cannot be blank.";
             } elseif (!has_length($this->password, array('min' => 8))) {
-                $this->errors[] = "Password must contain 8 or more characters.";
+                $this->errors['password'] = "Password must contain 8 or more characters.";
             } elseif (!preg_match('/[A-Z]/', $this->password)) {
-                $this->errors[] = "Password must contain at least one uppercase letter.";
+                $this->errors['password'] = "Password must contain at least one uppercase letter.";
             } elseif (!preg_match('/[a-z]/', $this->password)) {
-                $this->errors[] = "Password must contain at least one lowercase letter.";
+                $this->errors['password'] = "Password must contain at least one lowercase letter.";
             } elseif (!preg_match('/[0-9]/', $this->password)) {
-                $this->errors[] = "Password must contain at least one number.";
+                $this->errors['password'] = "Password must contain at least one number.";
             }
 
             // Validate confirm password
             if(isset($this->confirm_password) && $this->password !== $this->confirm_password) {
-                $this->errors[] = "Password and confirm password must match.";
+                $this->errors['confirm_password'] = "Password and confirm password must match.";
             }
         } else {
             // Existing user, password is optional
             if(!is_blank($this->password)) {
                 if(!has_length($this->password, array('min' => 8))) {
-                    $this->errors[] = "Password must contain 8 or more characters.";
+                    $this->errors['password'] = "Password must contain 8 or more characters.";
                 } elseif (!preg_match('/[A-Z]/', $this->password)) {
-                    $this->errors[] = "Password must contain at least one uppercase letter.";
+                    $this->errors['password'] = "Password must contain at least one uppercase letter.";
                 } elseif (!preg_match('/[a-z]/', $this->password)) {
-                    $this->errors[] = "Password must contain at least one lowercase letter.";
+                    $this->errors['password'] = "Password must contain at least one lowercase letter.";
                 } elseif (!preg_match('/[0-9]/', $this->password)) {
-                    $this->errors[] = "Password must contain at least one number.";
+                    $this->errors['password'] = "Password must contain at least one number.";
                 }
                 
                 // Validate confirm password for existing users when changing password
                 if(isset($this->confirm_password) && $this->password !== $this->confirm_password) {
-                    $this->errors[] = "Password and confirm password must match.";
+                    $this->errors['confirm_password'] = "Password and confirm password must match.";
                 }
             }
         }
