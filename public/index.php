@@ -63,26 +63,69 @@ if($session->is_logged_in()) {
             foreach($featured_recipes as $recipe) {
                 $chef = User::find_by_id($recipe->user_id);
                 $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
-                
-                echo '<div class="recipe-card">';
-                echo '<img src="' . url_for($recipe->get_image_path()) . '" alt="' . h($recipe->title) . '" class="recipe-image">';
-                echo '<div class="recipe-content">';
-                echo '<h3 class="recipe-title">' . h($recipe->title) . '</h3>';
-                echo '<div class="recipe-meta">';
-                echo '<span>By ' . h($chef->first_name . ' ' . $chef->last_name) . '</span>';
-                echo '<span>' . h($total_time) . '</span>';
-                echo '</div>';
-                echo '<p class="recipe-description">' . h($recipe->description) . '</p>';
-                echo '<div class="recipe-attributes">';
-                if($recipe->style()) echo '<a href="' . url_for('/recipes/index.php?style=' . h(u($recipe->style()->id))) . '" class="recipe-attribute">' . h($recipe->style()->name) . '</a>';
-                if($recipe->diet()) echo '<a href="' . url_for('/recipes/index.php?diet=' . h(u($recipe->diet()->id))) . '" class="recipe-attribute">' . h($recipe->diet()->name) . '</a>';
-                if($recipe->type()) echo '<a href="' . url_for('/recipes/index.php?type=' . h(u($recipe->type()->id))) . '" class="recipe-attribute">' . h($recipe->type()->name) . '</a>';
-                echo '</div>';
-                echo '<a href="' . url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=home') . '" class="btn-text">View Recipe</a>';
-                echo '</div>';
-                echo '</div>';
-            }
+                $style = $recipe->style();
+                $diet = $recipe->diet();
+                $type = $recipe->type();
+                $rating = $recipe->get_average_rating();
             ?>
+                <article class="recipe-card" role="article">
+                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=home'); ?>" 
+                       class="recipe-link"
+                       aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
+                        <div class="recipe-image-container">
+                            <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
+                                 alt="<?php echo h($recipe->title); ?>" 
+                                 class="recipe-image">
+                        </div>
+                        
+                        <div class="recipe-content">
+                            <h3 class="recipe-title" id="recipe-title-<?php echo h($recipe->recipe_id); ?>"><?php echo h($recipe->title); ?></h3>
+                            
+                            <div class="recipe-meta">
+                                <span class="rating" aria-label="Rating: <?php echo $rating; ?> out of 5 stars">
+                                    <?php 
+                                        // Full stars
+                                        for ($i = 1; $i <= floor($rating); $i++) {
+                                            echo '&#9733;';
+                                        }
+                                        // Half star if needed
+                                        if ($rating - floor($rating) >= 0.5) {
+                                            echo '&#189;';
+                                        }
+                                        // Empty stars
+                                        $remaining = 5 - ceil($rating);
+                                        for ($i = 1; $i <= $remaining; $i++) {
+                                            echo '&#9734;';
+                                        }
+                                        echo ' <span class="review-count" aria-label="' . $recipe->rating_count() . ' reviews">(' . $recipe->rating_count() . ')</span>';
+                                    ?>
+                                </span>
+                                <span class="time" aria-label="Total time: <?php echo $total_time; ?>">
+                                    <?php echo $total_time; ?>
+                                </span>
+                            </div>
+
+                            <div class="recipe-attributes" role="list">
+                                <?php if($style) { ?>
+                                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
+                                <?php } ?>
+                                <?php if($diet) { ?>
+                                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
+                                <?php } ?>
+                                <?php if($type) { ?>
+                                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                        <div class="recipe-footer">
+                            <div class="recipe-author">
+                                <span class="author-name">By <?php echo h($chef->username); ?></span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            <?php } ?>
         </div>
     </section>
 </div>
