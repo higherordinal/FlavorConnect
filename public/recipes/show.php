@@ -20,6 +20,12 @@ if (!$recipe) {
 $page_title = $recipe->title;
 $page_style = 'recipe-show';
 
+// Set SEO variables for recipe structured data
+$is_recipe_page = true;
+$page_description = substr(strip_tags($recipe->description), 0, 160);
+$page_keywords = $recipe->title . ', ' . $recipe->type()->name . ', ' . $recipe->style()->name . ', ' . $recipe->diet()->name;
+$page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path());
+
 // Determine back link based on referrer
 $ref = $_GET['ref'] ?? '';
 switch ($ref) {
