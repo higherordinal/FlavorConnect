@@ -164,56 +164,84 @@ const ENDPOINTS = {
 };
 ```
 
-### JavaScript Integration Strategy
+### CORS Configuration
 
-Our local environment uses PHP-based API endpoints, while the live environment uses Node.js endpoints on Heroku. The JavaScript is already designed to handle both environments:
+Ensure the Heroku API has proper CORS configuration to accept requests from your live domain:
 
-1. **Maintain the Dual-Environment Support**:
-   ```javascript
-   // In recipe-favorites.js and other files
-   if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.toggle === 'function') {
-     // Use Heroku API through the favorites utility
-     const result = await window.FlavorConnect.favorites.toggle(recipeId);
-   } else {
-     // Fallback to direct fetch for local development
-     await this.directUnfavorite(recipeId, button);
-   }
-   ```
+```javascript
+// In Heroku Node.js API
+app.use(cors({
+  origin: 'https://your-live-domain.com',
+  credentials: true
+}));
+```
 
-2. **Update the favorites.js Utility**:
-   When deploying to live, ensure the favorites.js utility is configured to use the Heroku API endpoints:
+## 7. Additional Server Configuration
 
-   ```javascript
-   // In favorites.js
-   window.FlavorConnect.favorites = {
-     apiBaseUrl: 'https://flavorconnect-api.herokuapp.com',
-     
-     toggle: async function(recipeId) {
-       const response = await fetch(`${this.apiBaseUrl}/favorites/toggle`, {
-         method: 'POST',
-         headers: { 'Content-Type': 'application/json' },
-         body: JSON.stringify({ recipe_id: recipeId }),
-         credentials: 'include'
-       });
-       return await response.json();
-     },
-     
-     // Other methods...
-   };
-   ```
+### .htaccess Files
 
-3. **CORS Configuration**:
-   Ensure the Heroku API has proper CORS configuration to accept requests from your live domain:
+Ensure that all .htaccess files are properly configured for the live environment:
 
-   ```javascript
-   // In Heroku Node.js API
-   app.use(cors({
-     origin: 'https://your-live-domain.com',
-     credentials: true
-   }));
-   ```
+#### Main .htaccess (in public directory)
 
-## 7. Deployment Checklist
+```apache
+# Enable URL rewriting
+RewriteEngine On
+
+# Base directory for rewrites
+RewriteBase /
+
+# Redirect to HTTPS if not already
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Don't rewrite if the file or directory exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite all other URLs to index.php
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+```
+
+#### API .htaccess (in public/api directory)
+
+```apache
+# Enable CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+
+# Handle OPTIONS requests
+RewriteEngine On
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# Rewrite API requests
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?endpoint=$1 [QSA,L]
+```
+
+### PHP Version and Extensions
+
+Ensure the live server has the correct PHP version and required extensions:
+
+```php
+// Check PHP version
+if (version_compare(PHP_VERSION, '7.4.0', '<')) {
+    die('PHP version 7.4 or higher is required. Current version: ' . PHP_VERSION);
+}
+
+// Check required extensions
+$required_extensions = ['mysqli', 'json', 'mbstring', 'gd'];
+foreach ($required_extensions as $ext) {
+    if (!extension_loaded($ext)) {
+        die("Required PHP extension not loaded: $ext");
+    }
+}
+```
+
+## 8. Deployment Checklist
 
 - [ ] Update all initialize.php paths to absolute paths
 - [ ] Update path constants in initialize.php
@@ -225,10 +253,11 @@ Our local environment uses PHP-based API endpoints, while the live environment u
 - [ ] Test all major functionality after deployment
 - [ ] Verify all CSS and JS files are loading correctly
 - [ ] Check for any hardcoded URLs and update them
-- [ ] Ensure favorites.js utility is configured for Heroku API
 - [ ] Verify CORS configuration on Heroku API
+- [ ] Check PHP version and required extensions
+- [ ] Validate .htaccess configurations
 
-## 8. Troubleshooting Common Issues
+## 9. Troubleshooting Common Issues
 
 ### 500 Server Error
 
@@ -250,7 +279,19 @@ If you encounter a 500 server error, check:
 2. Check for CORS configuration
 3. Test API endpoints directly
 
-## 9. Reverting to Previous Version
+### Database Connection Issues
+
+1. Verify database credentials
+2. Check database server availability
+3. Ensure database user has proper permissions
+
+### Session Issues
+
+1. Check session configuration in php.ini
+2. Verify session directory permissions
+3. Test session functionality with a simple script
+
+## 10. Reverting to Previous Version
 
 If needed, you can revert to a previous version:
 
