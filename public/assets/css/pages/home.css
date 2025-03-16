@@ -169,6 +169,20 @@
   transform: translateY(-4px);
 }
 
+.featured-recipes .recipe-attributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.featured-recipes .recipe-attribute {
+  margin-right: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+  white-space: nowrap;
+}
+
 /* ==========================================================================
    Responsive Design
    ========================================================================== */

@@ -129,17 +129,13 @@
 .recipe-attributes {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  gap: 0; /* Remove gap from container */
   min-height: 4rem; /* Set minimum height to accommodate two lines */
-  align-items: flex-start; /* Change from center to flex-start for better wrapping */
-  /* margin-top: auto; /* Push to bottom of container */
+  align-items: center; /* Center alignment for better appearance */
   padding-top: var(--spacing-sm); /* Add padding at the top for spacing */
-  margin-left: calc(-1 * var(--spacing-md));
-  margin-right: calc(-1 * var(--spacing-md));
-  padding-left: var(--spacing-md);
-  padding-right: var(--spacing-md);
-  width: calc(100% + (2 * var(--spacing-md)));
   padding-bottom: var(--spacing-sm); /* Add padding at the bottom for spacing when wrapped */
+  width: 100%;
+  justify-content: flex-start; /* Ensure left alignment */
 }
 
 /* Recipe attribute styling */
@@ -154,7 +150,9 @@
   align-items: center;
   text-decoration: none;
   transition: background-color var(--transition-medium);
-  margin-bottom: var(--spacing-xs); /* Add margin to ensure consistent spacing when wrapped */
+  margin-right: var(--spacing-xs); /* Add right margin instead of using gap */
+  margin-bottom: var(--spacing-xs); /* Add bottom margin for when tags wrap */
+  white-space: nowrap; /* Prevent text wrapping within tags */
 }
 
 .recipe-attribute:hover,
@@ -239,6 +237,10 @@
   .recipe-actions {
     justify-content: start;
   }
+  
+  .recipe-attributes {
+    justify-content: flex-start; /* Ensure left alignment on smaller screens */
+  }
 }
 
 @media (max-width: 480px) {
@@ -264,5 +266,15 @@
     justify-content: start;
     justify-items: start;
     text-align: left;
+  }
+  
+  .recipe-attributes {
+    justify-content: flex-start; /* Ensure left alignment on mobile */
+  }
+  
+  /* Keep consistent margins for recipe attributes */
+  .recipe-attribute {
+    margin-right: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
   }
 }
