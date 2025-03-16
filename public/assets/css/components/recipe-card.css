@@ -132,7 +132,7 @@
   gap: var(--spacing-xs);
   min-height: 4rem; /* Set minimum height to accommodate two lines */
   align-items: flex-start; /* Change from center to flex-start for better wrapping */
-  margin-top: auto; /* Push to bottom of container */
+  /* margin-top: auto; /* Push to bottom of container */
   padding-top: var(--spacing-sm); /* Add padding at the top for spacing */
   margin-left: calc(-1 * var(--spacing-md));
   margin-right: calc(-1 * var(--spacing-md));
@@ -220,24 +220,49 @@
 }
 
 @media (max-width: 768px) {
-  .recipe-footer {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
-  }
-
-  .recipe-meta {
-    justify-content: center;
-  }
-
   .recipe-grid {
     gap: var(--grid-gap-sm);
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  /* Keep recipe card content left-aligned */
+  .recipe-footer {
+    grid-template-columns: 1fr;
+    justify-items: start;
+    text-align: left;
+  }
+  
+  .recipe-meta {
+    justify-content: start;
+  }
+  
+  .recipe-actions {
+    justify-content: start;
   }
 }
 
 @media (max-width: 480px) {
   .recipe-grid {
     grid-template-columns: 1fr;
+  }
+  
+  /* Ensure recipe cards maintain proper spacing and alignment in single column */
+  .recipe-card {
+    max-width: 100%;
+  }
+  
+  /* Adjust padding for smaller screens */
+  .recipe-content {
+    padding: var(--spacing-md);
+  }
+  
+  /* Keep all elements left-aligned */
+  .recipe-meta,
+  .recipe-actions,
+  .recipe-footer,
+  .recipe-author {
+    justify-content: start;
+    justify-items: start;
+    text-align: left;
   }
 }

@@ -337,7 +337,8 @@
     gap: var(--grid-gap);
   }
 
-  .main-content .recipe-footer {
+  /* Remove conflicting recipe card styles that should be in recipe-card.css */
+  /* .main-content .recipe-footer {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
@@ -346,7 +347,7 @@
   .main-content .recipe-meta,
   .main-content .recipe-actions {
     justify-content: center;
-  }
+  } */
 }
 
 @media (max-width: 480px) {
@@ -354,7 +355,8 @@
     gap: var(--grid-gap-sm);
   }
 
-  .main-content .recipe-content {
+  /* Remove conflicting recipe card styles that should be in recipe-card.css */
+  /* .main-content .recipe-content {
     padding: var(--spacing-sm);
-  }
+  } */
 }
