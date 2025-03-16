@@ -3,6 +3,7 @@ ob_start(); // turn on output buffering
 
 // Load configuration first
 require_once(dirname(__DIR__) . '/config/config.php');
+require_once(dirname(__DIR__) . '/config/api_config.php');
 
 // Configure session parameters - extend timeout to 8 hours (28800 seconds)
 ini_set('session.gc_maxlifetime', 28800); // How long to store session data on server (8 hours)
