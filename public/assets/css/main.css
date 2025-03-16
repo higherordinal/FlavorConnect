@@ -564,6 +564,9 @@ a:hover {
   font-size: var(--font-size-large);
   font-weight: 600;
   margin: 0;
+  min-height: 3.2rem; /* Fixed height for consistent alignment */
+  display: flex;
+  align-items: center;
 }
 
 .recipe-meta {
