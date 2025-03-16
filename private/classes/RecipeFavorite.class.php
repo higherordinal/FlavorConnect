@@ -127,16 +127,23 @@ class RecipeFavorite extends DatabaseObject {
         }
 
         $is_favorited = static::is_favorited($user_id, $recipe_id);
-        $success = $is_favorited ? 
-            static::remove_favorite($user_id, $recipe_id) : 
-            static::add_favorite($user_id, $recipe_id);
+        
+        // Perform the appropriate action based on current favorite status
+        if ($is_favorited) {
+            $success = static::remove_favorite($user_id, $recipe_id);
+            $new_status = false;
+            $message = $success ? 'Removed from favorites' : 'Failed to remove from favorites';
+        } else {
+            $success = static::add_favorite($user_id, $recipe_id);
+            $new_status = true;
+            $message = $success ? 'Added to favorites' : 'Failed to add to favorites';
+        }
 
+        // Return a consistent response format
         return [
             'success' => $success,
-            'is_favorited' => !$is_favorited,
-            'message' => $success ? 
-                (!$is_favorited ? 'Added to favorites' : 'Removed from favorites') : 
-                'Failed to update favorite status'
+            'is_favorited' => $new_status,
+            'message' => $message
         ];
     }
 }

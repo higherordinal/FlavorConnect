@@ -154,20 +154,19 @@ window.FlavorConnect.favorites = {
             const cacheBuster = new Date().getTime();
             const finalUrl = `${fullUrl}?_=${cacheBuster}`;
 
-            // Try using URLSearchParams instead of FormData
-            const params = new URLSearchParams();
-            params.append('recipe_id', recipeId);
+            // Create a simple JSON payload instead of URLSearchParams
+            const payload = JSON.stringify({ recipe_id: recipeId });
 
             const response = await fetch(finalUrl, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                     'Accept': 'application/json',
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
                     'Pragma': 'no-cache',
                     'Expires': '0'
                 },
-                body: params
+                body: payload
             });
 
             // Log the response headers for debugging
