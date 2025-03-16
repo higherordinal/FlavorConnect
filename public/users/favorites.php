@@ -50,24 +50,26 @@ include(SHARED_PATH . '/member_header.php');
                 $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
             ?>
                 <article class="recipe-card" role="article">
-                    <div class="recipe-image-container">
-                        <?php if($recipe->img_file_path) { ?>
-                            <img src="<?php echo url_for('/assets/uploads/recipes/' . basename($recipe->img_file_path)); ?>" 
-                                 alt="<?php echo h($recipe->alt_text); ?>" 
-                                 class="recipe-image">
-                        <?php } else { ?>
-                            <img src="<?php echo url_for('/assets/images/recipe-placeholder.png'); ?>" 
-                                 alt="Recipe placeholder image" 
-                                 class="recipe-image">
-                        <?php } ?>
-                        <button class="unfavorite-btn" data-recipe-id="<?php echo $recipe->recipe_id; ?>">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                    </div>
-                    
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=favorites'); ?>" 
-                       class="recipe-content-link"
+                       class="recipe-link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
+                        <div class="recipe-image-container">
+                            <button class="favorite-btn favorited" 
+                                    data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
+                                    aria-label="Remove from favorites">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <?php if($recipe->img_file_path) { ?>
+                                <img src="<?php echo url_for('/assets/uploads/recipes/' . basename($recipe->img_file_path)); ?>" 
+                                     alt="<?php echo h($recipe->alt_text); ?>" 
+                                     class="recipe-image">
+                            <?php } else { ?>
+                                <img src="<?php echo url_for('/assets/images/recipe-placeholder.png'); ?>" 
+                                     alt="Recipe placeholder image" 
+                                     class="recipe-image">
+                            <?php } ?>
+                        </div>
+                        
                         <div class="recipe-content">
                             <h2 class="recipe-title" id="recipe-title-<?php echo h($recipe->recipe_id); ?>"><?php echo h($recipe->title); ?></h2>
                             
@@ -95,7 +97,7 @@ include(SHARED_PATH . '/member_header.php');
                                 </span>
                             </div>
 
-                            <div class="recipe-attributes">
+                            <div class="recipe-attributes" role="list">
                                 <?php if($style) { ?>
                                     <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
                                 <?php } ?>

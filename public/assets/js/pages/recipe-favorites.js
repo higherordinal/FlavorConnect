@@ -23,7 +23,7 @@ window.FlavorConnect.favoritesPage = {
      */
     setupEventListeners: function() {
         // Handle unfavorite buttons (both dedicated unfavorite buttons and regular favorite buttons)
-        document.querySelectorAll('.unfavorite-btn, .favorite-btn.favorited').forEach(button => {
+        document.querySelectorAll('.favorite-btn.favorited').forEach(button => {
             console.log('Setting up event listener for button:', button);
             button.addEventListener('click', this.handleUnfavorite.bind(this));
         });
@@ -50,7 +50,7 @@ window.FlavorConnect.favoritesPage = {
         
         try {
             // Get favorites directly from the DOM
-            const favoriteButtons = document.querySelectorAll('.unfavorite-btn');
+            const favoriteButtons = document.querySelectorAll('.favorite-btn.favorited');
             if (favoriteButtons.length > 0) {
                 console.log('Favorites already loaded in the DOM');
                 return; // Favorites are already loaded in the DOM

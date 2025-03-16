@@ -1,0 +1,218 @@
+/* ==========================================================================
+   Recipe Card Component
+   ========================================================================== */
+
+/* Base recipe card styling */
+.recipe-card {
+  background: var(--color-white);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--spacing-sm);
+  overflow: hidden;
+  transition: transform var(--transition-medium),
+    box-shadow var(--transition-medium);
+  height: 100%;
+  position: relative;
+}
+
+.recipe-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+}
+
+/* Recipe links */
+.recipe-link {
+  color: inherit;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  text-decoration: none;
+}
+
+.recipe-content-link {
+  color: inherit;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  text-decoration: none;
+}
+
+/* Recipe image container */
+.recipe-image-container {
+  overflow: hidden;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  position: relative;
+  width: 100%;
+}
+
+.recipe-image {
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  transition: transform var(--transition-medium);
+  width: 100%;
+}
+
+.recipe-card:hover .recipe-image {
+  transform: scale(1.05);
+}
+
+/* Recipe content */
+.recipe-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  height: 100%; /* Ensure consistent height */
+}
+
+.recipe-title {
+  color: var(--text-color);
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  margin: 0;
+  min-height: 3.2rem; /* Fixed height for consistent alignment */
+  display: flex;
+  align-items: center;
+}
+
+/* Recipe meta information */
+.recipe-meta {
+  color: #4a5555; /* Darkened for better contrast */
+  display: grid;
+  font-size: var(--font-size-small);
+  gap: var(--spacing-xs);
+  grid-auto-flow: column;
+  justify-content: start;
+  margin-top: 12px; /* Space between title and rating */
+  align-items: center;
+}
+
+/* Rating component */
+.recipe-meta .rating {
+  align-items: center;
+  color: var(--accent-color);
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  padding: 2px 6px;
+  display: grid;
+  font-size: 1rem;
+  gap: 0.25rem;
+  grid-template-columns: auto auto;
+  letter-spacing: 0.1em;
+}
+
+.recipe-meta .rating .review-count {
+  align-items: center;
+  color: var(--color-white);
+  display: grid;
+  font-size: 0.9rem;
+}
+
+.recipe-meta .time {
+  align-items: center;
+  display: grid;
+}
+
+.recipe-description {
+  color: #4a5555; /* Darkened for better contrast */
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Recipe attributes container */
+.recipe-attributes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  min-height: 4rem; /* Set minimum height to accommodate two lines */
+  align-items: center;
+  margin-top: auto; /* Push to bottom of container */
+  padding-top: var(--spacing-sm); /* Add padding at the top for spacing */
+}
+
+/* Recipe attribute styling */
+.recipe-attribute {
+  background-color: var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-white);
+  font-size: var(--font-size-small);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color var(--transition-medium);
+}
+
+.recipe-attribute:hover,
+.recipe-attribute:focus {
+  background-color: var(--secondary-color);
+  color: var(--color-white);
+}
+
+/* Recipe footer */
+.recipe-footer {
+  align-items: center;
+  border-top: 1px solid var(--light-gray);
+  display: grid;
+  gap: var(--spacing-sm);
+  grid-template-columns: repeat(2, 1fr);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.recipe-author {
+  font-size: var(--font-size-small);
+  color: #4a5555; /* Darkened for better contrast */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Favorite button */
+.favorite-btn {
+  background: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 50%;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 1.25rem;
+  height: 2.5rem;
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  transition: all 0.2s ease;
+  width: 2.5rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.1);
+}
+
+.favorite-btn.favorited {
+  color: #ff4b4b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .recipe-footer {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .recipe-meta {
+    justify-content: center;
+  }
+}

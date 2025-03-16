@@ -25,6 +25,7 @@ if(!isset($page_style)) { $page_style = ''; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/public-header.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css'); ?>">
     
     <!-- Page Specific Styles -->
     <?php if($page_style): ?>

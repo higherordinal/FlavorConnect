@@ -73,6 +73,13 @@ if($session->is_logged_in()) {
                        class="recipe-link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
                         <div class="recipe-image-container">
+                            <?php if($session->is_logged_in()) { ?>
+                            <button class="favorite-btn <?php echo $recipe->is_favorited ? 'favorited' : ''; ?>"
+                                    data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
+                                    aria-label="<?php echo $recipe->is_favorited ? 'Remove from' : 'Add to'; ?> favorites">
+                                <i class="<?php echo $recipe->is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
+                            </button>
+                            <?php } ?>
                             <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
                                  alt="<?php echo h($recipe->title); ?>" 
                                  class="recipe-image">

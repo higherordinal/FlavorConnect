@@ -207,47 +207,6 @@
   color: inherit;
 }
 
-/* Page-specific recipe attributes styling */
-.main-content .recipe-attributes {
-  min-height: 4rem; /* Set minimum height to accommodate two lines */
-}
-
-/* ==========================================================================
-   Recipe Card
-   ========================================================================== */
-
-.recipe-card {
-  background-color: var(--card-bg-color);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  display: grid;
-  grid-template-rows: auto 1fr;
-  overflow: hidden;
-  position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.recipe-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
-}
-
-.recipe-link {
-  color: inherit;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  height: 100%;
-  text-decoration: none;
-}
-
-.recipe-content-link {
-  color: inherit;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  height: 100%;
-  text-decoration: none;
-}
-
 /* ==========================================================================
    Favorite Button - Gallery Page Specific Overrides
    ========================================================================== */

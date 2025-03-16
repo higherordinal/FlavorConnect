@@ -74,6 +74,7 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
+/* Profile-specific recipe card styling */
 .recipe-card {
   background: var(--color-white);
   border-radius: var(--radius-lg);
@@ -95,7 +96,6 @@
 
 .recipe-image img {
   height: 100%;
-  left: 0;
   object-fit: cover;
   position: absolute;
   top: 0;

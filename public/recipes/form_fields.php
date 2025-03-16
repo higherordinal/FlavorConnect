@@ -65,7 +65,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
 
 <div class="row time-row">
     <div class="time-section">
-        <h4>Preparation Time</h4>
+        <h2 class="h4">Preparation Time</h2>
         <div class="time-inputs">
             <div class="form-group">
                 <label for="prep_hours">Hours</label>
@@ -83,7 +83,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
     </div>
     
     <div class="time-section">
-        <h4>Cooking Time</h4>
+        <h2 class="h4">Cooking Time</h2>
         <div class="time-inputs">
             <div class="form-group">
                 <label for="cook_hours">Hours</label>
@@ -103,7 +103,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
 
 <div class="row ingredients-row">
     <div class="ingredients-section">
-        <h4>Recipe Ingredients</h4>
+        <h2 class="h4">Recipe Ingredients</h2>
         <div id="ingredients-container">
             <?php 
             if (isset($ingredients) && !empty($ingredients)) {
@@ -187,7 +187,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
 
 <div class="row directions-row">
     <div class="directions-section">
-        <h4>Recipe Directions</h4>
+        <h2 class="h4">Recipe Directions</h2>
         <div id="directions-container">
             <?php 
             if (isset($steps) && !empty($steps)) {
@@ -236,7 +236,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
 
 <div class="row media-row">
     <div class="media-section">
-        <h4>Recipe Image</h4>
+        <h2 class="h4">Recipe Image</h2>
         <div class="form-group">
             <label for="recipe_image">Upload Image</label>
             <input type="file" name="recipe_image" id="recipe_image" class="form-control<?php echo error_class('recipe_image', $errors); ?>" accept="image/*" <?php echo isset($recipe->img_file_path) ? '' : 'required'; ?>>

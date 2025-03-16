@@ -62,16 +62,25 @@ function initializeAltTextGeneration() {
     
     if (titleInput && altTextInput) {
         titleInput.addEventListener('input', function() {
-            // Only update alt text if it's empty or matches previous title
+            // Only update alt text if it's empty or matches previous pattern
             const currentAlt = altTextInput.value;
             const previousTitle = titleInput.dataset.previousTitle || '';
+            const titleValue = this.value; // Store the full title value
             
-            if (!currentAlt || currentAlt === previousTitle + ' recipe image') {
-                altTextInput.value = this.value + ' recipe image';
+            // Check if alt text is empty or matches previous pattern
+            if (!currentAlt || currentAlt === previousTitle + ' recipe image' || 
+                currentAlt === previousTitle + ' recipe' || 
+                currentAlt === previousTitle + ' recipe header') {
+                // Set the full title value plus recipe header
+                altTextInput.value = titleValue + ' recipe header';
             }
             
             // Store current title for next comparison
-            titleInput.dataset.previousTitle = this.value;
+            titleInput.dataset.previousTitle = titleValue;
+            
+            // For debugging
+            console.log('Title value:', titleValue);
+            console.log('Alt text set to:', altTextInput.value);
         });
     }
 }

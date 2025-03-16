@@ -100,12 +100,13 @@ function process_api_request($request, $rules, $success_callback) {
 }
 
 /**
- * Ensures the request method matches the expected method
- * @param string $expected_method Expected HTTP method
- * @param string $actual_method Actual HTTP method
+ * Validates that the request method matches one of the allowed methods
+ * @param string $allowed_methods Comma-separated list of allowed HTTP methods (e.g., 'GET, POST')
+ * @param string $current_method The current HTTP method
  */
-function require_method($expected_method, $actual_method) {
-    if ($actual_method !== strtoupper($expected_method)) {
-        json_error('Method not allowed', 405);
+function require_method($allowed_methods, $current_method) {
+    $methods = array_map('trim', explode(',', $allowed_methods));
+    if (!in_array($current_method, $methods)) {
+        json_error('Method not allowed: ' . $current_method . '. Allowed methods: ' . $allowed_methods, 405);
     }
 }

@@ -44,7 +44,7 @@
     padding: 1rem;
 }
 
-.form-section h4 {
+.form-section h4, .form-section .h4 {
     border-bottom: 2px solid var(--primary-color);
     color: var(--primary-color);
     font-size: var(--font-size-large);
@@ -83,7 +83,7 @@
     padding: 0.5rem;
 }
 
-.time-section h4 {
+.time-section h4, .time-section .h4 {
     color: var(--primary-color);
     font-size: var(--font-size-large);
     margin-bottom: 0.5rem;
@@ -104,7 +104,7 @@
     padding: 1rem;
 }
 
-.ingredients-section h4 {
+.ingredients-section h4, .ingredients-section .h4 {
     color: var(--primary-color);
     font-size: var(--font-size-large);
     margin-bottom: 0.75rem;
@@ -157,7 +157,7 @@
     padding: 1rem;
 }
 
-.directions-section h4 {
+.directions-section h4, .directions-section .h4 {
     color: var(--primary-color);
     font-size: var(--font-size-large);
     margin-bottom: 0.75rem;

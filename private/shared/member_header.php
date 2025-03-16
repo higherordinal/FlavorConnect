@@ -29,6 +29,7 @@ if(!isset($page_style)) { $page_style = ''; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=' . time()); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-favorite.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=' . time()); ?>">
     
     <!-- Page Specific Styles -->
     <?php if(isset($page_style)) { ?>

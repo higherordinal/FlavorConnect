@@ -1,4 +1,9 @@
 /* ==========================================================================
+   Component Imports
+   ========================================================================== */
+
+
+/* ==========================================================================
    CSS Custom Properties
    ========================================================================== */
 
@@ -435,41 +440,6 @@ a:hover {
   color: var(--warning-color);
 }
 
-/* Recipe Meta */
-.recipe-meta {
-  align-items: center;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: auto auto;
-}
-
-.recipe-meta .rating {
-  align-items: center;
-  color: var(--accent-color);
-  background-color: var(--primary-color); /* Using primary color for consistency */
-  border-radius: var(--border-radius-sm);
-  padding: 2px 6px;
-  display: grid;
-  font-size: 1rem;
-  gap: 0.25rem;
-  grid-template-columns: auto auto;
-  letter-spacing: 0.1em;
-
-  /* Golden color for stars */
-}
-
-.recipe-meta .time {
-  align-items: center;
-  display: grid;
-}
-
-.recipe-meta .rating .review-count {
-  align-items: center;
-  color: var(--color-white); /* Changed to white for better contrast on dark background */
-  display: grid;
-  font-size: 0.9rem;
-}
-
 /* ==========================================================================
    Messages & Alerts
    ========================================================================== */
@@ -509,110 +479,6 @@ a:hover {
 .message.warning {
   background-color: var(--warning-color);
   color: var(--color-white);
-}
-
-/* ==========================================================================
-   Recipe Cards (shared between recipe gallery and favorites)
-   ========================================================================== */
-
-/* Base recipe card styling */
-.recipe-card {
-  background: var(--color-white);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: var(--spacing-sm);
-  overflow: hidden;
-  transition: transform var(--transition-medium),
-    box-shadow var(--transition-medium);
-  height: 100%;
-}
-
-/* Recipe image container */
-.recipe-image-container {
-  overflow: hidden;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  position: relative;
-  width: 100%;
-}
-
-.recipe-image {
-  height: 100%;
-  left: 0;
-  object-fit: cover;
-  position: absolute;
-  top: 0;
-  transition: transform var(--transition-medium);
-  width: 100%;
-}
-
-.recipe-card:hover .recipe-image {
-  transform: scale(1.05);
-}
-
-/* Recipe content */
-.recipe-content {
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md);
-}
-
-.recipe-title {
-  color: var(--text-color);
-  font-size: var(--font-size-large);
-  font-weight: 600;
-  margin: 0;
-  min-height: 3.2rem; /* Fixed height for consistent alignment */
-  display: flex;
-  align-items: center;
-}
-
-.recipe-meta {
-  color: #4a5555; /* Darkened from var(--text-color-light) for better contrast */
-  display: grid;
-  font-size: var(--font-size-small);
-  gap: var(--spacing-xs);
-  grid-auto-flow: column;
-  justify-content: start;
-  margin-top: 12px; /* Increased space between title and rating */
-}
-
-.recipe-description {
-  color: #4a5555; /* Darkened from var(--text-color-light) for better contrast */
-  font-size: var(--font-size-base);
-  line-height: 1.5;
-  margin: 0;
-}
-
-/* Recipe attributes container */
-.recipe-attributes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xs);
-  min-height: 4rem; /* Set minimum height to accommodate two lines */
-  align-items: center; /* Center attributes vertically */
-  margin-top: auto;
-}
-
-/* Recipe footer */
-.recipe-footer {
-  align-items: center;
-  border-top: 1px solid var(--light-gray);
-  display: grid;
-  gap: var(--spacing-sm);
-  grid-template-columns: repeat(2, 1fr);
-  padding: var(--spacing-sm) var(--spacing-md);
-}
-
-.recipe-author {
-  font-size: var(--font-size-small);
-  color: #4a5555; /* Much darker shade for better contrast */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
 }
 
 /* ==========================================================================
@@ -709,31 +575,5 @@ textarea {
 }
 
 /* ==========================================================================
-   Recipe Attributes
+   Recipe Attributes - MOVED TO recipe-card.css component
    ========================================================================== */
-
-/* Base styling for all recipe attributes */
-.recipe-attribute,
-.main-content .recipe-attribute,
-.recipe-card .recipe-attribute {
-  background-color: var(--primary-color);
-  border-radius: var(--border-radius-sm);
-  color: var(--color-white);
-  font-size: var(--font-size-small);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  text-decoration: none;
-  transition: background-color var(--transition-medium);
-}
-
-.recipe-attribute:hover,
-.recipe-attribute:focus,
-.main-content .recipe-attribute:hover,
-.main-content .recipe-attribute:focus,
-.recipe-card .recipe-attribute:hover,
-.recipe-card .recipe-attribute:focus {
-  background-color: var(--secondary-color);
-  color: var(--color-white);
-}
