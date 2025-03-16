@@ -203,19 +203,9 @@
     gap: var(--grid-gap);
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .recipe-grid {
-    gap: var(--grid-gap);
-    grid-template-columns: repeat(3, 1fr);
-  }
 }
 
 @media (max-width: 768px) {
-  .recipe-grid {
-    gap: var(--grid-gap-sm);
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .home-content {
     gap: var(--spacing-lg);
   }
@@ -273,9 +263,5 @@
 
   .cta-card h3 {
     font-size: var(--font-size-base);
-  }
-
-  .recipe-grid {
-    grid-template-columns: 1fr;
   }
 }
