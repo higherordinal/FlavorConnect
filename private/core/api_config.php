@@ -5,6 +5,10 @@
  * This file contains configuration settings for the FlavorConnect API
  */
 
+// Determine environment
+$is_production = $_SERVER['HTTP_HOST'] !== 'localhost' && 
+                !strpos($_SERVER['HTTP_HOST'], '127.0.0.1');
+
 // Database configuration for API
 define('API_DB_HOST', 'localhost'); // Bluehost database host
 define('API_DB_USER', 'swbhdnmy_user'); // Bluehost database username
@@ -12,7 +16,13 @@ define('API_DB_PASS', 'Divided_4union'); // Bluehost database password
 define('API_DB_NAME', 'swbhdnmy_db_flavorconnect'); // Bluehost database name
 
 // API URL configuration
-define('API_BASE_URL', '/api'); // Local API endpoint
+define('API_BASE_URL', $is_production ? 'https://flavorconnect-api-f240ecae55b2.herokuapp.com' : '/api'); // API endpoint based on environment
+define('API_LOCAL_URL', '/api'); // Local API endpoint
+
+// Heroku API endpoints - matching the existing live implementation
+define('API_FAVORITES_TOGGLE', $is_production ? API_BASE_URL . '/api/favorites/toggle' : API_LOCAL_URL . '/toggle_favorite.php');
+define('API_FAVORITES_CHECK', $is_production ? API_BASE_URL . '/api/favorites/{userId}/{recipeId}' : API_LOCAL_URL . '/toggle_favorite.php');
+define('API_FAVORITES_GET_ALL', $is_production ? API_BASE_URL . '/api/favorites/{userId}' : API_LOCAL_URL . '/get_favorites.php');
 
 // Error reporting for API
 define('API_DEBUG', false); // Set to false in production
