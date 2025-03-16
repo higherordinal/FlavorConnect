@@ -1,135 +1,91 @@
 <?php
-// Simple version of toggle_favorite.php with minimal dependencies
-// Force display of errors for debugging but capture them instead of displaying
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-error_reporting(E_ALL);
+/**
+ * Simplified Favorites API Endpoint
+ * 
+ * This endpoint handles all favorite-related operations:
+ * - GET: Check if a recipe is favorited
+ * - POST: Toggle favorite status for a recipe
+ */
 
-// Log all requests to this endpoint
+// Include initialize.php which loads all required dependencies
+require_once('../../private/core/initialize.php');
+
+// Set content type to JSON
+header('Content-Type: application/json');
+
+// Log all requests to this endpoint for debugging
 error_log("toggle_favorite.php called with method: " . $_SERVER['REQUEST_METHOD']);
 error_log("GET data: " . print_r($_GET, true));
 error_log("POST data: " . print_r($_POST, true));
 $raw_input = file_get_contents('php://input');
 error_log("Raw input: " . $raw_input);
 
-// Set content type to JSON before any output
-header('Content-Type: application/json');
+// Ensure user is logged in for all operations
+if (!$session->is_logged_in()) {
+    json_error('You must be logged in to manage favorites', 401);
+}
 
-// Include initialize.php which has its own ob_start()
-require_once('../../private/core/initialize.php');
+$user_id = $session->get_user_id();
+$request_method = $_SERVER['REQUEST_METHOD'];
+
+// Handle GET requests (check favorite status)
+if ($request_method === 'GET') {
+    // Validate request parameters
+    $rules = [
+        'recipe_id' => ['required', 'number', 'min:1']
+    ];
     
-try {
-    // Check if user is logged in
-    if (!$session->is_logged_in()) {
-        error_log("User not logged in");
-        echo json_encode([
-            'success' => false,
-            'error' => 'User not logged in',
-            'login_required' => true
-        ]);
-        exit;
+    $errors = validate_api_request($_GET, $rules);
+    if (!empty($errors)) {
+        json_error(implode(', ', $errors));
     }
     
-    $user_id = $session->get_user_id();
-    error_log("User ID: " . $user_id);
-    $request_method = $_SERVER['REQUEST_METHOD'];
+    $recipe_id = (int)$_GET['recipe_id'];
+    $is_favorited = RecipeFavorite::is_favorited($user_id, $recipe_id);
     
-    // Handle GET requests (check favorite status)
-    if ($request_method === 'GET') {
-        $recipe_id = isset($_GET['recipe_id']) ? (int)$_GET['recipe_id'] : 0;
-        error_log("GET request with recipe_id: " . $recipe_id);
-        
-        if (!$recipe_id) {
-            echo json_encode(['success' => false, 'error' => 'Recipe ID is required']);
-            exit;
-        }
-        
-        $is_favorited = RecipeFavorite::is_favorited($user_id, $recipe_id);
-        error_log("Is favorited: " . ($is_favorited ? 'yes' : 'no'));
-        echo json_encode(['success' => true, 'is_favorited' => $is_favorited]);
-        exit;
-    }
-    // Handle POST requests (toggle favorite status)
-    elseif ($request_method === 'POST') {
-        // Try to get recipe_id from POST data
-        $recipe_id = isset($_POST['recipe_id']) ? (int)$_POST['recipe_id'] : 0;
-        error_log("POST request with recipe_id from POST: " . $recipe_id);
+    json_success(['is_favorited' => $is_favorited]);
+}
+// Handle POST requests (toggle favorite status)
+elseif ($request_method === 'POST') {
+    try {
+        // Try to get recipe_id from POST data first
+        $data = $_POST;
         
         // If not in POST, try to get from JSON input
-        if (!$recipe_id) {
+        if (empty($data)) {
             $json_data = file_get_contents('php://input');
-            $data = json_decode($json_data, true);
-            error_log("Decoded JSON: " . print_r($data, true));
+            $decoded = json_decode($json_data, true);
             
-            if (isset($data['recipeId'])) {
-                $recipe_id = (int)$data['recipeId'];
-                error_log("Recipe ID from JSON recipeId: " . $recipe_id);
-            } elseif (isset($data['recipe_id'])) {
-                $recipe_id = (int)$data['recipe_id'];
-                error_log("Recipe ID from JSON recipe_id: " . $recipe_id);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                json_error('Invalid JSON data');
             }
+            
+            $data = $decoded;
         }
         
-        if (!$recipe_id) {
-            error_log("No recipe ID found in request");
-            echo json_encode(['success' => false, 'error' => 'Recipe ID is required']);
-            exit;
+        // Handle different parameter naming conventions
+        if (isset($data['recipeId']) && !isset($data['recipe_id'])) {
+            $data['recipe_id'] = $data['recipeId'];
         }
         
-        // Toggle favorite status
-        error_log("Toggling favorite for user " . $user_id . " and recipe " . $recipe_id);
+        // Validate request data
+        $rules = [
+            'recipe_id' => ['required', 'number', 'min:1']
+        ];
+        
+        $errors = validate_api_request($data, $rules);
+        if (!empty($errors)) {
+            json_error(implode(', ', $errors));
+        }
+        
+        $recipe_id = (int)$data['recipe_id'];
         $result = RecipeFavorite::toggle_favorite($user_id, $recipe_id);
-        error_log("Toggle result: " . print_r($result, true));
         
-        // Clear any existing output buffers
-        while (ob_get_level() > 0) {
-            ob_end_clean();
-        }
-        
-        // Set headers again after clearing buffers
-        header('Content-Type: application/json');
-        echo json_encode($result);
-        exit;
+        json_success($result);
+    } catch (Exception $e) {
+        json_error('Server error: ' . $e->getMessage(), 500);
     }
+} else {
     // Handle other request methods
-    else {
-        error_log("Method not allowed: " . $request_method);
-        echo json_encode(['success' => false, 'error' => 'Method not allowed']);
-        exit;
-    }
-} catch (Exception $e) {
-    // Log the error
-    error_log('Error in toggle_favorite.php: ' . $e->getMessage());
-    error_log('Error trace: ' . $e->getTraceAsString());
-    
-    // Clear any existing output buffers
-    while (ob_get_level() > 0) {
-        ob_end_clean();
-    }
-    
-    // Set headers again after clearing buffers
-    header('Content-Type: application/json');
-    
-    // Return a JSON error response
-    echo json_encode([
-        'success' => false,
-        'error' => 'Server error: ' . $e->getMessage()
-    ]);
-    exit;
+    require_method('GET, POST', $request_method);
 }
-
-// If we get here, something unexpected happened
-// Clear any existing output buffers
-while (ob_get_level() > 0) {
-    ob_end_clean();
-}
-
-// Set headers again after clearing buffers
-header('Content-Type: application/json');
-
-// Ensure we always return JSON
-echo json_encode([
-    'success' => false,
-    'error' => 'An unexpected error occurred'
-]);
-?>

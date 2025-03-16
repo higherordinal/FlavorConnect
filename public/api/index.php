@@ -20,8 +20,31 @@ echo json_encode([
         'toggle_favorite' => [
             'url' => '/api/toggle_favorite.php',
             'methods' => ['GET', 'POST'],
-            'description' => 'Toggle favorite status for a recipe'
+            'description' => 'Toggle favorite status for a recipe',
+            'parameters' => [
+                'GET' => [
+                    'recipe_id' => 'Required. The ID of the recipe to check favorite status.'
+                ],
+                'POST' => [
+                    'recipe_id' => 'Required. The ID of the recipe to toggle favorite status.'
+                ]
+            ],
+            'responses' => [
+                'GET' => [
+                    'success' => 'Boolean indicating if the request was successful',
+                    'is_favorited' => 'Boolean indicating if the recipe is favorited'
+                ],
+                'POST' => [
+                    'success' => 'Boolean indicating if the request was successful',
+                    'is_favorited' => 'Boolean indicating the new favorite status'
+                ]
+            ]
         ]
+    ],
+    'production_endpoints' => [
+        'toggle_favorite' => '/api/favorites/toggle',
+        'check_favorite' => '/api/favorites/{userId}/{recipeId}',
+        'get_all_favorites' => '/api/favorites/{userId}'
     ],
     'time' => date('Y-m-d H:i:s')
 ]);
