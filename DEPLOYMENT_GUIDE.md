@@ -148,31 +148,150 @@ Ensure CSS and JS files use cache busting in production:
 
 ## 6. Heroku API Integration
 
-### Heroku API Endpoints
+### Heroku API Configuration
 
-When deploying our local version to replace the live version, ensure these Heroku API endpoints are properly integrated:
+To integrate the existing Heroku API with our simplified local favorites functionality, create or update the following file:
+
+#### Create public/assets/js/utils/api-config.js
 
 ```javascript
-// Heroku API Base URL
-const HEROKU_API_URL = 'https://flavorconnect-api.herokuapp.com';
+/**
+ * FlavorConnect API Configuration
+ * This file configures the API endpoints based on the environment
+ */
 
-// Key Endpoints to Preserve
-const ENDPOINTS = {
-  toggleFavorite: `${HEROKU_API_URL}/favorites/toggle`,
-  getFavorites: `${HEROKU_API_URL}/favorites`,
-  checkFavorite: `${HEROKU_API_URL}/favorites/check`
+window.FlavorConnect = window.FlavorConnect || {};
+
+// Determine if we're in production or development
+window.FlavorConnect.isProduction = window.location.hostname !== 'localhost' && 
+                                   !window.location.hostname.includes('127.0.0.1');
+
+// Set the API base URL based on environment
+window.FlavorConnect.apiBaseUrl = window.FlavorConnect.isProduction 
+    ? 'https://flavorconnect-api.herokuapp.com'  // Production (Heroku)
+    : '/api';                                    // Local development
+
+// Configure API endpoints
+window.FlavorConnect.apiEndpoints = {
+    // Favorites endpoints
+    favorites: {
+        toggle: `${window.FlavorConnect.apiBaseUrl}${window.FlavorConnect.isProduction ? '/favorites/toggle' : '/toggle_favorite.php'}`,
+        check: `${window.FlavorConnect.apiBaseUrl}${window.FlavorConnect.isProduction ? '/favorites/check' : '/toggle_favorite.php'}`,
+        getAll: `${window.FlavorConnect.apiBaseUrl}${window.FlavorConnect.isProduction ? '/favorites' : '/get_favorites.php'}`
+    },
+    // Add other API endpoints here as needed
+};
+
+// Global API utility functions
+window.toggleFavorite = async function(recipeId) {
+    try {
+        const endpoint = window.FlavorConnect.apiEndpoints.favorites.toggle;
+        const method = 'POST';
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        const body = JSON.stringify({ recipe_id: recipeId });
+        
+        const response = await fetch(endpoint, {
+            method: method,
+            headers: headers,
+            body: body,
+            credentials: 'include'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error toggling favorite:', error);
+        return { success: false, error: error.message };
+    }
+};
+
+// Add other global API functions as needed
+```
+
+#### Update private/shared/member_header.php
+
+Add the API configuration script before other JavaScript files:
+
+```php
+<!-- API Configuration -->
+<script src="<?php echo url_for('/assets/js/utils/api-config.js'); ?>?v=<?php echo time(); ?>" defer></script>
+
+<!-- Other scripts -->
+<script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>?v=<?php echo time(); ?>" defer></script>
+```
+
+### Updating Favorites Functionality
+
+#### Update public/assets/js/utils/favorites.js
+
+Modify the favorites.js utility to use the centralized API configuration:
+
+```javascript
+/**
+ * FlavorConnect Favorites Utility
+ * Provides functions for managing recipe favorites
+ */
+
+// Initialize FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+
+// Favorites utility functions
+window.FlavorConnect.favorites = {
+    /**
+     * Toggle the favorite status of a recipe
+     * @param {number} recipeId - The ID of the recipe to toggle
+     * @returns {Promise<Object>} - Object with success and isFavorited properties
+     */
+    toggle: async function(recipeId) {
+        try {
+            // Use the configured endpoint from api-config.js
+            const endpoint = window.FlavorConnect.apiEndpoints.favorites.toggle;
+            const method = 'POST';
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            const body = JSON.stringify({ recipe_id: recipeId });
+            
+            const response = await fetch(endpoint, {
+                method: method,
+                headers: headers,
+                body: body,
+                credentials: 'include'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error('Error toggling favorite:', error);
+            return { success: false, error: error.message };
+        }
+    },
+    
+    // Other methods...
 };
 ```
 
-### CORS Configuration
+### CORS Configuration for Heroku API
 
 Ensure the Heroku API has proper CORS configuration to accept requests from your live domain:
 
 ```javascript
-// In Heroku Node.js API
+// In Heroku Node.js API (app.js or server.js)
+const cors = require('cors');
+
 app.use(cors({
-  origin: 'https://your-live-domain.com',
-  credentials: true
+  origin: ['https://your-live-domain.com', 'http://localhost:8080'],
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 ```
 
@@ -246,7 +365,9 @@ foreach ($required_extensions as $ext) {
 - [ ] Update all initialize.php paths to absolute paths
 - [ ] Update path constants in initialize.php
 - [ ] Update URL constants in initialize.php
-- [ ] Update API endpoint URLs to Heroku
+- [ ] Create/update api-config.js with Heroku endpoints
+- [ ] Update member_header.php to include api-config.js
+- [ ] Update favorites.js to use the centralized API configuration
 - [ ] Update database configuration
 - [ ] Set appropriate file permissions
 - [ ] Configure error reporting for production
