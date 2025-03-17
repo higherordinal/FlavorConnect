@@ -28,6 +28,7 @@ if($session->is_logged_in()) {
     </section>
 
     <section class="cta-section">
+        <h2 class="visually-hidden">What You Can Do</h2>
         <div class="cta-card">
             <h3>Share Recipes</h3>
             <p>Join our community and share your culinary creations with food enthusiasts worldwide.</p>
