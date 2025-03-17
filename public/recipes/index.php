@@ -170,7 +170,7 @@ $userData = [
                     class="filter-select" 
                     name="style" 
                     aria-labelledby="style-label"
-                    onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['style' => ''])); ?>' + this.value">
+                    data-filter-type="style">
                 <option value="">All Styles</option><?php foreach($styles as $style) { ?><option value="<?php echo h($style->id); ?>" <?php if($style_id === $style->id) echo 'selected'; ?>><?php echo h($style->name); ?></option><?php } ?>
             </select>
         </div>
@@ -181,7 +181,7 @@ $userData = [
                     class="filter-select" 
                     name="diet" 
                     aria-labelledby="diet-label"
-                    onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['diet' => ''])); ?>' + this.value">
+                    data-filter-type="diet">
                 <option value="">All Diets</option><?php foreach($diets as $diet) { ?><option value="<?php echo h($diet->id); ?>" <?php if($diet_id === $diet->id) echo 'selected'; ?>><?php echo h($diet->name); ?></option><?php } ?>
             </select>
         </div>
@@ -192,7 +192,7 @@ $userData = [
                     class="filter-select" 
                     name="type" 
                     aria-labelledby="type-label"
-                    onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['type' => ''])); ?>' + this.value">
+                    data-filter-type="type">
                 <option value="">All Types</option><?php foreach($types as $type) { ?><option value="<?php echo h($type->id); ?>" <?php if($type_id === $type->id) echo 'selected'; ?>><?php echo h($type->name); ?></option><?php } ?>
             </select>
         </div>
@@ -203,7 +203,7 @@ $userData = [
                     class="filter-select" 
                     name="sort" 
                     aria-labelledby="sort-label"
-                    onchange="window.location.href='<?php echo url_for('/recipes/index.php?' . build_query_string(['sort' => ''])); ?>' + this.value">
+                    data-filter-type="sort">
                 <option value="newest" <?php if($sort === 'newest') echo 'selected'; ?>>Newest First</option>
                 <option value="rating" <?php if($sort === 'rating') echo 'selected'; ?>>Highest Rated</option>
                 <option value="oldest" <?php if($sort === 'oldest') echo 'selected'; ?>>Oldest First</option>
@@ -376,7 +376,7 @@ $userData = [
 <?php include(SHARED_PATH . '/footer.php'); ?>
 
 <!-- Load JavaScript files -->
-<script src="<?php echo url_for('/assets/js/pages/recipe-gallery.js'); ?>" type="module"></script>
+<script src="<?php echo url_for('/assets/js/pages/recipe-gallery.js?v=' . time()); ?>" defer></script>
 
 <?php
 // Helper function to maintain query parameters

@@ -36,6 +36,32 @@ window.initializeGallery = function() {
 
 // Set up event listeners
 function setupEventListeners() {
+    // Filter select listeners
+    const filterSelects = document.querySelectorAll('.filter-select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', (e) => {
+            const filterType = e.target.dataset.filterType;
+            const value = e.target.value;
+            
+            // Build the URL with the updated filter
+            const currentUrl = new URL(window.location.href);
+            const params = new URLSearchParams(currentUrl.search);
+            
+            // Update or remove the parameter based on the value
+            if (value === '') {
+                params.delete(filterType);
+            } else {
+                params.set(filterType, value);
+            }
+            
+            // Keep other parameters
+            currentUrl.search = params.toString();
+            
+            // Navigate to the new URL
+            window.location.href = currentUrl.toString();
+        });
+    });
+
     // Sort field listener
     const sortSelect = document.querySelector('#sort');
     if (sortSelect) {
