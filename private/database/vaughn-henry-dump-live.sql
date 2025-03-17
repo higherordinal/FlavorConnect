@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 16, 2025 at 10:23 PM
+-- Generation Time: Mar 17, 2025 at 09:20 AM
 -- Server version: 8.0.41-32
 -- PHP Version: 8.3.15
 
@@ -987,7 +987,19 @@ INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `e
 (12, 'mhatwell', 'Hudson', 'Atwell', 'hudson.atwell@gmail.com', '$2y$10$labhtvaAsP3G3tfeBo3kt.UlzxlC3UUgH3M2gtYaMQOfSKVDip2R6', 'u', 1, '2025-03-07 22:48:24', '2025-03-16 17:27:18'),
 (14, 'KevinTestee', 'Kevin', 'Franklin', 'kevin@usertesting.com', '$2y$10$sLjcZ8mIGOfnSn/0z4Ij.ekHMA5QRDXWvzBCeC/NgZzc6HPjooJKG', 'u', 1, '2025-03-09 01:05:56', NULL),
 (15, 'mpersky', 'Mo', 'Persky', 'welovemocake@gmail.com', '$2y$10$gCwxjGy2slUJh5fE2xlvAu49EasFaXqRtJE1TZPtBk.KjMjlCM146', 'u', 1, '2025-03-09 02:40:12', NULL),
-(17, 'wAKXeTPLht', 'yAqTQkJrfEnKTza', 'fzGjYStZlLTQTe', 'williamskatie227133@yahoo.com', '$2y$10$s0MZ5V1v5YASZeneVILb2Oy7pxRg/prXgyRHssepPfP/1B8C1pd6W', 'u', 1, '2025-03-16 11:37:41', NULL);
+(17, 'wAKXeTPLht', 'yAqTQkJrfEnKTza', 'fzGjYStZlLTQTe', 'williamskatie227133@yahoo.com', '$2y$10$s0MZ5V1v5YASZeneVILb2Oy7pxRg/prXgyRHssepPfP/1B8C1pd6W', 'u', 1, '2025-03-16 11:37:41', NULL),
+(18, 'pgydnbs', 'Peter', 'Goodman', 'pgydnbs64@example.org', '21bd0e25d6a36cfc13af0f4378f5779a2e6ed298ff020e3129b98121414c203e', 'u', 1, '2025-03-17 15:12:10', NULL),
+(19, 'rfzdzygd', 'Ryan', 'Foster', 'rfzdzygd@example.net', '58931d4ce0a2bbd667e6bc8f7328b4582b90177c6e18ecb0510414aaa48280c3', 'u', 1, '2025-03-17 15:12:10', NULL),
+(20, 'gyjkut', 'Grace', 'Young', 'gyjkut31@example.org', '69df1899949d6f51d85e129df73b62e043fa20f12e0b0fa44e959a2d1e49ee96', 'u', 1, '2025-03-17 15:12:10', NULL),
+(21, 'dnfeqze', 'Diana', 'Nelson', 'dnfeqze@example.net', 'e57e438357dc0eae9b6fdb59ba3c7989032ca60f83be52a359ecd71691d97dd1', 'u', 1, '2025-03-17 15:12:10', NULL),
+(22, 'jlljq', 'James', 'Lloyd', 'jlljq@example.net', '551f76e3906f248a7539a4ec75edbee2677ecb5a818f0e931f497d9ae4729337', 'u', 1, '2025-03-17 15:12:10', NULL),
+(23, 'cqhcweip', 'Chris', 'Weber', 'cqhcweip56@example.net', 'f412b111079891baae33e91d995e868d52e68d2868c299aacbb1c6c1667f0600', 'u', 1, '2025-03-17 15:12:10', NULL),
+(24, 'nora_cook', 'Nora', 'Cooke', 'nora.cook@example.com', '11af663e8e57b112629e3cc4ba3b02d653d7807838285874d69fe660c84db9d0', 'u', 1, '2025-03-17 15:12:29', NULL),
+(25, 'jake_chef', 'Jake', 'Holloway', 'jake.holloway@example.net', 'cff8c931297b37e635005f15dfd51cc1d7e42e0662e2201a14b3c33523b63e6c', 'u', 1, '2025-03-17 15:12:29', NULL),
+(26, 'liv_foodie', 'Olivia', 'Ramirez', 'olivia.ramirez@example.org', '2cd39bb25c8fc68a9d2239bf49a4c20d72552c8d9e57aff61d632fad5a7ef3ec', 'u', 1, '2025-03-17 15:12:29', NULL),
+(27, 'leo_bakes', 'Leo', 'Patel', 'leo.patel@example.com', '66b5c227d07c7700422d3b29e9efb75aee0f17f95f148365067677b465622ec9', 'u', 1, '2025-03-17 15:12:29', NULL),
+(28, 'emma_savory', 'Emma', 'Savoy', 'emma.savoy@example.net', '8f29a2b0c57b411d9afd7d9a59493166fd769f47802566585d6f3e74f5326c82', 'u', 1, '2025-03-17 15:12:29', NULL),
+(29, 'chris_gourmet', 'Chris', 'Gourmet', 'chris.gourmet@example.org', '0c764ed0f0bbb9cf10a69fa6d3cdcd49542d947261514cc5c958e01011b099f9', 'u', 1, '2025-03-17 15:12:29', NULL);
 
 -- --------------------------------------------------------
 
@@ -1201,7 +1213,7 @@ ALTER TABLE `recipe_type`
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Mar 17, 2025 at 04:32 AM
+-- Generation Time: Mar 17, 2025 at 02:39 PM
 -- Server version: 8.0.41
 -- PHP Version: 8.2.27
 
@@ -190,10 +190,7 @@ INSERT INTO `ingredient` (`ingredient_id`, `recipe_id`, `name`) VALUES
 (148, 16, 'Eggs'),
 (150, 16, 'Salt'),
 (149, 16, 'Vanilla extract'),
-(147, 16, 'White sugar'),
-(173, 33, 'adaagaf'),
-(174, 33, 'agfgfssg'),
-(172, 33, 'fadafa');
+(147, 16, 'White sugar');
 
 -- --------------------------------------------------------
 
@@ -244,7 +241,7 @@ CREATE TABLE `recipe` (
   `alt_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `is_featured` tinyint(1) DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -267,8 +264,7 @@ INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`,
 (13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, '', 'recipe_67c318a1b739c.jpg', 'Thai Green Curry image', 1, '2025-02-27 15:10:17', '2025-03-06 02:55:09'),
 (14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', 'recipe_67c283f5882ba.jpg', 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17', '2025-03-06 02:55:09'),
 (15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', 'recipe_67c28600ddeda.jpg', 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49', '2025-03-06 02:55:09'),
-(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-06 02:55:09'),
-(33, 6, 'zfgzfzfgz', 'zfgzfgzfg', 9, 3, 2, 3600, 3600, '', 'recipe_67d5a26318c06.png', 'zfgzfzfgz recipe image', 0, '2025-03-15 11:53:07', '2025-03-15 11:53:07');
+(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-06 02:55:09');
 
 -- --------------------------------------------------------
 
@@ -481,10 +477,7 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 (115, 16, 143, 1, 2.50),
 (116, 16, 144, 2, 1.00),
 (117, 16, 145, 1, 1.00),
-(118, 16, 146, 1, 1.00),
-(143, 33, 172, 1, 1.00),
-(144, 33, 173, 1, 1.00),
-(145, 33, 174, 2, 1.00);
+(118, 16, 146, 1, 1.00);
 
 -- --------------------------------------------------------
 
@@ -676,9 +669,7 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 (115, 16, 6, 'Stir in chocolate chips.'),
 (116, 16, 7, 'Drop dough by spoonfuls onto a baking sheet.'),
 (117, 16, 8, 'Bake for 10-12 minutes until golden brown.'),
-(118, 16, 9, 'Cool on a wire rack and serve.'),
-(144, 33, 1, 'agafsagsfgs'),
-(145, 33, 2, 'sfgsfgsfgsf');
+(118, 16, 9, 'Cool on a wire rack and serve.');
 
 -- --------------------------------------------------------
 
@@ -750,22 +741,24 @@ CREATE TABLE `user_account` (
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `user_level` enum('s','a','u') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'u',
-  `is_active` tinyint(1) DEFAULT '1'
+  `is_active` tinyint(1) DEFAULT '1',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_account`
 --
 
-INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `email`, `password_hash`, `user_level`, `is_active`) VALUES
-(1, 'hcvaughn', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 'a', 1),
-(2, 'admin_chef', 'Michael', 'Brown', 'michael@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'a', 1),
-(3, 'chef_maria', 'Maria', 'Garcia', 'maria@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
-(4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
-(5, 'foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
-(6, 'super_admin', 'Super', 'Admin', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1),
-(8, 'jolieta', 'Joliet', 'Jake', 'jake@joliet.com', '$2y$10$wHsvWt/lfBf9yj.AG27HtOQbjM91eOSDjTofDcpfiV6Or4ixsxtye', 'u', 1),
-(10, 'testuser', 'Test', 'User', 'email@email.com', '$2y$10$x.s/799NdsEbA57./hsWuui3HWCA/tUjgrFCRipSn4MZ85bSgeG6W', 'u', 0);
+INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `email`, `password_hash`, `user_level`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'hcvaughn', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 'a', 1, '2025-03-17 04:37:25', NULL),
+(2, 'admin_chef', 'Michael', 'Brown', 'michael@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'a', 1, '2025-03-17 04:37:25', NULL),
+(3, 'chef_maria', 'Maria', 'Garcia', 'maria@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-17 04:37:25', NULL),
+(4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-17 04:37:25', NULL),
+(5, 'foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-17 04:37:25', NULL),
+(6, 'super_admin', 'Super', 'Admin', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1, '2025-03-17 04:37:25', NULL),
+(8, 'jolieta', 'Joliet', 'Jake', 'jake@joliet.com', '$2y$10$wHsvWt/lfBf9yj.AG27HtOQbjM91eOSDjTofDcpfiV6Or4ixsxtye', 'u', 1, '2025-03-17 04:37:25', NULL),
+(10, 'testuser', 'Test', 'User', 'email@email.com', '$2y$10$x.s/799NdsEbA57./hsWuui3HWCA/tUjgrFCRipSn4MZ85bSgeG6W', 'u', 0, '2025-03-17 04:37:25', NULL);
 
 -- --------------------------------------------------------
 

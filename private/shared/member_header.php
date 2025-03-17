@@ -96,9 +96,12 @@ if(!isset($page_style)) { $page_style = ''; }
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
                     <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'favorites' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
                     <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
-                    <?php if($session->is_admin() || $session->is_super_admin()) { ?>
-                    <li class="nav-item">
-                        <a href="<?php echo url_for('/admin/index.php'); ?>" class="nav-link">
+                    <?php if($session->is_admin() || $session->is_super_admin()) { 
+                        // Check if current page is in admin section
+                        $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
+                    ?>
+                    <li>
+                        <a href="<?php echo url_for('/admin/index.php'); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
                             <i class="fas fa-cog" aria-hidden="true"></i> Admin
                         </a>
                     </li>
