@@ -1,3 +1,6 @@
+/* ====================================
+   LOGIN PAGE LAYOUT
+   ==================================== */
 /* Login form grid layout */
 
 .content {
@@ -12,6 +15,9 @@
   text-align: center;
 }
 
+/* ====================================
+   FORM STRUCTURE
+   ==================================== */
 form {
   display: grid;
   gap: var(--spacing-lg);
@@ -24,6 +30,9 @@ form > div {
   gap: var(--spacing-sm);
 }
 
+/* ====================================
+   ADDITIONAL LINKS
+   ==================================== */
 /* Link container */
 
 form + div {

@@ -1,4 +1,6 @@
-/* Form Styles */
+/* ==========================================================================
+   Form Base Styles
+   ========================================================================== */
 
 .form {
   background-color: white;
@@ -13,6 +15,10 @@
   width: 100%;
   
 }
+
+/* ==========================================================================
+   Form Header
+   ========================================================================== */
 
 .form-header {
   background-color: var(--primary-color);
@@ -30,7 +36,9 @@
   margin: 0;
 }
 
-/* Login/Register specific styles */
+/* ==========================================================================
+   Login/Register Form Layout
+   ========================================================================== */
 
 .content {
   display: grid;
@@ -46,12 +54,18 @@
   max-width: 500px;
 }
 
-/* Form Elements */
+/* ==========================================================================
+   Form Elements
+   ========================================================================== */
 
 .form-group {
   display: grid;
   gap: var(--spacing-sm);
 }
+
+/* ==========================================================================
+   Form Buttons
+   ========================================================================== */
 
 .form-button {
   background-color: #0a2540;
@@ -85,7 +99,10 @@
   text-align: center;
 }
 
-/* Form Validation */
+/* ==========================================================================
+   Form Validation
+   ========================================================================== */
+
 .form-error {
   color: var(--error-color);
   font-size: 0.875rem;
@@ -120,7 +137,9 @@ textarea.error {
   font-size: 0.875rem;
 }
 
-/* Buttons */
+/* ==========================================================================
+   Button Variations
+   ========================================================================== */
 
 .form-button-secondary {
   background-color: var(--light-gray);
@@ -132,7 +151,9 @@ textarea.error {
   color: white;
 }
 
-/* Form Sections */
+/* ==========================================================================
+   Form Sections
+   ========================================================================== */
 
 .form-section {
   background-color: rgba(255, 255, 255, 0.5);
@@ -155,7 +176,9 @@ textarea.error {
   padding-bottom: 0.75rem;
 }
 
-/* Form Grid Layout */
+/* ==========================================================================
+   Form Grid Layout
+   ========================================================================== */
 
 .form-grid {
   display: grid;
@@ -163,7 +186,9 @@ textarea.error {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-/* Recipe Form Specific */
+/* ==========================================================================
+   Recipe Form Components
+   ========================================================================== */
 
 .ingredients-list,
 .instructions-list {
@@ -193,7 +218,9 @@ textarea.error {
   width: auto;
 }
 
-/* Responsive adjustments */
+/* ==========================================================================
+   Responsive Adjustments
+   ========================================================================== */
 
 @media (max-width: 768px) {
   .form {
@@ -232,7 +259,9 @@ textarea.error {
   }
 }
 
-/* Checkbox and Radio Styles */
+/* ==========================================================================
+   Checkbox and Radio Styles
+   ========================================================================== */
 
 .form-check {
   align-items: center;
@@ -262,7 +291,9 @@ textarea.error {
   user-select: none;
 }
 
-/* Button Styles */
+/* ==========================================================================
+   Button Styles
+   ========================================================================== */
 
 .btn {
   border-radius: var(--border-radius-md);
@@ -303,7 +334,9 @@ textarea.error {
   color: var(--color-white);
 }
 
-/* File input styling */
+/* ==========================================================================
+   File Input Styling
+   ========================================================================== */
 
 input[type="file"].form-control {
   background: var(--light-gray);
@@ -317,7 +350,9 @@ input[type="file"].form-control:hover {
   border-color: var(--accent-color);
 }
 
-/* Required field indicator */
+/* ==========================================================================
+   Required Field Indicator
+   ========================================================================== */
 
 .required .form-label::after {
   color: var(--error-color);
@@ -325,7 +360,9 @@ input[type="file"].form-control:hover {
   margin-left: var(--spacing-xs);
 }
 
-/* Form Grid */
+/* ==========================================================================
+   Form Grid
+   ========================================================================== */
 
 .form-row {
   display: grid;
@@ -339,7 +376,9 @@ input[type="file"].form-control:hover {
   }
 }
 
-/* Form Section */
+/* ==========================================================================
+   Form Section
+   ========================================================================== */
 
 .form-section {
   background: var(--color-white);
@@ -358,7 +397,9 @@ input[type="file"].form-control:hover {
   padding-bottom: var(--spacing-sm);
 }
 
-/* Form Label and Input Styles */
+/* ==========================================================================
+   Form Label and Input Styles
+   ========================================================================== */
 
 .form-label {
   color: var(--text-color);

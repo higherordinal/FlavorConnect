@@ -67,7 +67,7 @@
   flex-direction: column;
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
-  height: 100%; /* Ensure consistent height */
+  height: 100%;
 }
 
 .recipe-title {
@@ -75,20 +75,20 @@
   font-size: var(--font-size-large);
   font-weight: 600;
   margin: 0;
-  min-height: 3.2rem; /* Fixed height for consistent alignment */
+  min-height: 3.2rem; 
   display: flex;
   align-items: center;
 }
 
 /* Recipe meta information */
 .recipe-meta {
-  color: #4a5555; /* Darkened for better contrast */
+  color: #4a5555;
   display: grid;
   font-size: var(--font-size-small);
   gap: var(--spacing-xs);
   grid-auto-flow: column;
   justify-content: start;
-  margin-top: 12px; /* Space between title and rating */
+  margin-top: 12px;
   align-items: center;
 }
 
@@ -119,7 +119,7 @@
 }
 
 .recipe-description {
-  color: #4a5555; /* Darkened for better contrast */
+  color: #4a5555;
   font-size: var(--font-size-base);
   line-height: 1.5;
   margin: 0;
@@ -150,9 +150,9 @@
   align-items: center;
   text-decoration: none;
   transition: background-color var(--transition-medium);
-  margin-right: var(--spacing-xs); /* Add right margin instead of using gap */
-  margin-bottom: var(--spacing-xs); /* Add bottom margin for when tags wrap */
-  white-space: nowrap; /* Prevent text wrapping within tags */
+  margin-right: var(--spacing-xs); 
+  margin-bottom: var(--spacing-xs); 
+  white-space: nowrap; 
 }
 
 .recipe-attribute:hover,
@@ -173,7 +173,7 @@
 
 .recipe-author {
   font-size: var(--font-size-small);
-  color: #4a5555; /* Darkened for better contrast */
+  color: #4a5555;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -239,7 +239,7 @@
   }
   
   .recipe-attributes {
-    justify-content: flex-start; /* Ensure left alignment on smaller screens */
+    justify-content: flex-start; 
   }
 }
 
@@ -269,7 +269,7 @@
   }
   
   .recipe-attributes {
-    justify-content: flex-start; /* Ensure left alignment on mobile */
+    justify-content: flex-start;
   }
   
   /* Keep consistent margins for recipe attributes */

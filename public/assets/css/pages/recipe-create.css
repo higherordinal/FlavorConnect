@@ -1,3 +1,6 @@
+/* ====================================
+   MAIN FORM CONTAINER
+   ==================================== */
 .recipe-form {
     background: var(--color-white);
     border-radius: var(--border-radius-lg);
@@ -8,6 +11,9 @@
     padding: 1rem;
 }
 
+/* ====================================
+   PAGE HEADER
+   ==================================== */
 .recipe-form .page-header {
     display: grid;
     gap: var(--spacing-md);
@@ -25,6 +31,9 @@
     margin: 0;
 }
 
+/* ====================================
+   FORM LAYOUT
+   ==================================== */
 .recipe-form form {
     background: var(--color-white);
     border-radius: var(--border-radius-lg);
@@ -34,8 +43,9 @@
     padding: var(--spacing-lg);
 }
 
-/* Form sections */
-
+/* ====================================
+   FORM SECTIONS - GENERAL STYLING
+   ==================================== */
 .form-section {
     background: var(--color-white);
     border-radius: var(--border-radius-md);
@@ -52,8 +62,9 @@
     padding-bottom: 0.25rem;
 }
 
-/* Categories Section */
-
+/* ====================================
+   CATEGORIES SECTION
+   ==================================== */
 .categories-row {
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
@@ -64,8 +75,9 @@
     padding: 0.5rem;
 }
 
-/* Time Section */
-
+/* ====================================
+   TIME SECTION
+   ==================================== */
 .time-row {
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
@@ -95,8 +107,9 @@
     grid-template-columns: 1fr 1fr;
 }
 
-/* Ingredients Section */
-
+/* ====================================
+   INGREDIENTS SECTION
+   ==================================== */
 .ingredients-section {
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
@@ -148,8 +161,9 @@
     width: 30px;
 }
 
-/* Directions Section */
-
+/* ====================================
+   DIRECTIONS SECTION
+   ==================================== */
 .directions-section {
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
@@ -230,8 +244,9 @@
     align-self: center;
 }
 
-/* Media Section */
-
+/* ====================================
+   MEDIA SECTION
+   ==================================== */
 .media-section {
     margin-bottom: var(--spacing-lg);
 }
@@ -242,8 +257,9 @@
     margin-bottom: var(--spacing-md);
 }
 
-/* Buttons */
-
+/* ====================================
+   BUTTON STYLES
+   ==================================== */
 .recipe-form .form-buttons {
     display: grid;
     gap: var(--spacing-md);
@@ -303,8 +319,9 @@
     background-color: var(--danger-color-dark);
 }
 
-/* Common styles for all delete buttons */
-
+/* ====================================
+   REMOVE BUTTONS
+   ==================================== */
 .remove-ingredient,
 .remove-step {
     align-items: center;
@@ -335,8 +352,9 @@
     width: 100%;
 }
 
-/* Form Controls */
-
+/* ====================================
+   FORM CONTROLS
+   ==================================== */
 .form-control {
     background-color: var(--color-white);
     border: 2px solid var(--dark-gray);
@@ -358,8 +376,9 @@
     outline: none;
 }
 
-/* Breadcrumbs */
-
+/* ====================================
+   BREADCRUMB NAVIGATION
+   ==================================== */
 .breadcrumbs {
     align-items: center;
     display: grid;
@@ -390,6 +409,9 @@
     font-size: 0.9rem;
 }
 
+/* ====================================
+   RESPONSIVE STYLES
+   ==================================== */
 @media (max-width: 768px) {
     .recipe-form {
         padding: var(--spacing-md);
@@ -445,8 +467,9 @@
     }
 }
 
-/* File input styling */
-
+/* ====================================
+   FILE INPUT STYLING
+   ==================================== */
 .recipe-form input[type="file"] {
     background: var(--background-color);
     border: 2px dashed var(--dark-gray);
@@ -460,8 +483,9 @@
     border-color: var(--accent-color);
 }
 
-/* Star rating */
-
+/* ====================================
+   STAR RATING COMPONENT
+   ==================================== */
 .star-rating {
     direction: rtl;
     display: grid;
@@ -497,8 +521,9 @@
     color: var(--accent-color);
 }
 
-/* Error states */
-
+/* ====================================
+   FORM VALIDATION AND ERROR STATES
+   ==================================== */
 .recipe-form .form-control.is-invalid {
     background-color: rgba(231, 76, 60, 0.05);
     border-color: var(--error-color);
@@ -518,6 +543,9 @@
     content: "⚠";
 }
 
+/* ====================================
+   DELETE CONFIRMATION
+   ==================================== */
 .delete-confirmation {
     background-color: var(--danger-color-light);
     border: 2px solid var(--danger-color);

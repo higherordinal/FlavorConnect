@@ -1,4 +1,6 @@
-/* Member Header Specific Styles & Layout */
+/* ==========================================================================
+   Member Header Base Styles
+   ========================================================================== */
 
 /* Member Header Grid */
 .header-grid {
@@ -7,7 +9,10 @@
   grid-template-columns: auto 1fr auto;
 }
 
-/* Main Nav */
+/* ==========================================================================
+   Main Navigation
+   ========================================================================== */
+
 .main-nav {
   grid-area: nav;
   justify-self: center;
@@ -32,12 +37,18 @@
   color: var(--accent-color);
 }
 
-/* Mobile Menu Button */
+/* ==========================================================================
+   Mobile Menu Button
+   ========================================================================== */
+
 .mobile-menu-btn {
   display: none;
 }
 
-/* User Section */
+/* ==========================================================================
+   User Section & Profile Menu
+   ========================================================================== */
+
 .user-section {
   align-items: center;
   display: flex;
@@ -108,7 +119,10 @@
   box-shadow: 0 0 0 2px var(--accent-color);
 }
 
-/* Dropdown Menu */
+/* ==========================================================================
+   Dropdown Menu
+   ========================================================================== */
+
 .dropdown-menu {
   background-color: var(--color-white);
   border-radius: var(--border-radius-md);
@@ -144,6 +158,10 @@
   border-top: 1px solid var(--border-color);
   margin: 0.5rem 0;
 }
+
+/* ==========================================================================
+   Responsive Styles - Tablet
+   ========================================================================== */
 
 @media (max-width: 768px) {
   .mobile-menu-btn {
@@ -220,6 +238,10 @@
     margin-right: var(--spacing-sm);
   }
 }
+
+/* ==========================================================================
+   Responsive Styles - Mobile
+   ========================================================================== */
 
 @media (max-width: 480px) {
   .header-grid {

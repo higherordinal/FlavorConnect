@@ -1,3 +1,6 @@
+/* ====================================
+   ADMIN MANAGEMENT - MAIN LAYOUT
+   ==================================== */
 /* Admin Management Styles */
 
 .admin-management {
@@ -9,6 +12,9 @@
   padding: var(--spacing-md) var(--spacing-md);
 }
 
+/* ====================================
+   TABLE STYLES
+   ==================================== */
 /* Table Styles */
 
 .list {
@@ -46,6 +52,9 @@
   background-color: var(--light-gray);
 }
 
+/* ====================================
+   ACTION BUTTONS
+   ==================================== */
 /* Action Buttons */
 
 .admin-content > .actions {
@@ -79,6 +88,9 @@ td.actions .action.delete {
   padding: 0.25rem 0.5rem;
 }
 
+/* ====================================
+   ACTION BUTTON STYLES
+   ==================================== */
 /* Default action button */
 
 a.action,
@@ -97,6 +109,9 @@ button.action:hover {
   transform: translateY(-1px);
 }
 
+/* ====================================
+   CREATE BUTTON STYLE
+   ==================================== */
 /* Create button style */
 
 a.action.create,
@@ -119,6 +134,9 @@ button.action.create:hover {
   transform: translateY(-1px);
 }
 
+/* ====================================
+   SAVE BUTTON STYLE
+   ==================================== */
 /* Save button style */
 
 a.action.save,
@@ -141,6 +159,9 @@ button.action.save:hover {
   transform: translateY(-1px);
 }
 
+/* ====================================
+   DELETE BUTTON STYLE
+   ==================================== */
 /* Delete button style */
 
 a.action.delete {
@@ -154,6 +175,9 @@ a.action.delete:hover {
   color: var(--error-color);
 }
 
+/* ====================================
+   ADD BUTTON STYLE
+   ==================================== */
 /* Add button style */
 
 a.action.add,
@@ -170,6 +194,9 @@ button.action.add:hover {
   color: var(--success-dark);
 }
 
+/* ====================================
+   STATUS TOGGLE BUTTONS
+   ==================================== */
 /* Status Toggle Buttons */
 
 .action.activate {
@@ -194,6 +221,9 @@ button.action.add:hover {
   color: var(--warning-color);
 }
 
+/* ====================================
+   FORM STYLES
+   ==================================== */
 /* Forms */
 
 .admin-content .form-group input[type="text"],
@@ -216,6 +246,9 @@ button.action.add:hover {
   outline: none;
 }
 
+/* ====================================
+   ADMIN PAGE LAYOUTS
+   ==================================== */
 .admin.edit,
 .admin.new,
 .admin.delete {
@@ -239,6 +272,9 @@ button.action.add:hover {
   padding: var(--spacing-xl);
 }
 
+/* ====================================
+   ADMIN HEADER
+   ==================================== */
 .admin-header {
   align-items: center;
   display: flex;
@@ -256,12 +292,18 @@ button.action.add:hover {
   color: var(--color-white);
 }
 
+/* ====================================
+   ADMIN CONTENT
+   ==================================== */
 .admin-content {
   margin: 2rem auto;
   max-width: var(--container-width);
   padding: 0 1rem;
 }
 
+/* ====================================
+   FORM GROUP STYLING
+   ==================================== */
 .form-group {
   margin-bottom: var(--spacing-lg);
 }
@@ -273,6 +315,9 @@ button.action.add:hover {
   margin-bottom: var(--spacing-sm);
 }
 
+/* ====================================
+   FORM BUTTONS
+   ==================================== */
 .form-buttons {
   display: flex;
   gap: var(--spacing-md);
@@ -308,6 +353,9 @@ button.action.add:hover {
   transform: translateY(-1px);
 }
 
+/* ====================================
+   ERROR MESSAGES
+   ==================================== */
 .errors {
   background: var(--error-light-color);
   border-radius: var(--border-radius-sm);
@@ -329,6 +377,9 @@ button.action.add:hover {
   margin-bottom: 0;
 }
 
+/* ====================================
+   MESSAGE NOTIFICATIONS
+   ==================================== */
 /* Message */
 
 .message {
@@ -349,6 +400,9 @@ button.action.add:hover {
   color: var(--error-dark-color);
 }
 
+/* ====================================
+   DELETE CONFIRMATION
+   ==================================== */
 /* Delete Confirmation */
 
 .delete-confirmation {
@@ -402,6 +456,9 @@ button.action.add:hover {
   background: var(--hover-color);
 }
 
+/* ====================================
+   STATUS INDICATORS
+   ==================================== */
 /* Status Indicators */
 
 .status {
@@ -422,6 +479,9 @@ button.action.add:hover {
   color: var(--text-color);
 }
 
+/* ====================================
+   METADATA MANAGEMENT
+   ==================================== */
 /* Metadata Management Styles */
 
 .metadata-sections {
@@ -459,6 +519,9 @@ button.action.add:hover {
   width: 100%;
 }
 
+/* ====================================
+   SECTION HEADERS
+   ==================================== */
 .section-header {
   align-items: center;
   display: flex;
@@ -470,6 +533,9 @@ button.action.add:hover {
   margin: 0;
 }
 
+/* ====================================
+   ADD NEW BUTTON
+   ==================================== */
 /* Add New Button Styling */
 
 .add-new-button {
@@ -489,6 +555,9 @@ button.action.add:hover {
   font-size: 0.875rem;
 }
 
+/* ====================================
+   COUNT BADGES
+   ==================================== */
 /* Count Badges */
 
 .count-badge {
@@ -500,6 +569,9 @@ button.action.add:hover {
   padding: var(--spacing-xs) var(--spacing-sm);
 }
 
+/* ====================================
+   ADMIN CONTENT LAYOUT
+   ==================================== */
 /* Admin Content Layout */
 
 .admin-content {
@@ -527,6 +599,9 @@ button.action.add:hover {
   color: var(--color-white);
 }
 
+/* ====================================
+   RESPONSIVE TABLE STYLES
+   ==================================== */
 /* Table Styles */
 
 .table-responsive {
@@ -560,6 +635,9 @@ button.action.add:hover {
   background-color: var(--hover-color);
 }
 
+/* ====================================
+   STATUS BADGES
+   ==================================== */
 /* Status Badge */
 
 .status-badge {
@@ -579,6 +657,9 @@ button.action.add:hover {
   color: var(--on-error-color);
 }
 
+/* ====================================
+   ACTION BUTTONS LAYOUT
+   ==================================== */
 /* Action Buttons */
 
 .actions {
@@ -589,6 +670,9 @@ button.action.add:hover {
   grid-auto-flow: column;
 }
 
+/* ====================================
+   BUTTON STYLES
+   ==================================== */
 .btn {
   align-items: center;
   border-radius: var(--border-radius-sm);
@@ -628,6 +712,9 @@ button.action.add:hover {
   color: var(--error-color);
 }
 
+/* ====================================
+   CATEGORY MANAGEMENT
+   ==================================== */
 /* Category Management */
 
 .category-sections {
@@ -642,6 +729,9 @@ button.action.add:hover {
   padding: var(--spacing-lg);
 }
 
+/* ====================================
+   USER MANAGEMENT
+   ==================================== */
 /* User Management */
 .admin-dashboard .user-sections {
   display: grid;
@@ -668,6 +758,9 @@ button.action.add:hover {
   margin: 0;
 }
 
+/* ====================================
+   BREADCRUMBS
+   ==================================== */
 /* Breadcrumbs */
 
 .breadcrumbs {
@@ -700,6 +793,9 @@ button.action.add:hover {
   font-size: 0.9rem;
 }
 
+/* ====================================
+   ADMIN DASHBOARD
+   ==================================== */
 /* Admin Dashboard */
 
 .admin-dashboard {
@@ -766,6 +862,9 @@ button.action.add:hover {
   color: var(--primary-color);
 }
 
+/* ====================================
+   BOTTOM ACTIONS
+   ==================================== */
 /* Bottom Actions */
 
 .bottom-actions {
@@ -774,6 +873,9 @@ button.action.add:hover {
   text-align: center;
 }
 
+/* ====================================
+   RESPONSIVE DESIGN
+   ==================================== */
 /* Responsive Design */
 
 @media (max-width: 768px) {
@@ -933,6 +1035,9 @@ button.action.add:hover {
   }
 }
 
+/* ====================================
+   SMALL SCREEN ADJUSTMENTS
+   ==================================== */
 @media (max-width: 480px) {
   .admin-management h1,
   .admin-dashboard h1 {
@@ -970,6 +1075,9 @@ button.action.add:hover {
   }
 }
 
+/* ====================================
+   MOBILE DEVICE OPTIMIZATIONS
+   ==================================== */
 /* Add a new breakpoint for very small mobile devices */
 @media (max-width: 390px) {
   .admin-management {
@@ -999,14 +1107,6 @@ button.action.add:hover {
   }
   
   .admin-header h1 {
-    font-size: 1.3rem;
-  }
-  
-  .breadcrumbs {
-    font-size: 0.8rem;
-  }
-  
-  .back-link {
-    font-size: 0.9rem;
+    font-size: 1.25rem;
   }
 }

@@ -339,27 +339,10 @@
   .main-content .recipe-gallery {
     gap: var(--grid-gap);
   }
-
-  /* Remove conflicting recipe card styles that should be in recipe-card.css */
-  /* .main-content .recipe-footer {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    text-align: center;
-  }
-
-  .main-content .recipe-meta,
-  .main-content .recipe-actions {
-    justify-content: center;
-  } */
 }
 
 @media (max-width: 480px) {
   .main-content .recipe-gallery {
     gap: var(--grid-gap-sm);
   }
-
-  /* Remove conflicting recipe card styles that should be in recipe-card.css */
-  /* .main-content .recipe-content {
-    padding: var(--spacing-sm);
-  } */
 }

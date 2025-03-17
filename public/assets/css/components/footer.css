@@ -12,8 +12,8 @@ footer {
   grid-template-rows: auto auto;
   padding: 3rem 2rem;
   width: 100%;
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
-  margin: 0; /* Remove any margin that might cause overflow */
+  box-sizing: border-box;
+  margin: 0;
 }
 
 footer .footer-info {

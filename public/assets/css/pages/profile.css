@@ -1,9 +1,15 @@
+/* ====================================
+   PROFILE CONTAINER
+   ==================================== */
 .profile-container {
   margin: 0 auto;
   max-width: var(--max-width);
   padding: var(--spacing-lg);
 }
 
+/* ====================================
+   PROFILE HEADER
+   ==================================== */
 .profile-header {
   display: grid;
   gap: var(--spacing-md);
@@ -20,6 +26,9 @@
   padding: var(--spacing-md) var(--spacing-lg);
 }
 
+/* ====================================
+   PROFILE STATISTICS
+   ==================================== */
 .profile-stats {
   display: flex;
   gap: var(--spacing-lg);
@@ -37,6 +46,9 @@
   font-size: var(--font-size-large);
 }
 
+/* ====================================
+   SECTION HEADERS
+   ==================================== */
 .section-header {
   align-items: center;
   display: flex;
@@ -50,6 +62,9 @@
   margin: 0;
 }
 
+/* ====================================
+   EMPTY STATE STYLING
+   ==================================== */
 .empty-state {
   background-color: var(--color-gray-100);
   border-radius: var(--radius-lg);
@@ -68,13 +83,18 @@
   margin-bottom: var(--spacing-lg);
 }
 
+/* ====================================
+   RECIPE GRID LAYOUT
+   ==================================== */
 .recipe-grid {
   display: grid;
   gap: var(--grid-gap);
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-/* Profile-specific recipe card styling */
+/* ====================================
+   RECIPE CARD STYLING
+   ==================================== */
 .recipe-card {
   background: var(--color-white);
   border-radius: var(--radius-lg);
@@ -89,6 +109,9 @@
   transform: translateY(-4px);
 }
 
+/* ====================================
+   RECIPE IMAGE
+   ==================================== */
 .recipe-image {
   padding-top: 60%;
   position: relative;
@@ -102,6 +125,9 @@
   width: 100%;
 }
 
+/* ====================================
+   RECIPE CONTENT
+   ==================================== */
 .recipe-content {
   padding: var(--spacing-md);
 }
@@ -112,6 +138,9 @@
   margin: 0 0 var(--spacing-sm);
 }
 
+/* ====================================
+   RECIPE METADATA
+   ==================================== */
 .recipe-meta {
   color: var(--text-muted);
   display: flex;
@@ -130,6 +159,9 @@
   color: var(--primary-color);
 }
 
+/* ====================================
+   RECIPE ACTIONS
+   ==================================== */
 .recipe-actions {
   display: grid;
   gap: var(--spacing-sm);
@@ -141,6 +173,9 @@
   padding: var(--spacing-sm);
 }
 
+/* ====================================
+   RESPONSIVE STYLING
+   ==================================== */
 @media (max-width: 768px) {
   .profile-container {
     padding: var(--spacing-md);
