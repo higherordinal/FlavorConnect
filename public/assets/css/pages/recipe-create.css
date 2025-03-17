@@ -11,7 +11,7 @@
 .recipe-form .page-header {
     display: grid;
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
     position: relative;
     text-align: center;
 }

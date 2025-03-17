@@ -41,6 +41,9 @@
   font-size: var(--font-size-xlarge);
   line-height: 1;
   margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--accent-color);
+  width: 100%;
 }
 
 /* ==========================================================================
