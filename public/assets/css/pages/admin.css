@@ -840,7 +840,8 @@ button.action.add:hover {
 }
 
 .admin-module p {
-  color: var(--text-muted);
+  color: #2c3e50; /* Darker color for better contrast */
+  font-weight: 500; /* Medium weight for better readability */
   margin: 0;
 }
 
