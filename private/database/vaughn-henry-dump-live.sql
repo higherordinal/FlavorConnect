@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 06, 2025 at 06:46 PM
+-- Generation Time: Mar 16, 2025 at 10:23 PM
 -- Server version: 8.0.41-32
 -- PHP Version: 8.3.15
 
@@ -209,7 +209,36 @@ INSERT INTO `ingredient` (`ingredient_id`, `recipe_id`, `name`) VALUES
 (164, 82, 'garlic (minced)'),
 (168, 83, '.bhjguyggjkh'),
 (170, 83, '.lkhlkjhjlhhjh'),
-(169, 83, 'lgkjguyg');
+(169, 83, 'lgkjguyg'),
+(171, 84, 'Bacon'),
+(189, 85, '1 Honey Crip Apple'),
+(177, 85, '1 Honey Crips Apple'),
+(173, 85, '1 Whole Garlic Bulb'),
+(172, 85, '1 Whole Yellow Onion'),
+(174, 85, '2-3 Whole Carrots'),
+(185, 85, 'Apple cider vinegar (or rice vinegar) '),
+(176, 85, 'Bay Leaves'),
+(180, 85, 'Cayenne Pepper'),
+(175, 85, 'Chicken Breast'),
+(181, 85, 'Coarse Sea Salt'),
+(184, 85, 'Filtered Water'),
+(182, 85, 'Kettle & Fire Chicken Bone Broth'),
+(178, 85, 'Siracha'),
+(183, 85, 'Swanson Chicken Broth'),
+(179, 85, 'Worcestershire Sauce'),
+(188, 86, 'Cream Cheese (softened)'),
+(186, 86, 'Regular Pork Sausage'),
+(187, 86, 'Shredded Cheddar Ceese'),
+(191, 87, 'bread'),
+(192, 87, 'cheese'),
+(190, 87, 'fist'),
+(193, 87, 'mayonnaise'),
+(194, 88, 'black beans, rinsed and drained'),
+(198, 88, 'instant coffee'),
+(199, 88, 'semi-sweet chocolate chips'),
+(197, 88, 'unsweetened cocoa powder'),
+(196, 88, 'vanilla'),
+(195, 88, 'vegetable oil');
 
 -- --------------------------------------------------------
 
@@ -284,7 +313,12 @@ INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`,
 (14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', 'recipe_67c283f5882ba.jpg', 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17', NULL),
 (15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', 'recipe_67c28600ddeda.jpg', 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49', NULL),
 (16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-07 03:44:18'),
-(64, 6, 'test', 'test me now', 8, 3, 1, 3600, 3600, 'https://youtu.be/XLbMvY7ZxAk?si=lZ5F53iRsLtpX4Mi', 'recipe_67c7930971bb3.jpg', 'test recipe image', 0, '2025-03-05 01:43:47', '2025-03-06 06:06:33');
+(64, 6, 'test', 'test me now', 8, 3, 1, 3600, 3600, 'https://youtu.be/XLbMvY7ZxAk?si=lZ5F53iRsLtpX4Mi', 'recipe_67c7930971bb3.jpg', 'test recipe image', 0, '2025-03-05 01:43:47', '2025-03-06 06:06:33'),
+(84, 11, 'Sunrise Bacon', 'Make this delicious and crispy bacon in the oven with virtually zero clean up!', 1, 1, 8, 600, 1200, '', 'recipe_67cb22a6a1555.jpg', 'Sunrise Bacon recipe image', 0, '2025-03-07 18:45:26', '2025-03-07 18:45:26'),
+(85, 12, 'Hearty Weekend Stew', 'A hearty and healthy weekend stew.', 8, 1, 12, 1800, 12600, '', 'recipe_67cb8b1d5c018.jpg', 'Hearty Weekend Stew recipe image', 0, '2025-03-08 02:11:09', '2025-03-08 19:02:34'),
+(86, 10, 'Keto Sausage Balls', 'Keto recipe for easy breakfast or snack', 1, 1, 5, 1800, 900, '', 'recipe_67cc644f6b593.jpg', 'Keto Sausage Balls recipe image', 0, '2025-03-08 17:37:51', '2025-03-08 17:37:51'),
+(87, 14, 'Knuckle Sandwich', 'Let\'s dish out some justice. ', 10, 1, 12, 300, 0, '', 'recipe_67cf8a1511e03.jpg', 'Knuckle Sandwich recipe image', 0, '2025-03-09 03:20:34', '2025-03-11 02:55:49'),
+(88, 15, 'Black Bean Brownies', 'These are decadent and gluten-free fudgy brownies. These brownies are perfect for a less guilty dessert', 5, 1, 3, 600, 2700, '', 'recipe_67cd06b617487.jpg', 'Black Bean Brownies recipe image', 0, '2025-03-09 05:10:46', '2025-03-09 05:14:40');
 
 -- --------------------------------------------------------
 
@@ -332,7 +366,13 @@ INSERT INTO `recipe_comment` (`comment_id`, `recipe_id`, `user_id`, `comment_tex
 (27, 7, 6, 'Bad', '2025-03-01 15:33:13'),
 (28, 68, 6, 'ok', '2025-03-05 20:19:56'),
 (29, 69, 6, 'ok', '2025-03-05 21:07:15'),
-(33, 64, 6, 'ok', '2025-03-06 23:13:48');
+(33, 64, 6, 'ok', '2025-03-06 23:13:48'),
+(34, 15, 11, 'So super delicious!', '2025-03-07 16:34:50'),
+(36, 13, 12, 'This meal was fantastic.', '2025-03-07 22:55:07'),
+(37, 85, 12, 'I\'m a fan. Easy. Feeds me four times. Taste amazing.', '2025-03-08 00:13:59'),
+(38, 15, 10, 'Quick,easy,delicious', '2025-03-08 15:01:39'),
+(39, 87, 14, 'How\'s about a knuckle sandwich?!', '2025-03-09 01:23:12'),
+(40, 88, 15, 'Legit recipe', '2025-03-09 03:21:50');
 
 -- --------------------------------------------------------
 
@@ -570,7 +610,40 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 (258, 16, 127, 1, 2.50),
 (259, 16, 144, 2, 1.00),
 (260, 16, 76, 1, 1.00),
-(261, 16, 44, 1, 1.00);
+(261, 16, 44, 1, 1.00),
+(262, 84, 171, 7, 1.00),
+(263, 84, 128, 9, 1.00),
+(291, 86, 186, 7, 2.00),
+(292, 86, 187, 1, 1.00),
+(293, 86, 188, 6, 2.00),
+(350, 85, 172, 6, 10.00),
+(351, 85, 173, 6, 7.00),
+(352, 85, 174, 6, 12.00),
+(353, 85, 175, 7, 1.50),
+(354, 85, 176, 4, 1.00),
+(355, 85, 189, 6, 7.00),
+(356, 85, 178, 2, 1.50),
+(357, 85, 179, 2, 2.00),
+(358, 85, 180, 2, 4.00),
+(359, 85, 181, 2, 1.00),
+(360, 85, 182, 6, 16.90),
+(361, 85, 183, 6, 16.00),
+(362, 85, 184, 1, 2.00),
+(363, 85, 185, 2, 1.00),
+(378, 88, 194, 6, 15.00),
+(379, 88, 2, 1, 3.00),
+(380, 88, 195, 3, 3.00),
+(381, 88, 196, 2, 1.00),
+(382, 88, 197, 1, 0.25),
+(383, 88, 131, 1, 0.67),
+(384, 88, 128, 2, 0.50),
+(385, 88, 6, 2, 0.25),
+(386, 88, 198, 2, 0.50),
+(387, 88, 199, 1, 0.50),
+(388, 87, 190, 9, 1.00),
+(389, 87, 191, 6, 2.00),
+(390, 87, 192, 1, 1.00),
+(391, 87, 193, 3, 1.00);
 
 -- --------------------------------------------------------
 
@@ -619,14 +692,19 @@ INSERT INTO `recipe_rating` (`rating_id`, `recipe_id`, `user_id`, `rating_value`
 (27, 9, 4, 5),
 (28, 9, 2, 4),
 (29, 10, 1, 5),
-(30, 10, 1, 5),
 (31, 11, 2, 5),
 (32, 11, 4, 4),
 (34, 7, 6, 4),
 (35, 68, 6, 3),
 (36, 69, 6, 3),
 (46, 75, 6, 4),
-(47, 64, 6, 3);
+(47, 64, 6, 3),
+(48, 15, 11, 5),
+(50, 13, 12, 5),
+(51, 85, 12, 5),
+(52, 15, 10, 5),
+(54, 87, 14, 5),
+(55, 88, 15, 5);
 
 -- --------------------------------------------------------
 
@@ -788,7 +866,33 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 (216, 16, 6, 'Stir in chocolate chips.'),
 (217, 16, 7, 'Drop dough by spoonfuls onto a baking sheet.'),
 (218, 16, 8, 'Bake for 10-12 minutes until golden brown.'),
-(219, 16, 9, 'Cool on a wire rack and serve.');
+(219, 16, 9, 'Cool on a wire rack and serve.'),
+(220, 84, 1, 'Preheat oven to 400F.'),
+(221, 84, 2, 'Line 9x13 cookie sheet with parchment paper.'),
+(222, 84, 3, 'Lay bacon flat on baking sheet.'),
+(223, 84, 4, 'Lightly dust the bacon with your dash of baking powder.'),
+(224, 84, 5, 'Bake bacon for 20min at 400F.'),
+(243, 86, 1, 'Combine all ingredients in a large mixing bowl'),
+(244, 86, 2, 'Form 16 two-inch balls\r\nPlace on cookie sheet covered with parchment paper'),
+(245, 86, 3, 'Preheat oven to 400 degrees. Bake for 15 minutes or until internal temperature reaches 145 degrees'),
+(246, 86, 4, 'Serve warm or freeze in a ziploc bag or airtight container. If frozen\r\nmicrowave 2 balls on high for one minute. '),
+(283, 85, 1, 'Chop 1 whole yellow onion, set aside'),
+(284, 85, 2, 'Peel and separate 1 whole garlic clove, set aside.'),
+(285, 85, 3, 'Chop 2-3 whole carrot stems into 1/4 sections, set aside'),
+(286, 85, 4, 'Use scissors to cut the breast into small pieces, set aside. Chop apple into thin slices and set aside. '),
+(287, 85, 5, 'Combine bone broth, chicken broth, and water in large bowl, and bring to boil for two minutes on high heat.'),
+(288, 85, 6, 'Add chicken, onions, garlic, carrots, apple into pot.'),
+(289, 85, 7, 'Add cayenne pepper, Worcestershire sauce, siracha and salt into pot. (optional: add dash of apple cider vinegar to pot or rice vinegar --- NOT TOO MUCH THOUGH)'),
+(290, 85, 8, 'Cover pot and reduce heat to low medium. Stir every 30 minutes and use scissors to shred chicken further as needed. Salt and add bay leaf on 2nd hour. '),
+(291, 85, 9, 'Remove from heat on 3.5 hours and enjoy. Apples and onions should be fully dissolved leaving only shredded chicken and carrots and garlic cloves as meat. Broth should be sweet and spicy.'),
+(300, 88, 1, 'Preheat oven to 350 degrees fahrenheit. Puree black beans until a paste. in a large bowl mix together bean puree, eggs, oil, and vanilla'),
+(301, 88, 2, 'in a seperate bowl combine cocoa powder, sugar, baking powder, salt, and coffee. add to wet ingredients. Finally, add chocolate chips.'),
+(302, 88, 3, 'grease a 9x9 inch pan, then line with parchment paper. Pour batter into pan. bake for 30 to 40 minutes, or until the edges are visibly cooked and center no longer jiggles.'),
+(303, 88, 4, 'Allow brownies to cool for 5 minutes. cut into 16 pieces. Serve warm with a dairy free ice cream'),
+(304, 87, 1, 'Spread mayonnaise on the bread'),
+(305, 87, 2, 'Place cheese on the bread'),
+(306, 87, 3, 'Place fist on the bottom slice of bread, top with the second slice'),
+(307, 87, 4, 'Serve hot!');
 
 -- --------------------------------------------------------
 
@@ -870,16 +974,20 @@ CREATE TABLE `user_account` (
 --
 
 INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `email`, `password_hash`, `user_level`, `is_active`, `created_at`, `updated_at`) VALUES
-(1, 'hcvaughn', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 'a', 1, '2025-03-04 15:46:35', '2025-03-06 04:24:19'),
+(1, 'hcvaughn', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 'u', 1, '2025-03-04 15:46:35', '2025-03-08 22:29:17'),
 (2, 'admin_chef', 'Michael', 'Brown', 'michael@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'a', 1, '2025-03-04 15:46:35', NULL),
 (3, 'chef_maria', 'Maria', 'Garcia', 'maria@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', NULL),
 (4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', NULL),
 (5, 'foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', '2025-03-05 16:34:15'),
-(6, 'test_user', 'Test', 'User', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 'a', 1, '2025-03-04 15:46:35', NULL),
-(7, 'registertest', 'Register', 'Tester', 'register@test.com', '$2y$10$fAcyiRDl2QmHvU7q0WR2R.SRlvVfZs4LBfu3NAq2yR9n7.L6b7Esa', 'u', 1, '2025-03-04 15:52:53', '2025-03-06 03:27:43'),
+(6, 'super_admin', 'Super', 'Admin', 'super@admin.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1, '2025-03-04 15:46:35', '2025-03-08 22:34:06'),
+(7, 'registertest', 'Register', 'Tester', 'register@test.com', '$2y$10$.xg8TwkVQ0H79jzws1xnlusfrEylzXiVH5bTU/E7EH.fIB0L.4szO', 'a', 0, '2025-03-04 15:52:53', '2025-03-08 22:32:57'),
 (8, 'jhandcock', 'John', 'Handcock', 'jc@handcock.com', '$2y$10$3IvdWtB9YOlAHO5e7f4gR.JKg5yPxeli5KogHReoCBIEKKOaQjI16', 'u', 1, '2025-03-05 23:56:19', '2025-03-06 00:02:53'),
-(9, 'mWOwTPMvxHgJ', 'EIWeFchZDIzDR', 'ztjfSCLXdHN', 'oneidacurtisth25@gmail.com', '$2y$10$6iAKVpG16bvWGd83sl1ixOXMJDTKcoA8VTrSxKsh0it/h/vrKVfAe', 'u', 1, '2025-03-06 07:08:37', NULL),
-(10, 'vaughndmd', 'Henry', 'Vaughn', 'vaughndmd@gmail.com', '$2y$10$8XVhf.aUHGaPHSuWfLdZCufWNgK7BIdC.mLdph/9e.puFJuLri4Sy', 'u', 1, '2025-03-06 23:49:40', NULL);
+(10, 'vaughndmd', 'Henry', 'Vaughn', 'vaughndmd@gmail.com', '$2y$10$8XVhf.aUHGaPHSuWfLdZCufWNgK7BIdC.mLdph/9e.puFJuLri4Sy', 'u', 1, '2025-03-06 23:49:40', NULL),
+(11, 'dgraham', 'David', 'Graham', 'david32@example.com', '$2y$10$ByaRxfT3NgsUvLPF6ApjxeNGFOsyDTEx8kfflnGz0wblMPphekpNy', 'u', 0, '2025-03-07 16:33:01', '2025-03-08 22:32:42'),
+(12, 'mhatwell', 'Hudson', 'Atwell', 'hudson.atwell@gmail.com', '$2y$10$labhtvaAsP3G3tfeBo3kt.UlzxlC3UUgH3M2gtYaMQOfSKVDip2R6', 'u', 1, '2025-03-07 22:48:24', '2025-03-16 17:27:18'),
+(14, 'KevinTestee', 'Kevin', 'Franklin', 'kevin@usertesting.com', '$2y$10$sLjcZ8mIGOfnSn/0z4Ij.ekHMA5QRDXWvzBCeC/NgZzc6HPjooJKG', 'u', 1, '2025-03-09 01:05:56', NULL),
+(15, 'mpersky', 'Mo', 'Persky', 'welovemocake@gmail.com', '$2y$10$gCwxjGy2slUJh5fE2xlvAu49EasFaXqRtJE1TZPtBk.KjMjlCM146', 'u', 1, '2025-03-09 02:40:12', NULL),
+(17, 'wAKXeTPLht', 'yAqTQkJrfEnKTza', 'fzGjYStZlLTQTe', 'williamskatie227133@yahoo.com', '$2y$10$s0MZ5V1v5YASZeneVILb2Oy7pxRg/prXgyRHssepPfP/1B8C1pd6W', 'u', 1, '2025-03-16 11:37:41', NULL);
 
 -- --------------------------------------------------------
 
@@ -899,13 +1007,22 @@ CREATE TABLE `user_favorite` (
 
 INSERT INTO `user_favorite` (`user_id`, `recipe_id`, `created_at`) VALUES
 (6, 6, '2025-03-07 00:30:12'),
-(6, 9, '2025-03-06 23:09:42'),
+(6, 7, '2025-03-07 03:09:51'),
+(6, 8, '2025-03-07 02:59:14'),
 (6, 10, '2025-03-06 23:09:43'),
+(6, 11, '2025-03-07 02:59:02'),
 (6, 12, '2025-03-06 23:26:16'),
 (6, 13, '2025-03-06 23:11:53'),
-(6, 14, '2025-03-06 23:09:40'),
-(6, 15, '2025-03-06 22:57:39'),
-(10, 10, '2025-03-07 00:13:53');
+(6, 16, '2025-03-07 03:05:01'),
+(10, 10, '2025-03-07 00:13:53'),
+(10, 15, '2025-03-08 15:01:43'),
+(11, 15, '2025-03-07 16:35:20'),
+(12, 13, '2025-03-07 23:00:26'),
+(14, 10, '2025-03-09 01:08:04'),
+(14, 87, '2025-03-09 01:23:35'),
+(15, 7, '2025-03-09 02:49:59'),
+(15, 13, '2025-03-09 02:45:02'),
+(15, 88, '2025-03-09 03:22:52');
 
 --
 -- Indexes for dumped tables
@@ -1024,7 +1141,7 @@ ALTER TABLE `user_favorite`
 -- AUTO_INCREMENT for table `ingredient`
 --
 ALTER TABLE `ingredient`
-  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
 
 --
 -- AUTO_INCREMENT for table `measurement`
@@ -1036,13 +1153,13 @@ ALTER TABLE `measurement`
 -- AUTO_INCREMENT for table `recipe`
 --
 ALTER TABLE `recipe`
-  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `recipe_comment`
 --
 ALTER TABLE `recipe_comment`
-  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `recipe_diet`
@@ -1054,19 +1171,19 @@ ALTER TABLE `recipe_diet`
 -- AUTO_INCREMENT for table `recipe_ingredient`
 --
 ALTER TABLE `recipe_ingredient`
-  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=262;
+  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=392;
 
 --
 -- AUTO_INCREMENT for table `recipe_rating`
 --
 ALTER TABLE `recipe_rating`
-  MODIFY `rating_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `rating_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `recipe_step`
 --
 ALTER TABLE `recipe_step`
-  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=220;
+  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=308;
 
 --
 -- AUTO_INCREMENT for table `recipe_style`
@@ -1084,7 +1201,7 @@ ALTER TABLE `recipe_type`
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

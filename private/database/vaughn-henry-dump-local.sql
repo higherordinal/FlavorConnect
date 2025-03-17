@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Mar 06, 2025 at 02:38 PM
+-- Generation Time: Mar 17, 2025 at 04:32 AM
 -- Server version: 8.0.41
 -- PHP Version: 8.2.27
 
@@ -190,7 +190,10 @@ INSERT INTO `ingredient` (`ingredient_id`, `recipe_id`, `name`) VALUES
 (148, 16, 'Eggs'),
 (150, 16, 'Salt'),
 (149, 16, 'Vanilla extract'),
-(147, 16, 'White sugar');
+(147, 16, 'White sugar'),
+(173, 33, 'adaagaf'),
+(174, 33, 'agfgfssg'),
+(172, 33, 'fadafa');
 
 -- --------------------------------------------------------
 
@@ -208,17 +211,17 @@ CREATE TABLE `measurement` (
 --
 
 INSERT INTO `measurement` (`measurement_id`, `name`) VALUES
-(1, 'cup'),
-(9, 'dash'),
-(4, 'gram'),
+(1, 'cup(s)'),
+(9, 'dash(es)'),
+(4, 'gram(s)'),
 (5, 'kilogram'),
-(10, 'liter'),
-(11, 'milliliter'),
-(6, 'ounce'),
-(8, 'pinch'),
-(7, 'pound'),
-(3, 'tablespoon'),
-(2, 'teaspoon');
+(10, 'liter(s)'),
+(11, 'milliliter(s)'),
+(6, 'ounce(s)'),
+(8, 'pinch(es)'),
+(7, 'pound(s)'),
+(3, 'tablespoon(s)'),
+(2, 'teaspoon(s)');
 
 -- --------------------------------------------------------
 
@@ -264,7 +267,8 @@ INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`,
 (13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, '', 'recipe_67c318a1b739c.jpg', 'Thai Green Curry image', 1, '2025-02-27 15:10:17', '2025-03-06 02:55:09'),
 (14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', 'recipe_67c283f5882ba.jpg', 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17', '2025-03-06 02:55:09'),
 (15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', 'recipe_67c28600ddeda.jpg', 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49', '2025-03-06 02:55:09'),
-(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-06 02:55:09');
+(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-06 02:55:09'),
+(33, 6, 'zfgzfzfgz', 'zfgzfgzfg', 9, 3, 2, 3600, 3600, '', 'recipe_67d5a26318c06.png', 'zfgzfzfgz recipe image', 0, '2025-03-15 11:53:07', '2025-03-15 11:53:07');
 
 -- --------------------------------------------------------
 
@@ -477,7 +481,10 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 (115, 16, 143, 1, 2.50),
 (116, 16, 144, 2, 1.00),
 (117, 16, 145, 1, 1.00),
-(118, 16, 146, 1, 1.00);
+(118, 16, 146, 1, 1.00),
+(143, 33, 172, 1, 1.00),
+(144, 33, 173, 1, 1.00),
+(145, 33, 174, 2, 1.00);
 
 -- --------------------------------------------------------
 
@@ -531,7 +538,8 @@ INSERT INTO `recipe_rating` (`rating_id`, `recipe_id`, `user_id`, `rating_value`
 (32, 11, 4, 4),
 (34, 7, 6, 4),
 (35, 15, 6, 3),
-(38, 16, 6, 4);
+(38, 16, 6, 4),
+(40, 13, 6, 3);
 
 -- --------------------------------------------------------
 
@@ -668,7 +676,9 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 (115, 16, 6, 'Stir in chocolate chips.'),
 (116, 16, 7, 'Drop dough by spoonfuls onto a baking sheet.'),
 (117, 16, 8, 'Bake for 10-12 minutes until golden brown.'),
-(118, 16, 9, 'Cool on a wire rack and serve.');
+(118, 16, 9, 'Cool on a wire rack and serve.'),
+(144, 33, 1, 'agafsagsfgs'),
+(145, 33, 2, 'sfgsfgsfgsf');
 
 -- --------------------------------------------------------
 
@@ -753,9 +763,9 @@ INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `e
 (3, 'chef_maria', 'Maria', 'Garcia', 'maria@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
 (4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
 (5, 'foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1),
-(6, 'test_user', 'Test', 'User', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1),
-(7, 'registertest', 'Register', 'Test', 'register@test.com', '$2y$10$okviEeJFAngD/xM6Fa.lkekRGP2Tkas4w8lnqwFVh1i8ARXxjt8oS', 'u', 1),
-(8, 'jolieta', 'Joliet', 'Jake', 'jake@joliet.com', '$2y$10$wHsvWt/lfBf9yj.AG27HtOQbjM91eOSDjTofDcpfiV6Or4ixsxtye', 'u', 1);
+(6, 'super_admin', 'Super', 'Admin', 'test@user.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1),
+(8, 'jolieta', 'Joliet', 'Jake', 'jake@joliet.com', '$2y$10$wHsvWt/lfBf9yj.AG27HtOQbjM91eOSDjTofDcpfiV6Or4ixsxtye', 'u', 1),
+(10, 'testuser', 'Test', 'User', 'email@email.com', '$2y$10$x.s/799NdsEbA57./hsWuui3HWCA/tUjgrFCRipSn4MZ85bSgeG6W', 'u', 0);
 
 -- --------------------------------------------------------
 
@@ -774,16 +784,10 @@ CREATE TABLE `user_favorite` (
 --
 
 INSERT INTO `user_favorite` (`user_id`, `recipe_id`, `created_at`) VALUES
-(6, 4, '2025-03-03 21:44:57'),
 (6, 5, '2025-02-27 14:35:42'),
-(6, 6, '2025-03-03 21:46:54'),
-(6, 8, '2025-03-03 21:45:24'),
-(6, 9, '2025-02-27 21:17:46'),
-(6, 10, '2025-03-03 21:46:47'),
-(6, 12, '2025-03-06 04:29:45'),
-(6, 14, '2025-03-03 21:45:22'),
-(6, 16, '2025-03-06 03:45:37'),
-(7, 3, '2025-03-04 16:55:05'),
+(6, 8, '2025-03-17 00:02:31'),
+(6, 10, '2025-03-16 10:33:47'),
+(6, 13, '2025-03-16 23:00:22'),
 (8, 9, '2025-03-06 03:14:05'),
 (8, 13, '2025-03-06 02:33:40'),
 (8, 14, '2025-03-06 02:33:45');
@@ -905,7 +909,7 @@ ALTER TABLE `user_favorite`
 -- AUTO_INCREMENT for table `ingredient`
 --
 ALTER TABLE `ingredient`
-  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
+  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=178;
 
 --
 -- AUTO_INCREMENT for table `measurement`
@@ -917,13 +921,13 @@ ALTER TABLE `measurement`
 -- AUTO_INCREMENT for table `recipe`
 --
 ALTER TABLE `recipe`
-  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `recipe_comment`
 --
 ALTER TABLE `recipe_comment`
-  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `recipe_diet`
@@ -935,19 +939,19 @@ ALTER TABLE `recipe_diet`
 -- AUTO_INCREMENT for table `recipe_ingredient`
 --
 ALTER TABLE `recipe_ingredient`
-  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `recipe_rating`
 --
 ALTER TABLE `recipe_rating`
-  MODIFY `rating_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `rating_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `recipe_step`
 --
 ALTER TABLE `recipe_step`
-  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `recipe_style`
@@ -965,7 +969,7 @@ ALTER TABLE `recipe_type`
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Constraints for dumped tables
