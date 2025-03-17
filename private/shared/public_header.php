@@ -80,16 +80,16 @@ if(!isset($page_style)) { $page_style = ''; }
                     <span class="hamburger"></span>
                 </label>
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
-                    <li><a href="<?php echo url_for('/about.php'); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>>About</a></li>
+                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
+                    <li><a href="<?php echo url_for('/about.php'); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                 </ul>
             </nav>
 
             <!-- Auth Links -->
             <div class="auth-links">
-                <a href="<?php echo url_for('/auth/login.php'); ?>" class="login">Log In</a>
-                <a href="<?php echo url_for('/auth/register.php'); ?>" class="sign-up">Sign Up</a>
+                <a href="<?php echo url_for('/auth/login.php'); ?>" class="login"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Log In</a>
+                <a href="<?php echo url_for('/auth/register.php'); ?>" class="sign-up"><i class="fas fa-user-plus" aria-hidden="true"></i> Sign Up</a>
             </div>
         </div>
     </header>

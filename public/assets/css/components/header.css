@@ -152,17 +152,28 @@
   .nav-toggle:checked ~ ul {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
+    gap: 0;
   }
 
   .main-nav ul li {
     width: 100%;
   }
+  
+  .main-nav ul li:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
 
   .main-nav ul li a {
-    display: block;
-    padding: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
     width: 100%;
+  }
+  
+  .main-nav ul li a i {
+    margin-right: var(--spacing-sm);
+    width: 20px; /* Fixed width for consistent alignment */
+    text-align: center;
   }
 
   .main-nav ul li a:hover {

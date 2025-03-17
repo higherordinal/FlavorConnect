@@ -92,14 +92,14 @@ if(!isset($page_style)) { $page_style = ''; }
                     <span class="hamburger"></span>
                 </label>
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>>Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>>Recipes</a></li>
-                    <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'favorites' ? 'class="active" aria-current="page"' : ''; ?>>Favorites</a></li>
-                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>>Create Recipe</a></li>
+                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
+                    <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'favorites' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
+                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
                     <?php if($session->is_admin() || $session->is_super_admin()) { ?>
                     <li class="nav-item">
                         <a href="<?php echo url_for('/admin/index.php'); ?>" class="nav-link">
-                            <i class="fas fa-cog"></i> Admin
+                            <i class="fas fa-cog" aria-hidden="true"></i> Admin
                         </a>
                     </li>
                     <?php } ?>
@@ -114,17 +114,17 @@ if(!isset($page_style)) { $page_style = ''; }
                         $current_user = User::find_by_id($session->get_user_id());
                         $username = $current_user ? h($current_user->username) : 'Guest';
                         ?>
-                        <span class="username"><?php echo $username; ?></span>
+                        <span class="username"><i class="fas fa-user-circle" aria-hidden="true"></i> <?php echo $username; ?></span>
                     </button>
                     <div class="dropdown-menu">
-                        <a href="<?php echo url_for('/users/profile.php'); ?>">Profile</a>
+                        <a href="<?php echo url_for('/users/profile.php'); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
                         <?php if($session->is_admin() || $session->is_super_admin()) { ?>
                         <a href="<?php echo url_for('/admin/index.php'); ?>" class="dropdown-item">
-                            <i class="fas fa-cog"></i>
+                            <i class="fas fa-cog" aria-hidden="true"></i>
                             Admin (Dashboard)
                         </a>
                         <?php } ?>
-                        <a href="<?php echo url_for('/auth/logout.php'); ?>">Logout</a>
+                        <a href="<?php echo url_for('/auth/logout.php'); ?>"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
                     </div>
                 </div>
             </div>
