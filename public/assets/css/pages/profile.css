@@ -36,14 +36,20 @@
 
 .stat {
   align-items: center;
-  color: var(--text-muted);
+  color: #2c3e50;
   display: flex;
   gap: var(--spacing-sm);
+  font-weight: 500;
 }
 
 .stat i {
   color: var(--primary-color);
   font-size: var(--font-size-large);
+}
+
+.stat span {
+  color: #000000; /* Black text for maximum contrast */
+  font-weight: 600; /* Semi-bold for better readability */
 }
 
 /* ====================================
@@ -62,6 +68,21 @@
   margin: 0;
 }
 
+/* Make the Create New Recipe button more visible */
+.section-header .btn-primary {
+  background-color: #0a1a29; /* Darker primary color */
+  color: #ffffff;
+  font-weight: 700; /* Bold for maximum contrast */
+  border: 2px solid #0a1a29;
+  font-size: 1rem; /* Slightly larger font size */
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.section-header .btn-primary:hover {
+  background-color: #0d2438;
+  border-color: #0d2438;
+}
+
 /* ====================================
    EMPTY STATE STYLING
    ==================================== */
@@ -73,14 +94,29 @@
 }
 
 .empty-state i {
-  color: var(--color-gray-300);
+  color: #2c3e50; /* Darker color for better contrast */
   font-size: 4rem;
   margin-bottom: var(--spacing-md);
 }
 
 .empty-state p {
-  color: var(--text-muted);
+  color: #2c3e50; /* Darker text color for better contrast */
   margin-bottom: var(--spacing-lg);
+  font-weight: 500; /* Make text bolder for better contrast */
+}
+
+.empty-state .btn-primary {
+  background-color: #0a1a29; /* Darker primary color */
+  color: #ffffff;
+  font-weight: 700; /* Bold for maximum contrast */
+  border: 2px solid #0a1a29;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 1rem; /* Slightly larger font size */
+}
+
+.empty-state .btn-primary:hover {
+  background-color: #0d2438;
+  border-color: #0d2438;
 }
 
 /* ====================================
@@ -142,9 +178,10 @@
    RECIPE METADATA
    ==================================== */
 .recipe-meta {
-  color: var(--text-muted);
+  color: #2c3e50;
   display: flex;
   font-size: var(--font-size-small);
+  font-weight: 500;
   gap: var(--spacing-md);
   margin-bottom: var(--spacing-md);
 }
@@ -155,8 +192,14 @@
   gap: var(--spacing-xs);
 }
 
+.recipe-meta span span {
+  color: #000000; /* Black text for maximum contrast */
+  font-weight: 600; /* Semi-bold for better readability */
+}
+
 .recipe-meta i {
-  color: var(--primary-color);
+  color: #0a1a29; /* Darker color for better contrast */
+  font-weight: bold;
 }
 
 /* ====================================
@@ -171,6 +214,39 @@
 .recipe-actions .btn {
   font-size: var(--font-size-small);
   padding: var(--spacing-sm);
+  font-weight: 600; /* Make text bolder for better contrast */
+}
+
+/* Improve Edit button contrast */
+.recipe-actions .btn-primary {
+  background-color: #0a1a29; /* Darker primary color */
+  color: #ffffff;
+  border: 2px solid #0a1a29;
+  font-weight: 700; /* Bold for maximum contrast */
+}
+
+.recipe-actions .btn-primary:hover {
+  background-color: #0d2438;
+  border-color: #0d2438;
+}
+
+/* Improve View button contrast */
+.recipe-actions .btn-secondary {
+  background-color: #2573a7; /* Darker blue for better contrast */
+  color: #ffffff;
+  border: 1px solid #2573a7;
+  font-weight: 600;
+}
+
+.recipe-actions .btn-secondary:hover {
+  background-color: #1a5a83; /* Even darker on hover */
+  border-color: #1a5a83;
+}
+
+/* Make all span text more readable */
+.profile-container span {
+  color: #2c3e50; /* Dark text color for better contrast */
+  font-weight: 500; /* Medium weight for better readability */
 }
 
 /* ====================================
