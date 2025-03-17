@@ -228,7 +228,7 @@ h6 {
 h1:not(.logo h1) {
   color: var(--accent-color);
   font-size: var(--font-size-xxlarge);
-  letter-spacing: 0.27em; 
+  letter-spacing: 0.25em; 
   font-weight: 700; 
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); 
   padding-bottom: 0.5rem; 
