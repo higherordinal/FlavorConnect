@@ -29,6 +29,11 @@ window.FlavorConnect.favorites = {
                             icon.classList.remove('far');
                             icon.classList.add('fas');
                         }
+                        // Set aria-label for favorited state
+                        button.setAttribute('aria-label', 'Remove from favorites');
+                    } else {
+                        // Ensure aria-label is set for non-favorited state
+                        button.setAttribute('aria-label', 'Add to favorites');
                     }
                 })
                 .catch(error => console.error('Error checking favorite status:', error));

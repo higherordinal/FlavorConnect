@@ -207,7 +207,7 @@ echo display_session_message();
                 <div class="recipe-title-section">
                     <h1><?php echo h($recipe->title); ?></h1>
                     <?php if($session->is_logged_in()) { ?>
-                        <button class="favorite-btn" data-recipe-id="<?php echo $recipe->recipe_id; ?>">
+                        <button class="favorite-btn" data-recipe-id="<?php echo $recipe->recipe_id; ?>" aria-label="Add to favorites">
                             <i class="far fa-heart"></i>
                         </button>
                     <?php } ?>
@@ -526,6 +526,7 @@ echo display_session_message();
                     favoriteBtn.classList.add('favorited');
                     favoriteBtn.querySelector('i').classList.remove('far');
                     favoriteBtn.querySelector('i').classList.add('fas');
+                    favoriteBtn.setAttribute('aria-label', 'Remove from favorites');
                 }
             }
             
