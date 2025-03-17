@@ -389,35 +389,40 @@ echo display_session_message();
             <div class="add-comment">
                 <h3>Add Your Review</h3>
                 <form action="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" method="post">
-                    <div class="form-group rating-input">
-                        <label id="rating-label">Rating:</label>
-                        <div class="star-rating" aria-labelledby="rating-label">
-                            <input type="radio" id="star1" name="review[rating]" value="1" required>
-                            <label for="star1"><i class="fas fa-star"></i><span class="visually-hidden">1 star</span></label>
-                            <input type="radio" id="star2" name="review[rating]" value="2">
-                            <label for="star2"><i class="fas fa-star"></i><span class="visually-hidden">2 stars</span></label>
-                            <input type="radio" id="star3" name="review[rating]" value="3">
-                            <label for="star3"><i class="fas fa-star"></i><span class="visually-hidden">3 stars</span></label>
-                            <input type="radio" id="star4" name="review[rating]" value="4">
-                            <label for="star4"><i class="fas fa-star"></i><span class="visually-hidden">4 stars</span></label>
-                            <input type="radio" id="star5" name="review[rating]" value="5">
-                            <label for="star5"><i class="fas fa-star"></i><span class="visually-hidden">5 stars</span></label>
+                    <fieldset>
+                        <legend class="visually-hidden">Review Form</legend>
+                        <div class="form-group rating-input">
+                            <fieldset>
+                                <legend>Rating:</legend>
+                                <div class="star-rating">
+                                    <input type="radio" id="star1" name="review[rating]" value="1" required>
+                                    <label for="star1"><i class="fas fa-star"></i><span class="visually-hidden">1 star</span></label>
+                                    <input type="radio" id="star2" name="review[rating]" value="2">
+                                    <label for="star2"><i class="fas fa-star"></i><span class="visually-hidden">2 stars</span></label>
+                                    <input type="radio" id="star3" name="review[rating]" value="3">
+                                    <label for="star3"><i class="fas fa-star"></i><span class="visually-hidden">3 stars</span></label>
+                                    <input type="radio" id="star4" name="review[rating]" value="4">
+                                    <label for="star4"><i class="fas fa-star"></i><span class="visually-hidden">4 stars</span></label>
+                                    <input type="radio" id="star5" name="review[rating]" value="5">
+                                    <label for="star5"><i class="fas fa-star"></i><span class="visually-hidden">5 stars</span></label>
+                                </div>
+                            </fieldset>
                         </div>
-                    </div>
-                    
-                    <div class="form-group comment-input">
-                        <label for="comment">Your Comment (optional):</label>
-                        <textarea 
-                            id="comment" 
-                            name="review[comment]" 
-                            rows="4" 
-                            placeholder="Share your thoughts about this recipe..."
-                        ></textarea>
-                    </div>
+                        
+                        <div class="form-group comment-input">
+                            <label for="comment">Your Comment (optional):</label>
+                            <textarea 
+                                id="comment" 
+                                name="review[comment]" 
+                                rows="4" 
+                                placeholder="Share your thoughts about this recipe..."
+                            ></textarea>
+                        </div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
-                    </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" aria-label="Submit your review">Submit Review</button>
+                        </div>
+                    </fieldset>
                 </form>
             </div>
         <?php } else { ?>
@@ -453,11 +458,11 @@ echo display_session_message();
                             <?php echo h(date('M j, Y g:i A', strtotime($review->comment_created_at ?? 'now'))); ?>
                         </span>
                         <?php if($session->is_logged_in() && $session->get_user_id() == $review->user_id) { ?>
-                            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=delete_review'); ?>" class="delete-comment">
+                            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=delete_review'); ?>" class="delete-comment" aria-label="Delete your review">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         <?php } elseif($session->is_logged_in() && ($session->is_admin() || $session->is_super_admin())) { ?>
-                            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment">
+                            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment" aria-label="Delete this review (admin)">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
                         <?php } ?>

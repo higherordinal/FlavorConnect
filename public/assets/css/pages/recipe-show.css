@@ -967,6 +967,19 @@
     margin-bottom: 15px;
 }
 
+.rating-input fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.rating-input legend {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
 .rating-input label {
     font-weight: 600;
     margin: 0;
