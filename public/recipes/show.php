@@ -390,18 +390,18 @@ echo display_session_message();
                 <h3>Add Your Review</h3>
                 <form action="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" method="post">
                     <div class="form-group rating-input">
-                        <label>Rating:</label>
-                        <div class="star-rating">
+                        <label id="rating-label">Rating:</label>
+                        <div class="star-rating" aria-labelledby="rating-label">
                             <input type="radio" id="star1" name="review[rating]" value="1" required>
-                            <label for="star1"><i class="fas fa-star"></i></label>
+                            <label for="star1"><i class="fas fa-star"></i><span class="visually-hidden">1 star</span></label>
                             <input type="radio" id="star2" name="review[rating]" value="2">
-                            <label for="star2"><i class="fas fa-star"></i></label>
+                            <label for="star2"><i class="fas fa-star"></i><span class="visually-hidden">2 stars</span></label>
                             <input type="radio" id="star3" name="review[rating]" value="3">
-                            <label for="star3"><i class="fas fa-star"></i></label>
+                            <label for="star3"><i class="fas fa-star"></i><span class="visually-hidden">3 stars</span></label>
                             <input type="radio" id="star4" name="review[rating]" value="4">
-                            <label for="star4"><i class="fas fa-star"></i></label>
+                            <label for="star4"><i class="fas fa-star"></i><span class="visually-hidden">4 stars</span></label>
                             <input type="radio" id="star5" name="review[rating]" value="5">
-                            <label for="star5"><i class="fas fa-star"></i></label>
+                            <label for="star5"><i class="fas fa-star"></i><span class="visually-hidden">5 stars</span></label>
                         </div>
                     </div>
                     
