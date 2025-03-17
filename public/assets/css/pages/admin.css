@@ -475,8 +475,32 @@ button.action.add:hover {
 }
 
 .status.inactive {
-  background: var(--surface-color);
-  color: var(--text-color);
+  background: var(--error-color);
+  color: var(--on-error-color);
+}
+
+/* ====================================
+   STATUS BADGES
+   ==================================== */
+/* Status Badge */
+
+.status-badge {
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.status-badge.active {
+  background-color: var(--success-color);
+  color: var(--on-success-color);
+  font-weight: 700; /* Bold text for better readability */
+}
+
+.status-badge.inactive {
+  background-color: var(--error-color);
+  color: var(--on-error-color);
+  font-weight: 700; /* Bold text for better readability */
 }
 
 /* ====================================
@@ -633,28 +657,6 @@ button.action.add:hover {
 
 .table tbody tr:hover {
   background-color: var(--hover-color);
-}
-
-/* ====================================
-   STATUS BADGES
-   ==================================== */
-/* Status Badge */
-
-.status-badge {
-  border-radius: 50px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: var(--spacing-xs) var(--spacing-sm);
-}
-
-.status-badge.active {
-  background-color: var(--success-color);
-  color: var(--on-success-color);
-}
-
-.status-badge.inactive {
-  background-color: var(--error-color);
-  color: var(--on-error-color);
 }
 
 /* ====================================

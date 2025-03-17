@@ -17,7 +17,7 @@
   --danger-color-dark: #c82333;
   --danger-color-light: #fff5f5;
   --dark-gray: #7f8c8d;
-  --error-color: #c0392b;
+  --error-color: #a82315;
   --font-primary: "Roboto", sans-serif;
   --font-secondary: "Open Sans", sans-serif;
   --font-size-base: clamp(0.875rem, 2vw, 1rem);
@@ -30,6 +30,8 @@
   --grid-gap-lg: var(--spacing-lg);
   --grid-gap-sm: var(--spacing-sm);
   --light-gray: #ecf0f1;
+  --on-error-color: #ffffff;
+  --on-success-color: #ffffff;
   --primary-color: #0a1a29;
   --secondary-color: #3498db;
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
@@ -41,7 +43,7 @@
   --spacing-2xl: clamp(3rem, 6vw, 4rem);
   --spacing-xl: clamp(2rem, 4vw, 3rem);
   --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
-  --success-color: #27ae60;
+  --success-color: #1a7740;
   --text-color: #2c3e50;
   --text-muted: #95a5a6;
   --transition-fast: 150ms ease-in-out;
@@ -462,12 +464,12 @@ a:hover {
 
 .message.success {
   background-color: var(--success-color);
-  color: var(--color-white);
+  color: var(--on-success-color);
 }
 
 .message.error {
   background-color: var(--error-color);
-  color: var(--color-white);
+  color: var(--on-error-color);
 }
 
 .message.error p {
