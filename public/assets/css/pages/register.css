@@ -14,6 +14,20 @@
   text-align: center;
 }
 
+.form-header h1 {
+  color: var(--primary-color);
+  font-size: var(--font-size-xlarge);
+  letter-spacing: normal;
+  font-weight: 600;
+  text-shadow: none;
+  padding: var(--spacing-sm) 0;
+  margin: 0;
+}
+
+.form-header {
+  margin-bottom: var(--spacing-sm);
+}
+
 /* ====================================
    FORM STRUCTURE
    ==================================== */
