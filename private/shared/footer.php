@@ -1,6 +1,9 @@
     </main> <!-- Close .main-content from header.php -->
     
 <footer role="contentinfo">
+    <!-- Add visually hidden h2 to fix heading hierarchy -->
+    <h2 class="visually-hidden">Footer Information</h2>
+    
     <div class="footer-info">
         <h3>About FlavorConnect</h3>
         <p>Connecting food enthusiasts with their perfect dining experiences.</p>
