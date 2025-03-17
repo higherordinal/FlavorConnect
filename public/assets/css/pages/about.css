@@ -196,6 +196,18 @@
   margin-top: var(--spacing-lg);
 }
 
+.join-section .btn-primary {
+  background-color: var(--accent-color);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.join-section .btn-primary:hover {
+  background-color: var(--color-white);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
 /* ==========================================================================
    Responsive Design
    ========================================================================== */
