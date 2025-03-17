@@ -81,7 +81,11 @@ if(!isset($page_style)) { $page_style = ''; }
                 </label>
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
+                    <?php 
+                    // Check if current page is in recipes section
+                    $is_recipes_page = (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false);
+                    ?>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
                     <li><a href="<?php echo url_for('/about.php'); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                 </ul>
             </nav>

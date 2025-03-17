@@ -93,9 +93,23 @@ if(!isset($page_style)) { $page_style = ''; }
                 </label>
                 <ul>
                     <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $page_title === 'Recipes' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
-                    <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $page_title === 'favorites' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
-                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $page_title === 'Create Recipe' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
+                    <?php 
+                    // Check if current page is in recipes section (but not new.php)
+                    $is_recipes_page = (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false && 
+                                      strpos($_SERVER['PHP_SELF'], '/recipes/new.php') === false);
+                    ?>
+                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
+                    <?php 
+                    // Check if current page is favorites
+                    $is_favorites_page = (strtolower($page_title) === 'favorites' || strpos($_SERVER['PHP_SELF'], '/users/favorites.php') !== false);
+                    ?>
+                    <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $is_favorites_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
+                    <?php
+                    // Check if current page is create recipe (only new.php)
+                    $is_create_recipe_page = (strpos($_SERVER['PHP_SELF'], '/recipes/new.php') !== false || 
+                                            $page_title === 'Create Recipe');
+                    ?>
+                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
                     <?php if($session->is_admin() || $session->is_super_admin()) { 
                         // Check if current page is in admin section
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
