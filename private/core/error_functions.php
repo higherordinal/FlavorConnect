@@ -38,6 +38,7 @@ function display_errors($errors=array(), $display_type='traditional') {
  */
 function error_404() {
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    include(PUBLIC_PATH . '/404.php');
     exit();
 }
 
@@ -47,6 +48,7 @@ function error_404() {
  */
 function error_500() {
     header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+    include(PUBLIC_PATH . '/500.php');
     exit();
 }
 
