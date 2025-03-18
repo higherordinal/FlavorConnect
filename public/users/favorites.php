@@ -145,6 +145,6 @@ $userData = [
     window.initialFavoritesData = <?php echo json_encode($favoritesData); ?>;
 </script>
 
-<script src="<?php echo url_for('/assets/js/pages/recipe-favorites.js?v=' . time()); ?>"></script>
+<script src="<?php echo url_for('/assets/js/pages/user-favorites.js?v=' . time()); ?>"></script>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

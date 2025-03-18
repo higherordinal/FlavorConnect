@@ -90,8 +90,46 @@ try {
         
         $recipe_id = (int)$data['recipe_id'];
         
-        // Toggle favorite status and get result
-        $result = RecipeFavorite::toggle_favorite($user_id, $recipe_id);
+        // Check if the request is coming from the favorites page
+        $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $is_from_favorites_page = strpos($referer, 'favorites.php') !== false;
+        
+        error_log("Referer: " . $referer);
+        error_log("Is from favorites page: " . ($is_from_favorites_page ? 'true' : 'false'));
+        
+        // If the request is from the favorites page, always remove the favorite
+        if ($is_from_favorites_page) {
+            error_log("Removing favorite for user $user_id, recipe $recipe_id (from favorites page)");
+            
+            // Check if it's already favorited
+            $is_favorited = RecipeFavorite::is_favorited($user_id, $recipe_id);
+            
+            if ($is_favorited) {
+                // Remove the favorite
+                $success = RecipeFavorite::remove_favorite($user_id, $recipe_id);
+                $result = [
+                    'success' => $success,
+                    'is_favorited' => false,
+                    'message' => 'Removed from favorites'
+                ];
+            } else {
+                // It's not favorited, so just return success
+                $result = [
+                    'success' => true,
+                    'is_favorited' => false,
+                    'message' => 'Already not favorited'
+                ];
+            }
+        } else {
+            // For other pages, use the normal toggle behavior
+            error_log("Toggling favorite for user $user_id, recipe $recipe_id");
+            $result = RecipeFavorite::toggle_favorite($user_id, $recipe_id);
+        }
+        
+        // Set cache control headers to prevent caching
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
         
         // Return success response
         ob_end_clean();
