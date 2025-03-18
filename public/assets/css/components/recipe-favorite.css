@@ -3,50 +3,30 @@
    ========================================================================== */
 
 .favorite-btn, .unfavorite-btn {
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 50%;
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  display: grid;
-  height: 36px;
-  place-items: center;
-  position: absolute;
-  right: var(--spacing-sm);
-  top: var(--spacing-sm);
-  transition: all 0.2s ease;
-  width: 36px;
-  z-index: 2;
+  background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%;
+  box-shadow: var(--shadow-sm); cursor: pointer; display: grid;
+  height: 36px; width: 36px; place-items: center; position: absolute;
+  right: var(--spacing-sm); top: var(--spacing-sm); 
+  transition: all 0.2s ease; z-index: 2;
 }
 
 .favorite-btn i, .unfavorite-btn i {
-  color: var(--danger-color-dark);
-  font-size: var(--font-size-large);
+  color: var(--danger-color-dark); font-size: var(--font-size-large);
   transition: transform 0.2s ease;
 }
 
 .favorite-btn:hover, .unfavorite-btn:hover {
-  background: var(--color-white);
-  transform: scale(1.1);
+  background: var(--color-white); transform: scale(1.1);
 }
 
-.favorite-btn:hover i, .unfavorite-btn:hover i {
-  transform: scale(1.1);
-}
+.favorite-btn:hover i, .unfavorite-btn:hover i { transform: scale(1.1); }
 
 .favorite-btn.favorited i, .unfavorite-btn i {
-  animation: favorite-pop 0.3s ease-out;
-  color: var(--danger-color-dark);
+  animation: favorite-pop 0.3s ease-out; color: var(--danger-color-dark);
 }
 
 @keyframes favorite-pop {
-  0% {
-    transform: scale(1);
- }
-  50% {
-    transform: scale(1.2);
- }
-  100% {
-    transform: scale(1);
- }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
 }
