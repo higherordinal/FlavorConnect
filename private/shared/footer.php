@@ -5,7 +5,12 @@
     <h2 class="visually-hidden">Footer Information</h2>
     
     <div class="footer-info">
-        <h3>About FlavorConnect</h3>
+        <div class="footer-logo">
+            <a href="<?php echo url_for('/index.php'); ?>" aria-label="FlavorConnect Home">
+                <span class="logo-the"><i class="fas fa-utensils"></i>The</span>
+                <span class="logo-name">FlavorConnect</span>
+            </a>
+        </div>
         <p>Connecting food enthusiasts with their perfect dining experiences.</p>
         <address aria-label="Contact information">
             123 Foodie Lane<br>
