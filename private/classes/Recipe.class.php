@@ -384,7 +384,7 @@ class Recipe extends DatabaseObject {
 
     /**
      * Gets the image path for this recipe
-     * @param string $size The size of the image to return ('original', 'thumb', 'optimized')
+     * @param string $size The size of the image to return ('original', 'thumb', 'optimized', 'banner')
      * @return string Full image path or default placeholder path
      */
     public function get_image_path($size = 'original') {
@@ -408,6 +408,9 @@ class Recipe extends DatabaseObject {
                 break;
             case 'optimized':
                 $file_path = $filename . '_optimized.' . $extension;
+                break;
+            case 'banner':
+                $file_path = $filename . '_banner.' . $extension;
                 break;
             default:
                 return '/assets/uploads/recipes/' . $this->img_file_path;
@@ -853,6 +856,7 @@ class Recipe extends DatabaseObject {
             $original_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
             $thumb_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_thumb.' . $extension;
             $optimized_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_optimized.' . $extension;
+            $banner_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_banner.' . $extension;
             
             // Delete all image files if they exist
             if(file_exists($original_path)) {
@@ -865,6 +869,10 @@ class Recipe extends DatabaseObject {
             
             if(file_exists($optimized_path)) {
                 unlink($optimized_path);
+            }
+            
+            if(file_exists($banner_path)) {
+                unlink($banner_path);
             }
         }
         

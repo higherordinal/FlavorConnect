@@ -21,12 +21,21 @@
     text-align: center;
     padding: var(--spacing-lg) var(--spacing-lg);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    background-image: url('../../images/recipe-form-header.png');
+    background-image: url('/assets/images/recipe-form-header.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
+}
+
+.recipe-form .page-header.with-banner {
+    background-image: url('/assets/images/recipe-form-header.png');
+}
+
+.recipe-form .page-header.with-recipe-banner {
+    /* This will be overridden by the banner image in PHP */
+    background-image: none;
 }
 
 .recipe-form .page-header::before {
@@ -57,10 +66,6 @@
     border-radius: var(--border-radius);
     display: inline-block;
     max-width: 80%;
-}
-
-.recipe-form .page-header[data-recipe-image] {
-    background-image: var(--recipe-image);
 }
 
 /* ====================================

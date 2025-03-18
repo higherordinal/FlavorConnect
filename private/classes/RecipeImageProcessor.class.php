@@ -242,7 +242,7 @@ class RecipeImageProcessor {
     }
     
     /**
-     * Process a recipe image - create thumbnail and optimize for header
+     * Process a recipe image - create thumbnail, banner, and optimize for header
      * 
      * @param string $source_path Path to the source image
      * @param string $destination_dir Directory to save processed images
@@ -270,6 +270,7 @@ class RecipeImageProcessor {
         // Define output paths
         $thumbnail_path = $destination_dir . '/' . $file_basename . '_thumb.' . $file_extension;
         $optimized_path = $destination_dir . '/' . $file_basename . '_optimized.' . $file_extension;
+        $banner_path = $destination_dir . '/' . $file_basename . '_banner.' . $file_extension;
         
         // Try processing with ImageMagick first
         if ($this->isImageMagickAvailable()) {
@@ -279,8 +280,11 @@ class RecipeImageProcessor {
             // Create optimized version
             $optimized_result = $this->optimize($source_path, $optimized_path);
             
-            // If both operations were successful, return true
-            if ($thumbnail_result && $optimized_result) {
+            // Create banner image (1200x400) for form headers
+            $banner_result = $this->resize($source_path, $banner_path, 1200, 400, true);
+            
+            // If all operations were successful, return true
+            if ($thumbnail_result && $optimized_result && $banner_result) {
                 return true;
             }
             
@@ -294,8 +298,9 @@ class RecipeImageProcessor {
         if ($this->isGDAvailable()) {
             $thumbnail_result = $this->processWithGD($source_path, $thumbnail_path, 300, 200);
             $optimized_result = $this->processWithGD($source_path, $optimized_path, 800, 600);
+            $banner_result = $this->processWithGD($source_path, $banner_path, 1200, 400);
             
-            return $thumbnail_result && $optimized_result;
+            return $thumbnail_result && $optimized_result && $banner_result;
         }
         
         // If we get here, both ImageMagick and GD failed or are not available
