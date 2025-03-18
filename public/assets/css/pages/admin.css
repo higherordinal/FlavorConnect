@@ -26,8 +26,15 @@
   width: 100%;
 }
 
+.list thead {
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 35%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+}
+
 .list th {
-  background: var(--primary-color);
   color: var(--accent-color);
   font-weight: 600;
   padding: var(--spacing-md);
@@ -657,9 +664,16 @@ button.action.add:hover {
   width: 100%;
 }
 
+.table thead {
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 35%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+}
+
 .table th {
-  background: var(--primary-color);
-  color: var(--on-primary-color);
+  color: var(--accent-color);
   font-weight: 600;
   padding: var(--spacing-md);
   text-align: left;
