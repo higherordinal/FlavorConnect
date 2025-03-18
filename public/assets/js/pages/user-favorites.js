@@ -1,7 +1,7 @@
 /**
  * @fileoverview User Favorites page functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.2.0
+ * @version 1.3.0
  * @license MIT
  */
 
@@ -34,19 +34,12 @@ window.FlavorConnect.favoritesPage = {
     setupEventListeners: function() {
         console.log('Setting up event listeners for favorites page');
         
-        // Handle unfavorite buttons (both dedicated unfavorite buttons and regular favorite buttons)
+        // Handle unfavorite buttons
         document.querySelectorAll('.favorite-btn.favorited').forEach(button => {
-            console.log('Found favorite button with recipe ID:', button.dataset.recipeId);
-            
-            // Remove any existing event listeners (not perfect but helps)
-            button.removeEventListener('click', this.handleUnfavorite.bind(this));
-            
-            // Add new event listener
-            const boundHandler = this.handleUnfavorite.bind(this);
-            button.addEventListener('click', boundHandler);
-            
-            // Mark the button as having a listener
-            button._hasUnfavoriteListener = true;
+            if (!button._hasUnfavoriteListener) {
+                button.addEventListener('click', this.handleUnfavorite.bind(this));
+                button._hasUnfavoriteListener = true;
+            }
         });
 
         // Handle sort select
@@ -55,80 +48,12 @@ window.FlavorConnect.favoritesPage = {
             sortSelect.addEventListener('change', this.handleSort.bind(this));
         }
 
-        // Make sure favorite buttons are initialized
-        if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.initButtons === 'function') {
-            window.FlavorConnect.favorites.initButtons();
-        }
-        
         // Add a global event listener for any dynamically added favorite buttons
         document.addEventListener('click', (event) => {
             const button = event.target.closest('.favorite-btn.favorited');
             if (button && !button._hasUnfavoriteListener) {
-                console.log('Handling click on dynamically added favorite button');
-                this.handleUnfavorite.call(this, { 
-                    preventDefault: () => {},
-                    stopPropagation: () => {},
-                    currentTarget: button 
-                });
-                event.preventDefault();
-                event.stopPropagation();
-                
-                // Mark the button as having been handled
+                this.handleUnfavorite.call(this, event);
                 button._hasUnfavoriteListener = true;
-            }
-        });
-        
-        // Legacy support for old favorites.js code
-        // This ensures compatibility with any code that might be expecting the old behavior
-        document.querySelectorAll('.favorite-btn').forEach(button => {
-            // Only add this handler if it's not already handled by our main handler
-            if (!button._hasUnfavoriteListener) {
-                button.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const recipeId = button.dataset.recipeId;
-                    if (!recipeId) return;
-                    
-                    let result;
-                    
-                    if (typeof window.toggleFavorite === 'function') {
-                        result = await window.toggleFavorite(recipeId);
-                    } else {
-                        console.error('toggleFavorite function not available');
-                        return;
-                    }
-                    
-                    if (result && result.success) {
-                        // If unfavorited from favorites page, remove the card with animation
-                        const card = button.closest('.recipe-card');
-                        if (card && !result.isFavorited) {
-                            this.removeRecipeCard(button);
-                            
-                            // Check for empty state
-                            this.updateEmptyState();
-                        } else if (button) {
-                            // Update button appearance
-                            if (result.isFavorited) {
-                                button.classList.add('favorited');
-                                const icon = button.querySelector('i');
-                                if (icon) {
-                                    icon.classList.remove('far');
-                                    icon.classList.add('fas');
-                                }
-                            } else {
-                                button.classList.remove('favorited');
-                                const icon = button.querySelector('i');
-                                if (icon) {
-                                    icon.classList.remove('fas');
-                                    icon.classList.add('far');
-                                }
-                            }
-                        }
-                    } else {
-                        console.error('Failed to toggle favorite:', result ? result.error : 'Unknown error');
-                    }
-                });
             }
         });
     },
@@ -173,10 +98,10 @@ window.FlavorConnect.favoritesPage = {
      * @param {Event} event - The click event
      */
     handleUnfavorite: async function(event) {
-        event.preventDefault();
-        event.stopPropagation();
+        if (event.preventDefault) event.preventDefault();
+        if (event.stopPropagation) event.stopPropagation();
         
-        const button = event.currentTarget;
+        const button = event.target.closest('.favorite-btn') || event.currentTarget;
         const recipeId = button.dataset.recipeId;
         
         if (!recipeId) {
@@ -184,119 +109,55 @@ window.FlavorConnect.favoritesPage = {
             return;
         }
         
+        console.log('Unfavoriting recipe ID:', recipeId);
+        
+        // First, remove the card immediately for better UX
+        const card = button.closest('.recipe-card');
+        if (card) {
+            this.removeRecipeCard(button);
+            this.updateEmptyState();
+        }
+        
+        // Then make the API call
         try {
-            console.log('Unfavoriting recipe ID:', recipeId);
-            
             // Use XMLHttpRequest to avoid any caching issues
             const xhr = new XMLHttpRequest();
             
             // Get the base URL
-            const baseUrl = window.FlavorConnect.config && window.FlavorConnect.config.baseUrl 
-                ? window.FlavorConnect.config.baseUrl 
-                : '';
+            const baseUrl = window.FlavorConnect.config?.baseUrl || '/';
             const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
             const fullUrl = `${url}/api/toggle_favorite.php?_=${new Date().getTime()}`; // Add cache buster
             
-            console.log('Making direct API call to:', fullUrl);
+            console.log('Making API call to:', fullUrl);
             
-            // Set up the request
             xhr.open('POST', fullUrl, true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.setRequestHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-            xhr.setRequestHeader('Pragma', 'no-cache');
-            xhr.setRequestHeader('Expires', '0');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             
-            // Set up the callback
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    console.log('API response status:', xhr.status);
-                    console.log('API response text:', xhr.responseText);
-                    
-                    if (xhr.status === 200) {
-                        try {
-                            const result = JSON.parse(xhr.responseText);
-                            console.log('API response parsed:', result);
-                            
-                            if (result.success) {
-                                console.log('Successfully processed favorite toggle');
-                                // Always remove the card from the favorites page
-                                this.removeRecipeCard(button);
-                            } else {
-                                console.error('Failed to process favorite toggle:', result.error || 'Unknown error');
-                            }
-                        } catch (parseError) {
-                            console.error('Error parsing JSON response:', parseError);
+            xhr.onload = () => {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log('Unfavorite response:', response);
+                        
+                        if (!response.success) {
+                            console.error('API reported error:', response.message || 'Unknown error');
                         }
-                    } else {
-                        console.error('HTTP error:', xhr.status);
+                    } catch (e) {
+                        console.error('Error parsing API response:', e);
                     }
+                } else {
+                    console.error('API request failed with status:', xhr.status);
                 }
             };
             
-            // Send the request
-            xhr.send(`recipe_id=${recipeId}`);
+            xhr.onerror = () => {
+                console.error('Network error during API request');
+            };
             
-            // Remove the card immediately for better UX
-            // The API call will happen in the background
-            this.removeRecipeCard(button);
-            
+            xhr.send(JSON.stringify({ recipe_id: recipeId }));
         } catch (error) {
             console.error('Error unfavoriting recipe:', error);
-        }
-    },
-
-    /**
-     * Direct unfavorite implementation as a fallback
-     * @param {string|number} recipeId - The recipe ID to unfavorite
-     * @param {HTMLElement} button - The button element that was clicked
-     */
-    directUnfavorite: async function(recipeId, button) {
-        try {
-            const baseUrl = window.FlavorConnect && window.FlavorConnect.config && window.FlavorConnect.config.baseUrl 
-                ? window.FlavorConnect.config.baseUrl 
-                : '';
-            
-            // Remove trailing slash if present
-            const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-            const fullUrl = `${url}/api/toggle_favorite.php`;
-            
-            const formData = new FormData();
-            formData.append('recipe_id', recipeId);
-            
-            const response = await fetch(fullUrl, {
-                method: 'POST',
-                body: formData,
-                credentials: 'same-origin'
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const contentType = response.headers.get('content-type');
-            let result;
-            
-            if (contentType && contentType.includes('application/json')) {
-                result = await response.json();
-            } else {
-                const text = await response.text();
-                try {
-                    // Try to parse the response as JSON
-                    result = JSON.parse(text);
-                } catch (e) {
-                    console.error('Failed to parse response as JSON:', text);
-                    throw new Error('Invalid response format');
-                }
-            }
-            
-            if (result.success && !result.isFavorited) {
-                this.removeRecipeCard(button);
-            } else {
-                console.error('Failed to unfavorite recipe:', result.error || 'Unknown error');
-            }
-        } catch (error) {
-            console.error('Error in directUnfavorite:', error);
-            throw error;
         }
     },
 
@@ -304,35 +165,26 @@ window.FlavorConnect.favoritesPage = {
      * Handles sorting of favorite recipes
      * @param {Event} e - Change event from sort select
      */
-    handleSort: async function(e) {
+    handleSort: function(e) {
         const sortBy = e.target.value;
+        console.log('Sorting by:', sortBy);
+        
         this.showLoadingState(true);
         
-        try {
-            // Try to use the favorites utility
-            if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.getAllFavorites === 'function') {
-                const favorites = await window.FlavorConnect.favorites.getAllFavorites(sortBy);
-                this.updateFavoritesList(favorites);
-            } else {
-                // Fallback to initial data if available
-                if (window.initialFavoritesData) {
-                    // Sort the data client-side
-                    const sorted = [...window.initialFavoritesData].sort((a, b) => {
-                        if (sortBy === 'name') {
-                            return a.title.localeCompare(b.title);
-                        } else if (sortBy === 'date') {
-                            return new Date(b.date_added) - new Date(a.date_added);
-                        }
-                        return 0;
-                    });
-                    
-                    this.updateFavoritesList(sorted);
-                }
-            }
-        } catch (error) {
-            console.error('Error sorting favorites:', error);
-            this.showError('Failed to sort favorites');
-        } finally {
+        // Reload favorites with new sort
+        if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.getAllFavorites === 'function') {
+            window.FlavorConnect.favorites.getAllFavorites(sortBy)
+                .then(favorites => {
+                    this.updateFavoritesList(favorites);
+                    this.showLoadingState(false);
+                })
+                .catch(error => {
+                    console.error('Error loading sorted favorites:', error);
+                    this.showError('Failed to sort favorites');
+                    this.showLoadingState(false);
+                });
+        } else {
+            this.showError('Sorting functionality not available');
             this.showLoadingState(false);
         }
     },
@@ -342,39 +194,26 @@ window.FlavorConnect.favoritesPage = {
      * @param {Array} favorites - Array of favorite recipe objects
      */
     updateFavoritesList: function(favorites) {
-        const recipeGrid = document.querySelector('.recipe-grid');
-        if (!recipeGrid) return;
-        
-        // Clear existing recipes
-        recipeGrid.innerHTML = '';
-        
-        if (!favorites || favorites.length === 0) {
-            // Show empty state
-            const emptyState = this.createEmptyState();
-            recipeGrid.insertAdjacentHTML('beforebegin', emptyState);
-            recipeGrid.style.display = 'none';
+        const container = document.querySelector('#favorites-container');
+        if (!container) {
+            console.error('Favorites container not found');
             return;
         }
         
-        // Show the grid
-        recipeGrid.style.display = 'grid';
-        
-        // Remove any existing empty state
-        const existingEmptyState = document.querySelector('.no-recipes');
-        if (existingEmptyState) {
-            existingEmptyState.remove();
+        if (!favorites || favorites.length === 0) {
+            container.innerHTML = this.createEmptyState();
+            return;
         }
         
-        // Add recipe cards
+        let html = '';
         favorites.forEach(recipe => {
-            const card = this.createRecipeCard(recipe);
-            recipeGrid.insertAdjacentHTML('beforeend', card);
+            html += this.createRecipeCard(recipe);
         });
         
-        // Initialize favorite buttons
-        if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.initButtons === 'function') {
-            window.FlavorConnect.favorites.initButtons();
-        }
+        container.innerHTML = html;
+        
+        // Re-initialize event listeners for the new buttons
+        this.setupEventListeners();
     },
 
     /**
@@ -383,26 +222,27 @@ window.FlavorConnect.favoritesPage = {
      * @returns {string} HTML string for the recipe card
      */
     createRecipeCard: function(recipe) {
-        const baseUrl = window.FlavorConnect.config && window.FlavorConnect.config.baseUrl 
-            ? window.FlavorConnect.config.baseUrl 
-            : '';
-            
+        const baseUrl = window.FlavorConnect.config?.baseUrl || '/';
+        const recipeUrl = `${baseUrl}recipes/show.php?id=${recipe.id}`;
+        const imageUrl = recipe.image_url || `${baseUrl}assets/images/recipe-placeholder.jpg`;
+        
         return `
-            <article class="recipe-card">
-                <div class="recipe-card-image">
-                    <img src="${baseUrl}${recipe.image_path || '/assets/images/recipe-placeholder.jpg'}" alt="${recipe.title}" loading="lazy">
-                    <button class="favorite-btn favorited" data-recipe-id="${recipe.id}" aria-label="Remove from favorites">
-                        <i class="fas fa-heart"></i>
-                    </button>
+            <div class="recipe-card" data-recipe-id="${recipe.id}">
+                <div class="recipe-card-inner">
+                    <div class="recipe-image">
+                        <a href="${recipeUrl}">
+                            <img src="${imageUrl}" alt="${recipe.title}">
+                        </a>
+                        <button class="favorite-btn favorited" data-recipe-id="${recipe.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="recipe-details">
+                        <h3><a href="${recipeUrl}">${recipe.title}</a></h3>
+                        <p class="recipe-meta">${recipe.cook_time || ''} | ${recipe.difficulty || ''}</p>
+                    </div>
                 </div>
-                <div class="recipe-card-content">
-                    <h3 class="recipe-card-title"><a href="${baseUrl}/recipes/show.php?id=${recipe.id}">${recipe.title}</a></h3>
-                    <p class="recipe-card-meta">
-                        <span class="recipe-card-time"><i class="far fa-clock"></i> ${recipe.cook_time || 'N/A'}</span>
-                        <span class="recipe-card-difficulty"><i class="fas fa-signal"></i> ${recipe.difficulty || 'Easy'}</span>
-                    </p>
-                </div>
-            </article>
+            </div>
         `;
     },
 
@@ -411,14 +251,14 @@ window.FlavorConnect.favoritesPage = {
      * @returns {string} HTML string for empty state
      */
     createEmptyState: function() {
-        const baseUrl = window.FlavorConnect.config && window.FlavorConnect.config.baseUrl 
-            ? window.FlavorConnect.config.baseUrl 
-            : '';
-            
         return `
-            <div class="no-recipes">
-                <p>You haven't favorited any recipes yet. Browse our recipes and click the heart icon to add them to your favorites!</p>
-                <a href="${baseUrl}/recipes/index.php" class="btn btn-primary">Browse Recipes</a>
+            <div class="empty-state">
+                <div class="empty-state-icon">
+                    <i class="far fa-heart"></i>
+                </div>
+                <h2>No Favorites Yet</h2>
+                <p>You haven't added any recipes to your favorites yet.</p>
+                <a href="/" class="btn btn-primary">Explore Recipes</a>
             </div>
         `;
     },
@@ -427,23 +267,12 @@ window.FlavorConnect.favoritesPage = {
      * Updates empty state if no recipes remain
      */
     updateEmptyState: function() {
-        const recipeGrid = document.querySelector('.recipe-grid');
-        if (!recipeGrid) return;
+        const container = document.querySelector('#favorites-container');
+        if (!container) return;
         
-        // Check if there are any recipe cards left (either article.recipe-card or div.recipe-card)
-        const remainingCards = recipeGrid.querySelectorAll('article.recipe-card, .recipe-card');
-        
-        if (remainingCards.length === 0) {
-            // Remove any existing empty state
-            const existingEmptyState = document.querySelector('.no-recipes');
-            if (existingEmptyState) {
-                existingEmptyState.remove();
-            }
-            
-            // Create new empty state
-            const emptyState = this.createEmptyState();
-            recipeGrid.insertAdjacentHTML('beforebegin', emptyState);
-            recipeGrid.style.display = 'none';
+        const cards = container.querySelectorAll('.recipe-card');
+        if (cards.length === 0) {
+            container.innerHTML = this.createEmptyState();
         }
     },
 
@@ -452,25 +281,13 @@ window.FlavorConnect.favoritesPage = {
      * @param {HTMLElement} button - The button element inside the recipe card
      */
     removeRecipeCard: function(button) {
-        // Try to find the recipe card using different selectors
-        // First try article.recipe-card (used in favorites.php)
-        let card = button.closest('article.recipe-card');
+        const card = button.closest('.recipe-card');
+        if (!card) return;
         
-        // If not found, try div.recipe-card (used in dynamically created cards)
-        if (!card) {
-            card = button.closest('.recipe-card');
-        }
+        // Add animation class
+        card.classList.add('removing');
         
-        if (!card) {
-            console.error('Could not find recipe card to remove');
-            return;
-        }
-        
-        // Animate removal
-        card.style.transition = 'opacity 0.3s ease-out, transform 0.3s ease-out';
-        card.style.opacity = '0';
-        card.style.transform = 'scale(0.95)';
-        
+        // Remove after animation completes
         setTimeout(() => {
             card.remove();
             this.updateEmptyState();
@@ -482,22 +299,26 @@ window.FlavorConnect.favoritesPage = {
      * @param {boolean} show - Whether to show or hide loading state
      */
     showLoadingState: function(show) {
-        let loadingEl = document.querySelector('.loading-spinner');
+        const container = document.querySelector('#favorites-container');
+        const loadingEl = document.querySelector('#loading-state');
+        
+        if (!container) return;
         
         if (show) {
             if (!loadingEl) {
-                loadingEl = document.createElement('div');
-                loadingEl.className = 'loading-spinner';
-                loadingEl.innerHTML = '<div class="spinner"></div><p>Loading your favorites...</p>';
+                const loading = document.createElement('div');
+                loading.id = 'loading-state';
+                loading.className = 'loading-state';
+                loading.innerHTML = '<div class="spinner"></div><p>Loading your favorites...</p>';
                 
-                const container = document.querySelector('.recipe-grid');
-                if (container) {
-                    container.parentNode.insertBefore(loadingEl, container);
-                }
+                container.parentNode.insertBefore(loading, container);
             }
-            loadingEl.style.display = 'flex';
-        } else if (loadingEl) {
-            loadingEl.style.display = 'none';
+            container.classList.add('loading');
+        } else {
+            if (loadingEl) {
+                loadingEl.remove();
+            }
+            container.classList.remove('loading');
         }
     },
 
@@ -506,44 +327,32 @@ window.FlavorConnect.favoritesPage = {
      * @param {string} message - Error message to display
      */
     showError: function(message) {
-        let errorEl = document.querySelector('.error-message');
+        console.error(message);
         
-        if (!errorEl) {
-            errorEl = document.createElement('div');
-            errorEl.className = 'error-message';
-            
-            const container = document.querySelector('.recipe-grid');
-            if (container) {
-                container.parentNode.insertBefore(errorEl, container);
+        const container = document.querySelector('#favorites-container');
+        if (!container) return;
+        
+        const errorEl = document.querySelector('#error-message');
+        if (errorEl) {
+            errorEl.textContent = message;
+            return;
+        }
+        
+        const error = document.createElement('div');
+        error.id = 'error-message';
+        error.className = 'error-message';
+        error.textContent = message;
+        
+        container.parentNode.insertBefore(error, container);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            if (error.parentNode) {
+                error.remove();
             }
-        }
-        
-        errorEl.innerHTML = `
-            <div class="alert alert-danger">
-                <p><strong>Error:</strong> ${message}</p>
-                <button type="button" class="close-btn" aria-label="Close">×</button>
-            </div>
-        `;
-        
-        errorEl.style.display = 'block';
-        
-        // Add close button functionality
-        const closeBtn = errorEl.querySelector('.close-btn');
-        if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
-                errorEl.style.display = 'none';
-            });
-        }
+        }, 5000);
     }
 };
-
-// For backward compatibility
-function initializeFavorites() {
-    console.warn('initializeFavorites is deprecated, use window.FlavorConnect.favoritesPage.init instead');
-    if (window.FlavorConnect && window.FlavorConnect.favoritesPage) {
-        window.FlavorConnect.favoritesPage.init();
-    }
-}
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
