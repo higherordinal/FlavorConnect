@@ -492,6 +492,34 @@ a:hover {
 }
 
 /* ==========================================================================
+   Gallery Header
+   ========================================================================== */
+
+.gallery-header {
+  background: linear-gradient(135deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 50%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 70%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+  border-radius: var(--border-radius-sm);
+  display: grid;
+  gap: var(--grid-gap);
+  padding: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.gallery-header h1 {
+  color: var(--accent-color);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xlarge);
+  line-height: 1;
+  margin: 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--accent-color);
+  width: 100%;
+}
+
+/* ==========================================================================
    Transitions & Animations
    ========================================================================== */
 

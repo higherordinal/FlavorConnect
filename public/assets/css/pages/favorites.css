@@ -71,8 +71,4 @@
    Favorites Recipe Gallery
    ========================================================================== */
 
-.gallery-header h1 {
-  border-bottom: 1px solid var(--accent-color);
-  width: 100%;
-  padding-bottom: 0.5rem;
-}
+/* Gallery header styles are now defined globally in main.css */
