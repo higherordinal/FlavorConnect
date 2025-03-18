@@ -19,7 +19,7 @@
   background: linear-gradient(
     135deg,
     var(--primary-color) 60%,
-    var(--accent-color-dark) 100%
+    color-mix(in srgb, var(--primary-color) 40%, var(--accent-color-dark) 60%) 100%
   );
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
@@ -164,8 +164,10 @@
 .join-section {
   background: linear-gradient(
     135deg,
-    var(--primary-color),
-    var(--secondary-color)
+    var(--primary-color) 0%,
+    color-mix(in srgb, var(--primary-color) 80%, var(--secondary-color) 20%) 40%,
+    color-mix(in srgb, var(--primary-color) 60%, var(--secondary-color) 40%) 70%,
+    color-mix(in srgb, var(--primary-color) 70%, var(--secondary-color) 30%) 100%
   );
   border-radius: var(--border-radius-lg);
   color: var(--color-white);

@@ -3,10 +3,9 @@
 footer {
   background: linear-gradient(135deg, 
     var(--primary-color) 0%, 
-    var(--primary-color) 10%, 
-    color-mix(in srgb, var(--secondary-color) 15%, var(--primary-color) 85%) 20%,
-    color-mix(in srgb, var(--secondary-color) 25%, var(--primary-color) 75%) 40%, 
-    color-mix(in srgb, var(--secondary-color) 15%, var(--primary-color) 85%) 50%,
+    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 15%,
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 30%, 
+    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 45%,
     var(--primary-color) 60%);
   color: var(--light-gray);
   display: grid;
