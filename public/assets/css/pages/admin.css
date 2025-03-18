@@ -277,15 +277,20 @@ button.action.add:hover {
    ==================================== */
 .admin-header {
   align-items: center;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
   margin-bottom: var(--spacing-xl);
 }
 
 .admin-header h1 {
-  color: var(--text-color);
-  font-size: 2rem;
+  color: var(--accent-color);
   margin: 0;
+  padding: var(--spacing-md);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xlarge);
+  line-height: 1;
+  text-align: center;
+  border-bottom: none;
 }
 
 .admin-header .username-highlight {
@@ -612,11 +617,21 @@ button.action.add:hover {
 }
 
 .admin-header h1 {
-  background: var(--primary-color);
-  border-bottom: 2px solid var(--color-white);
-  color: var(--text-color);
+  background: linear-gradient(135deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 50%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 70%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+  border-bottom: 2px solid var(--accent-color);
+  color: var(--accent-color);
   margin: 0;
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xlarge);
+  line-height: 1;
+  border-radius: var(--border-radius-sm);
+  text-align: center;
+  border-bottom: none;
 }
 
 .admin-header .username-highlight {

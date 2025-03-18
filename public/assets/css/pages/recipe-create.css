@@ -4,7 +4,6 @@
 .recipe-form {
     background: var(--color-white);
     border-radius: var(--border-radius-lg);
-    border-top: 6px solid var(--primary-color);
     box-shadow: var(--shadow-lg);
     margin: 0 auto;
     max-width: 1000px;
@@ -16,19 +15,24 @@
    ==================================== */
 .recipe-form .page-header {
     display: grid;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-sm);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
     position: relative;
     text-align: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .recipe-form .page-header h1 {
     color: var(--primary-color);
-    font-family: var(--font-primary);
+    font-family: var(--font-secondary);
     font-size: var(--font-size-xxlarge);
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     margin: 0;
+    padding: var(--spacing-sm) 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.05em;
 }
 
 /* ====================================
