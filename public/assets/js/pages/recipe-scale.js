@@ -3,6 +3,9 @@
  * @author FlavorConnect Team
  * @version 1.0.0
  * @license MIT
+ * @description Handles the recipe scaling functionality that allows users to adjust
+ * ingredient quantities based on serving size. This script provides interactive
+ * scaling buttons that recalculate ingredient amounts in real-time.
  */
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -1,9 +1,18 @@
 /**
- * Recipe Filter Component
- * Provides client-side filtering for recipes with server-side fallback
+ * @fileoverview Recipe Filter Component for FlavorConnect
+ * @author FlavorConnect Team
+ * @version 1.1.0
+ * @license MIT
+ * @description Provides client-side filtering for recipes with server-side fallback.
+ * This component enhances the existing PHP-based filtering without disrupting current functionality.
  * 
- * This component is designed to enhance the existing PHP-based filtering
- * without disrupting current functionality.
+ * Features include:
+ * - Text search with debounce
+ * - Filtering by style, diet, and type
+ * - Sorting options
+ * - Pagination
+ * - URL state management
+ * - Graceful fallback to server-side filtering
  */
 
 // Global state for recipe filtering
@@ -36,6 +45,10 @@ window.recipeFilterState = {
 /**
  * Initialize the recipe filter component
  * @param {Object} options Configuration options
+ * @param {boolean} [options.useClientSide=false] Whether to use client-side filtering
+ * @param {Array} [options.initialRecipes=[]] Initial recipes data for client-side filtering
+ * @param {number|null} [options.userId=null] Current user ID
+ * @param {boolean} [options.isLoggedIn=false] Whether user is logged in
  */
 window.initRecipeFilter = function(options = {}) {
     // Only initialize once
@@ -79,6 +92,7 @@ window.initRecipeFilter = function(options = {}) {
 
 /**
  * Cache DOM elements for better performance
+ * Stores references to all filter-related DOM elements
  */
 function cacheFilterElements() {
     const elements = window.recipeFilterState.elements;
@@ -106,6 +120,7 @@ function cacheFilterElements() {
 
 /**
  * Set up event listeners for filter controls
+ * Attaches event handlers to search input, dropdowns, and form submission
  */
 function setupFilterEventListeners() {
     const elements = window.recipeFilterState.elements;

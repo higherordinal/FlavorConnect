@@ -1,3 +1,16 @@
+/**
+ * @fileoverview Recipe Form functionality for FlavorConnect
+ * @author FlavorConnect Team
+ * @version 1.0.0
+ * @license MIT
+ * @description Handles the recipe creation and editing form functionality.
+ * This script provides interactive features for the recipe form including:
+ * - Image preview and alt text generation
+ * - Dynamic ingredient rows with add/remove functionality
+ * - Dynamic direction steps with add/remove functionality
+ * - Form validation
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     // Ensure we only initialize once
     if (window.recipeFormInitialized) return;
@@ -19,7 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormValidation();
 });
 
-// Image Preview Functionality
+/**
+ * Initializes image preview functionality for the recipe image upload
+ * Creates a preview of the selected image below the file input
+ */
 function initializeImagePreview() {
     const imageInput = document.getElementById('recipe_image');
     const previewContainer = document.createElement('div');
@@ -55,7 +71,11 @@ function initializeImagePreview() {
     }
 }
 
-// Alt Text Generation
+/**
+ * Initializes automatic alt text generation based on recipe title
+ * Updates the alt text field when the title changes if the alt text is empty
+ * or matches a previous pattern
+ */
 function initializeAltTextGeneration() {
     const titleInput = document.getElementById('title');
     const altTextInput = document.getElementById('alt_text');
@@ -85,13 +105,21 @@ function initializeAltTextGeneration() {
     }
 }
 
-// Ingredients Functionality
+/**
+ * Initializes dynamic ingredient rows functionality
+ * Allows users to add and remove ingredient rows with quantity, measurement, and name
+ */
 function initializeIngredients() {
     const ingredientsContainer = document.getElementById('ingredients-container');
     const addIngredientBtn = document.getElementById('add-ingredient');
     let ingredientCount = ingredientsContainer ? 
         ingredientsContainer.querySelectorAll('.ingredient-row').length : 0;
 
+    /**
+     * Creates a new ingredient row with quantity, measurement, and name fields
+     * @param {number} index The index of the new ingredient row
+     * @returns {HTMLElement} The created ingredient row element
+     */
     function createIngredientRow(index) {
         const row = document.createElement('div');
         row.className = 'ingredient-row';
@@ -146,6 +174,10 @@ function initializeIngredients() {
         });
     }
 
+    /**
+     * Updates the visibility of remove buttons based on the number of ingredient rows
+     * Hides remove buttons if there's only one row
+     */
     function updateRemoveButtons() {
         const removeButtons = document.querySelectorAll('.remove-ingredient');
         const showButtons = removeButtons.length > 1;
@@ -153,13 +185,21 @@ function initializeIngredients() {
     }
 }
 
-// Directions Functionality
+/**
+ * Initializes dynamic direction steps functionality
+ * Allows users to add and remove direction steps with step number and instructions
+ */
 function initializeDirections() {
     const directionsContainer = document.getElementById('directions-container');
     const addStepBtn = document.getElementById('add-step');
     let stepCount = directionsContainer ? 
         directionsContainer.querySelectorAll('.direction-row').length : 0;
 
+    /**
+     * Creates a new direction step with step number and instructions
+     * @param {number} index The index of the new direction step
+     * @returns {HTMLElement} The created direction step element
+     */
     function createDirectionRow(index) {
         const row = document.createElement('div');
         row.className = 'direction-row';
@@ -179,6 +219,9 @@ function initializeDirections() {
         return row;
     }
 
+    /**
+     * Updates the step numbers and instructions for all direction steps
+     */
     function updateStepNumbers() {
         const steps = directionsContainer.querySelectorAll('.direction-row');
         steps.forEach((step, index) => {
@@ -216,6 +259,10 @@ function initializeDirections() {
         });
     }
 
+    /**
+     * Updates the visibility of remove buttons based on the number of direction steps
+     * Hides remove buttons if there's only one step
+     */
     function updateRemoveStepButtons() {
         const removeButtons = document.querySelectorAll('.remove-step');
         const showButtons = removeButtons.length > 1;
@@ -223,7 +270,10 @@ function initializeDirections() {
     }
 }
 
-// Form Validation
+/**
+ * Initializes form validation functionality
+ * Checks for required fields and displays error messages if necessary
+ */
 function initializeFormValidation() {
     const form = document.querySelector('.recipe-form form');
     if (form) {

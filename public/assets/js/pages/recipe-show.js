@@ -3,9 +3,20 @@
  * @author Henry Vaughn
  * @version 1.3.0
  * @license MIT
+ * @description Handles the interactive functionality on the recipe detail page.
+ * This script manages user interactions including:
+ * - Recipe rating system
+ * - Comment submission
+ * - Print functionality (handled in show.php)
  */
 
 // Functions from common.js that we need
+/**
+ * Safely adds an event listener with error handling
+ * @param {HTMLElement} element - The DOM element to attach the listener to
+ * @param {string} event - The event type to listen for
+ * @param {Function} handler - The event handler function
+ */
 function addSafeEventListener(element, event, handler) {
     if (element) {
         element.addEventListener(event, handler);
@@ -20,6 +31,7 @@ const state = {
 
 /**
  * Initializes recipe show page functionality
+ * Sets up all event listeners and initializes the page state
  */
 function initializeRecipeShow() {
     setupEventListeners();
@@ -27,6 +39,7 @@ function initializeRecipeShow() {
 
 /**
  * Sets up event listeners for the page
+ * Attaches handlers to rating stars and comment form
  */
 function setupEventListeners() {
     // Rating functionality
@@ -46,6 +59,7 @@ function setupEventListeners() {
 
 /**
  * Handles rating click
+ * @param {Event} event - The click event object
  */
 function handleRatingClick(event) {
     // Rating functionality would go here
@@ -54,6 +68,7 @@ function handleRatingClick(event) {
 
 /**
  * Handles comment form submission
+ * @param {Event} event - The submit event object
  */
 function handleCommentSubmit(event) {
     // Comment submission functionality would go here

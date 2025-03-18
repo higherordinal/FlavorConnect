@@ -66,7 +66,6 @@ if(!isset($page_style)) { $page_style = ''; }
     <script src="<?php echo url_for('/assets/js/utils/favorites.js?v=' . time()); ?>"></script>
     
     <!-- Component Scripts -->
-    <script src="<?php echo url_for('/assets/js/components/header.js?v=' . time()); ?>" defer></script>
     <script src="<?php echo url_for('/assets/js/components/member-header.js?v=' . time()); ?>" defer></script>
     <?php if($page_style === 'recipe-form') { ?>
     <script src="<?php echo url_for('/assets/js/pages/recipe-form.js?v=' . time()); ?>" defer></script>

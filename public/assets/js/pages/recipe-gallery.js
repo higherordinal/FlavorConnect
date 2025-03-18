@@ -1,5 +1,17 @@
 /**
- * @fileoverview Recipe gallery functionality
+ * @fileoverview Recipe gallery functionality for FlavorConnect
+ * @author FlavorConnect Team
+ * @version 1.2.0
+ * @license MIT
+ * @description Manages the recipe gallery page functionality including:
+ * - Filter and sort controls
+ * - Recipe card rendering
+ * - Pagination
+ * - Favorites integration
+ * - Dynamic URL updates
+ * 
+ * This script works with server-side rendered recipe cards and enhances
+ * the user experience with client-side filtering and sorting when available.
  */
 
 // Global state
@@ -25,7 +37,10 @@ const API_CONFIG = {
     }
 };
 
-// Initialize gallery
+/**
+ * Initialize the recipe gallery
+ * Sets up event listeners, loads filters from URL, and initializes favorite buttons
+ */
 window.initializeGallery = function() {
     setupEventListeners();
     loadFiltersFromURL();
@@ -34,7 +49,9 @@ window.initializeGallery = function() {
     }
 }
 
-// Set up event listeners
+/**
+ * Set up event listeners for filter and sort controls
+ */
 function setupEventListeners() {
     // Filter select listeners
     const filterSelects = document.querySelectorAll('.filter-select');
@@ -74,6 +91,7 @@ function setupEventListeners() {
 
 /**
  * Applies current filters to recipes and updates the display
+ * Filters, sorts, and renders recipes based on current filter state
  */
 function applyFilters() {
     const filteredRecipes = state.recipes.filter(recipe => {

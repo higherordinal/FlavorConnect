@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Recipe Favorite component for FlavorConnect
+ * @author Henry Vaughn
+ * @version 1.5.0
+ * @license MIT
+ * @description Handles the favorite button functionality for recipe cards and detail pages.
+ * This component initializes all favorite buttons on the page and handles toggling the favorite status.
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     // Find all favorite buttons
     const favoriteButtons = document.querySelectorAll('.favorite-btn');
