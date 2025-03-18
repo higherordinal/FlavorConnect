@@ -23,7 +23,7 @@ footer .footer-info {
 }
 
 footer .footer-info h3 {
-  color: var(--light-gray);
+  color: var(--accent-color);
   margin: 0 0 1rem 0;
 }
 
@@ -40,7 +40,7 @@ footer .footer-links {
 }
 
 footer .footer-links h3 {
-  color: var(--light-gray);
+  color: var(--accent-color);
   margin: 0 0 1rem 0;
 }
 
@@ -69,7 +69,7 @@ footer .footer-social {
 }
 
 footer .footer-social h3 {
-  color: var(--light-gray);
+  color: var(--accent-color);
   margin: 0 0 1rem 0;
 }
 
@@ -92,7 +92,7 @@ footer .footer-social a:hover {
 }
 
 footer .footer-copyright {
-  border-top: 1px solid var(--dark-gray);
+  border-top: 1px solid var(--accent-color);
   color: var(--dark-gray);
   grid-area: copyright;
   margin-top: 1rem;
