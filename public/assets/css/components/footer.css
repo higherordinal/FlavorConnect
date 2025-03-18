@@ -1,7 +1,13 @@
 /* Footer Layout */
 
 footer {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, 
+    var(--primary-color) 0%, 
+    var(--primary-color) 10%, 
+    color-mix(in srgb, var(--secondary-color) 15%, var(--primary-color) 85%) 20%,
+    color-mix(in srgb, var(--secondary-color) 25%, var(--primary-color) 75%) 40%, 
+    color-mix(in srgb, var(--secondary-color) 15%, var(--primary-color) 85%) 50%,
+    var(--primary-color) 60%);
   color: var(--light-gray);
   display: grid;
   gap: 2rem;
