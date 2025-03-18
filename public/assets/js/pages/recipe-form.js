@@ -1,6 +1,6 @@
 /**
  * @fileoverview Recipe Form functionality for FlavorConnect
- * @author FlavorConnect Team
+ * @author Henry Vaughn
  * @version 1.0.0
  * @license MIT
  * @description Handles the recipe creation and editing form functionality.

@@ -1,6 +1,6 @@
 /**
  * @fileoverview Recipe Filter Component for FlavorConnect
- * @author FlavorConnect Team
+ * @author Henry Vaughn
  * @version 1.1.0
  * @license MIT
  * @description Provides client-side filtering for recipes with server-side fallback.

@@ -181,6 +181,54 @@
 }
 
 /* ==========================================================================
+   JavaScript Enhancement / Fallback
+   ========================================================================== */
+
+/* Hide JS-enabled elements when JS is disabled */
+.js-enabled {
+  display: block;
+}
+
+/* Hide JS-disabled elements when JS is enabled */
+.js-disabled {
+  display: none;
+}
+
+/* When JS is disabled, show only the fallback */
+html.no-js .js-enabled {
+  display: none;
+}
+
+html.no-js .js-disabled {
+  display: block;
+}
+
+/* Fallback styles */
+.user-menu-fallback {
+  position: relative;
+}
+
+.user-menu-link {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.user-menu-link:hover {
+  background-color: var(--color-bg-hover);
+}
+
+.user-menu-link .username {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ==========================================================================
    Responsive Styles - Tablet
    ========================================================================== */
 

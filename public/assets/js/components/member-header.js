@@ -1,7 +1,7 @@
 /**
  * @fileoverview Member header component functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.0.0
+ * @version 1.3.0
  * @license MIT
  * @description Handles the member header dropdown menu functionality.
  * This script manages the user menu dropdown in the member header, including:

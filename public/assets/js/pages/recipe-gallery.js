@@ -1,6 +1,6 @@
 /**
  * @fileoverview Recipe gallery functionality for FlavorConnect
- * @author FlavorConnect Team
+ * @author Henry Vaughn
  * @version 1.2.0
  * @license MIT
  * @description Manages the recipe gallery page functionality including:

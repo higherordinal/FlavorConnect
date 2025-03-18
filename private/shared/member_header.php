@@ -4,7 +4,7 @@ if(!isset($page_style)) { $page_style = ''; }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +17,22 @@ if(!isset($page_style)) { $page_style = ''; }
     <link rel="icon" href="<?php echo url_for('/assets/images/flavorconnect_favicon.ico'); ?>" type="image/x-icon">
     <link rel="shortcut icon" href="<?php echo url_for('/assets/images/flavorconnect_favicon.ico'); ?>" type="image/x-icon">
     
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css'); ?>">
+    <!-- Base Styles -->
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css?v=' . time()); ?>">
+    
+    <!-- 404 Page Style -->
     <?php if($page_title === '404 - Page Not Found'): ?>
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/404.css'); ?>">
     <?php endif; ?>
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- JavaScript Detection -->
+    <script>
+        // Add 'js' class to html element if JavaScript is enabled
+        document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+    </script>
     
     <!-- Component Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
@@ -44,21 +55,19 @@ if(!isset($page_style)) { $page_style = ''; }
         // Global configuration
         window.FlavorConnect.config = {
             baseUrl: '<?php echo url_for('/'); ?>',
-            apiBaseUrl: '<?php echo url_for('/api/'); ?>',
             isLoggedIn: <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>,
             userId: <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>,
-            csrfToken: '<?php echo $session->get_csrf_token(); ?>'
+            csrfToken: '<?php echo $session->get_csrf_token(); ?>',
+            apiBaseUrl: '<?php echo url_for('/api'); ?>',
+            currentPage: '<?php echo $_SERVER['REQUEST_URI']; ?>',
+            isFavoritesPage: <?php echo (strpos($_SERVER['REQUEST_URI'], '/users/favorites.php') !== false) ? 'true' : 'false'; ?>,
+            debug: <?php echo defined('DEBUG_MODE') && DEBUG_MODE ? 'true' : 'false'; ?>
         };
         
-        // For backward compatibility
-        window.initialUserData = {
-            isLoggedIn: window.FlavorConnect.config.isLoggedIn,
-            userId: window.FlavorConnect.config.userId,
-            apiBaseUrl: window.FlavorConnect.config.apiBaseUrl
-        };
-        
-        // Debug configuration to console
-        console.log('FlavorConnect Config:', window.FlavorConnect.config);
+        // Log configuration in debug mode
+        if (window.FlavorConnect.config.debug) {
+            console.log('FlavorConnect Config:', window.FlavorConnect.config);
+        }
     </script>
     
     <!-- Core Utility Scripts -->
@@ -124,12 +133,15 @@ if(!isset($page_style)) { $page_style = ''; }
 
             <!-- User Section -->
             <div class="user-section">
-                <div class="user-menu">
+                <?php 
+                $current_user = User::find_by_id($session->get_user_id());
+                $username = $current_user ? h($current_user->username) : 'Guest';
+                $show_dropdown = isset($_GET['menu']) && $_GET['menu'] === 'user';
+                ?>
+                
+                <!-- JavaScript-enhanced dropdown (hidden with CSS if JS is disabled) -->
+                <div class="user-menu js-enabled">
                     <button class="user-menu-button" aria-expanded="false" aria-haspopup="true">
-                        <?php 
-                        $current_user = User::find_by_id($session->get_user_id());
-                        $username = $current_user ? h($current_user->username) : 'Guest';
-                        ?>
                         <span class="username"><i class="fas fa-user-circle" aria-hidden="true"></i> <?php echo $username; ?></span>
                     </button>
                     <div class="dropdown-menu">
@@ -142,6 +154,25 @@ if(!isset($page_style)) { $page_style = ''; }
                         <?php } ?>
                         <a href="<?php echo url_for('/auth/logout.php'); ?>"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
                     </div>
+                </div>
+                
+                <!-- No-JS fallback (hidden with CSS if JS is enabled) -->
+                <div class="user-menu-fallback js-disabled">
+                    <a href="<?php echo url_for($_SERVER['REQUEST_URI'] . (strpos($_SERVER['REQUEST_URI'], '?') !== false ? '&' : '?') . 'menu=user'); ?>" class="user-menu-link">
+                        <span class="username"><i class="fas fa-user-circle" aria-hidden="true"></i> <?php echo $username; ?></span>
+                    </a>
+                    <?php if($show_dropdown): ?>
+                    <div class="dropdown-menu show">
+                        <a href="<?php echo url_for('/users/profile.php'); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
+                        <?php if($session->is_admin() || $session->is_super_admin()) { ?>
+                        <a href="<?php echo url_for('/admin/index.php'); ?>" class="dropdown-item">
+                            <i class="fas fa-cog" aria-hidden="true"></i>
+                            Admin (Dashboard)
+                        </a>
+                        <?php } ?>
+                        <a href="<?php echo url_for('/auth/logout.php'); ?>"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</a>
+                    </div>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

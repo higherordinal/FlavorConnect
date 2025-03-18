@@ -1,6 +1,6 @@
 /**
  * @fileoverview Recipe scaling functionality for FlavorConnect
- * @author FlavorConnect Team
+ * @author Henry Vaughn
  * @version 1.0.0
  * @license MIT
  * @description Handles the recipe scaling functionality that allows users to adjust
