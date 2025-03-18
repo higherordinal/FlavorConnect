@@ -21,8 +21,8 @@ define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 define('WWW_ROOT', isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] : '');  // Base URL for the application
 
 // Upload Settings
-define('MAX_FILE_SIZE', 5242880);  // 5MB in bytes
-define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png']);  // Updated to match validation_functions.php
+define('MAX_FILE_SIZE', 10485760);  // 10MB in bytes
+define('ALLOWED_IMAGE_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']);  // Updated to include all supported formats
 
 // Session Settings
 define('SESSION_EXPIRY', 7200);  // 2 hours in seconds

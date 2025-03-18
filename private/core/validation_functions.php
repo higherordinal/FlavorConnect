@@ -162,7 +162,7 @@ function is_valid_file_upload($file, $options=[]) {
         return false;
     }
 
-    $allowed_types = $options['allowed_types'] ?? ['image/jpeg', 'image/png', 'image/gif'];
+    $allowed_types = $options['allowed_types'] ?? ALLOWED_IMAGE_TYPES;
     $max_size = $options['max_size'] ?? MAX_FILE_SIZE;
 
     if(!in_array($file['type'], $allowed_types)) {
@@ -246,10 +246,10 @@ function validate_recipe($recipe_data) {
     // Image validation (if uploaded)
     if(isset($_FILES['recipe_image']) && $_FILES['recipe_image']['error'] === UPLOAD_ERR_OK) {
         if(!is_valid_file_upload($_FILES['recipe_image'], [
-            'allowed_types' => ['image/jpeg', 'image/png'],
+            'allowed_types' => ALLOWED_IMAGE_TYPES,
             'max_size' => MAX_FILE_SIZE
         ])) {
-            $errors['recipe_image'] = "Please upload a valid image file (JPG, PNG, or GIF) under " . (MAX_FILE_SIZE / 1048576) . "MB.";
+            $errors['recipe_image'] = "Please upload a valid image file (JPG, PNG, GIF, or WebP) under " . (MAX_FILE_SIZE / 1048576) . "MB.";
         }
         
         // Alt text required if image is provided
