@@ -1,0 +1,96 @@
+/* Credits Page Styles */
+
+.credits-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+}
+
+.credits-page h1 {
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-primary);
+    text-align: center;
+}
+
+.credits-section {
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-md);
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+.credits-section h2 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-light);
+}
+
+.credit-item {
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--color-lightest);
+    border-radius: var(--border-radius-sm);
+}
+
+.credit-item h3 {
+    font-size: 1.4rem;
+    color: var(--color-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.credit-item p {
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.6;
+}
+
+.credit-item a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.credit-item a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.license-info {
+    margin-bottom: var(--spacing-md);
+}
+
+.license-info h3 {
+    font-size: 1.4rem;
+    color: var(--color-dark);
+    margin-bottom: var(--spacing-sm);
+}
+
+.license-info ul {
+    list-style-type: disc;
+    margin-left: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+
+.license-info li {
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .credits-page h1 {
+        font-size: 2rem;
+    }
+    
+    .credits-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .credit-item h3,
+    .license-info h3 {
+        font-size: 1.2rem;
+    }
+}
