@@ -213,6 +213,11 @@ class Recipe extends DatabaseObject {
         $temp_ingredients = $this->ingredients;
         $temp_instructions = $this->instructions;
         
+        // Process image if it exists
+        if (!empty($this->img_file_path) && file_exists(PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path)) {
+            $this->process_image();
+        }
+        
         // Call parent save method
         $result = parent::save();
         
@@ -379,12 +384,41 @@ class Recipe extends DatabaseObject {
 
     /**
      * Gets the image path for this recipe
+     * @param string $size The size of the image to return ('original', 'thumb', 'optimized')
      * @return string Full image path or default placeholder path
      */
-    public function get_image_path() {
+    public function get_image_path($size = 'original') {
         if(empty($this->img_file_path) || $this->img_file_path === '') {
             return '/assets/images/recipe-placeholder.png';
         }
+        
+        // If we're not requesting a specific size, just return the original
+        if ($size === 'original') {
+            return '/assets/uploads/recipes/' . $this->img_file_path;
+        }
+        
+        $file_info = pathinfo($this->img_file_path);
+        $filename = $file_info['filename'];
+        $extension = $file_info['extension'];
+        $file_path = '';
+        
+        switch($size) {
+            case 'thumb':
+                $file_path = $filename . '_thumb.' . $extension;
+                break;
+            case 'optimized':
+                $file_path = $filename . '_optimized.' . $extension;
+                break;
+            default:
+                return '/assets/uploads/recipes/' . $this->img_file_path;
+        }
+        
+        // Check if the requested size exists
+        if(!empty($file_path) && file_exists(PUBLIC_PATH . '/assets/uploads/recipes/' . $file_path)) {
+            return '/assets/uploads/recipes/' . $file_path;
+        }
+        
+        // Return original as fallback
         return '/assets/uploads/recipes/' . $this->img_file_path;
     }
 
@@ -780,6 +814,7 @@ class Recipe extends DatabaseObject {
                     continue;
                 }
                 
+                // Check if step_number is provided, otherwise use the index + 1
                 $step_number = isset($instruction['step_number']) ? $instruction['step_number'] : $i + 1;
                 
                 $sql = "INSERT INTO recipe_step (";
@@ -804,20 +839,72 @@ class Recipe extends DatabaseObject {
     }
 
     /**
-     * Deletes the recipe and its associated image file from the server
+     * Deletes the recipe and its associated image files from the server
      * @return bool True if deletion was successful
      */
     public function delete() {
-        // Delete the associated image file if it exists
-        if (!empty($this->img_file_path)) {
-            $image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
-            if (file_exists($image_path)) {
-                unlink($image_path);
+        // Delete associated files first
+        if(!empty($this->img_file_path)) {
+            $file_info = pathinfo($this->img_file_path);
+            $filename = $file_info['filename'];
+            $extension = $file_info['extension'];
+            
+            // Define paths for all versions of the image
+            $original_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
+            $thumb_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_thumb.' . $extension;
+            $optimized_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_optimized.' . $extension;
+            
+            // Delete all image files if they exist
+            if(file_exists($original_path)) {
+                unlink($original_path);
+            }
+            
+            if(file_exists($thumb_path)) {
+                unlink($thumb_path);
+            }
+            
+            if(file_exists($optimized_path)) {
+                unlink($optimized_path);
             }
         }
         
-        // Call the parent delete method to remove from database
-        return parent::delete();
+        // Delete recipe from database
+        $sql = "DELETE FROM " . static::$table_name . " ";
+        $sql .= "WHERE recipe_id='" . self::$database->escape_string($this->recipe_id) . "' ";
+        $sql .= "LIMIT 1";
+        
+        $result = self::$database->query($sql);
+        return $result;
+    }
+
+    /**
+     * Process the recipe image using RecipeImageProcessor
+     * Creates optimized version and thumbnail
+     * @return bool True if processing was successful
+     */
+    protected function process_image() {
+        if (empty($this->img_file_path)) {
+            return false;
+        }
+        
+        // Create image processor
+        require_once('RecipeImageProcessor.class.php');
+        $processor = new RecipeImageProcessor();
+        
+        // Define paths
+        $source_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
+        $destination_dir = PUBLIC_PATH . '/assets/uploads/recipes';
+        
+        // Process the image using the processor
+        $result = $processor->processRecipeImage($source_path, $destination_dir, $this->img_file_path);
+        
+        // Log any errors but continue
+        if ($result === false) {
+            $this->errors[] = "Image processing failed: " . implode(", ", $processor->getErrors());
+            // Even if processing fails, we continue - the original image will be used
+        }
+        
+        return true;
     }
 }
 ?>
