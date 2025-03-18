@@ -4,7 +4,16 @@ FROM php:8.1-apache
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
-    && docker-php-ext-install zip pdo pdo_mysql mysqli
+    imagemagick \
+    libmagickwand-dev \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    && docker-php-ext-install zip pdo pdo_mysql mysqli \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd
 
 # Enable Apache modules
 RUN a2enmod rewrite headers
@@ -17,9 +26,6 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Update the default apache site configuration
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
-
-# Copy custom php.ini
-COPY docker/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html

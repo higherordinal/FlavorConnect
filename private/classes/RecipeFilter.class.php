@@ -5,7 +5,6 @@
  * Supports both server-side filtering and client-side filtering via API
  * 
  * @author Henry Vaughn
- * @version 2.0.0
  */
 class RecipeFilter extends DatabaseObject {
     /** @var string Search query */

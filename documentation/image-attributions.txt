@@ -21,12 +21,11 @@ This document provides attribution information for all images used in the Flavor
 
 ### Recipe Sample/Demo Images
 
-| Recipe Name | Source | Photographer/Creator | License | URL |
+| Source | Photographer/Creator | License | URL |
 |-------------|--------|----------------------|---------|-----|
-| [Recipe Name 1] | Unsplash | [Photographer Name] | Unsplash License | [Image URL] |
-| [Recipe Name 2] | Pexels | [Photographer Name] | Pexels License | [Image URL] |
-| [Recipe Name 3] | AI-Generated | [AI Tool Name] | [AI Platform License] | N/A |
-| [Recipe Name 4] | Original Photography | [Your Name] | All Rights Reserved | N/A |
+| Unsplash | [Photographer Name] | Unsplash License | [Image URL] |
+| Pexels | Polina Tankilevitch | Pexels License | https://www.pexels.com/photo/photo-of-bowl-beside-wooden-chopping-board-3872370/ |
+
 
 ## License Information
 
@@ -58,3 +57,6 @@ For each image used in the project:
 ## Academic Usage Note
 
 This documentation has been prepared to comply with academic requirements for proper attribution of visual assets used in the FlavorConnect project.
+
+Photo by Polina Tankilevitch: https://www.pexels.com/photo/photo-of-bowl-beside-wooden-chopping-board-3872370/
+Photo by Eduardo Krajan: https://www.pexels.com/photo/meat-and-vegetable-meal-on-plate-15186040/

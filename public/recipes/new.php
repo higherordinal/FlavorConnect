@@ -28,39 +28,49 @@ if(is_post_request()) {
     
     if(empty($errors)) {
         // Handle file upload
-        if(isset($_FILES['recipe_image'])) {
-            if($_FILES['recipe_image']['error'] === UPLOAD_ERR_OK) {
-                $temp_path = $_FILES['recipe_image']['tmp_name'];
-                $extension = strtolower(pathinfo($_FILES['recipe_image']['name'], PATHINFO_EXTENSION));
+        if(isset($_FILES['recipe_image']) && $_FILES['recipe_image']['name'] != '') {
+            // Create image processor
+            require_once(PRIVATE_PATH . '/classes/RecipeImageProcessor.class.php');
+            $processor = new RecipeImageProcessor();
+            
+            // Define upload directory
+            $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes';
+            
+            // Check for file upload errors first
+            if ($_FILES['recipe_image']['error'] !== UPLOAD_ERR_OK) {
+                $upload_error_messages = [
+                    UPLOAD_ERR_INI_SIZE => "The uploaded file exceeds the upload_max_filesize directive in php.ini.",
+                    UPLOAD_ERR_FORM_SIZE => "The uploaded file exceeds the MAX_FILE_SIZE directive in the HTML form.",
+                    UPLOAD_ERR_PARTIAL => "The uploaded file was only partially uploaded.",
+                    UPLOAD_ERR_NO_FILE => "No file was uploaded.",
+                    UPLOAD_ERR_NO_TMP_DIR => "Missing a temporary folder.",
+                    UPLOAD_ERR_CANT_WRITE => "Failed to write file to disk.",
+                    UPLOAD_ERR_EXTENSION => "A PHP extension stopped the file upload."
+                ];
                 
-                // Validate file type
-                $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp'];
-                if(!in_array($extension, $allowed_extensions)) {
-                    $errors[] = "Invalid file type. Allowed formats: JPG, PNG, WebP";
-                    $session->message('Invalid file type. Allowed formats: JPG, PNG, WebP', 'error');
+                $error_message = $upload_error_messages[$_FILES['recipe_image']['error']] ?? "Unknown upload error.";
+                $errors['recipe_image'] = $error_message;
+                
+                // Add to session message for non-JavaScript users
+                $session->message('Error uploading image: ' . $error_message, 'error');
+            } else {
+                // Handle image upload and processing
+                $upload_result = $processor->handleImageUpload($_FILES['recipe_image'], $upload_dir);
+                
+                if($upload_result['success']) {
+                    $_POST['img_file_path'] = $upload_result['filename'];
+                    
+                    // If there were processing errors but upload succeeded, show a warning
+                    if(!empty($upload_result['errors'])) {
+                        $session->message('Image uploaded but processing had issues: ' . implode(', ', $upload_result['errors']), 'warning');
+                    }
                 } else {
-                    $filename = uniqid('recipe_') . '.' . $extension;
-                    $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes/';
-                    
-                    // Check if directory exists and create it if it doesn't
-                    if(!file_exists($upload_dir)) {
-                        mkdir($upload_dir, 0755, true);
+                    // Add processor errors to the errors array
+                    foreach ($upload_result['errors'] as $error) {
+                        $errors['recipe_image'] = $error;
                     }
-                    
-                    $target_path = $upload_dir . $filename;
-
-                    // Move file to target location
-                    if(move_uploaded_file($temp_path, $target_path)) {
-                        $_POST['img_file_path'] = $filename;
-                    } else {
-                        $session->message('Error uploading image. Please try again.', 'error');
-                    }
+                    $session->message('Error uploading image: ' . implode(', ', $upload_result['errors']), 'error');
                 }
-            } else if($_FILES['recipe_image']['error'] === UPLOAD_ERR_INI_SIZE || $_FILES['recipe_image']['error'] === UPLOAD_ERR_FORM_SIZE) {
-                $errors[] = "The uploaded image exceeds the maximum file size limit. Please upload a smaller image.";
-                $session->message('The uploaded image exceeds the maximum file size limit.', 'error');
-            } else if($_FILES['recipe_image']['error'] !== UPLOAD_ERR_NO_FILE) {
-                $session->message('Error uploading image. Please try again.', 'error');
             }
         }
 

@@ -63,44 +63,51 @@ if(is_post_request()) {
     if(empty($errors)) {
         // Handle file upload
         if(isset($_FILES['recipe_image']) && $_FILES['recipe_image']['name'] != '') {
-            if($_FILES['recipe_image']['error'] === UPLOAD_ERR_OK) {
-                $temp_path = $_FILES['recipe_image']['tmp_name'];
-                $extension = strtolower(pathinfo($_FILES['recipe_image']['name'], PATHINFO_EXTENSION));
+            // Create image processor
+            require_once(PRIVATE_PATH . '/classes/RecipeImageProcessor.class.php');
+            $processor = new RecipeImageProcessor();
+            
+            // Define upload directory
+            $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes';
+            
+            // Get old filename if exists
+            $old_filename = $recipe->img_file_path;
+            
+            // Check for file upload errors first
+            if ($_FILES['recipe_image']['error'] !== UPLOAD_ERR_OK) {
+                $upload_error_messages = [
+                    UPLOAD_ERR_INI_SIZE => "The uploaded file exceeds the upload_max_filesize directive in php.ini.",
+                    UPLOAD_ERR_FORM_SIZE => "The uploaded file exceeds the MAX_FILE_SIZE directive in the HTML form.",
+                    UPLOAD_ERR_PARTIAL => "The uploaded file was only partially uploaded.",
+                    UPLOAD_ERR_NO_FILE => "No file was uploaded.",
+                    UPLOAD_ERR_NO_TMP_DIR => "Missing a temporary folder.",
+                    UPLOAD_ERR_CANT_WRITE => "Failed to write file to disk.",
+                    UPLOAD_ERR_EXTENSION => "A PHP extension stopped the file upload."
+                ];
                 
-                // Validate file type
-                $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp'];
-                if(!in_array($extension, $allowed_extensions)) {
-                    $errors[] = "Invalid file type. Allowed formats: JPG, PNG, WebP";
-                    $session->message('Invalid file type. Allowed formats: JPG, PNG, WebP', 'error');
-                } else {
-                    $filename = uniqid('recipe_') . '.' . $extension;
-                    $target_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename;
+                $error_message = $upload_error_messages[$_FILES['recipe_image']['error']] ?? "Unknown upload error.";
+                $errors['recipe_image'] = $error_message;
+                
+                // Add to session message for non-JavaScript users
+                $session->message('Error uploading image: ' . $error_message, 'error');
+            } else {
+                // Handle image upload and processing
+                $upload_result = $processor->handleImageUpload($_FILES['recipe_image'], $upload_dir, $old_filename);
+                
+                if($upload_result['success']) {
+                    $_POST['img_file_path'] = $upload_result['filename'];
                     
-                    // Ensure the directory exists
-                    $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes/';
-                    if (!is_dir($upload_dir)) {
-                        mkdir($upload_dir, 0755, true);
+                    // If there were processing errors but upload succeeded, show a warning
+                    if(!empty($upload_result['errors'])) {
+                        $session->message('Image uploaded but processing had issues: ' . implode(', ', $upload_result['errors']), 'warning');
                     }
-
-                    // Move file to target location
-                    if(move_uploaded_file($temp_path, $target_path)) {
-                        // Delete old image if exists
-                        if(!empty($recipe->img_file_path)) {
-                            $old_image_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $recipe->img_file_path;
-                            if(file_exists($old_image_path)) {
-                                unlink($old_image_path);
-                            }
-                        }
-                        $_POST['img_file_path'] = $filename;
-                    } else {
-                        $session->message('Error uploading image. Please try again.', 'error');
+                } else {
+                    // Add processor errors to the errors array
+                    foreach ($upload_result['errors'] as $error) {
+                        $errors['recipe_image'] = $error;
                     }
+                    $session->message('Error uploading image: ' . implode(', ', $upload_result['errors']), 'error');
                 }
-            } else if($_FILES['recipe_image']['error'] === UPLOAD_ERR_INI_SIZE || $_FILES['recipe_image']['error'] === UPLOAD_ERR_FORM_SIZE) {
-                $errors[] = "The uploaded image exceeds the maximum file size limit. Please upload a smaller image.";
-                $session->message('The uploaded image exceeds the maximum file size limit.', 'error');
-            } else if($_FILES['recipe_image']['error'] !== UPLOAD_ERR_NO_FILE) {
-                $session->message('Error uploading image. Please try again.', 'error');
             }
         }
 
@@ -121,62 +128,52 @@ if(is_post_request()) {
             
             $recipe->prep_time = ($prep_hours * 3600) + ($prep_minutes * 60);
             $recipe->cook_time = ($cook_hours * 3600) + ($cook_minutes * 60);
+            $recipe->servings = $_POST['servings'] ?? $recipe->servings;
+            $recipe->alt_text = $_POST['alt_text'] ?? $recipe->alt_text;
             
-            $recipe->video_url = $_POST['video_url'] ?? $recipe->video_url;
+            // Set image file path if it was uploaded
             if(isset($_POST['img_file_path'])) {
                 $recipe->img_file_path = $_POST['img_file_path'];
             }
-            $recipe->alt_text = $_POST['alt_text'] ?? $recipe->alt_text;
-            $recipe->updated_at = date('Y-m-d H:i:s');
             
             // Process ingredients
-            if(isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
-                // Reset ingredients array
-                $recipe->ingredients = [];
-                
-                foreach($_POST['ingredients'] as $i => $ingredient_data) {
-                    if(!empty($ingredient_data['name'])) {
-                        $recipe->ingredients[] = [
-                            'name' => $ingredient_data['name'],
-                            'quantity' => $ingredient_data['quantity'] ?? '',
-                            'measurement_id' => $ingredient_data['measurement_id'] ?? ''
+            $ingredients = [];
+            if(isset($_POST['ingredients'])) {
+                foreach($_POST['ingredients'] as $i => $ingredient) {
+                    if(!empty($ingredient['name'])) {
+                        $ingredients[] = [
+                            'name' => $ingredient['name'],
+                            'quantity' => $ingredient['quantity'] ?? '',
+                            'measurement_id' => $ingredient['measurement_id'] ?? null,
+                            'sort_order' => $i + 1
                         ];
                     }
                 }
             }
+            $recipe->ingredients = $ingredients;
             
             // Process instructions
-            if(isset($_POST['steps']) && is_array($_POST['steps'])) {
-                // Reset instructions array
-                $recipe->instructions = [];
-                
-                foreach($_POST['steps'] as $i => $step_data) {
-                    if(!empty($step_data['instruction'])) {
-                        $recipe->instructions[] = [
-                            'instruction' => $step_data['instruction'],
+            $instructions = [];
+            if(isset($_POST['steps'])) {
+                foreach($_POST['steps'] as $i => $step) {
+                    if(!empty($step['instruction'])) {
+                        $instructions[] = [
+                            'instruction' => $step['instruction'],
                             'step_number' => $i + 1
                         ];
                     }
                 }
             }
+            $recipe->instructions = $instructions;
             
             // Save the recipe
-            $result = $recipe->save();
-            
-            if($result === true) {
-                // Success
-                $session->message('Recipe updated successfully.');
-                // Ensure we redirect to the show page
-                header("Location: " . url_for('/recipes/show.php?id=' . $id));
-                exit;
+            if($recipe->save()) {
+                $session->message('Recipe updated successfully!');
+                redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
             } else {
-                // Database save failed
-                $errors[] = "Failed to save recipe.";
-                
-                // Merge recipe errors with form errors
-                if (!empty($recipe->errors)) {
-                    $errors = array_merge($errors, $recipe->errors);
-                }
+                // If there were errors during save, add them to the errors array
+                $errors = array_merge($errors, $recipe->errors);
+                $session->message('Error updating recipe. Please try again.', 'error');
             }
         }
     }

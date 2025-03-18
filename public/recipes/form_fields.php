@@ -239,12 +239,13 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
         <h2 class="h4">Recipe Image</h2>
         <div class="form-group">
             <label for="recipe_image">Recipe Image</label>
-            <input type="file" id="recipe_image" name="recipe_image" accept="image/jpeg, image/png, image/gif, image/webp">
-            <small class="form-text text-muted">Upload a high-quality image of your recipe (JPEG, PNG, GIF, or WebP).</small>
+            <input type="file" id="recipe_image" name="recipe_image" accept="image/jpeg, image/png, image/gif, image/webp" data-max-size="10485760" data-error-message="File is too large. Maximum size is 10MB">
+            <small class="form-text text-muted">Upload a high-quality image of your recipe (JPEG, PNG, GIF, or WebP). Maximum size: 10MB.</small>
+            <?php echo display_error('recipe_image', $errors); ?>
             <?php if(isset($recipe) && $recipe->img_file_path): ?>
-                <div class="current-image">
+                <div class="current-image" style="max-width: 300px;">
                     <p>Current image:</p>
-                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="<?php echo h($recipe->title); ?>" class="img-thumbnail">
+                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="<?php echo h($recipe->title); ?>" class="img-thumbnail" style="max-width: 100%; height: auto;">
                 </div>
             <?php endif; ?>
         </div>

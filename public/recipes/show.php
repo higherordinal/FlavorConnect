@@ -33,7 +33,7 @@ if (method_exists($recipe, 'style') && $recipe->style()) {
 if (method_exists($recipe, 'diet') && $recipe->diet()) {
     $page_keywords .= ', ' . $recipe->diet()->name;
 }
-$page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path());
+$page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path('optimized'));
 
 // Determine back link based on referrer
 $ref = $_GET['ref'] ?? '';
@@ -200,8 +200,13 @@ echo display_session_message();
     </div>
     
     <div class="recipe-header-image">
-        <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
-             alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
+        <?php if ($recipe->img_file_path): ?>
+            <img src="<?php echo url_for($recipe->get_image_path('optimized')); ?>" 
+                 alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
+        <?php else: ?>
+            <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+                 alt="<?php echo h($recipe->title); ?>">
+        <?php endif; ?>
         <div class="recipe-header-overlay">
             <div class="recipe-header-content">
                 <div class="recipe-title-section">

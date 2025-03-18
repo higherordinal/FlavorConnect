@@ -161,6 +161,9 @@ class Recipe extends DatabaseObject {
         $this->validate();
         if(!empty($this->errors)) { return false; }
 
+        // Set the updated_at timestamp
+        $this->updated_at = date('Y-m-d H:i:s');
+
         // If image is being updated, delete the old image file
         if (array_key_exists('img_file_path', $this->attributes())) {
             $old_recipe = self::find_by_id($this->recipe_id);
@@ -184,6 +187,8 @@ class Recipe extends DatabaseObject {
                 }
                 if (in_array($key, ['style_id', 'diet_id', 'type_id', 'prep_time', 'cook_time'])) {
                     $attribute_pairs[] = "{$key}=NULL";
+                } else if ($key === 'updated_at') {
+                    $attribute_pairs[] = "{$key}='" . date('Y-m-d H:i:s') . "'";
                 } else {
                     $attribute_pairs[] = "{$key}=''"; // Set to empty string instead of NULL
                 }
@@ -213,28 +218,26 @@ class Recipe extends DatabaseObject {
         $temp_ingredients = $this->ingredients;
         $temp_instructions = $this->instructions;
         
-        // Process image if it exists
-        if (!empty($this->img_file_path) && file_exists(PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path)) {
-            $this->process_image();
-        }
-        
-        // Call parent save method
+        // Call parent save method first to ensure we have a recipe_id
         $result = parent::save();
         
-        // Restore ingredients and instructions
-        $this->ingredients = $temp_ingredients;
-        $this->instructions = $temp_instructions;
-        
-        if($result) {
+        if ($result) {
+            // Process image if it exists
+            if (!empty($this->img_file_path) && file_exists(PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path)) {
+                $this->process_image();
+            }
+            
+            // Restore ingredients and instructions
+            $this->ingredients = $temp_ingredients;
+            $this->instructions = $temp_instructions;
+            
             // Save ingredients and instructions
             $ingredients_result = $this->save_ingredients();
             $instructions_result = $this->save_instructions();
             
-            // If either save failed, return false
-            if(!$ingredients_result || !$instructions_result) {
-                return false;
-            }
+            return $ingredients_result && $instructions_result;
         }
+        
         return $result;
     }
 
@@ -385,7 +388,7 @@ class Recipe extends DatabaseObject {
     /**
      * Gets the image path for this recipe
      * @param string $size The size of the image to return ('original', 'thumb', 'optimized', 'banner')
-     * @return string Full image path or default placeholder path
+     * @return string Relative image path for use with url_for function
      */
     public function get_image_path($size = 'original') {
         if (!$this->img_file_path) {
@@ -393,28 +396,22 @@ class Recipe extends DatabaseObject {
         }
         
         $path_parts = pathinfo($this->img_file_path);
-        $directory = $path_parts['dirname'];
         $filename = $path_parts['filename'];
         $extension = 'webp'; // Always use WebP for processed images
         
-        $file_path = '';
-        
+        // For processed images (thumb, optimized, banner), we use the filename without extension
+        // and append the size suffix and .webp extension
         switch($size) {
             case 'thumb':
-                $file_path = $filename . '_thumb.' . $extension;
-                break;
+                return '/assets/uploads/recipes/' . $filename . '_thumb.' . $extension;
             case 'optimized':
-                $file_path = $filename . '_optimized.' . $extension;
-                break;
+                return '/assets/uploads/recipes/' . $filename . '_optimized.' . $extension;
             case 'banner':
-                $file_path = $filename . '_banner.' . $extension;
-                break;
+                return '/assets/uploads/recipes/' . $filename . '_banner.' . $extension;
             case 'original':
             default:
-                return $this->img_file_path;
+                return '/assets/uploads/recipes/' . $this->img_file_path;
         }
-        
-        return $directory . '/' . $file_path;
     }
 
     /**
@@ -724,42 +721,69 @@ class Recipe extends DatabaseObject {
      * @return bool True if successful
      */
     protected function save_ingredients() {
-        // First, delete any existing recipe ingredients
-        $sql = "DELETE FROM recipe_ingredient WHERE recipe_id='" . self::$database->escape_string($this->recipe_id) . "'";
-        self::$database->query($sql);
+        // First delete all existing ingredients
+        $sql = "DELETE FROM recipe_ingredient WHERE recipe_id = ?";
+        $stmt = self::$database->prepare($sql);
+        
+        if(!$stmt) {
+            $this->errors[] = "Failed to prepare delete statement: " . self::$database->error;
+            error_log("Failed to prepare delete statement: " . self::$database->error);
+            return false;
+        }
+        
+        $stmt->bind_param("i", $this->recipe_id);
+        $stmt->execute();
+        $stmt->close();
+        
+        // Debug: Log the number of ingredients
+        error_log("Saving " . count($this->ingredients ?? []) . " ingredients for recipe ID: " . $this->recipe_id);
         
         // Then add all recipe ingredients
         if(!empty($this->ingredients)) {
+            // Prepare the insert statement once
+            $sql = "INSERT INTO recipe_ingredient (recipe_id, ingredient_id, quantity, measurement_id) VALUES (?, ?, ?, ?)";
+            $stmt = self::$database->prepare($sql);
+            
+            if(!$stmt) {
+                $this->errors[] = "Failed to prepare insert statement: " . self::$database->error;
+                error_log("Failed to prepare insert statement: " . self::$database->error);
+                return false;
+            }
+            
             foreach($this->ingredients as $i => $ingredient) {
                 // Skip empty ingredients
                 if(empty($ingredient['name'])) {
+                    error_log("Skipping empty ingredient at index " . $i);
                     continue;
                 }
+                
+                // Debug: Log the ingredient being processed
+                error_log("Processing ingredient: " . $ingredient['name'] . ", Quantity: " . ($ingredient['quantity'] ?? 'none') . ", Measurement ID: " . ($ingredient['measurement_id'] ?? 'none'));
                 
                 // Check if ingredient exists or create it
                 $ingredient_id = $this->get_or_create_ingredient($ingredient['name']);
                 
+                // Debug: Log the ingredient ID
+                error_log("Ingredient ID: " . $ingredient_id);
+                
                 // Handle measurement_id - convert empty values to NULL
-                $measurement_id = !empty($ingredient['measurement_id']) ? "'" . self::$database->escape_string($ingredient['measurement_id']) . "'" : "NULL";
+                $measurement_id = !empty($ingredient['measurement_id']) ? $ingredient['measurement_id'] : null;
+                $quantity = $ingredient['quantity'] ?? '';
                 
-                $sql = "INSERT INTO recipe_ingredient (";
-                $sql .= "recipe_id, ingredient_id, quantity, measurement_id";
-                $sql .= ") VALUES (";
-                $sql .= "'" . self::$database->escape_string($this->recipe_id) . "', ";
-                $sql .= "'" . self::$database->escape_string($ingredient_id) . "', ";
-                $sql .= "'" . self::$database->escape_string($ingredient['quantity'] ?? '') . "', ";
-                $sql .= $measurement_id;
-                $sql .= ")";
-                
-                $result = self::$database->query($sql);
+                // Bind parameters and execute
+                $stmt->bind_param("iisi", $this->recipe_id, $ingredient_id, $quantity, $measurement_id);
+                $result = $stmt->execute();
                 
                 if(!$result) {
-                    $this->errors[] = "Failed to save ingredient: " . self::$database->error;
-                    return false;
+                    $this->errors[] = "Failed to save ingredient: " . $stmt->error;
+                    error_log("Failed to save ingredient: " . $stmt->error . " for ingredient: " . $ingredient['name']);
                 }
             }
-            return true;
+            
+            $stmt->close();
+            return empty($this->errors);
         } else {
+            error_log("No ingredients to save for recipe ID: " . $this->recipe_id);
             return true; // No ingredients to save is not an error
         }
     }
@@ -779,14 +803,27 @@ class Recipe extends DatabaseObject {
             return $row['ingredient_id'];
         }
         
-        // Create new ingredient
-        $sql = "INSERT INTO ingredient (name, recipe_id) VALUES ('" . self::$database->escape_string($name) . "', '" . self::$database->escape_string($this->recipe_id) . "')";
-        $result = self::$database->query($sql);
+        // Create new ingredient - use prepared statement to avoid SQL injection
+        $sql = "INSERT INTO ingredient (name) VALUES (?)";
+        $stmt = self::$database->prepare($sql);
+        
+        if(!$stmt) {
+            $this->errors[] = "Failed to prepare statement: " . self::$database->error;
+            error_log("Failed to prepare statement: " . self::$database->error);
+            return 1; // Return a default value if prepare fails
+        }
+        
+        $stmt->bind_param("s", $name);
+        $result = $stmt->execute();
         
         if($result) {
-            return self::$database->insert_id;
+            $ingredient_id = $stmt->insert_id;
+            $stmt->close();
+            return $ingredient_id;
         } else {
-            $this->errors[] = "Failed to create ingredient: " . self::$database->error;
+            $this->errors[] = "Failed to create ingredient: " . $stmt->error;
+            error_log("Failed to create ingredient: " . $stmt->error);
+            $stmt->close();
             // Return a default value if insert fails
             return 1;
         }
@@ -878,9 +915,9 @@ class Recipe extends DatabaseObject {
     }
 
     /**
-     * Process the recipe image using RecipeImageProcessor
-     * Creates optimized version and thumbnail
-     * @return bool True if processing was successful
+     * Process the recipe image to create thumbnail, optimized, and banner versions
+     * 
+     * @return bool True if processing was successful, false otherwise
      */
     protected function process_image() {
         if (empty($this->img_file_path)) {
@@ -888,19 +925,33 @@ class Recipe extends DatabaseObject {
         }
         
         // Create image processor
-        require_once('RecipeImageProcessor.class.php');
         $processor = new RecipeImageProcessor();
         
         // Define paths
         $source_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
         $destination_dir = PUBLIC_PATH . '/assets/uploads/recipes';
         
+        // Check if source file exists
+        if (!file_exists($source_path)) {
+            $this->errors[] = "Source image file not found: {$source_path}";
+            return false;
+        }
+        
+        // Get filename without extension for processing
+        $path_parts = pathinfo($this->img_file_path);
+        $filename = $path_parts['filename'];
+        
         // Process the image using the processor
-        $result = $processor->processRecipeImage($source_path, $destination_dir, $this->img_file_path);
+        $result = $processor->processRecipeImage($source_path, $destination_dir, $filename);
         
         // Log any errors but continue
         if ($result === false) {
-            $this->errors[] = "Image processing failed: " . implode(", ", $processor->getErrors());
+            $errors = $processor->getErrors();
+            if (is_array($errors) && !empty($errors)) {
+                $this->errors[] = "Image processing failed: " . implode(", ", $errors);
+            } else {
+                $this->errors[] = "Image processing failed with unknown error";
+            }
             // Even if processing fails, we continue - the original image will be used
         }
         

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Mar 17, 2025 at 10:01 PM
+-- Generation Time: Mar 18, 2025 at 12:26 PM
 -- Server version: 8.0.41-32
 -- PHP Version: 8.3.15
 
@@ -17,16 +17,20 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+-- SQL to drop the database if it exists
+DROP DATABASE IF EXISTS `flavorconnect`;
+
+
 --
 -- Database: `swbhdnmy_db_flavorconnect`
 --
+CREATE DATABASE IF NOT EXISTS `flavorconnect` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `flavorconnect`;
 
--- SQL to drop the database if it exists
-DROP DATABASE IF EXISTS `swbhdnmy_db_flavorconnect`;
-
--- Create the database
-CREATE DATABASE IF NOT EXISTS `swbhdnmy_db_flavorconnect` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `swbhdnmy_db_flavorconnect`;
+-- Create user and grant privileges
+CREATE USER IF NOT EXISTS 'hcvaughn'@'%' IDENTIFIED BY '@connect4Establish';
+GRANT ALL PRIVILEGES ON flavorconnect.* TO 'hcvaughn'@'%';
+FLUSH PRIVILEGES;
 
 -- --------------------------------------------------------
 
@@ -609,40 +613,40 @@ CREATE TABLE `recipe` (
 --
 
 INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`, `style_id`, `diet_id`, `prep_time`, `cook_time`, `video_url`, `img_file_path`, `alt_text`, `is_featured`, `created_at`, `updated_at`) VALUES
-(1, 3, 'Classic Spaghetti Carbonara', 'A traditional Italian pasta dish made with eggs, cheese, pancetta, and black pepper.', 10, 2, 8, 1200, 1800, '', 'recipe_67c31a7bdca1c.jpg', 'Classic Spaghetti Carbonara', 1, '2025-02-05 14:50:27', NULL),
-(2, 4, 'Breakfast Burrito', 'A hearty breakfast wrap filled with scrambled eggs, cheese, and fresh vegetables.', 1, 3, 7, 900, 600, '', '', 'Breakfast Burrito image', 0, '2025-02-05 14:50:27', NULL),
-(3, 5, 'Vegetarian Buddha Bowl', 'A nourishing bowl of grains, roasted vegetables, and protein-rich toppings.', 10, 11, 1, 1800, 2400, '', 'recipe_67c31dfe1939b.jpg', 'Vegetarian Buddha Bowl image', 1, '2025-02-05 14:50:27', NULL),
-(4, 2, 'Mediterranean Quinoa Salad', 'A refreshing salad with quinoa, fresh vegetables, and Mediterranean flavors.', 9, 8, 1, 1200, 1800, '', 'recipe_67c340f42b61c.jpg', 'Mediterranean Quinoa Salad image', 0, '2025-02-05 14:50:27', NULL),
-(5, 3, 'Spicy Thai Curry', 'A flavorful and aromatic curry with vegetables and tofu in coconut milk.', 10, 7, 2, 1500, 2400, '', 'recipe_67c3703f6bda3.jpg', 'Spicy Thai Curry image', 1, '2025-02-05 14:50:27', NULL),
-(6, 6, 'Mushroom Risotto', 'A creamy and flavorful risotto with mushrooms and parmesan.', 10, 2, 8, 1800, 2400, '', 'recipe_67c32ae999f64.jpg', 'Mushroom Risotto', 1, '2025-02-27 15:07:22', NULL),
-(7, 1, 'BBQ Pulled Pork Sandwich', 'Slow-cooked pulled pork with BBQ sauce served on a bun.', 3, 1, 12, 3600, 18000, '', 'recipe_67c31e7275f33.jpg', 'BBQ Pulled Pork Sandwich image', 0, '2025-02-27 15:07:37', NULL),
-(8, 2, 'Lemon Garlic Roasted Chicken', 'Juicy roasted chicken with lemon, garlic, and herbs.', 10, 9, 12, 1200, 5400, '', 'recipe_67c3408fe0d9c.jpg', 'Lemon Garlic Roasted Chicken image', 1, '2025-02-27 15:08:08', NULL),
-(9, 6, 'Vegetable Pad Thai', 'A delicious Thai stir-fried noodle dish with vegetables and peanuts.', 10, 7, 2, 1500, 2400, '', 'recipe_67c37774b5b71.jpg', 'Vegetable Pad Thai image', 1, '2025-02-27 15:08:42', '2025-03-06 04:05:17'),
-(10, 4, 'Classic Margherita Pizza', 'Traditional Neapolitan pizza with tomato, mozzarella, and basil.', 10, 2, 1, 2400, 900, '', 'recipe_67c376fd3102e.jpg', 'Classic Margherita Pizza image', 1, '2025-02-27 15:09:02', NULL),
-(11, 4, 'Homemade Hummus', 'A smooth and creamy hummus made from chickpeas and tahini.', 9, 8, 1, 600, 0, '', 'recipe_67c377e1ee040.jpg', 'Homemade Hummus image', 0, '2025-02-27 15:09:24', NULL),
-(12, 3, 'Spicy Black Bean Tacos', 'Delicious and spicy black bean tacos topped with fresh ingredients.', 10, 3, 2, 1200, 600, '', 'recipe_67c314f0569d0.jpg', 'Spicy Black Bean Tacos image', 1, '2025-02-27 15:10:03', NULL),
-(13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, '', 'recipe_67c318a1b739c.jpg', 'Thai Green Curry image', 1, '2025-02-27 15:10:17', NULL),
-(14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', 'recipe_67c283f5882ba.jpg', 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17', NULL),
-(15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', 'recipe_67c28600ddeda.jpg', 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49', NULL),
-(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', 'recipe_67c285b030fe4.jpg', 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-07 03:44:18'),
-(84, 11, 'Sunrise Bacon', 'Make this delicious and crispy bacon in the oven with virtually zero clean up!', 1, 1, 8, 600, 1200, '', 'recipe_67cb22a6a1555.jpg', 'Sunrise Bacon recipe image', 0, '2025-03-07 18:45:26', '2025-03-07 18:45:26'),
-(85, 12, 'Hearty Weekend Stew', 'A hearty and healthy weekend stew.', 8, 1, 12, 1800, 12600, '', 'recipe_67cb8b1d5c018.jpg', 'Hearty Weekend Stew recipe image', 0, '2025-03-08 02:11:09', '2025-03-08 19:02:34'),
-(86, 10, 'Keto Sausage Balls', 'Keto recipe for easy breakfast or snack', 1, 1, 5, 1800, 900, '', 'recipe_67cc644f6b593.jpg', 'Keto Sausage Balls recipe image', 0, '2025-03-08 17:37:51', '2025-03-08 17:37:51'),
-(87, 14, 'Knuckle Sandwich', 'Let\'s dish out some justice. ', 10, 1, 12, 300, 0, '', 'recipe_67cf8a1511e03.jpg', 'Knuckle Sandwich recipe image', 0, '2025-03-09 03:20:34', '2025-03-11 02:55:49'),
-(88, 15, 'Black Bean Brownies', 'These are decadent and gluten-free fudgy brownies. These brownies are perfect for a less guilty dessert', 5, 1, 3, 600, 2700, '', 'recipe_67cd06b617487.jpg', 'Black Bean Brownies recipe image', 0, '2025-03-09 05:10:46', '2025-03-09 05:14:40'),
+(1, 3, 'Classic Spaghetti Carbonara', 'A traditional Italian pasta dish made with eggs, cheese, pancetta, and black pepper.', 10, 2, 8, 1200, 1800, '', NULL, 'Classic Spaghetti Carbonara', 1, '2025-02-05 14:50:27', '2025-03-18 18:25:21'),
+(2, 4, 'Breakfast Burrito', 'A hearty breakfast wrap filled with scrambled eggs, cheese, and fresh vegetables.', 1, 3, 7, 900, 600, '', NULL, 'Breakfast Burrito image', 0, '2025-02-05 14:50:27', '2025-03-18 18:25:21'),
+(3, 5, 'Vegetarian Buddha Bowl', 'A nourishing bowl of grains, roasted vegetables, and protein-rich toppings.', 10, 11, 1, 1800, 2400, '', NULL, 'Vegetarian Buddha Bowl image', 1, '2025-02-05 14:50:27', '2025-03-18 18:25:21'),
+(4, 2, 'Mediterranean Quinoa Salad', 'A refreshing salad with quinoa, fresh vegetables, and Mediterranean flavors.', 9, 8, 1, 1200, 1800, '', NULL, 'Mediterranean Quinoa Salad image', 0, '2025-02-05 14:50:27', '2025-03-18 18:25:21'),
+(5, 3, 'Spicy Thai Curry', 'A flavorful and aromatic curry with vegetables and tofu in coconut milk.', 10, 7, 2, 1500, 2400, '', NULL, 'Spicy Thai Curry image', 1, '2025-02-05 14:50:27', '2025-03-18 18:25:21'),
+(6, 6, 'Mushroom Risotto', 'A creamy and flavorful risotto with mushrooms and parmesan.', 10, 2, 8, 1800, 2400, '', NULL, 'Mushroom Risotto', 1, '2025-02-27 15:07:22', '2025-03-18 18:25:21'),
+(7, 1, 'BBQ Pulled Pork Sandwich', 'Slow-cooked pulled pork with BBQ sauce served on a bun.', 3, 1, 12, 3600, 18000, '', NULL, 'BBQ Pulled Pork Sandwich image', 0, '2025-02-27 15:07:37', '2025-03-18 18:25:21'),
+(8, 2, 'Lemon Garlic Roasted Chicken', 'Juicy roasted chicken with lemon, garlic, and herbs.', 10, 9, 12, 1200, 5400, '', NULL, 'Lemon Garlic Roasted Chicken image', 1, '2025-02-27 15:08:08', '2025-03-18 18:25:21'),
+(9, 6, 'Vegetable Pad Thai', 'A delicious Thai stir-fried noodle dish with vegetables and peanuts.', 10, 7, 2, 1500, 2400, '', NULL, 'Vegetable Pad Thai image', 1, '2025-02-27 15:08:42', '2025-03-18 18:25:21'),
+(10, 4, 'Classic Margherita Pizza', 'Traditional Neapolitan pizza with tomato, mozzarella, and basil.', 10, 2, 1, 2400, 900, '', NULL, 'Classic Margherita Pizza image', 1, '2025-02-27 15:09:02', '2025-03-18 18:25:21'),
+(11, 4, 'Homemade Hummus', 'A smooth and creamy hummus made from chickpeas and tahini.', 9, 8, 1, 600, 0, '', NULL, 'Homemade Hummus image', 0, '2025-02-27 15:09:24', '2025-03-18 18:25:21'),
+(12, 3, 'Spicy Black Bean Tacos', 'Delicious and spicy black bean tacos topped with fresh ingredients.', 10, 3, 2, 1200, 600, '', NULL, 'Spicy Black Bean Tacos image', 1, '2025-02-27 15:10:03', '2025-03-18 18:25:21'),
+(13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, '', NULL, 'Thai Green Curry image', 1, '2025-02-27 15:10:17', '2025-03-18 18:25:21'),
+(14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 1, 900, 1200, '', NULL, 'Blueberry Pancakes image', 0, '2025-02-27 15:10:17', '2025-03-18 18:25:21'),
+(15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 9, 9, 900, 600, '', NULL, 'Spicy Garlic Butter Shrimp recipe image', 1, '2025-02-27 15:10:49', '2025-03-18 18:25:21'),
+(16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, '', NULL, 'Chocolate Chip Cookies image', 0, '2025-02-27 15:10:49', '2025-03-18 18:25:21'),
+(84, 11, 'Sunrise Bacon', 'Make this delicious and crispy bacon in the oven with virtually zero clean up!', 1, 1, 8, 600, 1200, '', NULL, 'Sunrise Bacon recipe image', 0, '2025-03-07 18:45:26', '2025-03-18 18:25:21'),
+(85, 12, 'Hearty Weekend Stew', 'A hearty and healthy weekend stew.', 8, 1, 12, 1800, 12600, '', NULL, 'Hearty Weekend Stew recipe image', 0, '2025-03-08 02:11:09', '2025-03-18 18:25:21'),
+(86, 10, 'Keto Sausage Balls', 'Keto recipe for easy breakfast or snack', 1, 1, 5, 1800, 900, '', NULL, 'Keto Sausage Balls recipe image', 0, '2025-03-08 17:37:51', '2025-03-18 18:25:21'),
+(87, 14, 'Knuckle Sandwich', 'Let\'s dish out some justice. ', 10, 1, 12, 300, 0, '', NULL, 'Knuckle Sandwich recipe image', 0, '2025-03-09 03:20:34', '2025-03-18 18:25:21'),
+(88, 15, 'Black Bean Brownies', 'These are decadent and gluten-free fudgy brownies. These brownies are perfect for a less guilty dessert', 5, 1, 3, 600, 2700, '', NULL, 'Black Bean Brownies recipe image', 0, '2025-03-09 05:10:46', '2025-03-18 18:25:21'),
 (103, 3, 'Classic German Sauerbraten', 'A traditional German pot roast, slow-cooked to tender perfection with a tangy-sweet gravy.', 10, 14, 12, 1440, 10800, NULL, NULL, NULL, 0, '2025-03-17 18:05:57', NULL),
-(105, 8, 'Beef Stroganoff', 'A creamy Russian dish with sautéed beef, mushrooms, and sour cream sauce.', 10, 14, 12, 900, 1800, '', 'recipe_67d86d427243c.jpg', 'Beef Stroganoff recipe header', 0, '2025-03-17 18:28:57', '2025-03-17 20:43:14'),
-(108, 4, 'Spicy Vegan Chili', 'A delicious and hearty plant-based chili with a spicy kick.', 2, 1, 2, 900, 3600, '', 'recipe_67d894c863e3f.jpg', 'Spicy Vegan Chili recipe image', 0, '2025-03-17 21:27:36', '2025-03-17 23:31:52'),
+(105, 8, 'Beef Stroganoff', 'A creamy Russian dish with sautéed beef, mushrooms, and sour cream sauce.', 10, 14, 12, 900, 1800, '', NULL, 'Beef Stroganoff recipe header', 0, '2025-03-17 18:28:57', '2025-03-18 18:25:21'),
+(108, 4, 'Spicy Vegan Chili', 'A delicious and hearty plant-based chili with a spicy kick.', 2, 1, 2, 900, 3600, '', NULL, 'Spicy Vegan Chili recipe image', 0, '2025-03-17 21:27:36', '2025-03-18 18:25:21'),
 (109, 17, 'Savory Lentil Stew', 'A hearty and flavorful lentil stew packed with vegetables and spices.', 3, 2, 6, 1200, 5400, NULL, NULL, NULL, 0, '2025-03-17 21:34:57', NULL),
 (110, 21, 'Garlic Butter Roasted Mushrooms', 'A rich and savory side dish featuring roasted mushrooms tossed in garlic butter and fresh herbs.', 8, 9, 2, 600, 1800, NULL, NULL, NULL, 0, '2025-03-17 21:36:26', NULL),
 (111, 15, 'Garlic Butter Roasted Mushrooms', 'A rich and savory side dish featuring roasted mushrooms tossed in garlic butter and fresh herbs.', 5, 13, 6, 600, 1800, NULL, NULL, NULL, 0, '2025-03-17 21:37:54', NULL),
 (112, 11, 'Spiced Chickpea and Spinach Stew', 'A hearty and aromatic stew made with chickpeas, spinach, and warm spices.', 9, 8, 10, 900, 2700, NULL, NULL, NULL, 0, '2025-03-17 21:39:48', NULL),
-(113, 24, 'Greek Lemon Garlic Roasted Potatoes', 'Crispy roasted potatoes infused with lemon, garlic, and oregano, a classic Greek side dish.', 4, 13, 1, 600, 3600, '', 'recipe_67d8978f48b30.jpg', 'Greek Lemon Garlic Roasted Potatoes recipe header', 0, '2025-03-17 21:41:12', '2025-03-17 23:43:43'),
+(113, 24, 'Greek Lemon Garlic Roasted Potatoes', 'Crispy roasted potatoes infused with lemon, garlic, and oregano, a classic Greek side dish.', 4, 13, 1, 600, 3600, '', NULL, 'Greek Lemon Garlic Roasted Potatoes recipe header', 0, '2025-03-17 21:41:12', '2025-03-18 18:25:21'),
 (114, 14, 'Greek Grilled Chicken Souvlaki', 'Juicy grilled chicken skewers marinated in olive oil, lemon, garlic, and oregano, a Greek classic.', 3, 2, 9, 900, 1800, NULL, NULL, NULL, 0, '2025-03-17 21:52:27', NULL),
 (115, 18, 'Refreshing Greek Frappe', 'A frothy, iced Greek coffee made with instant coffee, sugar, and milk or water, perfect for a hot day.', 4, 4, 1, 300, 0, NULL, NULL, NULL, 0, '2025-03-17 21:54:23', NULL),
 (116, 24, 'Ethiopian Spiced Tea', 'A warm and aromatic Ethiopian tea infused with cinnamon, cloves, and cardamom, perfect for relaxation.', 3, 4, 1, 300, 600, NULL, NULL, NULL, 0, '2025-03-17 21:57:18', NULL),
 (117, 3, 'Chinese Scallion Pancakes', 'Crispy and savory Chinese scallion pancakes made with simple dough and fresh green onions.', 5, 10, 6, 900, 1200, NULL, NULL, NULL, 0, '2025-03-17 21:59:29', NULL),
-(121, 4, 'Mexican Chilaquiles', 'A traditional Mexican breakfast dish made with crispy tortilla chips simmered in a flavorful salsa and topped with eggs and cheese.', 1, 3, 9, 900, 1200, '', 'recipe_67d89dc2b7b05.jpg', 'Mexican Chilaquiles recipe header', 0, '2025-03-17 22:06:52', '2025-03-18 00:10:10'),
+(121, 4, 'Mexican Chilaquiles', 'A traditional Mexican breakfast dish made with crispy tortilla chips simmered in a flavorful salsa and topped with eggs and cheese.', 1, 3, 9, 900, 1200, '', NULL, 'Mexican Chilaquiles recipe header', 0, '2025-03-17 22:06:52', '2025-03-18 18:25:21'),
 (122, 18, 'Indian Masala Chai', 'A traditional Indian spiced tea brewed with black tea, milk, and aromatic spices for a rich and comforting flavor.', 9, 3, 2, 300, 600, NULL, NULL, NULL, 0, '2025-03-17 22:14:38', NULL),
 (123, 10, 'Mango Lassi', 'A creamy and refreshing Indian yogurt-based mango drink, perfect for cooling down on a hot day.', 2, 9, 3, 600, 0, NULL, NULL, NULL, 0, '2025-03-17 22:17:50', NULL),
 (124, 18, 'BBQ Spare Ribs', 'Tender and flavorful pork spare ribs slow-cooked in a smoky, tangy BBQ sauce.', 2, 7, 3, 900, 14400, NULL, NULL, NULL, 0, '2025-03-17 22:19:07', NULL),

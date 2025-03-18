@@ -38,16 +38,50 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Initializes image preview functionality for the recipe image upload
  * Creates a preview of the selected image below the file input
+ * Validates file size and displays error messages
  */
 function initializeImagePreview() {
     const imageInput = document.getElementById('recipe_image');
     const previewContainer = document.createElement('div');
     previewContainer.className = 'mt-2';
     
+    // Create error message container
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'form-error';
+    errorContainer.style.display = 'none';
+    
     if (imageInput) {
+        // Add error container after the file input
+        imageInput.parentNode.insertBefore(errorContainer, imageInput.nextSibling);
+        
         imageInput.addEventListener('change', function() {
             const file = this.files[0];
+            
+            // Clear any existing error
+            errorContainer.textContent = '';
+            errorContainer.style.display = 'none';
+            imageInput.classList.remove('error');
+            
             if (file) {
+                // Check file size (max 10MB)
+                const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+                if (file.size > maxSize) {
+                    // Show error message
+                    errorContainer.textContent = 'File is too large. Maximum size is 10MB';
+                    errorContainer.style.display = 'block';
+                    imageInput.classList.add('error');
+                    
+                    // Clear the file input
+                    this.value = '';
+                    
+                    // Remove any existing preview
+                    while (previewContainer.firstChild) {
+                        previewContainer.removeChild(previewContainer.firstChild);
+                    }
+                    
+                    return;
+                }
+                
                 // Remove any existing preview
                 while (previewContainer.firstChild) {
                     previewContainer.removeChild(previewContainer.firstChild);
@@ -61,7 +95,8 @@ function initializeImagePreview() {
                         img.src = e.target.result;
                         img.alt = 'Recipe image preview';
                         img.className = 'img-thumbnail';
-                        img.style.maxWidth = '200px';
+                        img.style.maxWidth = '300px';
+                        img.style.height = 'auto';
                         previewContainer.appendChild(img);
                     };
                     reader.readAsDataURL(file);
@@ -69,37 +104,35 @@ function initializeImagePreview() {
             }
         });
 
-        // Insert preview container after the file input
-        imageInput.parentNode.insertBefore(previewContainer, imageInput.nextSibling);
+        // Insert preview container after the file input and error container
+        imageInput.parentNode.insertBefore(previewContainer, errorContainer.nextSibling);
     }
 }
 
 /**
  * Initializes automatic alt text generation based on recipe title
- * Updates the alt text field when the title changes if the alt text is empty
- * or matches a previous pattern
+ * Updates the alt text field when the title changes
  */
 function initializeAltTextGeneration() {
     const titleInput = document.getElementById('title');
     const altTextInput = document.getElementById('alt_text');
     
     if (titleInput && altTextInput) {
+        // Set initial alt text if title has value but alt text is empty
+        if (titleInput.value && !altTextInput.value) {
+            altTextInput.value = titleInput.value + ' recipe header';
+        }
+        
+        // Update alt text whenever title changes
         titleInput.addEventListener('input', function() {
-            // Only update alt text if it's empty or matches previous pattern
-            const currentAlt = altTextInput.value;
-            const previousTitle = titleInput.dataset.previousTitle || '';
-            const titleValue = this.value; // Store the full title value
+            const titleValue = this.value.trim();
             
-            // Check if alt text is empty or matches previous pattern
-            if (!currentAlt || currentAlt === previousTitle + ' recipe image' || 
-                currentAlt === previousTitle + ' recipe' || 
-                currentAlt === previousTitle + ' recipe header') {
-                // Set the full title value plus recipe header
+            // Always update the alt text to match the title
+            if (titleValue) {
                 altTextInput.value = titleValue + ' recipe header';
+            } else {
+                altTextInput.value = ''; // Clear alt text if title is empty
             }
-            
-            // Store current title for next comparison
-            titleInput.dataset.previousTitle = titleValue;
             
             // For debugging
             console.log('Title value:', titleValue);
