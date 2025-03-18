@@ -25,7 +25,7 @@ spl_autoload_register(function($class) {
 });
 
 // Load core functions
-require_once(PRIVATE_PATH . '/core/functions.php');
+require_once(PRIVATE_PATH . '/core/core_utilities.php');
 require_once(PRIVATE_PATH . '/core/validation_functions.php');
 require_once(PRIVATE_PATH . '/core/api_functions.php');
 require_once(PRIVATE_PATH . '/core/auth_functions.php');

@@ -74,22 +74,6 @@ function is_get_request() {
 }
 
 /**
- * Polyfill for money_format() on Windows systems
- * 
- * PHP's money_format() function is not available on Windows. This function
- * provides a simple replacement that formats a number as US currency.
- * 
- * @param string $format   The format specification (unused, included for compatibility)
- * @param float  $number   The number to format
- * @return string         The formatted number with '$' prefix and 2 decimal places
- */
-if(!function_exists('money_format')) {
-  function money_format($format, $number) {
-    return '$' . number_format($number, 2);
-  }
-}
-
-/**
  * Gets the current page name from the URL
  * @return string The current page name
  */

@@ -1,6 +1,6 @@
 <?php
 require_once('database_functions.php');
-require_once('functions.php');
+require_once('core_utilities.php');
 
 // Validation functions
 
