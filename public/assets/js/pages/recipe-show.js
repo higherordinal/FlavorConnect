@@ -1,7 +1,7 @@
 /**
  * @fileoverview Recipe Show page functionality for FlavorConnect
- * @author FlavorConnect Team
- * @version 1.0.0
+ * @author Henry Vaughn
+ * @version 1.3.0
  * @license MIT
  */
 

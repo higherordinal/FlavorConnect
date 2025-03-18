@@ -1,7 +1,7 @@
 /**
  * @fileoverview User Favorites page functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.3.0
+ * @version 1.4.0
  * @license MIT
  */
 
@@ -14,16 +14,6 @@ window.FlavorConnect.favoritesPage = {
      * Initializes the favorites page functionality
      */
     init: function() {
-        console.log('Initializing favorites page');
-        
-        // Make sure we have the config object
-        if (!window.FlavorConnect.config) {
-            window.FlavorConnect.config = {
-                baseUrl: '/',
-                isLoggedIn: true
-            };
-        }
-        
         this.setupEventListeners();
         this.loadFavorites();
     },
@@ -32,14 +22,10 @@ window.FlavorConnect.favoritesPage = {
      * Sets up event listeners for the page
      */
     setupEventListeners: function() {
-        console.log('Setting up event listeners for favorites page');
-        
-        // Handle unfavorite buttons
+        // Handle unfavorite buttons (both dedicated unfavorite buttons and regular favorite buttons)
         document.querySelectorAll('.favorite-btn.favorited').forEach(button => {
-            if (!button._hasUnfavoriteListener) {
-                button.addEventListener('click', this.handleUnfavorite.bind(this));
-                button._hasUnfavoriteListener = true;
-            }
+            console.log('Setting up event listener for button:', button);
+            button.addEventListener('click', this.handleUnfavorite.bind(this));
         });
 
         // Handle sort select
@@ -48,14 +34,12 @@ window.FlavorConnect.favoritesPage = {
             sortSelect.addEventListener('change', this.handleSort.bind(this));
         }
 
-        // Add a global event listener for any dynamically added favorite buttons
-        document.addEventListener('click', (event) => {
-            const button = event.target.closest('.favorite-btn.favorited');
-            if (button && !button._hasUnfavoriteListener) {
-                this.handleUnfavorite.call(this, event);
-                button._hasUnfavoriteListener = true;
-            }
-        });
+        // Initialize favorite buttons if not already handled
+        if (window.FlavorConnect.favorites) {
+            window.FlavorConnect.favorites.initButtons();
+        } else if (typeof window.initializeFavoriteButtons === 'function') {
+            window.initializeFavoriteButtons();
+        }
     },
 
     /**
@@ -68,26 +52,16 @@ window.FlavorConnect.favoritesPage = {
             // Get favorites directly from the DOM
             const favoriteButtons = document.querySelectorAll('.favorite-btn.favorited');
             if (favoriteButtons.length > 0) {
-                // We already have favorites loaded in the DOM
-                this.showLoadingState(false);
-                return;
+                console.log('Favorites already loaded in the DOM');
+                return; // Favorites are already loaded in the DOM
             }
             
-            // Try to use the favorites utility
-            if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.getAllFavorites === 'function') {
-                const favorites = await window.FlavorConnect.favorites.getAllFavorites();
-                this.updateFavoritesList(favorites);
-            } else {
-                // Fallback to initial data if available
-                if (window.initialFavoritesData) {
-                    this.updateFavoritesList(window.initialFavoritesData);
-                } else {
-                    this.showError('Unable to load favorites');
-                }
-            }
+            // If we get here, we need to load favorites (this shouldn't happen with the current implementation)
+            console.log('No favorites found in DOM, attempting to load from server');
+            this.showError('No favorite recipes found. Please try refreshing the page.');
         } catch (error) {
             console.error('Error loading favorites:', error);
-            this.showError('Failed to load favorites');
+            this.showError('Failed to load your favorite recipes. Please try again later.');
         } finally {
             this.showLoadingState(false);
         }
@@ -98,66 +72,103 @@ window.FlavorConnect.favoritesPage = {
      * @param {Event} event - The click event
      */
     handleUnfavorite: async function(event) {
-        if (event.preventDefault) event.preventDefault();
-        if (event.stopPropagation) event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
         
-        const button = event.target.closest('.favorite-btn') || event.currentTarget;
+        const button = event.currentTarget;
         const recipeId = button.dataset.recipeId;
         
-        if (!recipeId) {
-            console.error('No recipe ID found on button');
+        if (!recipeId) return;
+        
+        try {
+            // Use the favorites utility if available
+            if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.toggle === 'function') {
+                console.log('Using window.FlavorConnect.favorites.toggle');
+                const result = await window.FlavorConnect.favorites.toggle(recipeId);
+                console.log('Toggle result:', result);
+                
+                if (result.success && !result.isFavorited) {
+                    this.removeRecipeCard(button);
+                } else if (result.html_response) {
+                    // If we got an HTML response, try the direct approach
+                    console.log('Got HTML response, trying direct approach');
+                    await this.directUnfavorite(recipeId, button);
+                }
+            } else {
+                // Fallback to direct fetch
+                await this.directUnfavorite(recipeId, button);
+            }
+        } catch (error) {
+            console.error('Error unfavoriting recipe:', error);
+            this.showError('Failed to unfavorite recipe. Please try again later.');
+        }
+    },
+    
+    /**
+     * Direct unfavorite implementation as a fallback
+     * @param {string|number} recipeId - The recipe ID to unfavorite
+     * @param {HTMLElement} button - The button element that was clicked
+     */
+    directUnfavorite: async function(recipeId, button) {
+        // Use the toggle_favorite.php endpoint with POST method
+        const baseUrl = window.FlavorConnect.config.baseUrl;
+        // Remove trailing slash if present
+        const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+        
+        // Add cache-busting parameter
+        const cacheBuster = new Date().getTime();
+        const fullUrl = `${url}/api/toggle_favorite.php?_=${cacheBuster}`;
+        console.log('Direct unfavorite URL:', fullUrl);
+        
+        // Use URLSearchParams for the body
+        const params = new URLSearchParams();
+        params.append('recipe_id', recipeId);
+        
+        const response = await fetch(fullUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json',
+                'Cache-Control': 'no-cache, no-store, must-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0'
+            },
+            body: params
+        });
+        
+        // Log the response status for debugging
+        console.log('Response status:', response.status);
+        
+        // Handle unauthorized response (user not logged in)
+        if (response.status === 401) {
+            console.log('User not logged in, redirecting to login page');
+            window.location.href = `${window.FlavorConnect.config.baseUrl}login.php`;
             return;
         }
         
-        console.log('Unfavoriting recipe ID:', recipeId);
-        
-        // First, remove the card immediately for better UX
-        const card = button.closest('.recipe-card');
-        if (card) {
-            this.removeRecipeCard(button);
-            this.updateEmptyState();
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
         
-        // Then make the API call
+        // Check if the response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            console.error('Response is not JSON:', contentType);
+            const text = await response.text();
+            console.error('Response text:', text);
+            throw new Error('Invalid response format');
+        }
+        
         try {
-            // Use XMLHttpRequest to avoid any caching issues
-            const xhr = new XMLHttpRequest();
+            const data = await response.json();
+            console.log('Unfavorite response data:', data);
             
-            // Get the base URL
-            const baseUrl = window.FlavorConnect.config?.baseUrl || '/';
-            const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-            const fullUrl = `${url}/api/toggle_favorite.php?_=${new Date().getTime()}`; // Add cache buster
-            
-            console.log('Making API call to:', fullUrl);
-            
-            xhr.open('POST', fullUrl, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        console.log('Unfavorite response:', response);
-                        
-                        if (!response.success) {
-                            console.error('API reported error:', response.message || 'Unknown error');
-                        }
-                    } catch (e) {
-                        console.error('Error parsing API response:', e);
-                    }
-                } else {
-                    console.error('API request failed with status:', xhr.status);
-                }
-            };
-            
-            xhr.onerror = () => {
-                console.error('Network error during API request');
-            };
-            
-            xhr.send(JSON.stringify({ recipe_id: recipeId }));
-        } catch (error) {
-            console.error('Error unfavoriting recipe:', error);
+            if (data.success && !data.is_favorited) {
+                this.removeRecipeCard(button);
+            }
+        } catch (jsonError) {
+            console.error('Error parsing JSON:', jsonError);
+            throw new Error('Failed to parse JSON response');
         }
     },
 
@@ -165,26 +176,24 @@ window.FlavorConnect.favoritesPage = {
      * Handles sorting of favorite recipes
      * @param {Event} e - Change event from sort select
      */
-    handleSort: function(e) {
+    handleSort: async function(e) {
         const sortBy = e.target.value;
-        console.log('Sorting by:', sortBy);
-        
         this.showLoadingState(true);
         
-        // Reload favorites with new sort
-        if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.getAllFavorites === 'function') {
-            window.FlavorConnect.favorites.getAllFavorites(sortBy)
-                .then(favorites => {
-                    this.updateFavoritesList(favorites);
-                    this.showLoadingState(false);
-                })
-                .catch(error => {
-                    console.error('Error loading sorted favorites:', error);
-                    this.showError('Failed to sort favorites');
-                    this.showLoadingState(false);
-                });
-        } else {
-            this.showError('Sorting functionality not available');
+        try {
+            // Directly use fetch for API requests
+            const response = await fetch(`${window.FlavorConnect.config.apiBaseUrl}recipes/favorites?sort=${sortBy}`);
+            const data = await response.json();
+            
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
+            this.updateFavoritesList(data.favorites || []);
+        } catch (error) {
+            console.error('Error sorting favorites:', error);
+            this.showError('Failed to sort recipes. Please try again.');
+        } finally {
             this.showLoadingState(false);
         }
     },
@@ -194,26 +203,23 @@ window.FlavorConnect.favoritesPage = {
      * @param {Array} favorites - Array of favorite recipe objects
      */
     updateFavoritesList: function(favorites) {
-        const container = document.querySelector('#favorites-container');
-        if (!container) {
-            console.error('Favorites container not found');
-            return;
-        }
+        const container = document.querySelector('.recipe-gallery');
+        if (!container) return;
         
-        if (!favorites || favorites.length === 0) {
+        if (favorites.length === 0) {
             container.innerHTML = this.createEmptyState();
             return;
         }
         
-        let html = '';
-        favorites.forEach(recipe => {
-            html += this.createRecipeCard(recipe);
-        });
-        
+        const html = favorites.map(recipe => this.createRecipeCard(recipe)).join('');
         container.innerHTML = html;
         
-        // Re-initialize event listeners for the new buttons
-        this.setupEventListeners();
+        // Re-initialize favorite buttons
+        if (window.FlavorConnect.favorites) {
+            window.FlavorConnect.favorites.initButtons();
+        } else if (typeof window.initializeFavoriteButtons === 'function') {
+            window.initializeFavoriteButtons();
+        }
     },
 
     /**
@@ -222,25 +228,23 @@ window.FlavorConnect.favoritesPage = {
      * @returns {string} HTML string for the recipe card
      */
     createRecipeCard: function(recipe) {
-        const baseUrl = window.FlavorConnect.config?.baseUrl || '/';
-        const recipeUrl = `${baseUrl}recipes/show.php?id=${recipe.id}`;
-        const imageUrl = recipe.image_url || `${baseUrl}assets/images/recipe-placeholder.jpg`;
-        
         return `
             <div class="recipe-card" data-recipe-id="${recipe.id}">
-                <div class="recipe-card-inner">
-                    <div class="recipe-image">
-                        <a href="${recipeUrl}">
-                            <img src="${imageUrl}" alt="${recipe.title}">
-                        </a>
-                        <button class="favorite-btn favorited" data-recipe-id="${recipe.id}">
-                            <i class="fas fa-heart"></i>
-                        </button>
+                <div class="recipe-image">
+                    <img src="${recipe.image_url || window.FlavorConnect.config.baseUrl + 'assets/images/recipe-placeholder.jpg'}" alt="${recipe.title}">
+                    <button class="favorite-btn favorited" data-recipe-id="${recipe.id}" aria-label="Remove from favorites">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+                <div class="recipe-content">
+                    <h3 class="recipe-title">
+                        <a href="${window.FlavorConnect.config.baseUrl}recipes/show.php?id=${recipe.id}">${recipe.title}</a>
+                    </h3>
+                    <div class="recipe-meta">
+                        <span class="recipe-time"><i class="far fa-clock"></i> ${recipe.cook_time} min</span>
+                        <span class="recipe-difficulty"><i class="fas fa-signal"></i> ${recipe.difficulty}</span>
                     </div>
-                    <div class="recipe-details">
-                        <h3><a href="${recipeUrl}">${recipe.title}</a></h3>
-                        <p class="recipe-meta">${recipe.cook_time || ''} | ${recipe.difficulty || ''}</p>
-                    </div>
+                    <p class="recipe-description">${recipe.description.substring(0, 100)}${recipe.description.length > 100 ? '...' : ''}</p>
                 </div>
             </div>
         `;
@@ -253,12 +257,10 @@ window.FlavorConnect.favoritesPage = {
     createEmptyState: function() {
         return `
             <div class="empty-state">
-                <div class="empty-state-icon">
-                    <i class="far fa-heart"></i>
-                </div>
-                <h2>No Favorites Yet</h2>
+                <i class="far fa-heart"></i>
+                <h3>No Favorite Recipes</h3>
                 <p>You haven't added any recipes to your favorites yet.</p>
-                <a href="/" class="btn btn-primary">Explore Recipes</a>
+                <a href="${window.FlavorConnect.config.baseUrl}recipes" class="btn btn-primary">Explore Recipes</a>
             </div>
         `;
     },
@@ -267,11 +269,10 @@ window.FlavorConnect.favoritesPage = {
      * Updates empty state if no recipes remain
      */
     updateEmptyState: function() {
-        const container = document.querySelector('#favorites-container');
+        const container = document.querySelector('.recipe-gallery');
         if (!container) return;
         
-        const cards = container.querySelectorAll('.recipe-card');
-        if (cards.length === 0) {
+        if (document.querySelectorAll('.recipe-card').length === 0) {
             container.innerHTML = this.createEmptyState();
         }
     },
@@ -281,16 +282,21 @@ window.FlavorConnect.favoritesPage = {
      * @param {HTMLElement} button - The button element inside the recipe card
      */
     removeRecipeCard: function(button) {
-        const card = button.closest('.recipe-card');
-        if (!card) return;
+        const recipeCard = button.closest('.recipe-card');
+        if (!recipeCard) return;
         
-        // Add animation class
-        card.classList.add('removing');
-        
-        // Remove after animation completes
+        // Remove with animation
+        recipeCard.classList.add('removing');
         setTimeout(() => {
-            card.remove();
-            this.updateEmptyState();
+            recipeCard.remove();
+            
+            // Check if we need to show empty state
+            if (document.querySelectorAll('.recipe-card').length === 0) {
+                const container = document.querySelector('.recipe-gallery');
+                if (container && window.FlavorConnect.favorites) {
+                    container.innerHTML = window.FlavorConnect.favorites.createEmptyState();
+                }
+            }
         }, 300);
     },
 
@@ -299,25 +305,12 @@ window.FlavorConnect.favoritesPage = {
      * @param {boolean} show - Whether to show or hide loading state
      */
     showLoadingState: function(show) {
-        const container = document.querySelector('#favorites-container');
-        const loadingEl = document.querySelector('#loading-state');
-        
+        const container = document.querySelector('.recipe-gallery');
         if (!container) return;
         
         if (show) {
-            if (!loadingEl) {
-                const loading = document.createElement('div');
-                loading.id = 'loading-state';
-                loading.className = 'loading-state';
-                loading.innerHTML = '<div class="spinner"></div><p>Loading your favorites...</p>';
-                
-                container.parentNode.insertBefore(loading, container);
-            }
             container.classList.add('loading');
         } else {
-            if (loadingEl) {
-                loadingEl.remove();
-            }
             container.classList.remove('loading');
         }
     },
@@ -327,36 +320,31 @@ window.FlavorConnect.favoritesPage = {
      * @param {string} message - Error message to display
      */
     showError: function(message) {
-        console.error(message);
-        
-        const container = document.querySelector('#favorites-container');
-        if (!container) return;
-        
-        const errorEl = document.querySelector('#error-message');
-        if (errorEl) {
-            errorEl.textContent = message;
-            return;
-        }
-        
-        const error = document.createElement('div');
-        error.id = 'error-message';
-        error.className = 'error-message';
-        error.textContent = message;
-        
-        container.parentNode.insertBefore(error, container);
-        
-        // Auto-hide after 5 seconds
-        setTimeout(() => {
-            if (error.parentNode) {
-                error.remove();
+        const errorContainer = document.querySelector('.error-message');
+        if (!errorContainer) {
+            const container = document.querySelector('.recipe-gallery-container');
+            if (container) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = message;
+                container.insertBefore(errorDiv, container.firstChild);
             }
-        }, 5000);
+        } else {
+            errorContainer.textContent = message;
+        }
     }
+};
+
+// For backward compatibility
+window.initializeFavorites = function() {
+    window.FlavorConnect.favoritesPage.init();
 };
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     if (window.FlavorConnect.favoritesPage) {
         window.FlavorConnect.favoritesPage.init();
+    } else if (typeof window.initializeFavorites === 'function') {
+        window.initializeFavorites();
     }
 });
