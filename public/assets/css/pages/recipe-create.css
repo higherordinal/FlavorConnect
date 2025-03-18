@@ -59,6 +59,10 @@
     max-width: 80%;
 }
 
+.recipe-form .page-header[data-recipe-image] {
+    background-image: var(--recipe-image);
+}
+
 /* ====================================
    FORM LAYOUT
    ==================================== */

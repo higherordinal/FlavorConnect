@@ -162,7 +162,7 @@ $back_link = match($ref) {
 </div>
 
 <div class="recipe-form">
-    <div class="page-header">
+    <div class="page-header" id="recipe-header">
         <h1>Create New Recipe</h1>
     </div>
     

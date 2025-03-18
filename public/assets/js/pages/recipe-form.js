@@ -30,6 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Form Validation
     initializeFormValidation();
+    
+    // Recipe Header Background
+    initializeRecipeHeaderBackground();
 });
 
 /**
@@ -333,6 +336,28 @@ function initializeFormValidation() {
                     firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     firstError.focus();
                 }
+            }
+        });
+    }
+}
+
+/**
+ * Initializes recipe header background functionality
+ * Sets the background image of the recipe header based on the uploaded image
+ */
+function initializeRecipeHeaderBackground() {
+    const imageInput = document.getElementById('recipe_image');
+    const headerContainer = document.querySelector('.recipe-form .page-header');
+    
+    if (imageInput && headerContainer) {
+        imageInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                // Create a URL for the uploaded image
+                const url = URL.createObjectURL(file);
+                
+                // Set the background image of the recipe header
+                headerContainer.style.backgroundImage = `url(${url})`;
             }
         });
     }

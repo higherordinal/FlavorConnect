@@ -220,7 +220,7 @@ $back_text = match($ref) {
     </div>
 
     <div class="recipe-form">
-        <header class="page-header">
+        <header class="page-header" id="recipe-header" <?php if($recipe->img_file_path) echo 'style="background-image: url(\'' . url_for('/assets/uploads/recipes/' . h($recipe->img_file_path)) . '\');"'; ?>>
             <h1>Edit Recipe: <?php echo h($recipe->title); ?></h1>
         </header>
 
