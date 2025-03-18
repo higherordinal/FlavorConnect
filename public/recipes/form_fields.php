@@ -238,15 +238,15 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
     <div class="media-section">
         <h2 class="h4">Recipe Image</h2>
         <div class="form-group">
-            <label for="recipe_image">Upload Image</label>
-            <input type="file" name="recipe_image" id="recipe_image" class="form-control<?php echo error_class('recipe_image', $errors); ?>" accept="image/*" <?php echo isset($recipe->img_file_path) ? '' : 'required'; ?>>
-            <?php echo display_error('recipe_image', $errors); ?>
-            <?php if(isset($recipe->img_file_path) && $recipe->img_file_path) { ?>
-                <div class="mt-2">
-                    <img src="<?php echo url_for('/assets/uploads/recipes/' . $recipe->img_file_path); ?>" alt="Current recipe image" class="img-thumbnail" style="max-width: 200px;">
+            <label for="recipe_image">Recipe Image</label>
+            <input type="file" id="recipe_image" name="recipe_image" accept="image/jpeg, image/png, image/gif, image/webp">
+            <small class="form-text text-muted">Upload a high-quality image of your recipe (JPEG, PNG, GIF, or WebP).</small>
+            <?php if(isset($recipe) && $recipe->img_file_path): ?>
+                <div class="current-image">
+                    <p>Current image:</p>
+                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="Current recipe image" class="img-thumbnail">
                 </div>
-            <?php } ?>
-            <small class="form-text text-muted">Upload a high-quality image of your recipe (maximum file size: 2MB). Allowed formats: JPG, PNG</small>
+            <?php endif; ?>
         </div>
 
         <div class="form-group">

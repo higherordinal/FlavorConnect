@@ -388,18 +388,15 @@ class Recipe extends DatabaseObject {
      * @return string Full image path or default placeholder path
      */
     public function get_image_path($size = 'original') {
-        if(empty($this->img_file_path) || $this->img_file_path === '') {
-            return '/assets/images/recipe-placeholder.png';
+        if (!$this->img_file_path) {
+            return '';
         }
         
-        // If we're not requesting a specific size, just return the original
-        if ($size === 'original') {
-            return '/assets/uploads/recipes/' . $this->img_file_path;
-        }
+        $path_parts = pathinfo($this->img_file_path);
+        $directory = $path_parts['dirname'];
+        $filename = $path_parts['filename'];
+        $extension = 'webp'; // Always use WebP for processed images
         
-        $file_info = pathinfo($this->img_file_path);
-        $filename = $file_info['filename'];
-        $extension = $file_info['extension'];
         $file_path = '';
         
         switch($size) {
@@ -412,17 +409,12 @@ class Recipe extends DatabaseObject {
             case 'banner':
                 $file_path = $filename . '_banner.' . $extension;
                 break;
+            case 'original':
             default:
-                return '/assets/uploads/recipes/' . $this->img_file_path;
+                return $this->img_file_path;
         }
         
-        // Check if the requested size exists
-        if(!empty($file_path) && file_exists(PUBLIC_PATH . '/assets/uploads/recipes/' . $file_path)) {
-            return '/assets/uploads/recipes/' . $file_path;
-        }
-        
-        // Return original as fallback
-        return '/assets/uploads/recipes/' . $this->img_file_path;
+        return $directory . '/' . $file_path;
     }
 
     /**

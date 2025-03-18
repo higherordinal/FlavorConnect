@@ -34,10 +34,10 @@ if(is_post_request()) {
                 $extension = strtolower(pathinfo($_FILES['recipe_image']['name'], PATHINFO_EXTENSION));
                 
                 // Validate file type
-                $allowed_extensions = ['jpg', 'jpeg', 'png'];
+                $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp'];
                 if(!in_array($extension, $allowed_extensions)) {
-                    $errors[] = "Invalid file type. Allowed formats: JPG, PNG";
-                    $session->message('Invalid file type. Allowed formats: JPG, PNG', 'error');
+                    $errors[] = "Invalid file type. Allowed formats: JPG, PNG, WebP";
+                    $session->message('Invalid file type. Allowed formats: JPG, PNG, WebP', 'error');
                 } else {
                     $filename = uniqid('recipe_') . '.' . $extension;
                     $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes/';
@@ -175,9 +175,7 @@ $back_link = match($ref) {
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Create Recipe
             </button>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-outline">
-                <i class="fas fa-times"></i> Cancel
-            </a>
+            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

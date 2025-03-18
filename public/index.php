@@ -23,7 +23,7 @@ if($session->is_logged_in()) {
             </div>
         </div>
         <div class="hero-image">
-            <img src="<?php echo url_for('/assets/images/hero-img.jpg'); ?>" alt="Delicious food spread" class="hero-img">
+            <img src="<?php echo url_for('/assets/images/hero-img.webp'); ?>" alt="Delicious food spread" class="hero-img">
         </div>
     </section>
 

@@ -243,6 +243,7 @@ class RecipeImageProcessor {
     
     /**
      * Process a recipe image - create thumbnail, banner, and optimize for header
+     * Convert to WebP format for better compression and quality
      * 
      * @param string $source_path Path to the source image
      * @param string $destination_dir Directory to save processed images
@@ -265,23 +266,22 @@ class RecipeImageProcessor {
         // Get file info
         $file_info = pathinfo($filename);
         $file_basename = $file_info['filename'];
-        $file_extension = $file_info['extension'];
         
-        // Define output paths
-        $thumbnail_path = $destination_dir . '/' . $file_basename . '_thumb.' . $file_extension;
-        $optimized_path = $destination_dir . '/' . $file_basename . '_optimized.' . $file_extension;
-        $banner_path = $destination_dir . '/' . $file_basename . '_banner.' . $file_extension;
+        // Define output paths with WebP extension
+        $thumbnail_path = $destination_dir . '/' . $file_basename . '_thumb.webp';
+        $optimized_path = $destination_dir . '/' . $file_basename . '_optimized.webp';
+        $banner_path = $destination_dir . '/' . $file_basename . '_banner.webp';
         
         // Try processing with ImageMagick first
         if ($this->isImageMagickAvailable()) {
             // Create thumbnail (300x200)
-            $thumbnail_result = $this->resize($source_path, $thumbnail_path, 300, 200);
+            $thumbnail_result = $this->resizeToWebP($source_path, $thumbnail_path, 300, 200);
             
             // Create optimized version
-            $optimized_result = $this->optimize($source_path, $optimized_path);
+            $optimized_result = $this->optimizeToWebP($source_path, $optimized_path);
             
             // Create banner image (1200x400) for form headers
-            $banner_result = $this->resize($source_path, $banner_path, 1200, 400, true);
+            $banner_result = $this->resizeToWebP($source_path, $banner_path, 1200, 400, true);
             
             // If all operations were successful, return true
             if ($thumbnail_result && $optimized_result && $banner_result) {
@@ -296,9 +296,9 @@ class RecipeImageProcessor {
         
         // Try with GD library as fallback
         if ($this->isGDAvailable()) {
-            $thumbnail_result = $this->processWithGD($source_path, $thumbnail_path, 300, 200);
-            $optimized_result = $this->processWithGD($source_path, $optimized_path, 800, 600);
-            $banner_result = $this->processWithGD($source_path, $banner_path, 1200, 400);
+            $thumbnail_result = $this->processWithGDToWebP($source_path, $thumbnail_path, 300, 200);
+            $optimized_result = $this->processWithGDToWebP($source_path, $optimized_path, 800, 600);
+            $banner_result = $this->processWithGDToWebP($source_path, $banner_path, 1200, 400);
             
             return $thumbnail_result && $optimized_result && $banner_result;
         }
@@ -402,6 +402,150 @@ class RecipeImageProcessor {
             $this->errors[] = "GD processing error: " . $e->getMessage();
             return false;
         }
+    }
+    
+    /**
+     * Resize an image to the specified dimensions and convert to WebP format
+     * 
+     * @param string $source_path Path to the source image
+     * @param string $destination_path Path to save the resized image
+     * @param int $width Width of the resized image
+     * @param int $height Height of the resized image
+     * @param bool $crop Whether to crop the image to fit the dimensions
+     * @return bool True if successful, false otherwise
+     */
+    private function resizeToWebP($source_path, $destination_path, $width, $height, $crop = false) {
+        $quality = 75; // WebP quality (0-100)
+        
+        if ($crop) {
+            $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x{$height}^ -gravity center -extent {$width}x{$height} -quality {$quality} -define webp:lossless=false \"{$destination_path}\"";
+        } else {
+            $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x{$height} -quality {$quality} -define webp:lossless=false \"{$destination_path}\"";
+        }
+        
+        exec($command, $output, $return_var);
+        
+        if ($return_var !== 0) {
+            $this->errors[] = "Error resizing image to WebP: " . implode("\n", $output);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Optimize an image and convert to WebP format
+     * 
+     * @param string $source_path Path to the source image
+     * @param string $destination_path Path to save the optimized image
+     * @return bool True if successful, false otherwise
+     */
+    private function optimizeToWebP($source_path, $destination_path) {
+        $quality = 75; // WebP quality (0-100)
+        $width = 800; // Max width for optimized image
+        
+        $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x -quality {$quality} -define webp:lossless=false \"{$destination_path}\"";
+        
+        exec($command, $output, $return_var);
+        
+        if ($return_var !== 0) {
+            $this->errors[] = "Error optimizing image to WebP: " . implode("\n", $output);
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Process an image with GD library and convert to WebP
+     * 
+     * @param string $source_path Path to the source image
+     * @param string $destination_path Path to save the processed image
+     * @param int $width Width of the processed image
+     * @param int $height Height of the processed image
+     * @return bool True if successful, false otherwise
+     */
+    private function processWithGDToWebP($source_path, $destination_path, $width, $height) {
+        // Check if WebP is supported in this GD installation
+        if (!function_exists('imagewebp')) {
+            $this->errors[] = "WebP support is not available in GD library.";
+            return false;
+        }
+        
+        // Get image info
+        $image_info = getimagesize($source_path);
+        if ($image_info === false) {
+            $this->errors[] = "Could not get image information.";
+            return false;
+        }
+        
+        // Create image resource based on file type
+        $source_image = null;
+        switch ($image_info[2]) {
+            case IMAGETYPE_JPEG:
+                $source_image = imagecreatefromjpeg($source_path);
+                break;
+            case IMAGETYPE_PNG:
+                $source_image = imagecreatefrompng($source_path);
+                break;
+            case IMAGETYPE_GIF:
+                $source_image = imagecreatefromgif($source_path);
+                break;
+            case IMAGETYPE_WEBP:
+                $source_image = imagecreatefromwebp($source_path);
+                break;
+            default:
+                $this->errors[] = "Unsupported image type.";
+                return false;
+        }
+        
+        if (!$source_image) {
+            $this->errors[] = "Failed to create image resource.";
+            return false;
+        }
+        
+        // Calculate new dimensions while maintaining aspect ratio
+        $source_width = imagesx($source_image);
+        $source_height = imagesy($source_image);
+        $ratio = $source_width / $source_height;
+        
+        if ($width / $height > $ratio) {
+            $new_width = $height * $ratio;
+            $new_height = $height;
+        } else {
+            $new_width = $width;
+            $new_height = $width / $ratio;
+        }
+        
+        // Create destination image
+        $destination_image = imagecreatetruecolor($width, $height);
+        
+        // Handle transparency for PNG images
+        if ($image_info[2] === IMAGETYPE_PNG) {
+            imagealphablending($destination_image, false);
+            imagesavealpha($destination_image, true);
+            $transparent = imagecolorallocatealpha($destination_image, 255, 255, 255, 127);
+            imagefilledrectangle($destination_image, 0, 0, $width, $height, $transparent);
+        }
+        
+        // Resize and crop
+        $dst_x = ($width - $new_width) / 2;
+        $dst_y = ($height - $new_height) / 2;
+        imagecopyresampled($destination_image, $source_image, $dst_x, $dst_y, 0, 0, $new_width, $new_height, $source_width, $source_height);
+        
+        // Save as WebP
+        $result = imagewebp($destination_image, $destination_path, 75); // Quality: 0-100
+        
+        // Free memory
+        imagedestroy($source_image);
+        imagedestroy($destination_image);
+        
+        if (!$result) {
+            $this->errors[] = "Failed to save WebP image.";
+            return false;
+        }
+        
+        return true;
     }
     
     /**

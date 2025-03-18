@@ -68,10 +68,10 @@ if(is_post_request()) {
                 $extension = strtolower(pathinfo($_FILES['recipe_image']['name'], PATHINFO_EXTENSION));
                 
                 // Validate file type
-                $allowed_extensions = ['jpg', 'jpeg', 'png'];
+                $allowed_extensions = ['jpg', 'jpeg', 'png', 'webp'];
                 if(!in_array($extension, $allowed_extensions)) {
-                    $errors[] = "Invalid file type. Allowed formats: JPG, PNG";
-                    $session->message('Invalid file type. Allowed formats: JPG, PNG', 'error');
+                    $errors[] = "Invalid file type. Allowed formats: JPG, PNG, WebP";
+                    $session->message('Invalid file type. Allowed formats: JPG, PNG, WebP', 'error');
                 } else {
                     $filename = uniqid('recipe_') . '.' . $extension;
                     $target_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename;
