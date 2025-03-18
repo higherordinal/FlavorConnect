@@ -244,7 +244,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
             <?php if(isset($recipe) && $recipe->img_file_path): ?>
                 <div class="current-image">
                     <p>Current image:</p>
-                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="Current recipe image" class="img-thumbnail">
+                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="<?php echo h($recipe->title); ?>" class="img-thumbnail">
                 </div>
             <?php endif; ?>
         </div>

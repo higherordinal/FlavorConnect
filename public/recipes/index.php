@@ -273,7 +273,7 @@ $userData = [
                             </button>
                             <?php } ?>
                             <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 
-                                 alt="Photo of <?php echo h($recipe->title); ?>" 
+                                 alt="<?php echo h($recipe->title); ?>" 
                                  class="recipe-image">
                         </div>
                         

@@ -18,7 +18,7 @@ if($session->is_logged_in()) {
                 <p>FlavorConnect is your ultimate destination for discovering, sharing, and connecting through the joy of cooking. Our platform brings together food enthusiasts from all walks of life, creating a vibrant community where culinary creativity knows no bounds.</p>
             </div>
             <div class="about-hero-image">
-                <img src="<?php echo url_for('/assets/images/about-hero-img.webp'); ?>" alt="Cooking together" class="about-hero-img">
+                <img src="<?php echo url_for('/assets/images/about-hero-img.webp'); ?>" alt="Diverse group of people cooking together in a modern kitchen" class="about-hero-img">
             </div>
         </div>
 
