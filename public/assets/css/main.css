@@ -239,8 +239,11 @@ h6 {
   font-family: var(--font-secondary);
   font-weight: 600;
   line-height: 1.2;
-  margin-bottom: var(--spacing-md);
   margin-top: 0;
+}
+
+h2, h3, h4, h5, h6 {
+  margin-bottom: var(--spacing-md);
 }
 
 h1:not(.logo h1) {
@@ -250,7 +253,6 @@ h1:not(.logo h1) {
   font-weight: 700; 
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); 
   padding-bottom: 0.5rem; 
-  margin-bottom: var(--spacing-md); 
 }
 
 h2 {
