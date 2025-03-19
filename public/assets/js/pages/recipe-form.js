@@ -120,16 +120,16 @@ function initializeAltTextGeneration() {
     if (titleInput && altTextInput) {
         // Set initial alt text if title has value but alt text is empty
         if (titleInput.value && !altTextInput.value) {
-            altTextInput.value = titleInput.value + ' recipe header';
+            altTextInput.value = titleInput.value;
         }
         
         // Update alt text whenever title changes
         titleInput.addEventListener('input', function() {
             const titleValue = this.value.trim();
             
-            // Always update the alt text to match the title
+            // Always update the alt text to match the title exactly
             if (titleValue) {
-                altTextInput.value = titleValue + ' recipe header';
+                altTextInput.value = titleValue;
             } else {
                 altTextInput.value = ''; // Clear alt text if title is empty
             }
