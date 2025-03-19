@@ -3,7 +3,7 @@ require_once('../../private/config/config.php');
 require_once(PRIVATE_PATH . '/core/initialize.php');
 
 $page_title = 'Register';
-$page_style = 'register';
+$page_style = 'auth';
 
 $errors = [];
 $username = '';
@@ -39,7 +39,7 @@ include(SHARED_PATH . '/public_header.php');
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
 
-<div class="content">
+<div class="content register-form">
     <?php echo display_errors($errors); ?>
     <?php echo display_session_message(); ?>
 
@@ -84,7 +84,9 @@ include(SHARED_PATH . '/public_header.php');
             <?php echo display_error('confirm_password', $errors); ?>
         </div>
 
-        <button type="submit" class="form-button" name="submit">Register</button>
+        <div class="form-group button-container">
+            <button type="submit" class="btn-primary" name="submit">Create Account</button>
+        </div>
 
         <div class="form-footer">
             <p>Already have an account? <a href="<?php echo url_for('/auth/login.php'); ?>">Login here</a></p>

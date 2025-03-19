@@ -3,7 +3,7 @@ require_once('../../private/config/config.php');
 require_once(PRIVATE_PATH . '/core/initialize.php');
 
 $page_title = 'Login';
-$page_style = 'login';
+$page_style = 'auth';
 
 $errors = [];
 $username = '';
@@ -33,7 +33,7 @@ include(SHARED_PATH . '/public_header.php');
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
 
-<div class="content">
+<div class="content login-form">
     <?php echo display_errors($errors); ?>
     <?php echo display_session_message(); ?>
 
@@ -54,8 +54,8 @@ include(SHARED_PATH . '/public_header.php');
             <?php echo display_error('password', $errors); ?>
         </div>
 
-        <div class="form-group">
-            <button type="submit" class="form-button" name="submit">Login</button>
+        <div class="form-group button-container">
+            <button type="submit" class="btn-primary" name="submit">Sign In</button>
         </div>
         
         <div class="form-footer">

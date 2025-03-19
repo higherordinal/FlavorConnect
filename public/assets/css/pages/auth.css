@@ -1,0 +1,147 @@
+/* ==========================================================================
+   Auth Pages Layout (Login & Register)
+   ========================================================================== */
+
+.content {
+  display: grid;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  padding: var(--spacing-lg);
+  place-items: center;
+}
+
+.content > h1 {
+  margin-bottom: var(--spacing-xl);
+  text-align: center;
+}
+
+.form-header {
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 35%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  text-align: center;
+}
+
+.form-header h1 {
+  color: var(--accent-color);
+  font-size: var(--font-size-xlarge);
+  letter-spacing: normal;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin: 0;
+}
+
+/* ====================================
+   FORM STRUCTURE
+   ==================================== */
+form {
+  display: grid;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+/* Login form is narrower */
+.login-form form {
+  max-width: 400px;
+}
+
+/* Register form is wider */
+.register-form form {
+  max-width: 500px;
+}
+
+form > div {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+/* ====================================
+   FORM ELEMENTS
+   ==================================== */
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ====================================
+   RESPONSIVE LAYOUT FOR REGISTER FORM
+   ==================================== */
+/* Two-column layout for register form on wider screens */
+@media (min-width: 480px) {
+  .register-form form {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Full width items in register form */
+  .register-form form > div:first-child,  /* username */
+  .register-form form > div:nth-child(4), /* email */
+  .register-form form > div:nth-child(5), /* password */
+  .register-form form > div:nth-child(6), /* confirm password */
+  .register-form form > div:last-child,   /* submit button */
+  .register-form .form-footer {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ====================================
+   FORM BUTTONS
+   ==================================== */
+.form-group.button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: var(--spacing-md);
+}
+
+.form-group .btn-primary {
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 35%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+  border: none;
+  color: var(--accent-color);
+  font-weight: 600;
+  padding: 0.875rem 1.5rem;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+  margin-right: auto;
+}
+
+.form-group .btn-primary:hover {
+  background: linear-gradient(120deg, 
+    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 0%,
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 40%,
+    color-mix(in srgb, var(--secondary-color) 30%, var(--primary-color) 70%) 70%,
+    color-mix(in srgb, var(--secondary-color) 50%, var(--primary-color) 50%) 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ====================================
+   ADDITIONAL LINKS
+   ==================================== */
+/* Link container */
+.form-footer {
+  border-top: 1px solid var(--light-gray);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  text-align: center;
+}
+
+.form-footer a {
+  color: var(--secondary-color);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.form-footer a:hover {
+  color: var(--accent-color-dark);
+  text-decoration: underline;
+}
