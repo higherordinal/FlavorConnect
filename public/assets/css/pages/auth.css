@@ -110,7 +110,8 @@ form > div {
   transition: all 0.3s ease;
   display: inline-block;
   text-align: center;
-  margin-right: auto;
+  margin: auto;
+  width: 100%;
 }
 
 .form-group .btn-primary:hover {
