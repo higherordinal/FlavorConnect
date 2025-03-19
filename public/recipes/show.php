@@ -400,16 +400,16 @@ echo display_session_message();
                             <fieldset>
                                 <legend>Rating:</legend>
                                 <div class="star-rating">
-                                    <input type="radio" id="star1" name="review[rating]" value="1" required>
-                                    <label for="star1"><i class="fas fa-star"></i><span class="visually-hidden">1 star</span></label>
-                                    <input type="radio" id="star2" name="review[rating]" value="2">
-                                    <label for="star2"><i class="fas fa-star"></i><span class="visually-hidden">2 stars</span></label>
-                                    <input type="radio" id="star3" name="review[rating]" value="3">
-                                    <label for="star3"><i class="fas fa-star"></i><span class="visually-hidden">3 stars</span></label>
+                                    <input type="radio" id="star5" name="review[rating]" value="5" required>
+                                    <label for="star5"><i class="fas fa-star"></i><span class="visually-hidden">5 stars</span></label>
                                     <input type="radio" id="star4" name="review[rating]" value="4">
                                     <label for="star4"><i class="fas fa-star"></i><span class="visually-hidden">4 stars</span></label>
-                                    <input type="radio" id="star5" name="review[rating]" value="5">
-                                    <label for="star5"><i class="fas fa-star"></i><span class="visually-hidden">5 stars</span></label>
+                                    <input type="radio" id="star3" name="review[rating]" value="3">
+                                    <label for="star3"><i class="fas fa-star"></i><span class="visually-hidden">3 stars</span></label>
+                                    <input type="radio" id="star2" name="review[rating]" value="2">
+                                    <label for="star2"><i class="fas fa-star"></i><span class="visually-hidden">2 stars</span></label>
+                                    <input type="radio" id="star1" name="review[rating]" value="1">
+                                    <label for="star1"><i class="fas fa-star"></i><span class="visually-hidden">1 star</span></label>
                                 </div>
                             </fieldset>
                         </div>

@@ -939,14 +939,14 @@
     transition: color 0.2s ease;
 }
 
-/* When hovering the container, ensure proper hover states */
+/* When hovering the container, reset all stars */
 .star-rating:hover label {
     color: var(--color-gray-300);
 }
 
-/* Color all stars up to and including the hovered one */
+/* Color the hovered star and all stars after it */
 .star-rating label:hover,
-.star-rating:hover label:hover ~ label {
+.star-rating label:hover ~ label {
     color: #ffd700 !important;
 }
 
@@ -954,10 +954,6 @@
 .star-rating input:checked + label,
 .star-rating input:checked + label ~ label {
     color: #ffd700;
-}
-
-.star-rating label:hover ~ label {
-    color: var(--color-gray-300) !important;
 }
 
 .rating-input {
@@ -1213,4 +1209,18 @@
     .print-recipe-btn {
         margin-top: 1rem;
     }
+}
+
+.add-comment fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.rating-input fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
