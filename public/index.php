@@ -81,7 +81,7 @@ if($session->is_logged_in()) {
                                 <i class="<?php echo $recipe->is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
                             </button>
                             <?php } ?>
-                            <img src="<?php echo url_for($recipe->get_image_path()); ?>" 
+                            <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 
                                  alt="<?php echo h($recipe->title); ?>" 
                                  class="recipe-image">
                         </div>

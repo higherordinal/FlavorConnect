@@ -200,7 +200,7 @@ echo display_session_message();
     </div>
     
     <div class="recipe-header-image">
-        <?php if ($recipe->img_file_path): ?>
+        <?php if ($recipe->get_image_path('optimized')): ?>
             <img src="<?php echo url_for($recipe->get_image_path('optimized')); ?>" 
                  alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
         <?php else: ?>

@@ -387,10 +387,10 @@ class Recipe extends DatabaseObject {
 
     /**
      * Gets the image path for this recipe
-     * @param string $size The size of the image to return ('original', 'thumb', 'optimized', 'banner')
+     * @param string $size The size of the image to return ('thumb', 'optimized', 'banner')
      * @return string Relative image path for use with url_for function
      */
-    public function get_image_path($size = 'original') {
+    public function get_image_path($size = 'optimized') {
         if (!$this->img_file_path) {
             return '';
         }
@@ -401,17 +401,38 @@ class Recipe extends DatabaseObject {
         
         // For processed images (thumb, optimized, banner), we use the filename without extension
         // and append the size suffix and .webp extension
+        $base_path = '/assets/uploads/recipes/';
+        $file_path = '';
+        
         switch($size) {
             case 'thumb':
-                return '/assets/uploads/recipes/' . $filename . '_thumb.' . $extension;
-            case 'optimized':
-                return '/assets/uploads/recipes/' . $filename . '_optimized.' . $extension;
+                $file_path = $base_path . $filename . '_thumb.' . $extension;
+                break;
             case 'banner':
-                return '/assets/uploads/recipes/' . $filename . '_banner.' . $extension;
-            case 'original':
+                $file_path = $base_path . $filename . '_banner.' . $extension;
+                break;
+            case 'original': // Original now redirects to optimized since we don't keep originals
+            case 'optimized':
             default:
-                return '/assets/uploads/recipes/' . $this->img_file_path;
+                $file_path = $base_path . $filename . '_optimized.' . $extension;
+                break;
         }
+        
+        // Check if the file actually exists
+        if (file_exists(PUBLIC_PATH . $file_path)) {
+            return $file_path;
+        }
+        
+        // If the requested size doesn't exist, try to return the optimized version as a fallback
+        if ($size !== 'optimized') {
+            $fallback_path = $base_path . $filename . '_optimized.' . $extension;
+            if (file_exists(PUBLIC_PATH . $fallback_path)) {
+                return $fallback_path;
+            }
+        }
+        
+        // If we still don't have a valid file, return empty string
+        return '';
     }
 
     /**

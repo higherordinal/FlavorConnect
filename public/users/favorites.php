@@ -59,8 +59,8 @@ include(SHARED_PATH . '/member_header.php');
                                     aria-label="Remove from favorites">
                                 <i class="fas fa-heart"></i>
                             </button>
-                            <?php if($recipe->img_file_path) { ?>
-                                <img src="<?php echo url_for('/assets/uploads/recipes/' . basename($recipe->img_file_path)); ?>" 
+                            <?php if($recipe->get_image_path('thumb')) { ?>
+                                <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 
                                      alt="<?php echo h($recipe->alt_text); ?>" 
                                      class="recipe-image">
                             <?php } else { ?>

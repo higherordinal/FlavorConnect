@@ -51,8 +51,8 @@ include(SHARED_PATH . '/member_header.php');
                     <?php foreach($recipes as $recipe) { ?>
                         <div class="recipe-card">
                             <div class="recipe-image">
-                                <?php if(!empty($recipe->img_file_path)) { ?>
-                                    <img src="<?php echo url_for('/assets/uploads/recipes/' . $recipe->img_file_path); ?>" 
+                                <?php if($recipe->get_image_path('thumb')) { ?>
+                                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 
                                          alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
                                 <?php } else { ?>
                                     <img src="<?php echo url_for('/assets/images/recipe-placeholder.png'); ?>" 

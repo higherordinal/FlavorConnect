@@ -406,7 +406,7 @@ class RecipeImageProcessor {
             $destination_dir .= '/';
         }
         
-        // Define paths for processed images
+        // Define paths for processed images - only WebP versions
         $thumbnail_path = $destination_dir . $filename . '_thumb.webp';
         $optimized_path = $destination_dir . $filename . '_optimized.webp';
         $banner_path = $destination_dir . $filename . '_banner.webp';
@@ -602,19 +602,89 @@ class RecipeImageProcessor {
      * @return bool True if resizing and conversion were successful, false otherwise
      */
     private function resizeToWebP($source_path, $destination_path, $width, $height, $crop = false) {
-        $quality = 90; // WebP quality (0-100)
-        
-        if ($crop) {
-            $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x{$height}^ -gravity center -extent {$width}x{$height} -quality {$quality} -define webp:lossless=false \"{$destination_path}\"";
-        } else {
-            $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x{$height} -quality {$quality} -define webp:lossless=false \"{$destination_path}\"";
+        if (empty($source_path) || empty($destination_path)) {
+            $this->errors[] = "Source or destination path not set";
+            return false;
         }
         
-        exec($command, $output, $return_var);
+        if (!file_exists($source_path)) {
+            $this->errors[] = "Source file does not exist: {$source_path}";
+            return false;
+        }
+        
+        // Create destination directory if it doesn't exist
+        $destination_dir = dirname($destination_path);
+        if (!is_dir($destination_dir)) {
+            mkdir($destination_dir, 0755, true);
+        }
+        
+        $convert_cmd = $this->getImageMagickCommand();
+        
+        if (empty($convert_cmd)) {
+            $this->errors[] = "ImageMagick command not found";
+            return false;
+        }
+        
+        // Increased quality for WebP (85 allows for better quality while still maintaining reasonable file size)
+        $quality = 85;
+        
+        if ($crop) {
+            // First resize to fill the dimensions, then crop to exact size
+            $cmd = "{$convert_cmd} \"{$source_path}\" -resize {$width}x{$height}^ -gravity center -extent {$width}x{$height} ";
+        } else {
+            // Just resize to fit within the dimensions
+            $cmd = "{$convert_cmd} \"{$source_path}\" -resize {$width}x{$height} ";
+        }
+        
+        // Add optimization flags for WebP
+        // -strip: Remove all metadata (EXIF, etc.)
+        // -define webp:lossless=false: Use lossy compression for smaller files
+        // -define webp:method=5: Use a slightly faster compression method (0-6, where 6 is slowest but best compression)
+        // -define webp:low-memory=true: Use less memory during conversion
+        // -define webp:alpha-compression=1: Compress alpha channel (if present)
+        // -define webp:auto-filter=true: Use more advanced filtering for better compression
+        $cmd .= "-strip -quality {$quality} -define webp:lossless=false -define webp:method=5 -define webp:auto-filter=true ";
+        
+        // Add output file
+        $cmd .= "\"{$destination_path}\"";
+        
+        exec($cmd, $output, $return_var);
         
         if ($return_var !== 0) {
-            $this->errors[] = "Error resizing image to WebP: " . implode("\n", $output);
+            $this->errors[] = "WebP conversion failed with command: {$cmd}";
             return false;
+        }
+        
+        // Verify the file exists and is smaller than the original
+        if (!file_exists($destination_path)) {
+            $this->errors[] = "WebP conversion failed: output file not created";
+            return false;
+        }
+        
+        // Check if the WebP file is significantly larger than the original
+        $original_size = filesize($source_path);
+        $webp_size = filesize($destination_path);
+        
+        // Only try to reduce size if it's over 300KB (allowing for larger, higher quality images)
+        if ($webp_size > 300 * 1024) {
+            // If WebP is too large, try again with lower quality
+            $lower_quality = max(70, $quality - 10);
+            
+            if ($crop) {
+                $cmd = "{$convert_cmd} \"{$source_path}\" -resize {$width}x{$height}^ -gravity center -extent {$width}x{$height} ";
+            } else {
+                $cmd = "{$convert_cmd} \"{$source_path}\" -resize {$width}x{$height} ";
+            }
+            
+            $cmd .= "-strip -quality {$lower_quality} -define webp:lossless=false -define webp:method=5 -define webp:auto-filter=true ";
+            $cmd .= "\"{$destination_path}\"";
+            
+            exec($cmd, $output, $return_var);
+            
+            if ($return_var !== 0) {
+                $this->errors[] = "WebP re-optimization failed with command: {$cmd}";
+                return false;
+            }
         }
         
         return true;
@@ -631,10 +701,10 @@ class RecipeImageProcessor {
      * @return bool True if optimization and conversion were successful, false otherwise
      */
     private function optimizeToWebP($source_path, $destination_path) {
-        $quality = 90; // WebP quality (0-100)
+        $quality = 85; // Increased WebP quality (0-100)
         $width = 1000; // Max width for optimized image
         
-        $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x -quality {$quality} -define webp:lossless=false \"{$destination_path}\"";
+        $command = $this->getImageMagickCommand() . " \"{$source_path}\" -resize {$width}x -quality {$quality} -define webp:lossless=false -define webp:method=5 -define webp:auto-filter=true \"{$destination_path}\"";
         
         exec($command, $output, $return_var);
         
@@ -647,12 +717,12 @@ class RecipeImageProcessor {
     }
     
     /**
-     * Delete recipe images and their processed versions
+     * Delete recipe images processed versions
      * 
-     * Removes the original image and all processed versions (thumbnail, optimized, banner)
+     * Removes all processed WebP versions (thumbnail, optimized, banner)
      * 
      * @param string $directory Directory containing the images
-     * @param string $filename Filename of the original image
+     * @param string $filename Filename of the original image (with or without extension)
      * @return bool True if all files were deleted or didn't exist, false if any deletion failed
      */
     public function deleteRecipeImages($directory, $filename) {
@@ -665,20 +735,12 @@ class RecipeImageProcessor {
         $path_parts = pathinfo($filename);
         $base_filename = $path_parts['filename'];
         
-        // Define paths to all versions
-        $original_path = $directory . $filename;
+        // Define paths to WebP versions
         $thumb_path = $directory . $base_filename . '_thumb.webp';
         $optimized_path = $directory . $base_filename . '_optimized.webp';
         $banner_path = $directory . $base_filename . '_banner.webp';
         
-        // Delete original file
         $success = true;
-        if (file_exists($original_path)) {
-            if (!unlink($original_path)) {
-                $this->errors[] = "Failed to delete original image: {$original_path}";
-                $success = false;
-            }
-        }
         
         // Delete thumbnail
         if (file_exists($thumb_path)) {
@@ -716,6 +778,7 @@ class RecipeImageProcessor {
      * - Deletes old images if a replacement is provided
      * - Moves the uploaded file to the target directory
      * - Processes the image to create thumbnail, optimized, and banner versions
+     * - Deletes the original file after processing to only keep WebP versions
      * 
      * @param array $file_data The $_FILES array element for the uploaded file
      * @param string $target_dir The directory where the file should be stored
@@ -790,9 +853,17 @@ class RecipeImageProcessor {
             $result['errors'] = $this->errors;
         }
         
-        // Return success with the new filename
+        // Delete the original file after processing to only keep WebP versions
+        if (file_exists($target_path)) {
+            if (!unlink($target_path)) {
+                $this->errors[] = "Warning: Failed to delete original image file after processing";
+                // Don't fail the upload if we can't delete the original
+            }
+        }
+        
+        // Return success with the new filename (without extension since we'll only use WebP versions)
         $result['success'] = true;
-        $result['filename'] = $new_filename;
+        $result['filename'] = pathinfo($new_filename, PATHINFO_FILENAME); // Return only the filename without extension
         
         return $result;
     }
@@ -939,25 +1010,23 @@ class RecipeImageProcessor {
      * @param bool $crop Whether to crop the image to fit the dimensions
      * @return bool True if successful, false otherwise
      */
-    public function resizeWithGD($source_path, $destination_path, $width, $height, $crop = false) {
-        // Check if source file exists
-        if (!file_exists($source_path)) {
-            $this->errors[] = "Source file does not exist: {$source_path}";
+    protected function resizeWithGD($source_path, $destination_path, $width, $height, $crop = false) {
+        if (!function_exists('imagecreatefromjpeg') || !function_exists('imagecreatefrompng')) {
+            $this->errors[] = "GD library is not available or missing required functions";
             return false;
         }
         
         // Get image info
-        $info = getimagesize($source_path);
-        if ($info === false) {
-            $this->errors[] = "Failed to get image information for {$source_path}";
+        $image_info = getimagesize($source_path);
+        if ($image_info === false) {
+            $this->errors[] = "Could not get image information from source file";
             return false;
         }
         
-        // Create image resource based on file type
-        $source_image = null;
-        $mime = $info['mime'];
+        $mime_type = $image_info['mime'];
         
-        switch ($mime) {
+        // Create source image based on type
+        switch ($mime_type) {
             case 'image/jpeg':
                 $source_image = imagecreatefromjpeg($source_path);
                 break;
@@ -968,109 +1037,122 @@ class RecipeImageProcessor {
                 $source_image = imagecreatefromgif($source_path);
                 break;
             case 'image/webp':
-                $source_image = imagecreatefromwebp($source_path);
+                if (function_exists('imagecreatefromwebp')) {
+                    $source_image = imagecreatefromwebp($source_path);
+                } else {
+                    $this->errors[] = "WebP support not available in GD library";
+                    return false;
+                }
                 break;
             default:
-                $this->errors[] = "Unsupported image type: {$mime}";
+                $this->errors[] = "Unsupported image type: {$mime_type}";
                 return false;
         }
         
         if (!$source_image) {
-            $this->errors[] = "Failed to create image resource from {$source_path}";
+            $this->errors[] = "Failed to create source image from file";
             return false;
         }
         
-        // Get original dimensions
-        $original_width = imagesx($source_image);
-        $original_height = imagesy($source_image);
+        // Get source dimensions
+        $source_width = imagesx($source_image);
+        $source_height = imagesy($source_image);
         
-        // Calculate new dimensions
-        $new_width = $width;
-        $new_height = $height;
+        // Calculate target dimensions
+        $target_width = $width;
+        $target_height = $height;
         
-        if (!$crop) {
-            // Maintain aspect ratio
-            $ratio_orig = $original_width / $original_height;
+        if ($crop) {
+            // Calculate dimensions for cropping
+            $source_ratio = $source_width / $source_height;
+            $target_ratio = $width / $height;
             
-            if ($width / $height > $ratio_orig) {
-                $new_width = $height * $ratio_orig;
+            if ($source_ratio > $target_ratio) {
+                // Source image is wider than target ratio
+                $temp_width = intval($source_height * $target_ratio);
+                $temp_height = $source_height;
+                $source_x = intval(($source_width - $temp_width) / 2);
+                $source_y = 0;
             } else {
-                $new_height = $width / $ratio_orig;
-            }
-        }
-        
-        // Create a new true color image
-        $new_image = imagecreatetruecolor($new_width, $new_height);
-        
-        // Preserve transparency for PNG images
-        if ($mime == 'image/png') {
-            // Turn off alpha blending and set alpha flag
-            imagealphablending($new_image, false);
-            imagesavealpha($new_image, true);
-        }
-        
-        // Resize the image
-        imagecopyresampled(
-            $new_image,
-            $source_image,
-            0, 0, 0, 0,
-            $new_width, $new_height,
-            $original_width, $original_height
-        );
-        
-        // If cropping is needed and dimensions don't match the target
-        if ($crop && ($new_width != $width || $new_height != $height)) {
-            $cropped_image = imagecreatetruecolor($width, $height);
-            
-            // Preserve transparency for PNG
-            if ($mime == 'image/png') {
-                imagealphablending($cropped_image, false);
-                imagesavealpha($cropped_image, true);
+                // Source image is taller than target ratio
+                $temp_width = $source_width;
+                $temp_height = intval($source_width / $target_ratio);
+                $source_x = 0;
+                $source_y = intval(($source_height - $temp_height) / 2);
             }
             
-            // Calculate crop position (center)
-            $x_offset = ($new_width - $width) / 2;
-            $y_offset = ($new_height - $height) / 2;
+            $target_image = imagecreatetruecolor($target_width, $target_height);
             
-            // Crop the image
-            imagecopy(
-                $cropped_image,
-                $new_image,
-                0, 0, $x_offset, $y_offset,
-                $width, $height
+            // Preserve transparency for PNG images
+            if ($mime_type === 'image/png') {
+                imagealphablending($target_image, false);
+                imagesavealpha($target_image, true);
+                $transparent = imagecolorallocatealpha($target_image, 255, 255, 255, 127);
+                imagefilledrectangle($target_image, 0, 0, $target_width, $target_height, $transparent);
+            }
+            
+            // Crop and resize in one step
+            imagecopyresampled(
+                $target_image, $source_image,
+                0, 0, $source_x, $source_y,
+                $target_width, $target_height, $temp_width, $temp_height
             );
+        } else {
+            // Resize to fit within dimensions while maintaining aspect ratio
+            if ($source_width / $source_height > $width / $height) {
+                // Source image is wider than target ratio
+                $target_width = $width;
+                $target_height = intval($source_height * ($width / $source_width));
+            } else {
+                // Source image is taller than target ratio
+                $target_height = $height;
+                $target_width = intval($source_width * ($height / $source_height));
+            }
             
-            // Free the temporary image
-            imagedestroy($new_image);
-            $new_image = $cropped_image;
+            $target_image = imagecreatetruecolor($target_width, $target_height);
+            
+            // Preserve transparency for PNG images
+            if ($mime_type === 'image/png') {
+                imagealphablending($target_image, false);
+                imagesavealpha($target_image, true);
+                $transparent = imagecolorallocatealpha($target_image, 255, 255, 255, 127);
+                imagefilledrectangle($target_image, 0, 0, $target_width, $target_height, $transparent);
+            }
+            
+            // Resize the image
+            imagecopyresampled(
+                $target_image, $source_image,
+                0, 0, 0, 0,
+                $target_width, $target_height, $source_width, $source_height
+            );
         }
         
-        // Save the image
+        // Save the image as WebP with higher quality (85 is a good balance for better quality)
+        $webp_quality = 85;
         $result = false;
         
-        // Check if WebP is supported
         if (function_exists('imagewebp')) {
-            // Ensure the destination path has a .webp extension
-            $destination_path = preg_replace('/\.[^.]+$/', '.webp', $destination_path);
+            $result = imagewebp($target_image, $destination_path, $webp_quality);
             
-            // Save as WebP with higher quality
-            $result = imagewebp($new_image, $destination_path, 90);
+            // Check if the WebP file is too large (over 300KB)
+            if (file_exists($destination_path) && filesize($destination_path) > 300 * 1024) {
+                // If WebP is too large, try again with lower quality
+                $lower_quality = max(70, $webp_quality - 10);
+                $result = imagewebp($target_image, $destination_path, $lower_quality);
+            }
         } else {
-            $this->errors[] = "WebP format is not supported by your PHP installation";
+            $this->errors[] = "WebP support not available in GD library";
             
-            // Free up memory
-            imagedestroy($source_image);
-            imagedestroy($new_image);
-            
-            return false;
+            // Fall back to JPEG if WebP is not supported
+            $result = imagejpeg($target_image, $destination_path, 90);
         }
         
-        // Free up memory
+        // Free memory
         imagedestroy($source_image);
-        imagedestroy($new_image);
+        imagedestroy($target_image);
         
         if (!$result) {
-            $this->errors[] = "Failed to save image to {$destination_path}";
+            $this->errors[] = "Failed to save resized image";
             return false;
         }
         
