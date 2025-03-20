@@ -100,42 +100,30 @@ function get_raw_quantity($value) {
  */
 function format_quantity($value) {
     if ($value == 0) return '0';
-    if ($value == 1) return '1';
     
-    // Convert to fraction
-    $whole = floor($value);
-    $decimal = $value - $whole;
+    $wholePart = floor($value);
+    $decimal = $value - $wholePart;
     
-    // Common fractions
-    $fractions = [
-        0.25 => '1/4',
-        0.5 => '1/2',
-        0.75 => '3/4',
-        0.33 => '1/3',
-        0.67 => '2/3',
-        0.2 => '1/5',
-        0.4 => '2/5',
-        0.6 => '3/5',
-        0.8 => '4/5'
-    ];
-    
-    // Find the closest fraction
-    $closest = null;
-    $closest_diff = 1;
-    foreach ($fractions as $frac_decimal => $fraction) {
-        $diff = abs($decimal - $frac_decimal);
-        if ($diff < $closest_diff) {
-            $closest = $fraction;
-            $closest_diff = $diff;
-        }
+    // Convert decimal to fraction using the same logic as JavaScript
+    $fraction = '';
+    if ($decimal >= 0.875) {
+        $fraction = '';
+        $wholePart += 1;
+    } else if ($decimal >= 0.625) {
+        $fraction = '¾';
+    } else if ($decimal >= 0.375) {
+        $fraction = '½';
+    } else if ($decimal >= 0.125) {
+        $fraction = '¼';
     }
     
-    if ($whole > 0 && $closest) {
-        return $whole . ' ' . $closest;
-    } elseif ($whole > 0) {
-        return $whole;
+    // Format the final string
+    if ($wholePart == 0) {
+        return $fraction ?: '0';
+    } else if ($fraction) {
+        return $wholePart . ' ' . $fraction;
     } else {
-        return $closest ?? number_format($value, 2);
+        return (string)$wholePart;
     }
 }
 
