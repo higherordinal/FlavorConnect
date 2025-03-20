@@ -41,7 +41,7 @@ if(is_post_request()) {
 }
 
 $page_title = 'Delete Recipe';
-$page_style = 'recipe-create';
+$page_style = 'recipe-crud';
 include(SHARED_PATH . '/member_header.php');
 ?>
 

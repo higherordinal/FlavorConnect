@@ -3,7 +3,7 @@ require_once('../../private/core/initialize.php');
 require_login();
 
 $page_title = 'Create Recipe';
-$page_style = 'recipe-create';
+$page_style = 'recipe-crud';
 
 include(SHARED_PATH . '/member_header.php');
 
