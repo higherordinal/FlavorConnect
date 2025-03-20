@@ -28,6 +28,17 @@ if(is_post_request()) {
         unset($args['user_level']);
     }
     
+    // Check if this would deactivate the last active admin
+    $original_is_active = $user->is_active;
+    $new_is_active = isset($args['is_active']) ? (bool)$args['is_active'] : $original_is_active;
+    
+    if(($user->is_admin() || $user->is_super_admin()) && $original_is_active && !$new_is_active) {
+        if(!has_remaining_active_admin($user->user_id, false)) {
+            $session->message('Cannot deactivate the last active admin user.', 'error');
+            redirect_to(url_for('/admin/users/index.php'));
+        }
+    }
+    
     $user->merge_attributes($args);
     $result = $user->save();
     if($result === true) {
