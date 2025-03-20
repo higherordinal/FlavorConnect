@@ -21,6 +21,17 @@ include(SHARED_PATH . '/member_header.php');
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/profile.css'); ?>">
 
 <div class="profile-container">
+    <?php 
+    echo unified_navigation(
+        '/index.php',
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['label' => 'Profile']
+        ],
+        'Back to Home'
+    ); 
+    ?>
+    
     <div class="profile-header">
         <h1><?php echo h($user->username); ?></h1>
         <div class="profile-stats">

@@ -13,19 +13,19 @@ if($session->is_logged_in()) {
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=1.0'); ?>">
 
 <div class="container">
-    <a href="<?php echo url_for('/index.php'); ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i>
-        Back to Home
-    </a>
-    
-    <div class="breadcrumbs">
-        <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item active">Recipes</span>
-    </div>
+    <?php 
+    echo unified_navigation(
+        '/index.php',
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['label' => 'Recipes']
+        ],
+        'Back to Home'
+    ); 
+    ?>
 </div>
 
-<?php
+<?php 
 // Get filter values
 $search = $_GET['search'] ?? '';
 $style_id = !empty($_GET['style']) ? (int)$_GET['style'] : null;
@@ -213,7 +213,9 @@ $userData = [
         </div>
 
         <?php if($search || $style_id || $diet_id || $type_id) { ?>
-            <!-- Removed clear-filters button from here -->
+            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
+                <i class="fas fa-times"></i> Clear Filters
+            </a>
         <?php } ?>
     </div>
 
@@ -241,9 +243,6 @@ $userData = [
                         Type: <?php echo h($type->name); ?>
                     </span>
                 <?php } ?>
-                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
-                    <i class="fas fa-times"></i> Clear Filters
-                </a>
             </div>
         <?php } ?>
     </div>

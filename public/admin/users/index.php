@@ -20,17 +20,17 @@ include(SHARED_PATH . '/member_header.php');
 
 <main class="main-content">
     <div class="admin-content">
-        <a href="<?php echo url_for('/admin/index.php'); ?>" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to Admin Dashboard
-        </a>
-
-        <div class="breadcrumbs">
-            <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="<?php echo url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">User Management</span>
-        </div>
+        <?php 
+        echo unified_navigation(
+            '/admin/index.php',
+            [
+                ['url' => '/index.php', 'label' => 'Home'],
+                ['url' => '/admin/index.php', 'label' => 'Admin'],
+                ['label' => 'User Management']
+            ],
+            'Back to Admin Dashboard'
+        ); 
+        ?>
 
         <div class="admin-header">
             <h1>User Management</h1>

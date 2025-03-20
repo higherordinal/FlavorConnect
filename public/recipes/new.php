@@ -148,27 +148,21 @@ if(is_post_request()) {
     }
 }
 
-$ref = $_GET['ref'] ?? '';
-$back_link = match($ref) {
-    'profile' => url_for('/users/profile.php'),
-    'home' => url_for('/index.php'),
-    'header' => url_for('/recipes/index.php'),
-    default => url_for('/recipes/index.php')
-};
+$back_link = get_back_link('/recipes/index.php');
 ?>
 
 <div class="container">
-    <a href="<?php echo $back_link; ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back
-    </a>
-    
-    <div class="breadcrumbs">
-        <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
-        <span class="breadcrumb-separator">/</span>
-        <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item active">Create Recipe</span>
-    </div>
+    <?php 
+    echo unified_navigation(
+        $back_link,
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['url' => '/recipes/index.php', 'label' => 'Recipes'],
+            ['label' => 'Create Recipe']
+        ],
+        'Back'
+    ); 
+    ?>
 </div>
 
 <div class="recipe-form">

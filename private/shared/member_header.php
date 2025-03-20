@@ -35,12 +35,12 @@ if(!isset($page_style)) { $page_style = ''; }
     </script>
     
     <!-- Component Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-favorite.css?v=' . time()); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/unified-navigation.css?v=1.0'); ?>">
     
     <!-- Page Specific Styles -->
     <?php if(isset($page_style)) { ?>
@@ -73,6 +73,7 @@ if(!isset($page_style)) { $page_style = ''; }
     <!-- Core Utility Scripts -->
     <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
     <script src="<?php echo url_for('/assets/js/utils/favorites.js?v=' . time()); ?>"></script>
+    <script src="<?php echo url_for('/assets/js/utils/back-link.js?v=' . time()); ?>"></script>
     
     <!-- Component Scripts -->
     <script src="<?php echo url_for('/assets/js/components/member-header.js?v=' . time()); ?>" defer></script>

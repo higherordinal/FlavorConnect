@@ -180,14 +180,7 @@ if(is_post_request()) {
 }
 
 $ref = $_GET['ref'] ?? '';
-$back_link = match($ref) {
-    'profile' => url_for('/users/profile.php'),
-    'show' => url_for('/recipes/show.php?id=' . h(u($id))),
-    'home' => url_for('/index.php'),
-    'header' => url_for('/recipes/index.php'),
-    'favorites' => url_for('/users/favorites.php'),
-    default => url_for('/recipes/show.php?id=' . h(u($id)))
-};
+$back_link = get_back_link('/recipes/show.php?id=' . h(u($id)));
 
 $back_text = match($ref) {
     'profile' => 'Back to Profile',
@@ -201,19 +194,18 @@ $back_text = match($ref) {
 
 <main class="main-content">
     <div class="container">
-        <a href="<?php echo $back_link; ?>" class="back-link">
-            <i class="fas fa-arrow-left"></i> <?php echo $back_text; ?>
-        </a>
-        
-        <div class="breadcrumbs">
-            <a href="<?php echo url_for('/index.php'); ?>" class="breadcrumb-item">Home</a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="breadcrumb-item">Recipes</a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($id))); ?>" class="breadcrumb-item"><?php echo h($recipe->title); ?></a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">Edit Recipe</span>
-        </div>
+        <?php 
+        echo unified_navigation(
+            $back_link,
+            [
+                ['url' => '/index.php', 'label' => 'Home'],
+                ['url' => '/recipes/index.php', 'label' => 'Recipes'],
+                ['url' => '/recipes/show.php?id=' . h(u($id)), 'label' => h($recipe->title)],
+                ['label' => 'Edit Recipe']
+            ],
+            $back_text
+        ); 
+        ?>
     </div>
 
     <div class="recipe-form">

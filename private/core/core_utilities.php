@@ -99,25 +99,148 @@ function get_raw_quantity($value) {
  * @return string The formatted quantity
  */
 function format_quantity($value) {
-    // Convert common decimals to fractions
-    $value = floatval($value);
+    if ($value == 0) return '0';
+    if ($value == 1) return '1';
     
-    if ($value == 0.25) return '¼';
-    if ($value == 0.5) return '½';
-    if ($value == 0.75) return '¾';
-    if ($value == 0.33) return '⅓';
-    if ($value == 0.67) return '⅔';
-    if ($value == 1.25) return '1¼';
-    if ($value == 1.5) return '1½';
-    if ($value == 1.75) return '1¾';
+    // Convert to fraction
+    $whole = floor($value);
+    $decimal = $value - $whole;
     
-    // For whole numbers, return as is
-    if (floor($value) == $value) {
-        return (string)$value;
+    // Common fractions
+    $fractions = [
+        0.25 => '1/4',
+        0.5 => '1/2',
+        0.75 => '3/4',
+        0.33 => '1/3',
+        0.67 => '2/3',
+        0.2 => '1/5',
+        0.4 => '2/5',
+        0.6 => '3/5',
+        0.8 => '4/5'
+    ];
+    
+    // Find the closest fraction
+    $closest = null;
+    $closest_diff = 1;
+    foreach ($fractions as $frac_decimal => $fraction) {
+        $diff = abs($decimal - $frac_decimal);
+        if ($diff < $closest_diff) {
+            $closest = $fraction;
+            $closest_diff = $diff;
+        }
     }
     
-    // For other decimals, round to 2 places
-    return number_format($value, 2);
+    if ($whole > 0 && $closest) {
+        return $whole . ' ' . $closest;
+    } elseif ($whole > 0) {
+        return $whole;
+    } else {
+        return $closest ?? number_format($value, 2);
+    }
+}
+
+/**
+ * Generates a smart back link URL
+ * 
+ * This function determines the most appropriate back link based on:
+ * 1. The HTTP_REFERER if available
+ * 2. The 'ref' parameter in the query string
+ * 3. A default fallback URL
+ * 
+ * @param string $default_url The default URL to use if no referer is available
+ * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
+ * @return string The back link URL
+ */
+function get_back_link($default_url = '/index.php', $allowed_domains = []) {
+    // First check for ref parameter in query string
+    $ref = $_GET['ref'] ?? '';
+    if ($ref) {
+        switch ($ref) {
+            case 'home':
+                return url_for('/index.php');
+            case 'profile':
+                return url_for('/users/profile.php');
+            case 'favorites':
+                return url_for('/users/favorites.php');
+            case 'gallery':
+            case 'recipes':
+                return url_for('/recipes/index.php');
+            // Add more cases as needed
+        }
+    }
+    
+    // Then check HTTP_REFERER
+    $referer = $_SERVER['HTTP_REFERER'] ?? '';
+    if ($referer) {
+        // Parse the referer URL
+        $referer_parts = parse_url($referer);
+        $host = $referer_parts['host'] ?? '';
+        
+        // If allowed_domains is empty, allow any domain
+        // Otherwise, check if the referer's domain is in the allowed list
+        $is_allowed = empty($allowed_domains) || in_array($host, $allowed_domains);
+        
+        if ($is_allowed) {
+            // Extract the path from the referer
+            $path = $referer_parts['path'] ?? '';
+            
+            // Don't use referer if it's the same as current page to avoid loops
+            $current_path = $_SERVER['REQUEST_URI'] ?? '';
+            if ($path !== $current_path) {
+                return $referer;
+            }
+        }
+    }
+    
+    // Fallback to default URL
+    return url_for($default_url);
+}
+
+/**
+ * Generates a unified navigation component with back link and breadcrumbs
+ * 
+ * @param string $default_back_url The default URL to use if no referer is available
+ * @param array $breadcrumbs Array of breadcrumb items, each with 'url' and 'label' keys
+ * @param string $back_text Custom text for the back link (optional)
+ * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
+ * @return string HTML for the unified navigation component
+ */
+function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [], $back_text = 'Back', $allowed_domains = []) {
+    $back_link = get_back_link($default_back_url, $allowed_domains);
+    
+    $html = '<div class="unified-navigation">';
+    
+    // Add back link
+    $html .= '<a href="' . h($back_link) . '" class="back-link">';
+    $html .= '<i class="fas fa-arrow-left"></i> ' . h($back_text);
+    $html .= '</a>';
+    
+    // Add breadcrumbs if provided
+    if (!empty($breadcrumbs)) {
+        $html .= '<div class="breadcrumbs">';
+        
+        $count = count($breadcrumbs);
+        foreach ($breadcrumbs as $index => $crumb) {
+            if (isset($crumb['url']) && $index < $count - 1) {
+                // Not the last item, make it a link
+                $html .= '<a href="' . url_for(h($crumb['url'])) . '" class="breadcrumb-item">' . h($crumb['label']) . '</a>';
+            } else {
+                // Last item or no URL, just text
+                $html .= '<span class="breadcrumb-item breadcrumb-active">' . h($crumb['label']) . '</span>';
+            }
+            
+            // Add separator if not the last item
+            if ($index < $count - 1) {
+                $html .= '<span class="breadcrumb-separator">/</span>';
+            }
+        }
+        
+        $html .= '</div>';
+    }
+    
+    $html .= '</div>';
+    
+    return $html;
 }
 
 ?>

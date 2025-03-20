@@ -21,11 +21,12 @@ if(!isset($page_style)) { $page_style = ''; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css'); ?>">
     
     <!-- Component Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/public-header.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/public-header.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=1.0'); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/unified-navigation.css?v=1.0'); ?>">
     
     <!-- Page Specific Styles -->
     <?php if($page_style): ?>
@@ -59,6 +60,7 @@ if(!isset($page_style)) { $page_style = ''; }
     
     <!-- Core Utility Scripts -->
     <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
+    <script src="<?php echo url_for('/assets/js/utils/back-link.js?v=' . time()); ?>"></script>
 </head>
 <body>
     <header class="header" role="banner">

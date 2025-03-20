@@ -12,6 +12,18 @@ if($session->is_logged_in()) {
 
 <main>
     <section class="about-section">
+        <div class="container">
+            <?php 
+            echo unified_navigation(
+                '/index.php',
+                [
+                    ['url' => '/index.php', 'label' => 'Home'],
+                    ['label' => 'About Us']
+                ],
+                'Back'
+            ); 
+            ?>
+        </div>
         <div class="about-hero">
             <div class="about-hero-content">
                 <h1>About FlavorConnect</h1>

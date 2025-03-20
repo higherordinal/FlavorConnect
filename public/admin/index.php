@@ -11,6 +11,17 @@ include(SHARED_PATH . '/member_header.php');
 
 <main class="main-content">
     <div class="admin-dashboard">
+        <?php 
+        echo unified_navigation(
+            '/index.php',
+            [
+                ['url' => '/index.php', 'label' => 'Home'],
+                ['label' => 'Admin Dashboard']
+            ],
+            'Back to Home'
+        ); 
+        ?>
+        
         <div class="admin-header">
             <h1>Admin Dashboard</h1>
         </div>
