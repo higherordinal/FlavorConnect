@@ -38,6 +38,56 @@
     background-image: none;
 }
 
+/* Recipe header image styling */
+.recipe-form .recipe-header-image {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    margin: -1rem -1rem 1rem -1rem;
+    width: calc(100% + 2rem);
+}
+
+.recipe-form .recipe-header-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recipe-form .recipe-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.recipe-form .recipe-header-content {
+    width: 100%;
+    padding: 0 var(--spacing-xl);
+    color: var(--color-white);
+    text-align: center;
+}
+
+.recipe-form .recipe-header-content .page-header {
+    border: none;
+    background: none;
+    box-shadow: none;
+    color: var(--color-white);
+    margin-bottom: 0;
+}
+
+.recipe-form .recipe-header-content .page-header h1 {
+    color: var(--color-white);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    font-size: 2.5rem;
+}
+
 .recipe-form .page-header::before {
     content: '';
     position: absolute;

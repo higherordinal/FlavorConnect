@@ -46,21 +46,28 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <main>
+    <div class="container">
+        <?php 
+        echo unified_navigation(
+            $back_link,
+            [
+                ['url' => '/index.php', 'label' => 'Home'],
+                ['url' => '/recipes/index.php', 'label' => 'Recipes'],
+                ['url' => '/recipes/show.php?id=' . h(u($id)), 'label' => h($recipe->title)],
+                ['label' => 'Delete Recipe']
+            ],
+            'Back'
+        ); 
+        ?>
+    </div>
+    
     <div class="recipe-form">
-        <header class="page-header">
-            <?php 
-            echo unified_navigation(
-                $back_link,
-                [
-                    ['url' => '/index.php', 'label' => 'Home'],
-                    ['url' => '/recipes/index.php', 'label' => 'Recipes'],
-                    ['url' => '/recipes/show.php?id=' . h(u($id)), 'label' => h($recipe->title)],
-                    ['label' => 'Delete Recipe']
-                ],
-                'Back'
-            ); 
-            ?>
-            <h1>Delete Recipe</h1>
+        <header class="page-header with-recipe-banner" id="recipe-header" <?php 
+            if($recipe->img_file_path) {
+                echo 'style="background-image: url(\'' . url_for($recipe->get_image_path('banner')) . '\');"';
+            }
+        ?>>
+            <h1>Delete Recipe: <?php echo h($recipe->title); ?></h1>
         </header>
 
         <?php echo display_errors($errors); ?>
