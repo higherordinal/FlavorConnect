@@ -13,7 +13,7 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/favorites.css'); ?>">
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/user-favorites.css'); ?>">
 
 <div class="container">
     <?php 

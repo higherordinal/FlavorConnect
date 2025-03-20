@@ -9,7 +9,12 @@
   margin: 0 auto;
   max-width: var(--container-width);
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  padding: var(--spacing-md) var(--spacing-md);
+  padding: 0 var(--spacing-md) var(--spacing-md);
+}
+
+/* Ensure unified navigation has consistent spacing */
+.admin-management .unified-navigation {
+  margin-bottom: 0.5rem;
 }
 
 /* ====================================
