@@ -1,7 +1,6 @@
 <?php
 require_once('../../private/core/initialize.php');
 
-require_login();
 require_admin();
 
 $page_title = 'Admin Dashboard';

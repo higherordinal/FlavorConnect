@@ -83,4 +83,3 @@ function is_admin() {
     global $session;
     return $session->is_admin();
 }
-?>

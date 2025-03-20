@@ -1,6 +1,5 @@
 <?php
 require_once('../../../private/core/initialize.php');
-require_login();
 require_admin();
 
 // Initialize user with default values
