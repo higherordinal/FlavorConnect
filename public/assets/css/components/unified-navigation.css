@@ -31,12 +31,25 @@
 }
 
 /* Breadcrumbs Styles */
-.unified-navigation .breadcrumbs {
+.unified-navigation nav {
+    margin: 0;
+    padding: 0;
+}
+
+.unified-navigation ol.breadcrumbs {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     font-size: 0.9rem;
     color: var(--color-text-muted);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.unified-navigation li {
+    display: flex;
+    align-items: center;
 }
 
 .unified-navigation .breadcrumb-item {

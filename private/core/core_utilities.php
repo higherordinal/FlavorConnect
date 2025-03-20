@@ -203,7 +203,7 @@ function get_back_link($default_url = '/index.php', $allowed_domains = []) {
  * @param array $breadcrumbs Array of breadcrumb items, each with 'url' and 'label' keys
  * @param string $back_text Custom text for the back link (optional)
  * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
- * @return string HTML for the unified navigation component
+ * @return string HTML for the unified navigation component with SEO structured data
  */
 function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [], $back_text = 'Back', $allowed_domains = []) {
     $back_link = get_back_link($default_back_url, $allowed_domains);
@@ -217,25 +217,61 @@ function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [],
     
     // Add breadcrumbs if provided
     if (!empty($breadcrumbs)) {
-        $html .= '<div class="breadcrumbs">';
+        // Add BreadcrumbList structured data for SEO
+        $html .= '<script type="application/ld+json">';
+        $html .= '{';
+        $html .= '"@context": "https://schema.org",';
+        $html .= '"@type": "BreadcrumbList",';
+        $html .= '"itemListElement": [';
         
-        $count = count($breadcrumbs);
         foreach ($breadcrumbs as $index => $crumb) {
-            if (isset($crumb['url']) && $index < $count - 1) {
-                // Not the last item, make it a link
-                $html .= '<a href="' . url_for(h($crumb['url'])) . '" class="breadcrumb-item">' . h($crumb['label']) . '</a>';
-            } else {
-                // Last item or no URL, just text
-                $html .= '<span class="breadcrumb-item breadcrumb-active">' . h($crumb['label']) . '</span>';
+            $html .= '{';
+            $html .= '"@type": "ListItem",';
+            $html .= '"position": ' . ($index + 1) . ',';
+            $html .= '"name": "' . h($crumb['label']) . '"';
+            if (isset($crumb['url'])) {
+                $html .= ',"item": "' . url_for(h($crumb['url'])) . '"';
             }
-            
-            // Add separator if not the last item
-            if ($index < $count - 1) {
-                $html .= '<span class="breadcrumb-separator">/</span>';
+            $html .= '}';
+            if ($index < count($breadcrumbs) - 1) {
+                $html .= ',';
             }
         }
         
-        $html .= '</div>';
+        $html .= ']';
+        $html .= '}';
+        $html .= '</script>';
+        
+        // Visual breadcrumbs with appropriate ARIA attributes
+        $html .= '<nav aria-label="Breadcrumb">';
+        $html .= '<ol class="breadcrumbs" itemscope itemtype="https://schema.org/BreadcrumbList">';
+        
+        $count = count($breadcrumbs);
+        foreach ($breadcrumbs as $index => $crumb) {
+            $html .= '<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">';
+            
+            if (isset($crumb['url']) && $index < $count - 1) {
+                // Not the last item, make it a link
+                $html .= '<a itemprop="item" href="' . url_for(h($crumb['url'])) . '" class="breadcrumb-item">';
+                $html .= '<span itemprop="name">' . h($crumb['label']) . '</span>';
+                $html .= '</a>';
+            } else {
+                // Last item or no URL, just text
+                $html .= '<span itemprop="name" class="breadcrumb-item breadcrumb-active" aria-current="page">' . h($crumb['label']) . '</span>';
+            }
+            
+            $html .= '<meta itemprop="position" content="' . ($index + 1) . '" />';
+            
+            // Add separator if not the last item
+            if ($index < $count - 1) {
+                $html .= '<span class="breadcrumb-separator" aria-hidden="true">/</span>';
+            }
+            
+            $html .= '</li>';
+        }
+        
+        $html .= '</ol>';
+        $html .= '</nav>';
     }
     
     $html .= '</div>';
