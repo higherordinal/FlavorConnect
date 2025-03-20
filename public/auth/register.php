@@ -54,16 +54,18 @@ include(SHARED_PATH . '/public_header.php');
             <?php echo display_error('username', $errors); ?>
         </div>
 
-        <div class="form-group">
-            <label class="form-label" for="first_name">First Name</label>
-            <input class="form-input <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required>
-            <?php echo display_error('first_name', $errors); ?>
-        </div>
+        <div class="name-fields-container">
+            <div class="form-group">
+                <label class="form-label" for="first_name">First Name</label>
+                <input class="form-input <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required>
+                <?php echo display_error('first_name', $errors); ?>
+            </div>
 
-        <div class="form-group">
-            <label class="form-label" for="last_name">Last Name</label>
-            <input class="form-input <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required>
-            <?php echo display_error('last_name', $errors); ?>
+            <div class="form-group">
+                <label class="form-label" for="last_name">Last Name</label>
+                <input class="form-input <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required>
+                <?php echo display_error('last_name', $errors); ?>
+            </div>
         </div>
 
         <div class="form-group">

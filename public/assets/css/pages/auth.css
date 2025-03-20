@@ -59,6 +59,20 @@ form > div {
   gap: var(--spacing-sm);
 }
 
+/* Name fields container for first and last name */
+.name-fields-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+/* Media query for larger screens */
+@media (min-width: 576px) {
+  .name-fields-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 /* ====================================
    FORM ELEMENTS
    ==================================== */
