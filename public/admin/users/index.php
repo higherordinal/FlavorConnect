@@ -7,13 +7,40 @@ require_admin();
 $page_title = 'Admin: User Management';
 $page_style = 'admin';
 
-// Get all users, but regular admins can't see super admins
+// Get sort parameters
+$sort_column = $_GET['sort'] ?? 'username';
+$sort_order = $_GET['order'] ?? 'asc';
+
+// Validate sort column to prevent SQL injection
+$allowed_columns = ['username', 'first_name', 'last_name', 'email', 'is_active', 'user_level'];
+if (!in_array($sort_column, $allowed_columns)) {
+    $sort_column = 'username'; // Default if invalid
+}
+
+// Validate sort order
+$sort_order = strtolower($sort_order) === 'desc' ? 'DESC' : 'ASC';
+
+// Build the SQL query
 $sql = "SELECT * FROM user_account";
 if(!$session->is_super_admin()) {
     $sql .= " WHERE user_level != 's'";
 }
-$sql .= " ORDER BY username ASC";
+$sql .= " ORDER BY {$sort_column} {$sort_order}";
 $users = User::find_by_sql($sql);
+
+// Function to generate sort URL
+function sort_link($column, $current_sort, $current_order) {
+    $new_order = ($current_sort === $column && $current_order === 'ASC') ? 'DESC' : 'ASC';
+    return url_for('/admin/users/index.php?sort=' . $column . '&order=' . $new_order);
+}
+
+// Function to display sort indicator
+function sort_indicator($column, $current_sort, $current_order) {
+    if ($current_sort === $column) {
+        return $current_order === 'ASC' ? ' <i class="fas fa-sort-up"></i>' : ' <i class="fas fa-sort-down"></i>';
+    }
+    return ' <i class="fas fa-sort"></i>';
+}
 
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -42,12 +69,36 @@ include(SHARED_PATH . '/member_header.php');
             <table class="list">
                 <thead>
                     <tr>
-                        <th>Username</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Status</th>
-                        <th>User Level</th>
+                        <th>
+                            <a href="<?php echo sort_link('username', $sort_column, $sort_order); ?>" class="sort-link">
+                                Username<?php echo sort_indicator('username', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo sort_link('first_name', $sort_column, $sort_order); ?>" class="sort-link">
+                                First Name<?php echo sort_indicator('first_name', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo sort_link('last_name', $sort_column, $sort_order); ?>" class="sort-link">
+                                Last Name<?php echo sort_indicator('last_name', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo sort_link('email', $sort_column, $sort_order); ?>" class="sort-link">
+                                Email<?php echo sort_indicator('email', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo sort_link('is_active', $sort_column, $sort_order); ?>" class="sort-link">
+                                Status<?php echo sort_indicator('is_active', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
+                        <th>
+                            <a href="<?php echo sort_link('user_level', $sort_column, $sort_order); ?>" class="sort-link">
+                                User Level<?php echo sort_indicator('user_level', $sort_column, $sort_order); ?>
+                            </a>
+                        </th>
                         <th>Actions</th>
                     </tr>
                 </thead>

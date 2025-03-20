@@ -1147,3 +1147,37 @@ button.action.add:hover {
     font-size: 1.25rem;
   }
 }
+
+/* ====================================
+   SORTABLE TABLE STYLES
+   ==================================== */
+
+.sort-link {
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+  width: 100%;
+}
+
+.sort-link:hover {
+  color: var(--color-white);
+}
+
+.sort-link i {
+  font-size: 0.8em;
+  margin-left: 0.5rem;
+  opacity: 0.5;
+}
+
+.sort-link:hover i {
+  opacity: 1;
+  color: var(--color-white);
+}
+
+.sort-link i.fa-sort-up,
+.sort-link i.fa-sort-down {
+  opacity: 1;
+  color: var(--color-white);
+}
