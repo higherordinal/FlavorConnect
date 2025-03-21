@@ -39,7 +39,7 @@
 
 .recipe-header-overlay {
     align-items: end;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
     display: grid;
     height: 100%;
     left: 0;
@@ -136,7 +136,6 @@
 .recipe-content {
     display: grid;
     gap: 2rem;
-    grid-template-columns: 1fr;
 }
 
 .recipe-meta {
@@ -211,24 +210,179 @@
     gap: var(--spacing-md);
 }
 
+.comment-form {
+    background-color: var(--color-gray-100);
+    border-radius: var(--radius-md);
+    display: grid;
+    gap: 1.5rem;
+    padding: 1.5rem;
+}
+
+.comment-form h3 {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    margin: 0 0 1rem 0;
+}
+
+.star-rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 3px;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: var(--color-gray-300);
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.2s ease;
+}
+
+/* When hovering the container, reset all stars */
+.star-rating:hover label {
+    color: var(--color-gray-300);
+}
+
+/* Color the hovered star and all stars after it */
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+    color: #ffd700 !important;
+}
+
+/* Keep the selected stars colored */
+.star-rating input:checked + label,
+.star-rating input:checked + label ~ label {
+    color: #ffd700;
+}
+
+.rating-input {
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.rating-input fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.rating-input legend {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.rating-input label {
+    font-weight: 600;
+    margin: 0;
+}
+
+.comment-input {
+    margin-bottom: 15px;
+}
+
+.comment-input label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.comment-input textarea {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    resize: vertical;
+    width: 100%;
+}
+
+.add-comment .btn-primary {
+    background-color: var(--primary-color);
+    font-weight: 600;
+    padding: 10px 20px;
+}
+
+.add-comment .btn-primary:hover {
+    background-color: var(--secondary-color);
+}
+
 .comments-list {
     display: grid;
-    gap: var(--grid-gap);
+    gap: 1.5rem;
 }
 
-.comment-card {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-md);
+.comment {
+    border-bottom: 1px solid var(--color-gray-200);
     display: grid;
-    gap: var(--spacing-md);
-    padding: var(--spacing-md);
-    transition: transform var(--transition-medium), box-shadow var(--transition-medium);
+    gap: 1rem;
+    padding: 1.5rem;
 }
 
-.comment-card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-header {
+    align-items: center;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: auto 1fr auto;
+}
+
+.comment-author {
+    font-weight: 600;
+}
+
+.comment-author i,
+.comment-date i {
+    margin-right: 0.25rem;
+}
+
+.comment-rating {
+    display: inline-flex;
+    gap: 2px;
+}
+
+.comment-rating i {
+    font-size: 14px;
+}
+
+.comment-rating {
+    display: grid;
+    gap: 0.25rem;
+    grid-template-columns: repeat(5, auto);
+}
+
+.comment-text {
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.delete-comment {
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin-left: 10px;
+    transition: color 0.2s;
+}
+
+.delete-comment:hover {
+    color: #c0392b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .star-rating label {
+        font-size: 20px;
+    }
+    .rating-input {
+        align-items: flex-start;
+        flex-direction: column;
+    }
 }
 
 /* ====================================
@@ -900,159 +1054,6 @@
 }
 
 .comment-rating {
-    display: inline-flex;
-    gap: 2px;
-}
-
-.comment-rating i {
-    font-size: 14px;
-}
-
-.comment-form {
-    background-color: var(--color-gray-100);
-    border-radius: var(--radius-md);
-    display: grid;
-    gap: 1.5rem;
-    padding: 1.5rem;
-}
-
-.comment-form h3 {
-    color: var(--text-color);
-    font-size: 1.1rem;
-    margin: 0 0 1rem 0;
-}
-
-.star-rating {
-    display: inline-flex;
-    flex-direction: row-reverse;
-    gap: 3px;
-}
-
-.star-rating input {
-    display: none;
-}
-
-.star-rating label {
-    color: var(--color-gray-300);
-    cursor: pointer;
-    font-size: 24px;
-    transition: color 0.2s ease;
-}
-
-/* When hovering the container, reset all stars */
-.star-rating:hover label {
-    color: var(--color-gray-300);
-}
-
-/* Color the hovered star and all stars after it */
-.star-rating label:hover,
-.star-rating label:hover ~ label {
-    color: #ffd700 !important;
-}
-
-/* Keep the selected stars colored */
-.star-rating input:checked + label,
-.star-rating input:checked + label ~ label {
-    color: #ffd700;
-}
-
-.rating-input {
-    align-items: center;
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.rating-input fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-.rating-input legend {
-    color: var(--text-color);
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.rating-input label {
-    font-weight: 600;
-    margin: 0;
-}
-
-.comment-input {
-    margin-bottom: 15px;
-}
-
-.comment-input label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.comment-input textarea {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 10px;
-    resize: vertical;
-    width: 100%;
-}
-
-.add-comment .btn-primary {
-    background-color: var(--primary-color);
-    font-weight: 600;
-    padding: 10px 20px;
-}
-
-.add-comment .btn-primary:hover {
-    background-color: var(--secondary-color);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .star-rating label {
-        font-size: 20px;
-    }
-    .rating-input {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-}
-
-.comments-list {
-    display: grid;
-    gap: 1.5rem;
-}
-
-.comment {
-    border-bottom: 1px solid var(--color-gray-200);
-    display: grid;
-    gap: 1rem;
-    padding: 1.5rem;
-}
-
-.comment:last-child {
-    border-bottom: none;
-}
-
-.comment-header {
-    align-items: center;
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: auto 1fr auto;
-}
-
-.comment-author {
-    font-weight: 600;
-}
-
-.comment-author i,
-.comment-date i {
-    margin-right: 0.25rem;
-}
-
-.comment-rating {
     display: grid;
     gap: 0.25rem;
     grid-template-columns: repeat(5, auto);
@@ -1121,71 +1122,169 @@
 }
 
 @media print {
-    .recipe-show {
-        display: block;
-        margin: 0;
-        padding: 0;
+    /* General print layout */
+    html, body {
+        height: auto !important;
+        overflow: visible !important;
+        width: 100% !important;
     }
+    
+    .recipe-show {
+        display: block !important;
+        height: auto !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        position: static !important;
+        width: 100% !important;
+    }
+    
+    /* Hide non-essential elements */
     header, footer, .back-link, .breadcrumbs, .favorite-btn, 
     .recipe-actions, .print-recipe-btn, .comments-section,
-    .scaling-buttons {
+    .scaling-buttons, .video-container, .recipe-video {
         display: none !important;
     }
-    .recipe-header-image {
-        height: 300px;
-        margin: 0 auto;
-        page-break-after: avoid;
-        width: 85%;
+    
+    /* Reset container for print */
+    .recipe-container {
+        display: block !important;
+        gap: 0 !important;
+        height: auto !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        padding: 0 !important;
+        position: static !important;
+        width: 100% !important;
     }
-
+    
+    /* Optimize recipe header for print - show overlay only */
+    .recipe-header {
+        margin-bottom: 0.3cm !important;
+    }
+    
+    .recipe-header-image {
+        display: block !important;
+        height: auto !important;
+        position: relative !important;
+    }
+    
+    .recipe-header-image img {
+        display: none !important;
+    }
+    
     .recipe-header-overlay {
-        background: none;
-        color: black;
+        background: rgba(13, 34, 53, 0.9) !important;
+        border-radius: 5px !important;
+        display: block !important;
+        margin: 0 auto !important;
+        padding: 0.5cm 0 !important;
+        position: static !important;
+        width: 100% !important;
     }
 
     .recipe-header-content h1 {
-        color: black;
-        font-size: 24pt;
+        color: white !important;
+        font-size: 16pt !important;
+        margin: 0 0 0.2cm 0 !important;
+        text-align: center !important;
     }
 
+    /* Recipe meta information */
     .recipe-meta {
-        color: black;
+        color: white !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        font-size: 8pt !important;
+        gap: 0.3cm !important;
+        justify-content: center !important;
+        margin-bottom: 0 !important;
     }
+    
+    .meta-item {
+        flex: 0 0 auto !important;
+    }
+    
+    /* Recipe description - hide to save space */
     .recipe-description-container {
-        display: block;
+        display: none !important;
     }
 
-    .recipe-description {
-        max-width: 100%;
-    }
+    /* Ingredients and directions sections */
     .recipe-ingredients,
     .recipe-directions {
-        box-shadow: none;
-        break-inside: avoid;
-        margin: 1rem 0;
-        padding: 1rem 0;
-        page-break-inside: avoid;
+        box-shadow: none !important;
+        break-inside: avoid !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-inside: avoid !important;
+        width: 100% !important;
     }
+    
+    /* Left align both sections */
+    .recipe-ingredients {
+        margin-bottom: 0.3cm !important;
+    }
+    
     .recipe-directions {
-        page-break-before: auto;
+        page-break-before: auto !important;
     }
+    
+    /* Ingredient list formatting */
+    .ingredients-list {
+        font-size: 8pt !important;
+        line-height: 1.2 !important;
+        padding-left: 0.3cm !important;
+    }
+    
+    .ingredients-list li {
+        margin-bottom: 0.1cm !important;
+    }
+    
+    /* Direction steps formatting */
+    .directions-list {
+        font-size: 8pt !important;
+        line-height: 1.2 !important;
+        padding-left: 0.3cm !important;
+    }
+    
+    .directions-list li {
+        margin-bottom: 0.1cm !important;
+    }
+    
+    .direction-step {
+        display: flex !important;
+        gap: 0.2cm !important;
+    }
+    
+    .step-number {
+        font-size: 8pt !important;
+        height: 1.5em !important;
+        width: 1.5em !important;
+    }
+    
+    /* General text formatting */
     body {
-        color: black;
-        font-size: 12pt;
-        line-height: 1.5;
+        color: black !important;
+        font-size: 8pt !important;
+        line-height: 1.2 !important;
     }
+    
+    h2 {
+        font-size: 12pt !important;
+        margin: 0.2cm 0 !important;
+    }
+    
     * {
         background-color: white !important;
         box-shadow: none !important;
     }
-
-    /* Hide elements not needed for printing */
-    /* Ensure recipe image prints nicely */
-    /* Adjust description container for print */
-    /* Ensure recipe sections don't break across pages */
-    /* Add page breaks where appropriate */
-    /* Ensure text is readable when printed */
-    /* Remove background colors and shadows */
+    
+    /* Force page size */
+    @page {
+        margin: 0.5cm !important;
+        size: portrait !important;
+    }
 }
 
 .print-recipe-btn:hover {
@@ -1194,7 +1293,7 @@
 
 @media (min-width: 768px) {
     .recipe-content {
-        grid-template-columns: 300px 1fr;
+        grid-template-columns: 1fr;
     }
 }
 
