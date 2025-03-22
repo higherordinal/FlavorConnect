@@ -255,16 +255,16 @@ echo display_session_message();
                                     Total: <?php echo h(TimeUtility::format_time($recipe->prep_time + $recipe->cook_time)); ?>
                                 </span>
                             </div>
-                            <div class="recipe-attributes">
-                                <span>
+                            <div class="recipe-attributes" role="list">
+                                <span role="listitem">
                                     <i class="fas fa-utensils"></i>
                                     <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>
                                 </span>
-                                <span>
+                                <span role="listitem">
                                     <i class="fas fa-leaf"></i>
                                     <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
                                 </span>
-                                <span>
+                                <span role="listitem">
                                     <i class="fas fa-plate"></i>
                                     <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
                                 </span>

@@ -262,6 +262,7 @@ $userData = [
                 <article class="recipe-card" role="article">
                     <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" 
                        class="recipe-link"
+                       role="link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
                         <div class="recipe-image-container">
                             <?php if($session->is_logged_in()) { ?>
@@ -306,13 +307,13 @@ $userData = [
 
                             <div class="recipe-attributes" role="list">
                                 <?php if($style) { ?>
-                                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
+                                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($style->name); ?></a>
                                 <?php } ?>
                                 <?php if($diet) { ?>
-                                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
+                                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($diet->name); ?></a>
                                 <?php } ?>
                                 <?php if($type) { ?>
-                                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
+                                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($type->name); ?></a>
                                 <?php } ?>
                             </div>
                         </div>
