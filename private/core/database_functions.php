@@ -5,7 +5,7 @@
  * @return mysqli The database connection instance
  */
 function db_connect() {
-  $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+  $connection = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
   confirm_db_connect($connection);
   DatabaseObject::set_database($connection);
   return $connection;
