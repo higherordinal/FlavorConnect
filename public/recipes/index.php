@@ -212,11 +212,6 @@ $userData = [
             </select>
         </div>
 
-        <?php if($search || $style_id || $diet_id || $type_id) { ?>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
-                <i class="fas fa-times"></i> Clear Filters
-            </a>
-        <?php } ?>
     </div>
 
     <div class="filter-summary">
@@ -243,6 +238,9 @@ $userData = [
                         Type: <?php echo h($type->name); ?>
                     </span>
                 <?php } ?>
+                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
+                    <i class="fas fa-times"></i> Clear Filters
+                </a>
             </div>
         <?php } ?>
     </div>

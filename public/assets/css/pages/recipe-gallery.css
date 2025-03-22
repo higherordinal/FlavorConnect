@@ -84,6 +84,7 @@
   display: grid;
   gap: var(--grid-gap);
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  align-items: end;
 }
 
 .main-content .filter-group {
@@ -118,28 +119,21 @@
    ========================================================================== */
 
 .main-content .filter-summary {
-  background: linear-gradient(135deg, 
-    var(--primary-color) 0%,
-    var(--primary-color) 40%, 
-    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 65%,
-    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
-  border-radius: var(--border-radius-sm);
-  display: grid;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .main-content .results-count {
-  color: var(--accent-color);
+  color: var(--text-color-light);
   font-size: var(--font-size-small);
-  font-weight: 600;
   margin: 0;
 }
 
 .main-content .active-filters {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--spacing-sm);
-  grid-template-columns: repeat(auto-fit, minmax(100px, max-content));
 }
 
 /* Clear Filters Button */

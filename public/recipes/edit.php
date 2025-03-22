@@ -130,6 +130,7 @@ if(is_post_request()) {
             $recipe->cook_time = ($cook_hours * 3600) + ($cook_minutes * 60);
             $recipe->servings = $_POST['servings'] ?? $recipe->servings;
             $recipe->alt_text = $_POST['alt_text'] ?? $recipe->alt_text;
+            $recipe->video_url = $_POST['video_url'] ?? $recipe->video_url;
             
             // Set image file path if it was uploaded
             if(isset($_POST['img_file_path'])) {
