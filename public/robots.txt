@@ -1,0 +1,10 @@
+# robots.txt for FlavorConnect
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /debug_500_page.php
+
+# Sitemap location
+Sitemap: https://flavorconnect.com/sitemap.xml
