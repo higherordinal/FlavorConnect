@@ -1,75 +1,116 @@
 # FlavorConnect Image Processing Setup
 
-This document provides instructions for setting up image processing in FlavorConnect on different environments.
+This document provides instructions for setting up image processing in FlavorConnect on different environments. FlavorConnect uses two image processing libraries:
+
+1. **ImageMagick with Imagick PHP extension**: Primary image processing library for advanced operations
+2. **GD Library**: Fallback library for basic image processing when ImageMagick is not available
 
 ## Docker Environment
 
 If you're running FlavorConnect in a Docker container, follow these steps to ensure image processing works correctly:
 
-1. Install ImageMagick and required PHP extensions in your Docker container:
+1. Install ImageMagick, Imagick PHP extension, and GD library in your Docker container:
 
 ```bash
 # Run this inside your Docker container
 apt-get update
-apt-get install -y imagemagick php-imagick
-apt-get install -y php-gd
+apt-get install -y imagemagick libmagickwand-dev
+pecl install imagick
+docker-php-ext-enable imagick
+
+# Install GD library as fallback
+apt-get install -y libfreetype6-dev libjpeg62-turbo-dev libpng-dev
+docker-php-ext-configure gd --with-freetype --with-jpeg
+docker-php-ext-install -j$(nproc) gd
 ```
 
 2. Alternatively, you can use the provided installation script:
 
 ```bash
 # Copy the script to your Docker container
-docker cp install-imagemagick.sh your_container_name:/install-imagemagick.sh
+docker cp install-imagemagick-docker.sh your_container_name:/install-imagemagick-docker.sh
 
 # Run the script inside the container
-docker exec -it your_container_name bash /install-imagemagick.sh
+docker exec -it your_container_name bash /install-imagemagick-docker.sh
 ```
 
 3. Verify the installation:
 
 ```bash
-# Check if ImageMagick is installed
-docker exec -it your_container_name convert -version
+# Check ImageMagick
+convert -version
 
-# Check if PHP extensions are loaded
-docker exec -it your_container_name php -m | grep -E 'imagick|gd'
+# Check PHP extensions
+php -m | grep -E 'imagick|gd'
 ```
 
-4. Ensure the upload directory has proper permissions:
+## XAMPP Environment
+
+If you're using XAMPP for local development:
+
+1. Install ImageMagick and PHP extensions:
 
 ```bash
-# Set proper permissions for the upload directory
-docker exec -it your_container_name chmod -R 755 /var/www/html/public/assets/uploads
+# For Windows
+# Download and install ImageMagick from https://imagemagick.org/script/download.php
+# Make sure to check "Install development headers and libraries for C and C++" during installation
+
+# For XAMPP on Linux
+sudo apt-get update
+sudo apt-get install -y imagemagick php-imagick
+sudo apt-get install -y php-gd
 ```
+
+2. Enable the extensions in php.ini:
+   - Open `php.ini` in your XAMPP installation directory
+   - Ensure these lines are uncommented:
+     ```
+     extension=gd
+     extension=imagick
+     ```
+   - Restart Apache
+
+3. Verify the installation:
+   - Create a phpinfo.php file with `<?php phpinfo(); ?>`
+   - Open it in your browser and search for "gd" and "imagick"
 
 ## Bluehost Environment
 
-If you're hosting FlavorConnect on Bluehost, follow these steps:
+On Bluehost, both ImageMagick and GD library should be pre-installed. You can verify this through the Bluehost cPanel:
 
-1. Check if ImageMagick is already installed (it usually is on Bluehost):
+1. Log in to your Bluehost cPanel
+2. Go to "PHP Configuration" or "Select PHP Version"
+3. Ensure that both "imagick" and "gd" extensions are enabled
+4. If not enabled, select them and save your changes
 
-```bash
-/usr/bin/convert -version
-```
+### File Path Considerations
 
-2. If ImageMagick is not available, contact Bluehost support to enable it for your account.
-
-3. Ensure the PHP extensions are loaded:
+When deploying to Bluehost, you need to update any relative file paths to absolute paths, especially in API files:
 
 ```php
-<?php
-// Create a phpinfo.php file with this content
-phpinfo();
-?>
+// Change this:
+require_once('../private/initialize.php');
+
+// To this:
+require_once('/home/swbhdnmy/public_html/private/initialize.php');
 ```
 
-Upload this file to your server and check if the GD and Imagick extensions are loaded.
+Common files that need path updates:
+- API endpoint files (e.g., `/api/toggle_favorite.php`)
+- Custom AJAX handlers
+- Any files that use relative paths to include core application files
 
-4. Set proper permissions for the upload directory:
+This is necessary because Bluehost's server configuration may resolve relative paths differently than your local development environment. Using absolute paths ensures that all required files can be located correctly.
 
-```bash
-chmod -R 755 public_html/public/assets/uploads
-```
+## How FlavorConnect Uses Image Processing
+
+FlavorConnect uses these libraries for:
+
+1. **Recipe Image Uploads**: Resizing, optimizing, and creating thumbnails
+2. **Profile Pictures**: Cropping and resizing user profile images
+3. **Gallery Images**: Processing multiple images for recipe galleries
+
+The application will attempt to use ImageMagick first, and fall back to GD if ImageMagick is not available.
 
 ## Testing Image Processing
 

@@ -56,6 +56,20 @@ FlavorConnect now automatically detects and configures itself for different envi
 
 No manual configuration changes are needed when switching between environments.
 
+### Important Note for Bluehost Deployment
+
+When deploying to Bluehost, you may need to manually update initialization file paths in API files to use absolute paths. For example:
+
+```php
+// Change this:
+require_once('../private/initialize.php');
+
+// To this:
+require_once('/home/swbhdnmy/public_html/private/initialize.php');
+```
+
+This ensures that API endpoints can correctly locate the required files regardless of how they're accessed.
+
 ## Database Configuration
 
 ### Docker Environment
