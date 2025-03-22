@@ -37,7 +37,7 @@ $config = [
     'docker' => [
         'db_host' => 'db',
         'db_port' => 3306,
-        'db_user' => 'hcvaughn',
+        'db_user' => 'user',
         'db_pass' => '@connect4Establish',
         'db_name' => 'flavorconnect'
     ],
@@ -46,7 +46,7 @@ $config = [
     'xampp' => [
         'db_host' => 'localhost',
         'db_port' => 3306,
-        'db_user' => 'hcvaughn',
+        'db_user' => 'user',
         'db_pass' => '@connect4Establish',
         'db_name' => 'flavorconnect'
     ],
