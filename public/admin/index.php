@@ -5,6 +5,35 @@ require_admin();
 
 $page_title = 'Admin Dashboard';
 $page_style = 'admin';
+
+// Determine the back link based on the ref_page parameter
+$back_link = '/index.php';
+$back_text = 'Back to Home';
+
+if (isset($_GET['ref_page']) && !empty($_GET['ref_page'])) {
+    $ref_page = $_GET['ref_page'];
+    
+    // Make sure the ref_page is a valid internal URL
+    if (strpos($ref_page, '/') === 0) {
+        // It's a valid internal URL, use it as the back link
+        $back_link = $ref_page;
+        
+        // Set appropriate back text based on the back link
+        if (strpos($back_link, '/recipes/index.php') !== false) {
+            $back_text = 'Back to Recipes';
+        } elseif (strpos($back_link, '/users/favorites.php') !== false) {
+            $back_text = 'Back to Favorites';
+        } elseif (strpos($back_link, '/users/profile.php') !== false) {
+            $back_text = 'Back to Profile';
+        } elseif (strpos($back_link, '/index.php') !== false) {
+            $back_text = 'Back to Home';
+        } else {
+            // Generic back text for other pages
+            $back_text = 'Back';
+        }
+    }
+}
+
 include(SHARED_PATH . '/member_header.php');
 ?>
 
@@ -12,12 +41,12 @@ include(SHARED_PATH . '/member_header.php');
     <div class="admin-dashboard">
         <?php 
         echo unified_navigation(
-            '/index.php',
+            $back_link,
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['label' => 'Admin Dashboard']
             ],
-            'Back to Home'
+            $back_text
         ); 
         ?>
         

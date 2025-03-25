@@ -38,17 +38,45 @@ $page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_pat
 // Determine back link based on referrer
 $ref = $_GET['ref'] ?? '';
 $back_text = 'Back to Recipes';
+$back_link = '';
 
-// Use the smart back link function
-$back_link = get_back_link('/recipes/index.php');
-
-// Set appropriate back text based on the back link
-if (strpos($back_link, '/index.php') !== false) {
-    $back_text = 'Back to Home';
-} elseif (strpos($back_link, '/users/favorites.php') !== false) {
-    $back_text = 'Back to Favorites';
-} elseif (strpos($back_link, '/users/profile.php') !== false) {
-    $back_text = 'Back to Profile';
+// Set back link and text based on the ref parameter
+switch ($ref) {
+    case 'home':
+        $back_link = url_for('/index.php');
+        $back_text = 'Back to Home';
+        break;
+    case 'favorites':
+        $back_link = url_for('/users/favorites.php');
+        $back_text = 'Back to Favorites';
+        break;
+    case 'profile':
+        $back_link = url_for('/users/profile.php');
+        $back_text = 'Back to Profile';
+        break;
+    case 'gallery':
+        // Check if we have gallery parameters to preserve pagination and filters
+        if (isset($_GET['gallery_params'])) {
+            $gallery_params = urldecode($_GET['gallery_params']);
+            $back_link = url_for('/recipes/index.php?' . $gallery_params);
+        } else {
+            $back_link = url_for('/recipes/index.php');
+        }
+        $back_text = 'Back to Recipes';
+        break;
+    default:
+        // If no ref parameter or unknown value, fall back to the smart back link
+        $back_link = get_back_link('/recipes/index.php');
+        
+        // Set appropriate back text based on the determined back link
+        if (strpos($back_link, '/index.php') !== false && strpos($back_link, '/recipes/index.php') === false) {
+            $back_text = 'Back to Home';
+        } elseif (strpos($back_link, '/users/favorites.php') !== false) {
+            $back_text = 'Back to Favorites';
+        } elseif (strpos($back_link, '/users/profile.php') !== false) {
+            $back_text = 'Back to Profile';
+        }
+        break;
 }
 
 // Set up breadcrumbs

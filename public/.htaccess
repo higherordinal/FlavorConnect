@@ -3,9 +3,9 @@ RewriteEngine On
 # Redirect old API endpoint to new API endpoint
 RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
 
-# Custom error pages
-ErrorDocument 404 /404.php
-ErrorDocument 500 /500.php
+# Custom error pages - using absolute paths for better compatibility
+ErrorDocument 404 /FlavorConnect/public/404.php
+ErrorDocument 500 /FlavorConnect/public/500.php
 
 # Handle front controller pattern
 RewriteCond %{REQUEST_FILENAME} !-d

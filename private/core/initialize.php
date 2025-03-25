@@ -8,13 +8,32 @@ require_once(dirname(__DIR__) . '/config/api_config.php');
 // Load Bluehost compatibility script
 require_once(dirname(__DIR__) . '/core/bluehost-compatibility.php');
 
-// Configure session parameters - extend timeout to 8 hours (28800 seconds)
-ini_set('session.gc_maxlifetime', 28800); // How long to store session data on server (8 hours)
-ini_set('session.cookie_lifetime', 28800); // How long to store the session cookie on client (8 hours)
+// Configure session parameters - extend timeout to 24 hours (86400 seconds)
+// Set both PHP and session cookie parameters for maximum compatibility
+ini_set('session.gc_maxlifetime', 86400); // How long to store session data on server (24 hours)
+ini_set('session.cookie_lifetime', 86400); // How long to store the session cookie on client (24 hours)
+
+// Set session cookie parameters before starting the session
+session_set_cookie_params([
+    'lifetime' => 86400,
+    'path' => '/',
+    'domain' => '', // Current domain
+    'secure' => false, // Set to true if using HTTPS
+    'httponly' => true, // Prevent JavaScript access to session cookie
+    'samesite' => 'Lax' // Prevent CSRF attacks
+]);
 
 // Start session if not already started
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
+    
+    // Regenerate session ID periodically to prevent session fixation
+    if (!isset($_SESSION['last_regeneration'])) {
+        $_SESSION['last_regeneration'] = time();
+    } else if (time() - $_SESSION['last_regeneration'] > 3600) { // Regenerate every hour
+        session_regenerate_id(true);
+        $_SESSION['last_regeneration'] = time();
+    }
 }
 
 // Custom autoloader for FlavorConnect classes

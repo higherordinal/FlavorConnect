@@ -124,7 +124,7 @@ if(!isset($page_style)) { $page_style = ''; }
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
                     ?>
                     <li>
-                        <a href="<?php echo url_for('/admin/index.php'); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
+                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI'])); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
                             <i class="fas fa-cog" aria-hidden="true"></i> Admin
                         </a>
                     </li>
@@ -148,7 +148,7 @@ if(!isset($page_style)) { $page_style = ''; }
                     <div class="dropdown-menu">
                         <a href="<?php echo url_for('/users/profile.php'); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
                         <?php if($session->is_admin() || $session->is_super_admin()) { ?>
-                        <a href="<?php echo url_for('/admin/index.php'); ?>" class="dropdown-item">
+                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI'])); ?>" class="dropdown-item">
                             <i class="fas fa-cog" aria-hidden="true"></i>
                             Admin (Dashboard)
                         </a>
@@ -166,7 +166,7 @@ if(!isset($page_style)) { $page_style = ''; }
                     <div class="dropdown-menu show">
                         <a href="<?php echo url_for('/users/profile.php'); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
                         <?php if($session->is_admin() || $session->is_super_admin()) { ?>
-                        <a href="<?php echo url_for('/admin/index.php'); ?>" class="dropdown-item">
+                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI'])); ?>" class="dropdown-item">
                             <i class="fas fa-cog" aria-hidden="true"></i>
                             Admin (Dashboard)
                         </a>

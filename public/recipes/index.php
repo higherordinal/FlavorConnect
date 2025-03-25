@@ -258,7 +258,7 @@ $userData = [
                 $type = $recipe->type();
             ?>
                 <article class="recipe-card" role="article">
-                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" 
+                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=gallery&gallery_params=' . urlencode(http_build_query($_GET))); ?>" 
                        class="recipe-link"
                        role="link"
                        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">

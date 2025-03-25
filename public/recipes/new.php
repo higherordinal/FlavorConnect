@@ -97,8 +97,9 @@ if(is_post_request()) {
             $recipe->img_file_path = $_POST['img_file_path'] ?? '';
             $recipe->alt_text = $_POST['alt_text'] ?? '';
             $recipe->is_featured = 0; // Set to integer 0 instead of boolean false
-            $recipe->created_date = date('Y-m-d');
-            $recipe->created_time = date('H:i:s');
+            
+            // Use only created_at with current timestamp
+            $recipe->created_at = date('Y-m-d H:i:s');
 
             if($recipe->save()) {
                 // Save ingredients
