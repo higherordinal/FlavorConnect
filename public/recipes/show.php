@@ -96,7 +96,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset
     // Check if user is admin or super admin
     if (!$session->is_admin() && !$session->is_super_admin()) {
         $session->message('You do not have permission to delete this review.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
     }
     
     $rating_id = $_GET['rating_id'];
@@ -108,7 +108,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset
         $session->message('Failed to delete review.');
     }
     
-    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
 }
 
 // Handle review deletion (user's own reviews)
@@ -125,7 +125,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
     
     if (!$review) {
         $session->message('Review not found or you do not have permission to delete it.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
     }
     
     // Delete the review
@@ -135,7 +135,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
         $session->message('Failed to delete review.');
     }
     
-    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
 }
 
 // Handle new review submission
@@ -156,7 +156,7 @@ if (is_post_request()) {
 
     if (!empty($existing_review)) {
         $session->message('You have already reviewed this recipe.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
     }
 
     $review_data = [
@@ -172,7 +172,7 @@ if (is_post_request()) {
         $review = new RecipeReview($review_data);
         if ($review->save()) {
             $session->message('Review submitted successfully.');
-            redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+            redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
         } else {
             $errors[] = 'Failed to save review.';
         }
@@ -382,7 +382,7 @@ echo display_session_message();
             </div>
         <?php } ?>
 
-        <div class="comments-section">
+        <div class="comments-section" id="reviews">
             <div class="comments-header">
                 <h2><i class="fas fa-comments"></i> Reviews & Comments</h2>
                 <?php if($reviews) { 
