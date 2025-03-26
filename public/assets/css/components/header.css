@@ -143,7 +143,11 @@
   }
 
   .main-nav > ul {
-    background-color: var(--primary-color);
+    background: linear-gradient(90deg, 
+      var(--primary-color) 0%,
+      var(--primary-color) 55%, 
+      color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 75%,
+      color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
     box-shadow: var(--shadow-md);
     display: none;
     left: 0;
