@@ -122,10 +122,17 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 50%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 70%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-md);
 }
 
 .main-content .results-count {
-  color: var(--text-color-light);
+  color: var(--accent-color);
   font-size: var(--font-size-small);
   margin: 0;
 }
