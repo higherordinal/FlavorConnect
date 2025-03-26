@@ -373,17 +373,6 @@
     color: #c0392b;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .star-rating label {
-        font-size: 20px;
-    }
-    .rating-input {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-}
-
 /* ====================================
    RECIPE VIDEO
    ==================================== */
@@ -504,6 +493,16 @@
 /* ====================================
    RESPONSIVE STYLING
    ==================================== */
+@media (max-width: 768px) {
+    .star-rating label {
+        font-size: 20px;
+    }
+    .rating-input {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
 @media (max-width: 1024px) {
     .recipe-container {
         gap: var(--grid-gap);
@@ -571,6 +570,18 @@
     .recipe-actions .btn {
         font-size: 0.8rem;
         padding: 0.4rem 0.8rem;
+    }
+    .average-rating {
+        justify-content: center;
+        width: 100%;
+    }
+    .average-rating .stars {
+        font-size: 0.9rem;
+    }
+    .comments-header {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
     }
 }
 
@@ -1027,10 +1038,22 @@
 .average-rating {
     align-items: center;
     color: var(--text-color);
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     font-weight: 600;
     gap: 0.5rem;
-    grid-template-columns: auto auto;
+}
+
+.average-rating .stars {
+    display: inline-flex;
+    flex-shrink: 1;
+    gap: 2px;
+    margin: 0 8px;
+}
+
+.average-rating .rating-value,
+.average-rating .rating-count {
+    white-space: nowrap;
 }
 
 .stars i,
