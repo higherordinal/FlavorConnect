@@ -229,15 +229,18 @@ echo display_session_message();
                 <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
                      alt="<?php echo h($recipe->title); ?>">
             <?php endif; ?>
+            
             <div class="recipe-header-overlay">
                 <div class="recipe-header-content">
-                    <div class="recipe-title-section">
-                        <h1><?php echo h($recipe->title); ?></h1>
-                        <?php if($session->is_logged_in()) { ?>
-                            <button class="favorite-btn" data-recipe-id="<?php echo $recipe->recipe_id; ?>" aria-label="Add to favorites">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        <?php } ?>
+                    <div class="recipe-header-top">
+                        <div class="recipe-title-section">
+                            <h1><?php echo h($recipe->title); ?></h1>
+                            <?php if($session->is_logged_in()) { ?>
+                                <button class="favorite-btn" data-recipe-id="<?php echo $recipe->recipe_id; ?>" aria-label="Add to favorites">
+                                    <i class="far fa-heart"></i>
+                                </button>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div class="recipe-meta">
                         <div class="recipe-rating">
@@ -298,8 +301,7 @@ echo display_session_message();
                                 </span>
                             </div>
                         </div>
-                    </div>
-                    <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
+                        <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
                         <div class="recipe-actions">
                             <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id)) . '&ref=show'); ?>" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Edit Recipe
@@ -308,7 +310,10 @@ echo display_session_message();
                                 <i class="fas fa-trash"></i> Delete Recipe
                             </a>
                         </div>
-                    <?php } ?>
+                        <?php } else { ?>
+                        <div class="recipe-actions-placeholder"></div>
+                        <?php } ?>
+                    </div>
                 </div>
             </div>
         </div>
