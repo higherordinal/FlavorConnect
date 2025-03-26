@@ -345,6 +345,7 @@
 .comment-rating {
     display: inline-flex;
     gap: 2px;
+    white-space: nowrap;
 }
 
 .comment-rating i {
@@ -1039,21 +1040,50 @@
     align-items: center;
     color: var(--text-color);
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     font-weight: 600;
     gap: 0.5rem;
 }
 
 .average-rating .stars {
     display: inline-flex;
-    flex-shrink: 1;
+    flex-shrink: 0;
     gap: 2px;
     margin: 0 8px;
+    white-space: nowrap;
 }
 
 .average-rating .rating-value,
 .average-rating .rating-count {
     white-space: nowrap;
+}
+
+/* ====================================
+   COMMENT RATINGS AND STARS
+   ==================================== */
+
+.comment-rating,
+.rating-display {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    gap: 2px;
+    white-space: nowrap;
+}
+
+.rating-display i,
+.comment-rating i {
+    color: var(--color-gray-300);
+    font-size: 14px;
+}
+
+.rating-display i.fas,
+.comment-rating i.fas {
+    color: #ffd700;
+}
+
+.rating-display i.far,
+.comment-rating i.far {
+    color: rgba(255, 215, 0, 0.3);
 }
 
 .stars i,
@@ -1076,22 +1106,6 @@
     display: inline-flex;
     gap: 2px;
     margin: 0 8px;
-}
-
-.comment-rating {
-    display: grid;
-    gap: 0.25rem;
-    grid-template-columns: repeat(5, auto);
-    justify-content: start;
-}
-
-.comment-rating .star {
-    color: var(--color-gray-300);
-    font-size: 1.1rem;
-}
-
-.comment-rating .star.filled {
-    color: var(--color-warning);
 }
 
 .comment-text {
@@ -1132,18 +1146,72 @@
     width: fit-content;
 }
 
-@media (max-width: 768px) {
-    .recipe-description-container {
+@media (max-width: 480px) {
+    /* Rating display adjustments for mobile */
+    .average-rating {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .average-rating .stars {
+        font-size: 0.9rem;
+    }
+    
+    .comments-header {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    /* Ensure stars never wrap to a new line */
+    .stars,
+    .rating-display,
+    .comment-rating {
+        display: inline-flex !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+        font-size: 0.9rem !important;
+    }
+    
+    /* Make sure comment ratings don't wrap either */
+    .comment-rating {
+        display: inline-flex !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .recipe-content {
         grid-template-columns: 1fr;
     }
+}
+
+@media (max-width: 768px) {
+    .recipe-description-container {
+        align-items: center;
+        flex-direction: column;
+    }
     .recipe-description-container .recipe-description {
-        grid-column: 1;
+        width: 100%;
     }
     .print-recipe-btn {
-        grid-column: 1;
-        justify-self: center;
         margin-top: 1rem;
     }
+}
+
+.add-comment fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.rating-input fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 @media print {
@@ -1314,37 +1382,4 @@
 
 .print-recipe-btn:hover {
     background-color: #0d2235 !important;
-}
-
-@media (min-width: 768px) {
-    .recipe-content {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .recipe-description-container {
-        align-items: center;
-        flex-direction: column;
-    }
-    .recipe-description-container .recipe-description {
-        width: 100%;
-    }
-    .print-recipe-btn {
-        margin-top: 1rem;
-    }
-}
-
-.add-comment fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-.rating-input fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
 }
