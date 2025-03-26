@@ -8,6 +8,7 @@
     margin-inline: auto;
     max-width: 1200px;
     padding-inline: var(--container-padding);
+    padding-bottom: var(--spacing-xl);
     width: 100%;
 }
 
@@ -198,6 +199,9 @@
 .comments-section {
     display: grid;
     gap: var(--grid-gap);
+    margin-bottom: var(--spacing-xl);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .comment-form {
@@ -426,10 +430,9 @@
 }
 
 .recipe-time {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 0.9rem;
-    gap: var(--spacing-md);
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .recipe-time span {
@@ -611,18 +614,13 @@
    RECIPE SHOW LAYOUT
    ==================================== */
 .recipe-show {
-    display: grid;
-    gap: 2rem;
-    grid-template-columns: 1fr min(1200px, calc(100% - 4rem)) 1fr;
+    display: block;
     width: 100%;
-}
-
-.recipe-show > * {
-    grid-column: 2;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .recipe-header-image {
-    grid-column: 1 / -1;
     height: 60vh;
     margin: 0 auto;
     min-height: 400px;
@@ -667,7 +665,6 @@
 .recipe-time {
     display: grid;
     gap: 1rem;
-    grid-column: 1 / -1;
     margin-bottom: 1rem;
 }
 
