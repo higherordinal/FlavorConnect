@@ -156,6 +156,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    max-width: 70%;
 }
 
 /* Recipe actions */
@@ -167,6 +168,8 @@
     justify-content: flex-end;
     align-items: flex-end;
     flex-wrap: wrap;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 /* Remove the bottom row since we're using grid */
@@ -175,13 +178,6 @@
 }
 
 /* Recipe details */
-.recipe-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    max-width: 70%;
-}
-
 .recipe-time {
     display: flex;
     flex-wrap: wrap;
@@ -223,14 +219,6 @@
 }
 
 /* Recipe actions */
-.recipe-actions, .recipe-actions-placeholder {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-    align-items: flex-end;
-    flex-wrap: wrap;
-}
-
 .recipe-actions .btn {
     background-color: rgba(255, 255, 255, 0.2);
     border: none;
@@ -317,10 +305,6 @@
         grid-template-columns: 1fr 1fr;
     }
     
-    .recipe-meta {
-        gap: 0.5rem;
-    }
-    
     .recipe-rating {
         margin-bottom: 0.25rem;
     }
@@ -334,10 +318,6 @@
     
     .recipe-header-top {
         margin-bottom: 0.2rem;
-    }
-    
-    .recipe-rating {
-        margin-bottom: 0.3rem;
     }
     
     .recipe-title-section {
@@ -360,6 +340,7 @@
     
     .recipe-rating {
         margin-bottom: 0.2rem;
+        font-size: 0.9rem;
     }
     
     .recipe-rating .stars {
@@ -395,6 +376,32 @@
         flex: 0 1 auto;
         min-width: 0;
     }
+    
+    /* Rating display adjustments for mobile */
+    .average-rating {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .average-rating .stars {
+        font-size: 0.9rem;
+    }
+    
+    .comments-header {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    /* Ensure stars never wrap to a new line */
+    .stars,
+    .rating-display,
+    .comment-rating {
+        display: inline-flex !important;
+        flex-wrap: nowrap !important;
+        white-space: nowrap !important;
+        font-size: 0.9rem !important;
+    }
 }
 
 @media (max-width: 360px) {
@@ -422,17 +429,17 @@
         padding: 0.25rem 0.5rem;
         flex: 0 1 auto;
     }
+}
+
+@media (max-width: 320px) {
+    .recipe-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
     
-    @media (max-width: 320px) {
-        .recipe-actions {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        
-        .recipe-actions .btn {
-            width: 100%;
-            justify-content: center;
-        }
+    .recipe-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
@@ -520,6 +527,20 @@
     color: var(--text-color);
     font-size: 1.1rem;
     margin: 0 0 1rem 0;
+}
+
+.comment-form fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.add-comment fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 .star-rating {
@@ -1308,144 +1329,6 @@
     display: inline-flex;
     gap: 2px;
     margin: 0 8px;
-}
-
-.comment-text {
-    color: var(--text-color);
-    line-height: 1.5;
-}
-
-.delete-comment {
-    color: #e74c3c;
-    font-size: 0.9em;
-    margin-left: 10px;
-    transition: color 0.2s;
-}
-
-.delete-comment:hover {
-    color: #c0392b;
-}
-
-.comment-header {
-    align-items: center;
-    display: flex;
-    margin-bottom: 10px;
-}
-
-.print-recipe-btn {
-    align-items: center;
-    align-self: flex-start;
-    background-color: var(--primary-color) !important;
-    border: none;
-    border-radius: var(--radius-sm);
-    color: var(--color-white) !important;
-    cursor: pointer;
-    display: inline-flex;
-    flex-shrink: 0;
-    font-weight: 500;
-    gap: 0.5rem;
-    padding: 0.75rem 1.25rem;
-    width: fit-content;
-}
-
-@media (max-width: 480px) {
-    /* Rating display adjustments for mobile */
-    .average-rating {
-        justify-content: center;
-        width: 100%;
-    }
-    
-    .average-rating .stars {
-        font-size: 0.9rem;
-    }
-    
-    .comments-header {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        text-align: center;
-    }
-    
-    /* Ensure stars never wrap to a new line */
-    .stars,
-    .rating-display,
-    .comment-rating {
-        display: inline-flex !important;
-        flex-wrap: nowrap !important;
-        white-space: nowrap !important;
-        font-size: 0.9rem !important;
-    }
-    
-    /* Make sure comment ratings don't wrap either */
-    .comment-rating {
-        display: inline-flex !important;
-        flex-wrap: nowrap !important;
-        white-space: nowrap !important;
-    }
-    
-    .recipe-rating {
-        max-width: 100%;
-        overflow: hidden;
-    }
-    
-    .recipe-rating .stars {
-        font-size: 0.9rem;
-        flex-shrink: 0;
-    }
-    
-    .recipe-rating .rating-count {
-        font-size: 0.8rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-}
-
-@media (min-width: 768px) {
-    .recipe-content {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .recipe-description-container {
-        align-items: center;
-        flex-direction: column;
-    }
-    .recipe-description-container .recipe-description {
-        width: 100%;
-    }
-    .print-recipe-btn {
-        margin-top: 1rem;
-    }
-}
-
-.add-comment fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-.rating-input fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-}
-
-.recipe-actions, .recipe-actions-placeholder {
-    visibility: visible !important;
-    opacity: 1 !important;
-}
-
-.comment-rating {
-    display: inline-flex;
-    flex-wrap: nowrap;
-    gap: 2px;
-    white-space: nowrap;
-}
-
-.comment-rating i {
-    font-size: 14px;
 }
 
 .comment-text {
