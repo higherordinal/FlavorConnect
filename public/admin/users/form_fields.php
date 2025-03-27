@@ -1,4 +1,4 @@
-<?php
+<?php 
 // Prevent this file from being accessed directly
 if(!isset($user)) {
     redirect_to(url_for('/admin/users/index.php'));
@@ -10,37 +10,37 @@ $is_new = !isset($user->user_id);
 
 <div class="form-group">
     <label for="username">Username</label>
-    <input type="text" name="user[username]" id="username" value="<?php echo h($user->username); ?>" placeholder="Enter username" class="<?php echo error_class('username', $user->errors); ?>" required>
+    <input type="text" name="user[username]" id="username" value="<?php echo h($user->username); ?>" placeholder="Enter username" class="<?php echo error_class('username', $user->errors); ?>" required data-error-message="Username cannot be blank">
     <?php echo display_error('username', $user->errors); ?>
 </div>
 
 <div class="form-group">
     <label for="first_name">First Name</label>
-    <input type="text" name="user[first_name]" id="first_name" value="<?php echo h($user->first_name); ?>" placeholder="Enter first name" class="<?php echo error_class('first_name', $user->errors); ?>" required>
+    <input type="text" name="user[first_name]" id="first_name" value="<?php echo h($user->first_name); ?>" placeholder="Enter first name" class="<?php echo error_class('first_name', $user->errors); ?>" required data-error-message="First name cannot be blank">
     <?php echo display_error('first_name', $user->errors); ?>
 </div>
 
 <div class="form-group">
     <label for="last_name">Last Name</label>
-    <input type="text" name="user[last_name]" id="last_name" value="<?php echo h($user->last_name); ?>" placeholder="Enter last name" class="<?php echo error_class('last_name', $user->errors); ?>" required>
+    <input type="text" name="user[last_name]" id="last_name" value="<?php echo h($user->last_name); ?>" placeholder="Enter last name" class="<?php echo error_class('last_name', $user->errors); ?>" required data-error-message="Last name cannot be blank">
     <?php echo display_error('last_name', $user->errors); ?>
 </div>
 
 <div class="form-group">
     <label for="email">Email</label>
-    <input type="email" name="user[email]" id="email" value="<?php echo h($user->email); ?>" placeholder="Enter email address" class="<?php echo error_class('email', $user->errors); ?>" required>
+    <input type="email" name="user[email]" id="email" value="<?php echo h($user->email); ?>" placeholder="Enter email address" class="<?php echo error_class('email', $user->errors); ?>" required data-error-message="Email cannot be blank">
     <?php echo display_error('email', $user->errors); ?>
 </div>
 
 <div class="form-group">
     <label for="password">Password <?php if(!$is_new) { echo "(leave blank to keep current password)"; } ?></label>
-    <input type="password" name="user[password]" id="password" placeholder="Enter password" class="<?php echo error_class('password', $user->errors); ?>" <?php if($is_new) { echo "required"; } ?>>
+    <input type="password" name="user[password]" id="password" placeholder="Enter password" class="<?php echo error_class('password', $user->errors); ?>" <?php if($is_new) { echo "required"; } ?> data-error-message="Password cannot be blank">
     <?php echo display_error('password', $user->errors); ?>
 </div>
 
 <div class="form-group">
     <label for="confirm_password">Confirm Password <?php if(!$is_new) { echo "(leave blank to keep current password)"; } ?></label>
-    <input type="password" name="user[confirm_password]" id="confirm_password" placeholder="Re-enter the password" class="<?php echo error_class('confirm_password', $user->errors); ?>" <?php if($is_new) { echo "required"; } ?>>
+    <input type="password" name="user[confirm_password]" id="confirm_password" placeholder="Re-enter the password" class="<?php echo error_class('confirm_password', $user->errors); ?>" <?php if($is_new) { echo "required"; } ?> data-error-message="Please confirm your password">
     <?php echo display_error('confirm_password', $user->errors); ?>
 </div>
 

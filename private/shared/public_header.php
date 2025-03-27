@@ -44,6 +44,9 @@ if(!isset($page_style)) { $page_style = ''; }
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- Utility Scripts -->
+    <script src="<?php echo url_for('/assets/js/utils/form-validation.js'); ?>"></script>
+    
     <!-- Global Configuration -->
     <script>
         // Initialize FlavorConnect namespace

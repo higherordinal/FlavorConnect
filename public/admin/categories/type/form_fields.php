@@ -7,10 +7,12 @@ if(!isset($type)) {
 
 <div class="form-group">
     <label for="type_name">Type Name</label>
-    <input type="text" class="form-control" id="type_name" name="type[name]" value="<?php echo h($type->name); ?>" required>
+    <input type="text" class="form-control<?php echo error_class('name', $type->errors); ?>" id="type_name" name="type[name]" value="<?php echo h($type->name); ?>" required data-error-message="Type name cannot be blank">
+    <?php echo display_error('name', $type->errors); ?>
 </div>
 
 <div class="form-group">
     <label for="type_description">Description</label>
-    <textarea class="form-control" id="type_description" name="type[description]" rows="3"><?php echo h($type->description); ?></textarea>
+    <textarea class="form-control<?php echo error_class('description', $type->errors); ?>" id="type_description" name="type[description]" rows="3" data-error-message="Please provide a description"><?php echo h($type->description); ?></textarea>
+    <?php echo display_error('description', $type->errors); ?>
 </div>
