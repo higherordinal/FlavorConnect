@@ -61,8 +61,10 @@
 .recipe-title-section {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 0.75rem;
+    width: 100%;
+    flex-wrap: nowrap;
 }
 
 .recipe-title-section h1 {
@@ -70,9 +72,15 @@
     font-size: 1.75rem;
     line-height: 1.3;
     margin: 0;
-    flex: 1;
     word-break: break-word;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    backdrop-filter: blur(2px);
+    display: inline;
+    width: auto;
+    max-width: max-content;
 }
 
 .recipe-title-section .favorite-btn {
@@ -89,6 +97,7 @@
     justify-content: center;
     font-size: 1.2rem;
     transition: all 0.2s ease;
+    margin-left: auto;
 }
 
 .recipe-title-section .favorite-btn:hover {
