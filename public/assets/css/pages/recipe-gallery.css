@@ -12,23 +12,6 @@
 }
 
 /* ==========================================================================
-   Container
-   ========================================================================== */
-
-.container {
-  margin-inline: auto;
-  max-width: 1200px;
-  padding-inline: var(--container-padding);
-  width: 100%;
-}
-
-/* ==========================================================================
-   Gallery Header
-   ========================================================================== */
-
-/* Gallery header styles are now defined globally in main.css */
-
-/* ==========================================================================
    Search Bar
    ========================================================================== */
 
@@ -83,7 +66,7 @@
 .main-content .gallery-filters {
   display: grid;
   gap: var(--grid-gap);
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   align-items: end;
 }
 
@@ -198,23 +181,6 @@
 }
 
 /* ==========================================================================
-   Favorite Button - Gallery Page Specific Overrides
-   ========================================================================== */
-
-/* Position override for gallery page */
-.main-content .favorite-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 2;
-}
-
-/* Gallery-specific favorited state */
-.main-content .favorite-btn.favorited {
-  color: #ff4b4b;
-}
-
-/* ==========================================================================
    Toast Notifications
    ========================================================================== */
 
@@ -316,20 +282,12 @@
    Responsive Design
    ========================================================================== */
 
-@media (max-width: 1024px) {
-  .main-content .recipe-grid {
-    gap: var(--grid-gap);
-  }
-}
-
-@media (max-width: 768px) {
-  .main-content .recipe-gallery {
-    gap: var(--grid-gap);
-  }
-}
-
 @media (max-width: 480px) {
   .main-content .recipe-gallery {
     gap: var(--grid-gap-sm);
+  }
+  
+  .main-content .gallery-filters {
+    grid-template-columns: 1fr;
   }
 }
