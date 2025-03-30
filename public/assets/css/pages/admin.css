@@ -948,6 +948,11 @@ button.action.add:hover {
     overflow-x: auto;
     width: 100%;
   }
+  
+  .list tbody {
+    width: 100%;
+    display: block;
+  }
 
   .list thead {
     display: none;
