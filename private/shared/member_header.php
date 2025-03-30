@@ -20,11 +20,6 @@ if(!isset($page_style)) { $page_style = ''; }
     <!-- Base Styles -->
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css?v=' . time()); ?>">
     
-    <!-- 404 Page Style -->
-    <?php if($page_title === '404 - Page Not Found'): ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/404.css'); ?>">
-    <?php endif; ?>
-    
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
