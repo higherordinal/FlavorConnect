@@ -34,21 +34,24 @@ function display_errors($errors=array(), $display_type='traditional') {
 
 /**
  * Displays a 404 Not Found error page
- * @return void
+ * 
+ * This function is designed to work across all environments (Apache, Docker, production)
+ * by using the 404.php file which includes the site header and footer.
+ * 
+ * @param string $message Optional custom message to display
+ * @return void This function exits and does not return
  */
-function error_404() {
+function error_404($message = '') {
+    // Set proper HTTP status code
     header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    
+    // Set a custom error message if provided
+    $error_message = $message;
+    
+    // Include the 404.php file which will handle displaying the error page
     include(PUBLIC_PATH . '/404.php');
-    exit();
-}
-
-/**
- * Displays a 500 Internal Server Error page
- * @return void
- */
-function error_500() {
-    header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
-    include(PUBLIC_PATH . '/500.php');
+    
+    // Terminate script execution
     exit();
 }
 
