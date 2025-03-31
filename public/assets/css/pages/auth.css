@@ -141,7 +141,6 @@ form > div {
 /* ====================================
    ADDITIONAL LINKS
    ==================================== */
-/* Link container */
 .form-footer {
   border-top: 1px solid var(--light-gray);
   margin-top: var(--spacing-md);
