@@ -1,7 +1,7 @@
-/**
- * Unified Navigation Component
- * Combines back links and breadcrumbs into a single, cohesive navigation component
- */
+/* ====================================
+   UNIFIED NAVIGATION COMPONENT
+   ==================================== */
+/* Combines back links and breadcrumbs into a single, cohesive navigation component */
 
 .unified-navigation {
     display: flex;
@@ -10,7 +10,10 @@
     margin-bottom: 1rem;
 }
 
-/* Back Link Styles */
+/* ====================================
+   BACK LINK STYLES
+   ==================================== */
+
 .unified-navigation .back-link {
     display: inline-flex;
     align-items: center;
@@ -30,7 +33,10 @@
     font-size: 0.9em;
 }
 
-/* Breadcrumbs Styles */
+/* ====================================
+   UNIFIED NAVIGATION BREADCRUMBS
+   ==================================== */
+
 .unified-navigation nav {
     margin: 0;
     padding: 0;
@@ -72,7 +78,11 @@
     color: var(--color-border);
 }
 
-/* Standalone Breadcrumbs (outside of unified-navigation) */
+/* ====================================
+   STANDALONE BREADCRUMBS
+   ==================================== */
+/* For breadcrumbs used outside of the unified-navigation component */
+
 .breadcrumbs {
     align-items: center;
     display: grid;
@@ -103,7 +113,10 @@
     font-size: 0.9rem;
 }
 
-/* Responsive adjustments */
+/* ====================================
+   RESPONSIVE ADJUSTMENTS
+   ==================================== */
+
 @media (min-width: 768px) {
     .unified-navigation {
         flex-direction: row;

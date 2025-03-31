@@ -1,4 +1,6 @@
-/* Footer Layout */
+/* ====================================
+   FOOTER LAYOUT
+   ==================================== */
 
 footer {
   background: linear-gradient(135deg, 
@@ -27,7 +29,10 @@ footer .footer-info {
   grid-area: info;
 }
 
-/* Footer Logo */
+/* ====================================
+   FOOTER LOGO
+   ==================================== */
+
 footer .footer-logo {
   font-family: var(--font-secondary);
   font-weight: 700;
@@ -73,6 +78,10 @@ footer .footer-info address {
   line-height: 1.5;
 }
 
+/* ====================================
+   FOOTER LINKS
+   ==================================== */
+
 footer .footer-links {
   display: grid;
   gap: 0.5rem;
@@ -101,6 +110,10 @@ footer .footer-links a {
 footer .footer-links a:hover {
   color: var(--accent-color);
 }
+
+/* ====================================
+   FOOTER SOCIAL
+   ==================================== */
 
 footer .footer-social {
   display: grid;
@@ -131,6 +144,10 @@ footer .footer-social a:hover {
   color: var(--accent-color);
 }
 
+/* ====================================
+   FOOTER COPYRIGHT
+   ==================================== */
+
 footer .footer-copyright {
   border-top: 1px solid var(--accent-color);
   color: var(--dark-gray);
@@ -140,7 +157,9 @@ footer .footer-copyright {
   text-align: center;
 }
 
-/* Responsive Design */
+/* ====================================
+   RESPONSIVE DESIGN
+   ==================================== */
 
 @media (max-width: 1024px) {
   footer {
