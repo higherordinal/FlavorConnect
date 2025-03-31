@@ -59,7 +59,7 @@ if($session->is_logged_in()) {
         <div class="recipe-grid">
             <?php
             // Get featured recipes from the database
-            $featured_recipes = Recipe::find_featured();
+            $featured_recipes = Recipe::find_featured(6);
             
             foreach($featured_recipes as $recipe) {
                 $chef = User::find_by_id($recipe->user_id);
