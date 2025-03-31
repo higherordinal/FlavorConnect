@@ -513,12 +513,12 @@ button.action.add:hover {
 
 .status.active {
   background: var(--success-color);
-  color: var(--on-success-color);
+  color: var(--color-white);
 }
 
 .status.inactive {
   background: var(--error-color);
-  color: var(--on-error-color);
+  color: var(--color-white);
 }
 
 /* ====================================
@@ -980,36 +980,6 @@ button.action.add:hover {
     justify-content: center;
   }
   
-  /* Further reduce sizes for small screens */
-  .list {
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-  }
-  
-  .list tbody tr {
-    padding: clamp(0.375rem, 1.5vw, 0.5rem);
-  }
-  
-  .list tbody td {
-    gap: 0.25rem;
-  }
-  
-  .list tbody td::before {
-    font-size: clamp(0.6875rem, 1.5vw, 0.75rem);
-  }
-  
-  td.actions .action {
-    min-width: 28px;
-    min-height: 28px;
-  }
-  
-  td.actions .action i {
-    font-size: 0.6875rem;
-  }
-  
-  .table-responsive {
-    margin-bottom: clamp(0.5rem, 3vw, 1rem);
-  }
-  
   .admin-content {
     padding: 0 0.25rem;
   }
@@ -1057,6 +1027,208 @@ button.action.add:hover {
     margin: 0 0 1rem 0;
   }
   
+  .actions:not(td) {
+    grid-auto-flow: row;
+    grid-auto-rows: max-content;
+    justify-content: stretch;
+  }
+
+  .action:not(td .action) {
+    text-align: center;
+  }
+  
+  .metadata-sections {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-management h1,
+  .admin-dashboard h1 {
+    font-size: 1.5rem;
+  }
+
+  .admin-module {
+    padding: var(--spacing-md);
+  }
+
+  .admin-module h2 {
+    font-size: 1.25rem;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .action {
+    font-size: 0.9rem;
+    padding: var(--spacing-sm) var(--spacing-sm);
+  }
+  
+  .metadata-section {
+    padding: clamp(0.125rem, 1.5vw, 0.25rem);
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .metadata-section h2 {
+    font-size: 1.25rem;
+  }
+  
+  .add-new-button .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .admin-content {
+    padding: 0;
+  }
+  
+  .metadata-section {
+    padding: 0.125rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .admin-management {
+    padding: 0.25rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .admin-management h1,
+  .admin-dashboard h1 {
+    font-size: 1.25rem;
+  }
+
+  .admin-module h2 {
+    font-size: 1.125rem;
+  }
+  
+  .metadata-section h2 {
+    font-size: 1.125rem;
+  }
+  
+  .admin-content {
+    padding: 0;
+  }
+  
+  .metadata-section {
+    padding: 0.125rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ====================================
+   RESPONSIVE TABLE STYLES
+   ==================================== */
+
+.table-responsive {
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.table {
+  border-collapse: collapse;
+  min-width: 600px;
+  width: 100%;
+}
+
+.table thead {
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 35%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+}
+
+.table th {
+  color: var(--accent-color);
+  font-weight: 600;
+  padding: var(--spacing-md);
+  text-align: left;
+}
+
+.table td {
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+}
+
+.table tbody tr:hover {
+  background-color: var(--hover-color);
+}
+
+.table-responsive {
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.list th:nth-child(1) {
+  width: 15%;
+}
+
+.list th:nth-child(2),
+.list th:nth-child(3) {
+  width: 20%;
+}
+
+.list th:nth-child(4) {
+  width: 25%;
+}
+
+.list th:nth-child(5),
+.list th:nth-child(6) {
+  width: 10%;
+}
+
+.list th:last-child {
+  width: 10%;
+  min-width: 70px;
+}
+
+/* Table-specific responsive styles */
+@media (max-width: 768px) {
+  /* Further reduce sizes for small screens */
+  .list {
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  }
+  
+  .list tbody tr {
+    padding: clamp(0.375rem, 1.5vw, 0.5rem);
+  }
+  
+  .list tbody td {
+    gap: 0.25rem;
+  }
+  
+  .list tbody td::before {
+    font-size: clamp(0.6875rem, 1.5vw, 0.75rem);
+  }
+  
+  td.actions .action {
+    min-width: 28px;
+    min-height: 28px;
+  }
+  
+  td.actions .action i {
+    font-size: 0.6875rem;
+  }
+  
+  .table-responsive {
+    margin-bottom: clamp(0.5rem, 3vw, 1rem);
+  }
+}
+
+@media (max-width: 1024px) {
   .list {
     -webkit-overflow-scrolling: touch;
     display: block;
@@ -1176,60 +1348,9 @@ button.action.add:hover {
   td[data-label="Status"] {
     min-width: max-content;
   }
-
-  .actions:not(td) {
-    grid-auto-flow: row;
-    grid-auto-rows: max-content;
-    justify-content: stretch;
-  }
-
-  .action:not(td .action) {
-    text-align: center;
-  }
-  
-  .metadata-sections {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 480px) {
-  .admin-management h1,
-  .admin-dashboard h1 {
-    font-size: 1.5rem;
-  }
-
-  .admin-module {
-    padding: var(--spacing-md);
-  }
-
-  .admin-module h2 {
-    font-size: 1.25rem;
-  }
-
-  .form-group label {
-    font-size: 0.9rem;
-  }
-
-  .action {
-    font-size: 0.9rem;
-    padding: var(--spacing-sm) var(--spacing-sm);
-  }
-  
-  .metadata-section {
-    padding: clamp(0.125rem, 1.5vw, 0.25rem);
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .metadata-section h2 {
-    font-size: 1.25rem;
-  }
-  
-  .add-new-button .btn {
-    width: 100%;
-    justify-content: center;
-  }
-  
   /* Even smaller sizes for mobile screens */
   .list {
     font-size: clamp(0.6875rem, 3vw, 0.75rem);
@@ -1269,37 +1390,9 @@ button.action.add:hover {
   .table-responsive {
     margin-bottom: 0.5rem;
   }
-  
-  .admin-content {
-    padding: 0;
-  }
-  
-  .metadata-section {
-    padding: 0.125rem;
-    margin-bottom: 0.5rem;
-  }
 }
 
 @media (max-width: 390px) {
-  .admin-management {
-    padding: 0.25rem;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .admin-management h1,
-  .admin-dashboard h1 {
-    font-size: 1.25rem;
-  }
-
-  .admin-module h2 {
-    font-size: 1.125rem;
-  }
-  
-  .metadata-section h2 {
-    font-size: 1.125rem;
-  }
-  
   /* Extreme size reduction for very small screens */
   .list {
     font-size: 0.6875rem;
@@ -1326,15 +1419,6 @@ button.action.add:hover {
     margin-bottom: 0.25rem;
     border-radius: 0.25rem;
   }
-  
-  .admin-content {
-    padding: 0;
-  }
-  
-  .metadata-section {
-    padding: 0.125rem;
-    margin-bottom: 0.5rem;
-  }
 }
 
 @media (max-width: 1200px) {
@@ -1346,81 +1430,6 @@ button.action.add:hover {
   .list td {
     padding: clamp(0.5rem, 1.5vw, 0.75rem);
   }
-}
-
-/* ====================================
-   RESPONSIVE TABLE STYLES
-   ==================================== */
-
-.table-responsive {
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.table {
-  border-collapse: collapse;
-  min-width: 600px;
-  width: 100%;
-}
-
-.table thead {
-  background: linear-gradient(120deg, 
-    var(--primary-color) 0%,
-    var(--primary-color) 35%, 
-    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
-    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
-}
-
-.table th {
-  color: var(--accent-color);
-  font-weight: 600;
-  padding: var(--spacing-md);
-  text-align: left;
-}
-
-.table td {
-  border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-md);
-}
-
-.table tbody tr:hover {
-  background-color: var(--hover-color);
-}
-
-.table-responsive {
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.list th:nth-child(1) {
-  width: 15%;
-}
-
-.list th:nth-child(2),
-.list th:nth-child(3) {
-  width: 20%;
-}
-
-.list th:nth-child(4) {
-  width: 25%;
-}
-
-.list th:nth-child(5),
-.list th:nth-child(6) {
-  width: 10%;
-}
-
-.list th:last-child {
-  width: 10%;
-  min-width: 70px;
 }
 
 /* ====================================
