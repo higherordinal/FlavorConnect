@@ -4,7 +4,7 @@ require_once('../../private/core/initialize.php');
 require_login();
 
 $page_title = 'User Favorites';
-$page_style = 'favorites';
+$page_style = 'user-favorites';
 
 // Get user's favorite recipes
 $favorites = Recipe::find_favorites_by_user_id($session->get_user_id());
