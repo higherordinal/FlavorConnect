@@ -23,7 +23,11 @@
 /* ====================================
    TABLE STYLES
    ==================================== */
-/* Table Styles */
+/* 
+  Table Styles:
+  Define the layout and appearance of tables used throughout the admin interface.
+  This includes the table container, headers, rows, and cells.
+*/
 
 .list {
   background: var(--surface-color);
@@ -83,6 +87,13 @@
 /* ====================================
    TABLE ACTION BUTTONS
    ==================================== */
+/* 
+  Table Action Buttons:
+  Styling for action buttons within table cells, including their layout,
+  appearance, and hover states. These buttons are used for operations like
+  edit, delete, and other row-specific actions.
+*/
+
 /* Center-align action buttons in tables only */
 table td.actions {
   white-space: nowrap;
@@ -112,27 +123,6 @@ table td.actions .action {
 table td.actions .action.delete {
   font-size: 0.85rem;
   padding: 0;
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 1024px) {
-  /* Further compact action buttons at smaller screens */
-  table td.actions .action {
-    width: 1.75rem;
-    height: 1.75rem;
-    min-width: 1.75rem;
-    min-height: 1.75rem;
-    margin: 0;
-  }
-  
-  /* Adjust the responsive layout for better display */
-  .list tbody td.actions {
-    display: flex;
-    flex-direction: row;
-    gap: 0.25rem;
-    justify-content: center;
-    align-items: center;
-  }
 }
 
 /* ====================================
@@ -692,86 +682,6 @@ button.action.add:hover {
 }
 
 /* ====================================
-   RESPONSIVE TABLE STYLES
-   ==================================== */
-/* Table Styles */
-
-.table-responsive {
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: auto; /* Allow horizontal scrolling only within the table container */
-}
-
-.table {
-  border-collapse: collapse;
-  min-width: 600px;
-  width: 100%;
-}
-
-.table thead {
-  background: linear-gradient(120deg, 
-    var(--primary-color) 0%,
-    var(--primary-color) 35%, 
-    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
-    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
-}
-
-.table th {
-  color: var(--accent-color);
-  font-weight: 600;
-  padding: var(--spacing-md);
-  text-align: left;
-}
-
-.table td {
-  border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-md);
-}
-
-.table tbody tr:hover {
-  background-color: var(--hover-color);
-}
-
-/* Ensure the table container allows horizontal scrolling if needed */
-.table-responsive {
-  background: var(--surface-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  margin-bottom: var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-  overflow-x: auto; /* Allow horizontal scrolling only within the table container */
-}
-
-/* Make table columns more balanced */
-.list th:nth-child(1) {
-  width: 15%;
-}
-
-.list th:nth-child(2),
-.list th:nth-child(3) {
-  width: 20%;
-}
-
-.list th:nth-child(4) {
-  width: 25%;
-}
-
-.list th:nth-child(5),
-.list th:nth-child(6) {
-  width: 10%;
-}
-
-.list th:last-child {
-  width: 10%;
-  min-width: 70px;
-}
-
-/* ====================================
    ACTION BUTTONS LAYOUT
    ==================================== */
 /* Action Buttons */
@@ -830,8 +740,6 @@ button.action.add:hover {
 /* ====================================
    CATEGORY MANAGEMENT
    ==================================== */
-/* Category Management */
-
 .category-sections {
   display: grid;
   gap: var(--spacing-lg);
@@ -847,7 +755,6 @@ button.action.add:hover {
 /* ====================================
    USER MANAGEMENT
    ==================================== */
-/* User Management */
 .admin-dashboard .user-sections {
   display: grid;
   gap: var(--spacing-lg);
@@ -911,7 +818,6 @@ button.action.add:hover {
 /* ====================================
    ADMIN DASHBOARD
    ==================================== */
-/* Admin Dashboard */
 
 .admin-dashboard {
   display: grid;
@@ -992,26 +898,9 @@ button.action.add:hover {
   font-size: 1rem;
 }
 
-/* Responsive adjustments for admin dashboard */
-@media (max-width: 1024px) {
-  .admin-modules {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-md);
-  }
-  
-  .admin-module {
-    padding: var(--spacing-sm);
-  }
-  
-  .admin-module .actions .action {
-    padding: var(--spacing-xs) var(--spacing-sm);
-  }
-}
-
 /* ====================================
    BOTTOM ACTIONS
    ==================================== */
-/* Bottom Actions */
 
 .bottom-actions {
   margin-bottom: var(--spacing-xl);
@@ -1022,7 +911,12 @@ button.action.add:hover {
 /* ====================================
    RESPONSIVE DESIGN
    ==================================== */
-/* Responsive Design */
+/* 
+  Responsive Design:
+  Media queries and adjustments for different screen sizes to ensure
+  the admin interface remains usable and visually appealing across
+  desktop, tablet, and mobile devices.
+*/
 
 @media (max-width: 768px) {
   .admin-management,
@@ -1141,6 +1035,14 @@ button.action.add:hover {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 
+  .admin-module {
+    padding: var(--spacing-sm);
+  }
+  
+  .admin-module .actions .action {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
   .metadata-sections {
     grid-template-columns: 1fr;
     width: 100%;
@@ -1196,6 +1098,22 @@ button.action.add:hover {
     content: attr(data-label);
     font-weight: 600;
     font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  }
+
+  table td.actions .action {
+    width: 1.75rem;
+    height: 1.75rem;
+    min-width: 1.75rem;
+    min-height: 1.75rem;
+    margin: 0;
+  }
+  
+  .list tbody td.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    justify-content: center;
+    align-items: center;
   }
   
   /* Make first cell (usually Name) appear in first row, first column */
@@ -1428,6 +1346,81 @@ button.action.add:hover {
   .list td {
     padding: clamp(0.5rem, 1.5vw, 0.75rem);
   }
+}
+
+/* ====================================
+   RESPONSIVE TABLE STYLES
+   ==================================== */
+
+.table-responsive {
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.table {
+  border-collapse: collapse;
+  min-width: 600px;
+  width: 100%;
+}
+
+.table thead {
+  background: linear-gradient(120deg, 
+    var(--primary-color) 0%,
+    var(--primary-color) 35%, 
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
+}
+
+.table th {
+  color: var(--accent-color);
+  font-weight: 600;
+  padding: var(--spacing-md);
+  text-align: left;
+}
+
+.table td {
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-md);
+}
+
+.table tbody tr:hover {
+  background-color: var(--hover-color);
+}
+
+.table-responsive {
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.list th:nth-child(1) {
+  width: 15%;
+}
+
+.list th:nth-child(2),
+.list th:nth-child(3) {
+  width: 20%;
+}
+
+.list th:nth-child(4) {
+  width: 25%;
+}
+
+.list th:nth-child(5),
+.list th:nth-child(6) {
+  width: 10%;
+}
+
+.list th:last-child {
+  width: 10%;
+  min-width: 70px;
 }
 
 /* ====================================
