@@ -21,6 +21,86 @@
 }
 
 /* ====================================
+   ADMIN MODULE STYLES
+   ==================================== */
+
+/* Admin module specific styles */
+.admin-module {
+  background: var(--surface-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-md);
+  transition: all 0.2s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-module h2 {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.admin-module p {
+  color: var(--text-color);
+  margin-bottom: var(--spacing-md);
+  flex-grow: 1;
+}
+
+/* Admin module action buttons - specifically for dashboard modules */
+.admin-module .actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: auto;
+}
+
+.admin-module .action {
+  align-items: center;
+  background: var(--primary-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--color-white);
+  display: inline-flex;
+  font-weight: 500;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: auto;
+  height: auto;
+  min-width: auto;
+  min-height: auto;
+  border: 1px solid transparent;
+}
+
+.admin-module .action:hover {
+  background: var(--color-white);
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.admin-module .action i {
+  font-size: 1rem;
+}
+
+/* Admin dashboard layout */
+.admin-dashboard {
+  padding: var(--spacing-md);
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
+
+.admin-modules {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  margin-top: var(--spacing-lg);
+}
+
+/* ====================================
    TABLE STYLES
    ==================================== */
 /* 
@@ -524,7 +604,6 @@ button.action.add:hover {
 /* ====================================
    STATUS BADGES
    ==================================== */
-/* Status Badge */
 
 .status-badge {
   border-radius: 50px;
@@ -536,7 +615,7 @@ button.action.add:hover {
 .status-badge.active {
   background-color: var(--success-color);
   color: var(--on-success-color);
-  font-weight: 700; /* Bold text for better readability */
+  font-weight: 700;
 }
 
 .status-badge.inactive {
@@ -548,7 +627,6 @@ button.action.add:hover {
 /* ====================================
    METADATA MANAGEMENT
    ==================================== */
-/* Metadata Management Styles */
 
 .metadata-sections {
   display: grid;
@@ -608,7 +686,6 @@ button.action.add:hover {
 /* ====================================
    ADD NEW BUTTON
    ==================================== */
-/* Add New Button Styling */
 
 .add-new-button {
   display: flex;
@@ -630,7 +707,6 @@ button.action.add:hover {
 /* ====================================
    COUNT BADGES
    ==================================== */
-/* Count Badges */
 
 .count-badge {
   background: var(--surface-color);
@@ -644,7 +720,6 @@ button.action.add:hover {
 /* ====================================
    ADMIN CONTENT LAYOUT
    ==================================== */
-/* Admin Content Layout */
 
 .admin-content {
   margin: var(--spacing-lg) auto;
@@ -684,7 +759,6 @@ button.action.add:hover {
 /* ====================================
    ACTION BUTTONS LAYOUT
    ==================================== */
-/* Action Buttons */
 
 .admin-content > .actions {
   display: grid;
@@ -783,7 +857,7 @@ button.action.add:hover {
 /* ====================================
    BREADCRUMBS
    ==================================== */
-/* Breadcrumbs */
+
 
 .breadcrumbs {
   align-items: center;
