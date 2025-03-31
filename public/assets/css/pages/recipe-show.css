@@ -1212,37 +1212,6 @@
     z-index: 10;
 }
 
-/* Breadcrumbs */
-.breadcrumbs {
-    align-items: center;
-    display: grid;
-    gap: var(--spacing-xs);
-    grid-auto-columns: max-content;
-    grid-auto-flow: column;
-    margin-bottom: var(--spacing-md);
-}
-
-.breadcrumb-item {
-    color: var(--text-secondary-color);
-    font-size: 0.9rem;
-    text-decoration: none;
-}
-
-.breadcrumb-item:not(.active):hover {
-    color: var(--primary-color);
-    text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.breadcrumb-separator {
-    color: var(--text-secondary-color);
-    font-size: 0.9rem;
-}
-
 /* Comments Section */
 .comments-section {
     background-color: #f8f9fa;

@@ -464,97 +464,6 @@
 }
 
 /* ====================================
-   BREADCRUMB NAVIGATION
-   ==================================== */
-.breadcrumbs {
-    align-items: center;
-    display: grid;
-    gap: var(--spacing-xs);
-    grid-auto-columns: max-content;
-    grid-auto-flow: column;
-    margin-bottom: var(--spacing-md);
-}
-
-.breadcrumb-item {
-    color: var(--text-secondary-color);
-    font-size: 0.9rem;
-    text-decoration: none;
-}
-
-.breadcrumb-item:not(.active):hover {
-    color: var(--primary-color);
-    text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-    color: var(--text-color);
-    font-weight: 500;
-}
-
-.breadcrumb-separator {
-    color: var(--text-secondary-color);
-    font-size: 0.9rem;
-}
-
-/* ====================================
-   RESPONSIVE STYLES
-   ==================================== */
-@media (max-width: 768px) {
-    .recipe-form {
-        padding: var(--spacing-md);
-    }
-
-    .form-section,
-    .categories-row,
-    .time-row,
-    .image-section,
-    .ingredients-section,
-    .directions-section {
-        padding: 1.5rem;
-    }
-
-    .ingredient-row {
-        gap: 0.5rem;
-        grid-template-columns: 1fr;
-    }
-
-    .ingredient-row .remove-ingredient {
-        justify-self: end;
-        margin-top: 0;
-    }
-
-    .direction-row {
-        gap: 0.5rem;
-        grid-template-columns: 1fr;
-    }
-
-    .direction-row .step-number {
-        justify-self: start;
-        margin-top: 0;
-    }
-
-    .direction-row .remove-step {
-        justify-self: end;
-        margin-top: 0;
-    }
-
-    .remove-ingredient,
-    .remove-step {
-        position: absolute;
-        right: 0.5rem;
-        top: 0.5rem;
-    }
-
-    .form-buttons {
-        grid-template-columns: 1fr;
-    }
-
-    .form-buttons .btn {
-        width: 100%;
-    }
-}
-
-/* ====================================
    FILE INPUT STYLING
    ==================================== */
 .recipe-form input[type="file"] {
@@ -658,4 +567,62 @@
 
 .delete-confirmation .warning i {
     color: var(--danger-color);
+}
+
+/* ====================================
+   RESPONSIVE STYLES
+   ==================================== */
+@media (max-width: 768px) {
+    .recipe-form {
+        padding: var(--spacing-md);
+    }
+
+    .form-section,
+    .categories-row,
+    .time-row,
+    .image-section,
+    .ingredients-section,
+    .directions-section {
+        padding: 1.5rem;
+    }
+
+    .ingredient-row {
+        gap: 0.5rem;
+        grid-template-columns: 1fr;
+    }
+
+    .ingredient-row .remove-ingredient {
+        justify-self: end;
+        margin-top: 0;
+    }
+
+    .direction-row {
+        gap: 0.5rem;
+        grid-template-columns: 1fr;
+    }
+
+    .direction-row .step-number {
+        justify-self: start;
+        margin-top: 0;
+    }
+
+    .direction-row .remove-step {
+        justify-self: end;
+        margin-top: 0;
+    }
+
+    .remove-ingredient,
+    .remove-step {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+    }
+
+    .form-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .form-buttons .btn {
+        width: 100%;
+    }
 }

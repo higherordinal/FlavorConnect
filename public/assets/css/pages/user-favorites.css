@@ -6,6 +6,7 @@
   padding-top: 0;
 }
 
+/* Ensure unified navigation has consistent spacing within favorites layout */
 .container .unified-navigation {
   margin-bottom: 0.5rem;
 }
@@ -46,41 +47,5 @@
 }
 
 /* ==========================================================================
-   Breadcrumbs
-   ========================================================================== */
-
-.breadcrumbs {
-  align-items: center;
-  display: grid;
-  gap: var(--spacing-xs);
-  grid-auto-columns: max-content;
-  grid-auto-flow: column;
-  margin-bottom: var(--spacing-md);
-}
-
-.breadcrumb-item {
-  color: var(--text-secondary-color);
-  font-size: 0.9rem;
-  text-decoration: none;
-}
-
-.breadcrumb-item:not(.active):hover {
-  color: var(--primary-color);
-  text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-  color: var(--text-color);
-  font-weight: 500;
-}
-
-.breadcrumb-separator {
-  color: var(--text-secondary-color);
-  font-size: 0.9rem;
-}
-
-/* ==========================================================================
    Favorites Recipe Gallery
    ========================================================================== */
-
-/* Gallery header styles are now defined globally in main.css */

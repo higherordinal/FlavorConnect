@@ -10,7 +10,7 @@
   padding: var(--spacing-md) var(--spacing-xl) 0;
 }
 
-/* Ensure unified navigation has consistent spacing */
+/* Ensure unified navigation has consistent spacing within about layout */
 .about-section .unified-navigation {
   margin-bottom: 0;
 }
