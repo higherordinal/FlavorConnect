@@ -9,7 +9,7 @@
     "hero"
     "cta"
     "featured";
-  margin: 0 auto;
+  margin: var(--spacing-lg) auto;
   max-width: 1400px;
   padding-inline: var(--container-padding);
   width: 100%;
