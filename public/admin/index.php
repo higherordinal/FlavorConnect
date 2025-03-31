@@ -37,47 +37,45 @@ if (isset($_GET['ref_page']) && !empty($_GET['ref_page'])) {
 include(SHARED_PATH . '/member_header.php');
 ?>
 
-<main class="main-content">
-    <div class="admin-dashboard">
-        <?php 
-        echo unified_navigation(
-            $back_link,
-            [
-                ['url' => '/index.php', 'label' => 'Home'],
-                ['label' => 'Admin Dashboard']
-            ],
-            $back_text
-        ); 
-        ?>
-        
-        <div class="admin-header">
-            <h1>Admin Dashboard</h1>
+<div class="admin-dashboard">
+    <?php 
+    echo unified_navigation(
+        $back_link,
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['label' => 'Admin Dashboard']
+        ],
+        $back_text
+    ); 
+    ?>
+    
+    <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+    </div>
+
+    <div class="admin-modules">
+        <div class="admin-module">
+            <h2>User Management</h2>
+            <p>Manage user accounts, roles, and permissions.</p>
+            <div class="actions">
+                <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="action">
+                    <i class="fas fa-users"></i>
+                    Manage Users
+                </a>
+            </div>
         </div>
 
-        <div class="admin-modules">
-            <div class="admin-module">
-                <h2>User Management</h2>
-                <p>Manage user accounts, roles, and permissions.</p>
-                <div class="actions">
-                    <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="action">
-                        <i class="fas fa-users"></i>
-                        Manage Users
-                    </a>
-                </div>
-            </div>
-
-            <div class="admin-module">
-                <h2>Category Management</h2>
-                <p>Manage recipe categories and organization.</p>
-                <div class="actions">
-                    <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action">
-                        <i class="fas fa-tags"></i>
-                        Manage Categories
-                    </a>
-                </div>
+        <div class="admin-module">
+            <h2>Category Management</h2>
+            <p>Manage recipe categories and organization.</p>
+            <div class="actions">
+                <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action">
+                    <i class="fas fa-tags"></i>
+                    Manage Categories
+                </a>
             </div>
         </div>
     </div>
-</main>
+</div>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
