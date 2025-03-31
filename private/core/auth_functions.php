@@ -4,7 +4,7 @@
 /**
  * Requires login for accessing protected resources
  * For web requests: redirects to login page
- * For API requests: returns JSON error
+ * For API requests: returns JSON error response
  * @return void
  */
 function require_login() {

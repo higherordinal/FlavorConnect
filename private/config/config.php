@@ -45,7 +45,7 @@ $config = [
     // XAMPP/local environment
     'xampp' => [
         'db_host' => 'localhost',
-        'db_port' => 3306,
+        'db_port' => 3308,
         'db_user' => 'user',
         'db_pass' => '@connect4Establish',
         'db_name' => 'flavorconnect'
