@@ -1,15 +1,19 @@
 RewriteEngine On
 
-# Redirect old API endpoint to new API endpoint
-RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
+# Detect base path - needed for XAMPP subfolder installations
+RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+RewriteRule ^(.*) - [E=BASE_PATH:%1]
 
-# Custom error pages - Docker-compatible approach
-ErrorDocument 404 /404.php
+# Redirect old API endpoint to new API endpoint
+RewriteRule ^recipes/api\.php$ %{ENV:BASE_PATH}/api/recipes/ [R=301,L]
+
+# Custom error pages - environment-aware approach
+ErrorDocument 404 %{ENV:BASE_PATH}/404.php
 
 # Handle front controller pattern
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ index.php [L]
+RewriteRule ^ %{ENV:BASE_PATH}/index.php [L]
 
 # Prevent directory listing
 Options -Indexes

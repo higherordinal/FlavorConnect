@@ -5,6 +5,28 @@ ob_start(); // turn on output buffering
 require_once(dirname(__DIR__) . '/config/config.php');
 require_once(dirname(__DIR__) . '/config/api_config.php');
 
+// Detect base path for XAMPP environment
+if (ENVIRONMENT === 'xampp') {
+    $script_name = $_SERVER['SCRIPT_NAME'] ?? '';
+    $script_parts = explode('/', $script_name);
+    
+    // Extract project folder name (should be "FlavorConnect Local")
+    if (count($script_parts) > 1) {
+        $project_folder = $script_parts[1];
+        if (!empty($project_folder)) {
+            // Define a constant for the project folder
+            define('PROJECT_FOLDER', '/' . $project_folder);
+        } else {
+            define('PROJECT_FOLDER', '');
+        }
+    } else {
+        define('PROJECT_FOLDER', '');
+    }
+} else {
+    // For Docker and other environments, no project folder is needed
+    define('PROJECT_FOLDER', '');
+}
+
 // Load Bluehost compatibility script
 require_once(dirname(__DIR__) . '/core/bluehost-compatibility.php');
 

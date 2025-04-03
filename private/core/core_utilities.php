@@ -10,10 +10,19 @@ function url_for($script_path) {
   if($script_path[0] != '/') {
     $script_path = "/" . $script_path;
   }
+  
   // Get the base URL from the server
   $base_url = isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST']) 
     ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] 
     : '';
+  
+  // Direct approach for XAMPP environment
+  if (ENVIRONMENT === 'xampp') {
+    // Hardcode the project folder and public directory for XAMPP
+    return $base_url . '/flavorconnect local/public' . $script_path;
+  }
+  
+  // For Docker and other environments
   return $base_url . $script_path;
 }
 
