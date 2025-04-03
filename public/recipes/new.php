@@ -167,7 +167,7 @@ $back_link = get_back_link('/recipes/index.php');
 </div>
 
 <div class="recipe-form">
-    <div class="page-header with-banner" id="recipe-header">
+    <div class="page-header with-banner" id="recipe-header" style="background-image: url('<?php echo url_for('/assets/images/recipe-form-header.webp'); ?>');">
         <h1>Create New Recipe</h1>
     </div>
     
