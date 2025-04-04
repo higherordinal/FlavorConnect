@@ -4,7 +4,7 @@
 
 .about-section {
   display: grid;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg); /* Increased spacing between sections */
   margin: 0 auto;
   max-width: 1200px;
   padding: var(--spacing-md) var(--spacing-xl) 0;

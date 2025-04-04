@@ -30,14 +30,14 @@ if (ENVIRONMENT === 'xampp') {
 // Load Bluehost compatibility script
 require_once(dirname(__DIR__) . '/core/bluehost-compatibility.php');
 
-// Configure session parameters - extend timeout to 24 hours (86400 seconds)
+// Configure session parameters using SESSION_EXPIRY from config.php
 // Set both PHP and session cookie parameters for maximum compatibility
-ini_set('session.gc_maxlifetime', 86400); // How long to store session data on server (24 hours)
-ini_set('session.cookie_lifetime', 86400); // How long to store the session cookie on client (24 hours)
+ini_set('session.gc_maxlifetime', SESSION_EXPIRY); // How long to store session data on server
+ini_set('session.cookie_lifetime', SESSION_EXPIRY); // How long to store the session cookie on client
 
 // Set session cookie parameters before starting the session
 session_set_cookie_params([
-    'lifetime' => 86400,
+    'lifetime' => SESSION_EXPIRY,
     'path' => '/',
     'domain' => '', // Current domain
     'secure' => false, // Set to true if using HTTPS

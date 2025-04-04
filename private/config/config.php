@@ -27,7 +27,7 @@ $config = [
     // Default/common settings
     'default' => [
         'development_mode' => true,
-        'session_expiry' => 7200,  // 2 hours in seconds
+        'session_expiry' => 86400,  // 24 hours in seconds
         'max_file_size' => 10485760,  // 10MB in bytes
         'allowed_image_types' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
         'timezone' => 'America/New_York'
