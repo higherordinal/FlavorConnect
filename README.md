@@ -65,9 +65,9 @@ FlavorConnect is designed to work in two development environments:
    - Uses relative paths for includes
    - Development mode enabled with detailed error reporting
 
-**Note:** The codebase has been optimized specifically for Docker and XAMPP environments. For production deployment, a separate version is available that's specifically optimized for production environments.
+**Note:** The codebase has been optimized specifically for Docker and XAMPP environments. For production deployment, a separate version is available in the `production` folder that's specifically optimized for production environments.
 
-For deployment details, see the [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) file.
+For deployment details, see the [DEPLOYMENT_GUIDE.md](production/DEPLOYMENT_GUIDE.md) file in the production folder.
 
 ## Database Configuration
 
