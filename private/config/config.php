@@ -11,7 +11,9 @@ function detect_environment() {
     }
     
     // Check if running on Bluehost
-    if (file_exists('/home/swbhdnmy') || (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'flavorconnect.com') !== false)) {
+    if (file_exists('/home/swbhdnmy') || 
+        (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'flavorconnect.space') !== false) || 
+        (isset($_SERVER['DOCUMENT_ROOT']) && strpos($_SERVER['DOCUMENT_ROOT'], 'website_7135c1f5') !== false)) {
         return 'bluehost';
     }
     

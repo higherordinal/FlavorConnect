@@ -10,7 +10,7 @@ if (ENVIRONMENT === 'xampp') {
     $script_name = $_SERVER['SCRIPT_NAME'] ?? '';
     $script_parts = explode('/', $script_name);
     
-    // Extract project folder name (should be "FlavorConnect Local")
+    // Extract project folder name (should be "FlavorConnect")
     if (count($script_parts) > 1) {
         $project_folder = $script_parts[1];
         if (!empty($project_folder)) {
@@ -27,8 +27,7 @@ if (ENVIRONMENT === 'xampp') {
     define('PROJECT_FOLDER', '');
 }
 
-// Load Bluehost compatibility script
-require_once(dirname(__DIR__) . '/core/bluehost-compatibility.php');
+// No environment-specific scripts needed
 
 // Configure session parameters using SESSION_EXPIRY from config.php
 // Set both PHP and session cookie parameters for maximum compatibility

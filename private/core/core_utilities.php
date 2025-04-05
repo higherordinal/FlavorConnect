@@ -19,7 +19,7 @@ function url_for($script_path) {
   // Direct approach for XAMPP environment
   if (ENVIRONMENT === 'xampp') {
     // Hardcode the project folder and public directory for XAMPP
-    return $base_url . '/flavorconnect local/public' . $script_path;
+    return $base_url . '/FlavorConnect/public' . $script_path;
   }
   
   // For Docker and other environments
