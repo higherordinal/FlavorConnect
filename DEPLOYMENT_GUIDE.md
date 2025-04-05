@@ -87,7 +87,7 @@ The API configuration is  defined in:
 
 For Bluehost deployment, use the dedicated Bluehost configuration file instead of the development config:
 
-1. The `bluehost_config.php` file already contains the correct settings for your Bluehost environment:
+1. The `production/bluehost_config.php` file already contains the correct settings for your Bluehost environment:
 
 ```php
 // Bluehost-specific configurations from bluehost_config.php
@@ -119,7 +119,7 @@ error_reporting(0);
 ini_set('display_errors', '0');
 ```
 
-2. For the production version, directly modify `initialize.php` to use the Bluehost configuration file:
+2. For the production version, copy `production/bluehost_config.php` to the private/config directory and modify `initialize.php` to use it:
 
 ```php
 // In private/core/initialize.php
@@ -326,13 +326,13 @@ app.use(cors({
 
 ### .htaccess Files
 
-The repository contains Bluehost-specific .htaccess files that are optimized for the production environment. During deployment, you need to rename these files:
+The repository contains Bluehost-specific .htaccess files in the `production` folder that are optimized for the production environment. During deployment, you need to copy and rename these files:
 
 #### Main .htaccess (in public directory)
 
-1. Locate the Bluehost-specific file: `public/.bluehost-htaccess`
+1. Locate the Bluehost-specific file: `production/.bluehost-main-htaccess`
 2. **Delete** any existing `.htaccess` file in the public directory
-3. Rename `.bluehost-htaccess` to `.htaccess` when deploying to Bluehost
+3. Copy `.bluehost-main-htaccess` to the public directory and rename it to `.htaccess`
 
 The Bluehost-specific version includes:
 - Absolute path references instead of relative paths
@@ -363,9 +363,9 @@ Header set Referrer-Policy "strict-origin-when-cross-origin"
 
 #### API .htaccess (in public/api directory)
 
-1. Locate the Bluehost-specific file: `public/api/.bluehost-htaccess`
+1. Locate the Bluehost-specific file: `production/.bluehost-api-htaccess`
 2. **Delete** any existing `.htaccess` file in the public/api directory
-3. Rename `.bluehost-htaccess` to `.htaccess` when deploying to Bluehost
+3. Copy `.bluehost-api-htaccess` to the public/api directory and rename it to `.htaccess`
 
 The Bluehost-specific version includes:
 - Updated RewriteBase for the production URL structure
@@ -408,12 +408,13 @@ foreach ($required_extensions as $ext) {
 ## 8. Deployment Checklist
 
 - [ ] Update all initialize.php paths to absolute paths
+- [ ] Copy `production/bluehost_config.php` to private/config directory
 - [ ] Verify the constants in bluehost_config.php are correct for your Bluehost environment
 - [ ] Create/update api-config.js with Heroku endpoints
 - [ ] Update member_header.php to include api-config.js
 - [ ] Update recipe-favorite.js to use the centralized API configuration
-- [ ] Verify `bluehost_config.php` contains the correct Bluehost database settings
 - [ ] Modify `initialize.php` in the production version to directly load `bluehost_config.php` instead of `config.php`
+- [ ] Copy `production/RecipeImageProcessor.live.class.php` to private/classes directory
 - [ ] Set appropriate file permissions
 - [ ] Configure error reporting for production
 - [ ] Test all major functionality after deployment
@@ -421,7 +422,9 @@ foreach ($required_extensions as $ext) {
 - [ ] Check for any hardcoded URLs and update them
 - [ ] Verify CORS configuration on Heroku API
 - [ ] Check PHP version and required extensions
-- [ ] Delete existing `.htaccess` files and rename `.bluehost-htaccess` files to `.htaccess` in both the main public directory and the API directory
+- [ ] Copy `.htaccess` files from production folder to their respective directories:
+  - [ ] Copy `production/.bluehost-main-htaccess` to public/.htaccess
+  - [ ] Copy `production/.bluehost-api-htaccess` to public/api/.htaccess
 - [ ] Validate .htaccess configurations
 
 ## 9. Troubleshooting Common Issues

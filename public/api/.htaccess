@@ -1,4 +1,5 @@
 # FlavorConnect API Configuration
+# Optimized for XAMPP/Docker environments
 
 RewriteEngine On
 RewriteBase /FlavorConnect/public/api/
