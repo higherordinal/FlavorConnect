@@ -7,7 +7,7 @@
  */
 function url_for($script_path) {
   // add the leading '/' if not present
-  if($script_path[0] != '/') {
+  if($script_path !== '' && $script_path[0] != '/') {
     $script_path = "/" . $script_path;
   }
   
