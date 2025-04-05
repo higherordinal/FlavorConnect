@@ -6,14 +6,14 @@ $rules = ['id' => ['required', 'number', 'min:1']];
 $errors = validate_api_request(['id' => $_GET['id'] ?? ''], $rules);
 
 if (!empty($errors)) {
-    $session->message('Invalid recipe ID.');
-    redirect_to(url_for('/recipes/index.php'));
+    // Use error_404 instead of redirecting
+    error_404('Invalid recipe ID.');
 }
 
 $recipe = Recipe::find_by_id($_GET['id']);
 if (!$recipe) {
-    $session->message('Recipe not found.');
-    redirect_to(url_for('/recipes/index.php'));
+    // Use error_404 instead of redirecting
+    error_404("The recipe you're looking for could not be found. It may have been moved or deleted.");
 }
 
 // Set page title and style

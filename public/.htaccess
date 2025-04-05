@@ -7,13 +7,13 @@ RewriteRule ^(.*) - [E=BASE_PATH:%1]
 # Redirect old API endpoint to new API endpoint
 RewriteRule ^recipes/api\.php$ %{ENV:BASE_PATH}/api/recipes/ [R=301,L]
 
-# Custom error pages - environment-aware approach
-ErrorDocument 404 %{ENV:BASE_PATH}/404.php
+# Custom error pages - use a relative path without leading slash for XAMPP
+ErrorDocument 404 404.php
 
-# Handle front controller pattern
+# Handle front controller pattern for all URLs that don't exist as files or directories
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ %{ENV:BASE_PATH}/index.php [L]
+RewriteRule ^ %{ENV:BASE_PATH}/router.php [L]
 
 # Prevent directory listing
 Options -Indexes

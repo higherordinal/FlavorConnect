@@ -35,21 +35,26 @@ function display_errors($errors=array(), $display_type='traditional') {
 /**
  * Displays a 404 Not Found error page
  * 
- * This function is designed to work across all environments (Apache, Docker, production)
- * by using the 404.php file which includes the site header and footer.
+ * This function redirects to the 404.php page, which is the best practice approach
+ * for handling 404 errors consistently across all environments.
  * 
  * @param string $message Optional custom message to display
  * @return void This function exits and does not return
  */
 function error_404($message = '') {
-    // Set proper HTTP status code
-    header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    // Set proper HTTP status code if headers haven't been sent yet
+    if (!headers_sent()) {
+        header($_SERVER["SERVER_PROTOCOL"] . " 404 Not Found");
+    }
     
-    // Set a custom error message if provided
-    $error_message = $message;
+    // Store the error message in the session if provided
+    if (!empty($message) && isset($GLOBALS['session'])) {
+        $GLOBALS['session']->message($message);
+    }
     
-    // Include the 404.php file which will handle displaying the error page
-    include(PUBLIC_PATH . '/404.php');
+    // Redirect to the 404.php page
+    $redirect_url = url_for('/404.php');
+    header("Location: {$redirect_url}");
     
     // Terminate script execution
     exit();

@@ -26,12 +26,17 @@
 }
 
 .error-404 h1 {
+  /* Use primary color background with accent color text */
+  background-color: var(--primary-color);
   color: var(--accent-color);
   font-size: 8rem;
   font-weight: 700;
   line-height: 1;
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  display: inline-block;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .error-404 h2 {
@@ -41,7 +46,8 @@
 }
 
 .error-404 p {
-  color: var(--text-muted);
+  /* Darker text-muted color for better contrast */
+  color: #5d6d7e; /* Darker version of var(--text-muted) */
   font-size: var(--font-size-large);
   line-height: 1.6;
   margin-bottom: var(--spacing-xl);
@@ -52,6 +58,19 @@
   flex-wrap: wrap;
   gap: var(--spacing-md);
   justify-content: center;
+}
+
+/* Custom button styles with better contrast */
+.error-actions .btn-primary {
+  background-color: #0a1a29; /* Darker primary color */
+  color: white;
+  font-weight: 500;
+}
+
+.error-actions .btn-secondary {
+  background-color: #2773a5; /* Darker secondary color */
+  color: white;
+  font-weight: 500;
 }
 
 .error-actions .btn {

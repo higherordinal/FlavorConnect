@@ -13,7 +13,8 @@ $id = $_GET['id'];
 $recipe = Recipe::find_by_id($id);
 
 if(!$recipe) {
-    redirect_to(url_for('/recipes/index.php'));
+    // Use error_404 instead of redirecting
+    error_404("The recipe you're trying to edit could not be found. It may have been moved or deleted.");
 }
 
 // Check if user has permission to edit this recipe

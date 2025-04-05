@@ -27,7 +27,7 @@ class User extends DatabaseObject {
     public $email;
     /** @var string Hashed password */
     public $password_hash;
-    /** @var string User level (admin/regular) */
+    /** @var string User level (user/admin/super admin) */
     public $user_level;
     /** @var bool Whether user account is active */
     public $is_active;
