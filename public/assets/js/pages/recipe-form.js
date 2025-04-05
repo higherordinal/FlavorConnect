@@ -322,6 +322,9 @@ function initializeIngredients() {
         if (selectedIndex >= 0 && originalText) {
             const selectedOption = measurementSelect.options[selectedIndex];
             
+            // Store the original singular form as a data attribute for form submission
+            selectedOption.setAttribute('data-singular', originalText);
+            
             if (quantity > 1) {
                 const pluralizedText = pluralizeMeasurement(originalText, quantity);
                 selectedOption.textContent = pluralizedText;
@@ -437,6 +440,18 @@ function initializeFormValidation() {
     const form = document.querySelector('.recipe-form form');
     if (form) {
         form.addEventListener('submit', function(e) {
+            // Restore singular forms of measurement names before submission
+            const measurementSelects = form.querySelectorAll('select[id^="measurement_"]');
+            measurementSelects.forEach(select => {
+                const selectedOption = select.options[select.selectedIndex];
+                if (selectedOption && selectedOption.hasAttribute('data-singular')) {
+                    // Restore the original singular text for database storage
+                    const singularText = selectedOption.getAttribute('data-singular');
+                    console.log(`Restoring singular form: ${singularText} for measurement ID: ${selectedOption.value}`);
+                    selectedOption.textContent = singularText;
+                }
+            });
+            
             let isValid = true;
             const requiredFields = form.querySelectorAll('[required]');
             
