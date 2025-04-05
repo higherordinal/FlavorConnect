@@ -142,6 +142,35 @@ function initializeAltTextGeneration() {
 }
 
 /**
+ * Pluralizes a measurement name based on quantity
+ * @param {string} measurementName The measurement name to pluralize
+ * @param {number} quantity The quantity of the measurement
+ * @returns {string} The properly pluralized measurement name
+ */
+function pluralizeMeasurement(measurementName, quantity) {
+    if (!measurementName || measurementName === '(none)') return '';
+    
+    // If quantity is 1 or less, use singular form
+    if (quantity <= 1) {
+        return measurementName;
+    }
+    
+    // Handle specific measurement cases
+    switch (measurementName.toLowerCase().trim()) {
+        // Measurements that have special plural forms
+        case 'dash':
+            return 'dashes';
+            
+        case 'pinch':
+            return 'pinches';
+            
+        // Default: just add 's' for all other measurements
+        default:
+            return measurementName + 's';
+    }
+}
+
+/**
  * Initializes dynamic ingredient rows functionality
  * Allows users to add and remove ingredient rows with quantity, measurement, and name
  */
@@ -150,6 +179,19 @@ function initializeIngredients() {
     const addIngredientBtn = document.getElementById('add-ingredient');
     let ingredientCount = ingredientsContainer ? 
         ingredientsContainer.querySelectorAll('.ingredient-row').length : 0;
+        
+    // Store original measurement options for reference
+    let originalMeasurementOptions = [];
+    const firstMeasurementSelect = document.querySelector('#measurement_0');
+    if (firstMeasurementSelect) {
+        Array.from(firstMeasurementSelect.options).forEach(option => {
+            originalMeasurementOptions.push({
+                value: option.value,
+                text: option.textContent
+            });
+        });
+        console.log('Stored original measurement options:', originalMeasurementOptions);
+    }
 
     /**
      * Creates a new ingredient row with quantity, measurement, and name fields
@@ -164,6 +206,8 @@ function initializeIngredients() {
         const measurementSelect = document.querySelector('#measurement_0');
         const measurementOptions = measurementSelect ? measurementSelect.innerHTML : '';
         
+        console.log('Creating new ingredient row with index:', index);
+        
         row.innerHTML = `
             <div class="form-group">
                 <label for="quantity_${index}">Quantity</label>
@@ -172,7 +216,7 @@ function initializeIngredients() {
             </div>
             
             <div class="form-group">
-                <label for="measurement_${index}">Measurement</label>
+                <label for="measurement_${index}" data-base-label="Measurement">Measurement</label>
                 <select name="ingredients[${index}][measurement_id]" id="measurement_${index}" class="form-control" required>
                     ${measurementOptions}
                 </select>
@@ -191,6 +235,14 @@ function initializeIngredients() {
         return row;
     }
 
+    // Set up quantity change listeners for existing ingredient rows
+    if (ingredientsContainer) {
+        const existingRows = ingredientsContainer.querySelectorAll('.ingredient-row');
+        existingRows.forEach(row => {
+            setupQuantityChangeListeners(row, originalMeasurementOptions);
+        });
+    }
+    
     if (addIngredientBtn && ingredientsContainer) {
         // Add new ingredient
         addIngredientBtn.addEventListener('click', function() {
@@ -198,6 +250,9 @@ function initializeIngredients() {
             ingredientsContainer.appendChild(newRow);
             ingredientCount++;
             updateRemoveButtons();
+            
+            // Add event listeners for quantity changes
+            setupQuantityChangeListeners(newRow, originalMeasurementOptions);
         });
 
         // Remove ingredient
@@ -210,6 +265,76 @@ function initializeIngredients() {
         });
     }
 
+    /**
+     * Sets up event listeners for quantity changes to update measurement labels
+     * @param {HTMLElement} row The ingredient row to set up listeners for
+     * @param {Array} originalOptions The original measurement options
+     */
+    function setupQuantityChangeListeners(row, originalOptions) {
+        const quantityInput = row.querySelector('input[type="number"]');
+        const measurementSelect = row.querySelector('select');
+        
+        if (quantityInput && measurementSelect) {
+            // Add a data attribute to store the selected measurement's original text
+            measurementSelect.addEventListener('change', function() {
+                const selectedOption = measurementSelect.options[measurementSelect.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    // Find the original text for this option
+                    const originalOption = originalOptions.find(opt => opt.value === selectedOption.value);
+                    if (originalOption) {
+                        measurementSelect.setAttribute('data-original-text', originalOption.text);
+                        
+                        // Update pluralization based on current quantity
+                        const quantity = parseFloat(quantityInput.value) || 0;
+                        updateSelectedMeasurement(quantityInput, measurementSelect, originalOption.text);
+                    }
+                }
+            });
+            
+            // Update measurement text when quantity changes
+            quantityInput.addEventListener('input', function() {
+                const originalText = measurementSelect.getAttribute('data-original-text');
+                if (originalText) {
+                    updateSelectedMeasurement(quantityInput, measurementSelect, originalText);
+                }
+            });
+            
+            // Initialize with current values
+            const selectedOption = measurementSelect.options[measurementSelect.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const originalOption = originalOptions.find(opt => opt.value === selectedOption.value);
+                if (originalOption) {
+                    measurementSelect.setAttribute('data-original-text', originalOption.text);
+                    updateSelectedMeasurement(quantityInput, measurementSelect, originalOption.text);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Updates the selected measurement text based on quantity
+     * @param {HTMLInputElement} quantityInput The quantity input element
+     * @param {HTMLSelectElement} measurementSelect The measurement select element
+     * @param {string} originalText The original measurement text
+     */
+    function updateSelectedMeasurement(quantityInput, measurementSelect, originalText) {
+        const quantity = parseFloat(quantityInput.value) || 0;
+        const selectedIndex = measurementSelect.selectedIndex;
+        
+        if (selectedIndex >= 0 && originalText) {
+            const selectedOption = measurementSelect.options[selectedIndex];
+            
+            if (quantity > 1) {
+                const pluralizedText = pluralizeMeasurement(originalText, quantity);
+                selectedOption.textContent = pluralizedText;
+                console.log(`Updated measurement: ${originalText} → ${pluralizedText}`);
+            } else {
+                selectedOption.textContent = originalText;
+                console.log(`Reset measurement to: ${originalText}`);
+            }
+        }
+    }
+    
     /**
      * Updates the visibility of remove buttons based on the number of ingredient rows
      * Hides remove buttons if there's only one row
