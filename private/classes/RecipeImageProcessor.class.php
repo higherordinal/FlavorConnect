@@ -53,7 +53,7 @@ class RecipeImageProcessor {
             // Update this path to match your ImageMagick installation
             $this->convert_path = 'magick convert';
         } else {
-            // For Bluehost or other Linux servers
+            // For Linux servers
             $this->convert_path = '/usr/bin/convert';
         }
     }
@@ -93,9 +93,16 @@ class RecipeImageProcessor {
      * @return bool True if ImageMagick is available and functional, false otherwise
      */
     public function isImageMagickAvailable() {
+        // Cache the result to avoid repeated checks
+        static $result = null;
+        
+        if ($result !== null) {
+            return $result;
+        }
+        
         // Check if the Imagick extension is loaded
         if (extension_loaded('imagick')) {
-            return true;
+            return $result = true;
         }
         
         // Check if the command-line ImageMagick is available
@@ -105,23 +112,8 @@ class RecipeImageProcessor {
             $output = [];
             $return_var = 0;
             
-            // Check for Bluehost environment
-            if ($this->isBluehostEnvironment()) {
-                // Use the function from bluehost-compatibility.php if available
-                if (function_exists('check_bluehost_imagemagick')) {
-                    return check_bluehost_imagemagick();
-                }
-                
-                // Fallback check for Bluehost
-                exec($command . ' -version', $output, $return_var);
-                if ($return_var !== 0) {
-                    $this->errors[] = "ImageMagick command not found on Bluehost server";
-                    return false;
-                }
-                return true;
-            }
             // Check for Docker environment
-            else if ($this->isDockerEnvironment()) {
+            if ($this->isDockerEnvironment()) {
                 // In Docker, we should have 'convert' available
                 exec('convert -version', $output, $return_var);
                 if ($return_var !== 0) {
@@ -165,10 +157,17 @@ class RecipeImageProcessor {
      * @return bool True if GD is available, false otherwise
      */
     public function isGDAvailable() {
+        // Cache the result to avoid repeated checks
+        static $result = null;
+        
+        if ($result !== null) {
+            return $result;
+        }
+        
         // Check if GD extension is loaded
         if (!extension_loaded('gd')) {
             $this->errors[] = "GD library is not available";
-            return false;
+            return $result = false;
         }
         
         // Check if required GD functions exist
@@ -402,9 +401,7 @@ class RecipeImageProcessor {
         }
         
         // Ensure destination directory ends with a slash
-        if (substr($destination_dir, -1) !== '/' && substr($destination_dir, -1) !== '\\') {
-            $destination_dir .= '/';
-        }
+        $destination_dir = rtrim($destination_dir, '/\\') . '/';
         
         // Define paths for processed images - only WebP versions
         $thumbnail_path = $destination_dir . $filename . '_thumb.webp';
@@ -897,38 +894,28 @@ class RecipeImageProcessor {
      * @return bool True if running in Docker, false otherwise
      */
     private function isDockerEnvironment() {
+        // Cache the result to avoid repeated checks
+        static $is_docker = null;
+        
+        if ($is_docker !== null) {
+            return $is_docker;
+        }
+        
         // Check for Docker environment indicators
         if (file_exists('/.dockerenv')) {
-            return true;
+            return $is_docker = true;
         }
         
         // Check for Docker cgroup
         $cgroup_content = @file_get_contents('/proc/self/cgroup');
         if ($cgroup_content !== false && strpos($cgroup_content, 'docker') !== false) {
-            return true;
+            return $is_docker = true;
         }
         
-        return false;
+        return $is_docker = false;
     }
     
-    /**
-     * Check if running on Bluehost
-     * 
-     * @return bool True if running on Bluehost, false otherwise
-     */
-    private function isBluehostEnvironment() {
-        // Use the function from bluehost-compatibility.php if available
-        if (function_exists('is_bluehost_environment')) {
-            return is_bluehost_environment();
-        }
-        
-        // Fallback detection if the function is not available
-        if (strpos($_SERVER['SERVER_NAME'] ?? '', 'bluehost') !== false) {
-            return true;
-        }
-        
-        return false;
-    }
+
     
     /**
      * Get the appropriate ImageMagick command for the current environment
@@ -936,17 +923,17 @@ class RecipeImageProcessor {
      * @return string The ImageMagick command appropriate for the current environment
      */
     private function getImageMagickCommand() {
+        // Cache the result to avoid repeated checks
+        static $command = null;
+        
+        if ($command !== null) {
+            return $command;
+        }
+        
         // Check if running in Docker
         if ($this->isDockerEnvironment()) {
             // For Docker environments, use the Docker container's ImageMagick
-            return 'convert';
-        } else if ($this->isBluehostEnvironment()) {
-            // For Bluehost, use the function from bluehost-compatibility.php if available
-            if (function_exists('get_bluehost_imagemagick_path')) {
-                return get_bluehost_imagemagick_path();
-            }
-            // Default Bluehost path
-            return '/usr/bin/convert';
+            return $command = 'convert';
         } else if ($this->is_windows) {
             // For Windows, try both 'magick convert' and 'convert'
             $output = [];
@@ -966,10 +953,10 @@ class RecipeImageProcessor {
             }
             
             // Default to 'magick convert' as a fallback
-            return 'magick convert';
+            return $command = 'magick convert';
         } else {
             // For Linux/Unix servers
-            return '/usr/bin/convert';
+            return $command = '/usr/bin/convert';
         }
     }
     
