@@ -36,7 +36,7 @@ window.FlavorConnect.favorites = {
                         button.setAttribute('aria-label', 'Add to favorites');
                     }
                 })
-                .catch(error => console.error('Error checking favorite status:', error));
+                .catch(error => {/* Error silently handled */});
             
             // Mark as initialized
             button.dataset.initialized = 'true';
@@ -68,10 +68,8 @@ window.FlavorConnect.favorites = {
                         const actionText = result.isFavorited ? 'Remove from' : 'Add to';
                         button.setAttribute('aria-label', `${actionText} favorites`);
                     } else if (result.error) {
-                        console.error('Failed to toggle favorite:', result.error);
                     }
                 } catch (error) {
-                    console.error('Error toggling favorite:', error);
                 }
             });
         });
@@ -91,7 +89,7 @@ window.FlavorConnect.favorites = {
             // Remove trailing slash if present
             const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
             const fullUrl = `${url}/api/toggle_favorite.php?recipe_id=${recipeId}`;
-            console.log('Checking favorite status URL:', fullUrl);
+
             
             // Add cache-busting parameter to prevent caching
             const cacheBuster = new Date().getTime();
@@ -106,12 +104,11 @@ window.FlavorConnect.favorites = {
                 }
             });
             
-            // Log the response headers for debugging
-            console.log('Response status:', response.status);
+
             
             // Handle unauthorized response (user not logged in)
             if (response.status === 401) {
-                console.log('User not logged in, returning false for favorite status');
+
                 return false;
             }
             
@@ -121,17 +118,16 @@ window.FlavorConnect.favorites = {
             
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                console.error('Response is not JSON:', contentType);
                 const text = await response.text();
-                console.error('Response text:', text);
+
                 return false;
             }
             
             const data = await response.json();
-            console.log('Check status response data:', data);
+
             return data.is_favorited === true;
         } catch (error) {
-            console.error('Error checking favorite status:', error);
+
             return false;
         }
     },
@@ -153,7 +149,7 @@ window.FlavorConnect.favorites = {
             // Remove trailing slash if present
             const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
             const fullUrl = `${url}/api/toggle_favorite.php`;
-            console.log('Toggle favorite URL:', fullUrl);
+
 
             // Add cache-busting parameter to prevent caching
             const cacheBuster = new Date().getTime();
@@ -174,13 +170,11 @@ window.FlavorConnect.favorites = {
                 body: payload
             });
 
-            // Log the response headers for debugging
-            console.log('Response status:', response.status);
-            console.log('Response headers:', response.headers);
+
             
             // Handle unauthorized response (user not logged in)
             if (response.status === 401) {
-                console.log('User not logged in, redirecting to login page');
+
                 window.location.href = `${window.FlavorConnect.config.baseUrl}login.php`;
                 return { success: false, error: 'User not logged in' };
             }
@@ -192,9 +186,8 @@ window.FlavorConnect.favorites = {
             // Check if the response is JSON
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
-                console.error('Response is not JSON:', contentType);
                 const text = await response.text();
-                console.error('Response text:', text);
+
                 
                 // Try to extract error message from HTML
                 let errorMessage = 'Invalid response format';
@@ -205,7 +198,7 @@ window.FlavorConnect.favorites = {
                         errorMessage = errorMatch[1];
                     }
                 } catch (e) {
-                    console.error('Error parsing HTML error:', e);
+                    // Silent catch - we'll use the default error message
                 }
                 
                 return { 
@@ -217,21 +210,20 @@ window.FlavorConnect.favorites = {
 
             try {
                 const data = await response.json();
-                console.log('Toggle response data:', data);
+
                 
                 return {
                     success: data.success === true,
                     isFavorited: data.is_favorited === true
                 };
             } catch (jsonError) {
-                console.error('Error parsing JSON:', jsonError);
+
                 return { 
                     success: false, 
                     error: 'Failed to parse JSON response' 
                 };
             }
         } catch (error) {
-            console.error('Error toggling favorite:', error);
             return { success: false, error: error.message };
         }
     },
@@ -247,7 +239,7 @@ window.FlavorConnect.favorites = {
             
             // In this implementation, we're relying on the server-side rendering
             // to provide the favorites data directly in the DOM
-            console.log('Getting favorites from DOM');
+
             
             // Get recipe IDs from the DOM
             const favoriteButtons = document.querySelectorAll('.favorite-btn.favorited, .unfavorite-btn');
@@ -267,10 +259,10 @@ window.FlavorConnect.favorites = {
                 };
             }).filter(f => f !== null);
             
-            console.log('Found favorites in DOM:', favorites.length);
+
             return favorites;
         } catch (error) {
-            console.error('Error getting favorites:', error);
+
             return [];
         }
     },
@@ -293,7 +285,7 @@ window.FlavorConnect.favorites = {
 
 // For backward compatibility (DEPRECATED - use window.FlavorConnect.favorites.initButtons instead)
 window.initializeFavoriteButtons = function() {
-    console.warn('DEPRECATED: window.initializeFavoriteButtons is deprecated. Use window.FlavorConnect.favorites.initButtons instead.');
+
     if (window.FlavorConnect && window.FlavorConnect.favorites) {
         window.FlavorConnect.favorites.initButtons();
     }
@@ -301,11 +293,11 @@ window.initializeFavoriteButtons = function() {
 
 // For backward compatibility (DEPRECATED - use window.FlavorConnect.favorites.toggle instead)
 window.toggleFavorite = async function(recipeId) {
-    console.warn('DEPRECATED: window.toggleFavorite is deprecated. Use window.FlavorConnect.favorites.toggle instead.');
+
     if (window.FlavorConnect && window.FlavorConnect.favorites) {
         return await window.FlavorConnect.favorites.toggle(recipeId);
     } else {
-        console.error('Favorite functionality not available');
+
         return { success: false, error: 'Favorite functionality not available' };
     }
 };
