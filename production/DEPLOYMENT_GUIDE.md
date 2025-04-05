@@ -57,6 +57,32 @@ No changes are needed to these constants as they are already optimized for the B
 
 ### Path Adjustment Strategy
 
+#### Automated Path Update
+
+A script is provided to automatically update all initialize.php paths to absolute paths for Bluehost deployment:
+
+1. **Run the update script**:
+   ```bash
+   # On Windows
+   cd production
+   update_paths.bat
+   
+   # On Linux/Mac
+   cd production
+   chmod +x update_paths.sh
+   ./update_paths.sh
+   ```
+
+2. **What the script does**:
+   - Scans all PHP files in the public directory recursively
+   - Replaces relative paths to initialize.php with the Bluehost absolute path
+   - Creates backups of all modified files
+   - Provides a summary of changes made
+
+#### Manual Path Adjustment (Alternative)
+
+If you prefer to update paths manually:
+
 1. **Search for all initialize.php includes**:
    ```
    grep -r "require.*initialize.php" --include="*.php" .
@@ -407,7 +433,7 @@ foreach ($required_extensions as $ext) {
 
 ## 8. Deployment Checklist
 
-- [ ] Update all initialize.php paths to absolute paths
+- [ ] Update all initialize.php paths to absolute paths (using the provided update_paths script or manually)
 - [ ] Copy `production/bluehost_config.php` to private/config directory
 - [ ] Verify the constants in bluehost_config.php are correct for your Bluehost environment
 - [ ] Create/update api-config.js with Heroku endpoints

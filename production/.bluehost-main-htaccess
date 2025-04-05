@@ -9,10 +9,10 @@ RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
 # Custom error pages - use absolute paths for production
 ErrorDocument 404 /404.php
 
-# Handle front controller pattern for all URLs that don't exist as files or directories
+# Custom 404 handling for files that don't exist
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ /router.php [L]
+RewriteRule ^ /404.php [L]
 
 # Prevent directory listing
 Options -Indexes
