@@ -896,33 +896,22 @@ class Recipe extends DatabaseObject {
      * @return bool True if deletion was successful
      */
     public function delete() {
-        // Delete associated files first
+        // Delete associated image files first
         if(!empty($this->img_file_path)) {
-            $file_info = pathinfo($this->img_file_path);
-            $filename = $file_info['filename'];
-            $extension = $file_info['extension'];
+            // Create image processor
+            $processor = new RecipeImageProcessor();
             
-            // Define paths for all versions of the image
-            $original_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $this->img_file_path;
-            $thumb_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_thumb.' . $extension;
-            $optimized_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_optimized.' . $extension;
-            $banner_path = PUBLIC_PATH . '/assets/uploads/recipes/' . $filename . '_banner.' . $extension;
+            // Define upload directory
+            $upload_dir = PUBLIC_PATH . '/assets/uploads/recipes';
             
-            // Delete all image files if they exist
-            if(file_exists($original_path)) {
-                unlink($original_path);
-            }
+            // Delete all image variations (thumb, optimized, banner)
+            // The existing deleteRecipeImages method expects just the filename without path
+            $processor->deleteRecipeImages($upload_dir, $this->img_file_path);
             
-            if(file_exists($thumb_path)) {
-                unlink($thumb_path);
-            }
-            
-            if(file_exists($optimized_path)) {
-                unlink($optimized_path);
-            }
-            
-            if(file_exists($banner_path)) {
-                unlink($banner_path);
+            // If there were errors during image deletion, log them but continue with recipe deletion
+            $errors = $processor->getErrors();
+            if(!empty($errors)) {
+                error_log('Error deleting recipe images: ' . implode(', ', $errors));
             }
         }
         
