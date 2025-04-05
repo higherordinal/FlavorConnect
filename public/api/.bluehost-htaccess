@@ -1,0 +1,23 @@
+# FlavorConnect API Configuration for Bluehost
+
+RewriteEngine On
+# Use absolute path for Bluehost
+RewriteBase /api/
+
+# Route all API requests to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# Set JSON content type for API responses
+Header set Content-Type application/json
+
+# Enable CORS for API requests
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type"
+
+# Additional security for production
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>

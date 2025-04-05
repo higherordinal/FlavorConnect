@@ -22,39 +22,38 @@ require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initiali
 
 | File Type | Local Path | Live Path |
 |-----------|------------|-----------|
-| Main index.php | `require_once('../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
+| Root pages (index.php, about.php, 404.php) | `require_once('../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
 | API files | `require_once('../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
 | Member pages | `require_once('../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
-| Admin pages | `require_once('../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
+| Admin pages (admin/*.php) | `require_once('../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
+| Admin subdirectories (admin/users/*.php, admin/categories/*.php) | `require_once('../../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
+| Admin deeper subdirectories (admin/categories/type/*.php, admin/categories/diet/*.php, admin/categories/style/*.php, admin/categories/measurement/*.php) | `require_once('../../../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
 | Recipe pages | `require_once('../../private/core/initialize.php');` | `require_once('/home2/swbhdnmy/public_html/website_7135c1f5/private/core/initialize.php');` |
 
-#### Path Constants in initialize.php
+#### Configuration Constants in bluehost_config.php
 
-In `private/core/initialize.php`, update these path constants:
-
-```php
-// Local development
-define("PRIVATE_PATH", dirname(__FILE__));
-define("PROJECT_PATH", dirname(PRIVATE_PATH));
-define("PUBLIC_PATH", PROJECT_PATH . '/public');
-define("SHARED_PATH", PRIVATE_PATH . '/shared');
-
-// Live server (absolute paths)
-define("PRIVATE_PATH", '/home2/swbhdnmy/public_html/website_7135c1f5/private');
-define("PROJECT_PATH", '/home2/swbhdnmy/public_html/website_7135c1f5');
-define("PUBLIC_PATH", '/home2/swbhdnmy/public_html/website_7135c1f5');
-define("SHARED_PATH", PRIVATE_PATH . '/shared');
-```
-
-#### URL Constants in initialize.php
+The bluehost_config.php file already contains all necessary constants for the production environment:
 
 ```php
-// Local development
-define("WWW_ROOT", '/FlavorConnect/public');
+// Path Configuration - Already defined in bluehost_config.php
+define('PROJECT_ROOT', '/home2/swbhdnmy/public_html/website_7135c1f5');
+define('PUBLIC_PATH', PROJECT_ROOT . '/public');
+define('PRIVATE_PATH', PROJECT_ROOT . '/private');
+define('SHARED_PATH', PRIVATE_PATH . '/shared');
+define('UPLOADS_PATH', PUBLIC_PATH . '/uploads');
+define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 
-// Live server
-define("WWW_ROOT", '');
+// URL Configuration - Already defined in bluehost_config.php
+define('WWW_ROOT', isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] : '');
+
+// Database Configuration - Already defined in bluehost_config.php
+define('DB_HOST', $config['db_host']);
+define('DB_USER', $config['db_user']);
+define('DB_PASS', $config['db_pass']);
+define('DB_NAME', $config['db_name']);
 ```
+
+No changes are needed to these constants as they are already optimized for the Bluehost environment.
 
 ### Path Adjustment Strategy
 
@@ -64,8 +63,6 @@ define("WWW_ROOT", '');
    ```
 
 2. **Update each file** with the absolute path for the live server
-
-3. **Check all path constants** in initialize.php
 
 ## 2. API Endpoint Changes
 
@@ -81,27 +78,57 @@ define('API_BASE_URL', 'https://flavorconnect-api.herokuapp.com');
 
 ### Update API Configuration
 
-The API configuration is typically defined in:
-- `/private/core/config.php`
-- `/private/core/api_config.php` (if exists)
+The API configuration is  defined in:
+- `/private/core/api_config.php` 
 
-## 3. Database Configuration
+## 3. Configuration Files
 
-Ensure the database configuration is updated for the live environment:
+### Database and Application Configuration
+
+For Bluehost deployment, use the dedicated Bluehost configuration file instead of the development config:
+
+1. The `bluehost_config.php` file already contains the correct settings for your Bluehost environment:
 
 ```php
-// Local development (in private/core/database.php)
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'flavorconnect');
+// Bluehost-specific configurations from bluehost_config.php
+$config = [
+    // Default settings
+    'development_mode' => false,
+    'session_expiry' => 86400,  // 24 hours in seconds
+    'max_file_size' => 10485760,  // 10MB in bytes
+    'allowed_image_types' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+    'timezone' => 'America/New_York',
+    
+    // Bluehost database settings
+    'db_host' => 'localhost',
+    'db_port' => 3306,
+    'db_user' => 'swbhdnmy_user',
+    'db_pass' => '@Connect4establish',
+    'db_name' => 'swbhdnmy_db_flavorconnect'
+];
 
-// Live server
-define('DB_HOST', 'your_live_db_host');
-define('DB_USER', 'your_live_db_user');
-define('DB_PASS', 'your_live_db_password');
-define('DB_NAME', 'your_live_db_name');
+// Define database constants
+define('DB_HOST', $config['db_host']);
+define('DB_PORT', $config['db_port']);
+define('DB_USER', $config['db_user']);
+define('DB_PASS', $config['db_pass']);
+define('DB_NAME', $config['db_name']);
+
+// Error Reporting - Production settings
+error_reporting(0);
+ini_set('display_errors', '0');
 ```
+
+2. For the production version, directly modify `initialize.php` to use the Bluehost configuration file:
+
+```php
+// In private/core/initialize.php
+
+// Load the Bluehost configuration file
+require_once(PRIVATE_PATH . '/config/bluehost_config.php');
+```
+
+This approach eliminates environment detection logic and simplifies the codebase for production. The development version will continue to use `config.php`, while the production version will use `bluehost_config.php` exclusively.
 
 ## 4. File Permissions
 
@@ -299,46 +326,64 @@ app.use(cors({
 
 ### .htaccess Files
 
-Ensure that all .htaccess files are properly configured for the live environment:
+The repository contains Bluehost-specific .htaccess files that are optimized for the production environment. During deployment, you need to rename these files:
 
 #### Main .htaccess (in public directory)
 
+1. Locate the Bluehost-specific file: `public/.bluehost-htaccess`
+2. **Delete** any existing `.htaccess` file in the public directory
+3. Rename `.bluehost-htaccess` to `.htaccess` when deploying to Bluehost
+
+The Bluehost-specific version includes:
+- Absolute path references instead of relative paths
+- Enhanced security headers for production
+- Cache control for static assets
+- No BASE_PATH detection (not needed in production)
+
 ```apache
-# Enable URL rewriting
+# Bluehost-optimized .htaccess
 RewriteEngine On
 
-# Base directory for rewrites
-RewriteBase /
-
-# Redirect to HTTPS if not already
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Don't rewrite if the file or directory exists
-RewriteCond %{REQUEST_FILENAME} !-f
+# Handle front controller pattern for all URLs that don't exist as files or directories
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ /router.php [L]
 
-# Rewrite all other URLs to index.php
-RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+# Additional security headers for production
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+# Cache control for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    # Additional cache rules...
+</IfModule>
 ```
 
 #### API .htaccess (in public/api directory)
 
+1. Locate the Bluehost-specific file: `public/api/.bluehost-htaccess`
+2. **Delete** any existing `.htaccess` file in the public/api directory
+3. Rename `.bluehost-htaccess` to `.htaccess` when deploying to Bluehost
+
+The Bluehost-specific version includes:
+- Updated RewriteBase for the production URL structure
+- Additional security headers
+
 ```apache
-# Enable CORS
-Header set Access-Control-Allow-Origin "*"
-Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
-Header set Access-Control-Allow-Headers "Content-Type, Authorization"
-
-# Handle OPTIONS requests
+# FlavorConnect API Configuration for Bluehost
 RewriteEngine On
-RewriteCond %{REQUEST_METHOD} OPTIONS
-RewriteRule ^(.*)$ $1 [R=200,L]
+# Use absolute path for Bluehost
+RewriteBase /api/
 
-# Rewrite API requests
+# Route all API requests to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?endpoint=$1 [QSA,L]
+RewriteRule ^(.*)$ index.php [L,QSA]
+
+# Additional security headers
+Header set X-Content-Type-Options "nosniff"
 ```
 
 ### PHP Version and Extensions
@@ -363,12 +408,12 @@ foreach ($required_extensions as $ext) {
 ## 8. Deployment Checklist
 
 - [ ] Update all initialize.php paths to absolute paths
-- [ ] Update path constants in initialize.php
-- [ ] Update URL constants in initialize.php
+- [ ] Verify the constants in bluehost_config.php are correct for your Bluehost environment
 - [ ] Create/update api-config.js with Heroku endpoints
 - [ ] Update member_header.php to include api-config.js
 - [ ] Update recipe-favorite.js to use the centralized API configuration
-- [ ] Update database configuration
+- [ ] Verify `bluehost_config.php` contains the correct Bluehost database settings
+- [ ] Modify `initialize.php` in the production version to directly load `bluehost_config.php` instead of `config.php`
 - [ ] Set appropriate file permissions
 - [ ] Configure error reporting for production
 - [ ] Test all major functionality after deployment
@@ -376,6 +421,7 @@ foreach ($required_extensions as $ext) {
 - [ ] Check for any hardcoded URLs and update them
 - [ ] Verify CORS configuration on Heroku API
 - [ ] Check PHP version and required extensions
+- [ ] Delete existing `.htaccess` files and rename `.bluehost-htaccess` files to `.htaccess` in both the main public directory and the API directory
 - [ ] Validate .htaccess configurations
 
 ## 9. Troubleshooting Common Issues

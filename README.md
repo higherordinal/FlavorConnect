@@ -39,11 +39,12 @@ A recipe sharing and management platform where users can discover, share, and or
    - Website: http://localhost:8080
    - API: http://localhost:3000
    - Database: localhost:3306
+   - phpMyAdmin: http://localhost:8081
 
 ### Using XAMPP
 
 1. Extract the zip file or clone the repository to your XAMPP htdocs folder
-2. Import the database schema from `/private/database/vaughn-henry-dump-local.sql`
+2. Import the database schema from `/private/database/vaughn-henry-dump.sql`
 3. Access the application at:
    - Website: http://localhost/FlavorConnect
    - API: http://localhost/FlavorConnect/api
@@ -52,17 +53,19 @@ A recipe sharing and management platform where users can discover, share, and or
 
 ### Environment Separation
 
-FlavorConnect is designed to work in multiple environments:
+FlavorConnect is designed to work in two development environments:
 
-1. **Local Development (FlavorConnect)**:
-   - Supports Docker and XAMPP environments
+1. **Docker Environment**:
+   - Uses container-based development setup
+   - Includes pre-configured web server, database, and API services
+   - Optimized for containerized development workflow
+
+2. **XAMPP Environment**:
+   - Traditional local development setup
    - Uses relative paths for includes
    - Development mode enabled with detailed error reporting
 
-2. **Production (FlavorConnect-Live)**:
-   - Uses absolute paths with `$_SERVER['DOCUMENT_ROOT']`
-   - Production mode with minimal error reporting
-   - Separate configuration files
+**Note:** The codebase has been optimized specifically for Docker and XAMPP environments. For production deployment, a separate version is available that's specifically optimized for production environments.
 
 For deployment details, see the [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) file.
 
@@ -184,6 +187,6 @@ If you encounter any issues:
 - Node.js for API services
 - JavaScript (ES6+)
 - CSS3 with custom variables for theming
-- Docker
+- Docker (primary development environment)
 - XAMPP (alternative development environment)
-- ImageMagick for image processing
+- ImageMagick for image processing (with GD library fallback)

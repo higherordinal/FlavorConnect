@@ -1,6 +1,6 @@
 # FlavorConnect Image Processing Setup
 
-This document provides instructions for setting up image processing in FlavorConnect on different environments. FlavorConnect uses two image processing libraries:
+This document provides instructions for setting up image processing in FlavorConnect for Docker and XAMPP environments. FlavorConnect uses two image processing libraries:
 
 1. **ImageMagick with Imagick PHP extension**: Primary image processing library for advanced operations
 2. **GD Library**: Fallback library for basic image processing when ImageMagick is not available
@@ -74,33 +74,26 @@ sudo apt-get install -y php-gd
    - Create a phpinfo.php file with `<?php phpinfo(); ?>`
    - Open it in your browser and search for "gd" and "imagick"
 
-## Bluehost Environment
+## Production Deployment
 
-On Bluehost, both ImageMagick and GD library should be pre-installed. You can verify this through the Bluehost cPanel:
+For production deployment, a separate version of the RecipeImageProcessor class is provided:
 
-1. Log in to your Bluehost cPanel
-2. Go to "PHP Configuration" or "Select PHP Version"
-3. Ensure that both "imagick" and "gd" extensions are enabled
-4. If not enabled, select them and save your changes
+- `RecipeImageProcessor.live.class.php` - Optimized specifically for production environments
 
-### File Path Considerations
+This version removes all environment detection code and assumes it's running in a production Linux environment with ImageMagick installed at `/usr/bin/convert`.
 
-When deploying to Bluehost, you need to update any relative file paths to absolute paths, especially in API files:
+### Using the Production Version
 
-```php
-// Change this:
-require_once('../private/initialize.php');
+When deploying to production, you should:
 
-// To this:
-require_once('/home/swbhdnmy/public_html/private/initialize.php');
-```
+1. Use the `RecipeImageProcessor.live.class.php` file instead of the standard version
+2. Ensure ImageMagick is installed on your production server
+3. Verify that the web server has appropriate permissions to execute ImageMagick commands
 
-Common files that need path updates:
-- API endpoint files (e.g., `/api/toggle_favorite.php`)
-- Custom AJAX handlers
-- Any files that use relative paths to include core application files
-
-This is necessary because Bluehost's server configuration may resolve relative paths differently than your local development environment. Using absolute paths ensures that all required files can be located correctly.
+The production version includes optimizations like:
+- Hardcoded paths for better performance
+- Removal of unnecessary environment checks
+- Production-specific security settings (umask)
 
 ## How FlavorConnect Uses Image Processing
 
@@ -111,14 +104,6 @@ FlavorConnect uses these libraries for:
 3. **Gallery Images**: Processing multiple images for recipe galleries
 
 The application will attempt to use ImageMagick first, and fall back to GD if ImageMagick is not available.
-
-## Testing Image Processing
-
-After setting up your environment, you can test the image processing functionality:
-
-1. Navigate to `/test-docker-image.php` in your browser
-2. Check the environment information to verify ImageMagick and GD are available
-3. Upload a test image to verify the processing works correctly
 
 ## Fallback Mechanism
 
@@ -139,8 +124,9 @@ For Docker-specific issues:
 2. Check if the container has sufficient disk space
 3. Verify that the user running the web server has permission to execute ImageMagick commands
 
-For Bluehost-specific issues:
+For production-specific issues:
 
-1. Check if your hosting plan supports ImageMagick
-2. Contact Bluehost support if you need assistance enabling ImageMagick
-3. Verify that your .htaccess file doesn't restrict access to the required commands
+1. Check if your hosting provider supports ImageMagick
+2. Verify that the ImageMagick binary is located at the expected path
+3. Check file permissions and ownership for upload directories
+4. Ensure your .htaccess file doesn't restrict access to the required commands
