@@ -216,7 +216,7 @@
     box-shadow: var(--shadow-sm);
     display: grid;
     gap: 1rem;
-    grid-template-columns: 100px 215px 1fr 40px;
+    grid-template-columns: 100px 219px 1fr 40px;
     margin-bottom: 0.5rem;
     padding: 0.75rem;
     position: relative;
@@ -235,6 +235,13 @@
 
 .ingredient-row .form-group input {
     display: block;
+}
+
+.ingredient-row input,
+.ingredient-row select {
+    height: 48px; 
+    box-sizing: border-box;
+    min-width: 0; 
 }
 
 .ingredient-row .remove-ingredient {
