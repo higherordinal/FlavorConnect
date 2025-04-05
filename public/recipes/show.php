@@ -346,8 +346,11 @@ echo display_session_message();
                         <?php 
                         $measurement = $ingredient->measurement;
                         $ingredient_obj = $ingredient->ingredient;
-                        echo h($measurement ? $measurement->get_pluralized_name($ingredient->quantity) : ''); ?> 
-                        <?php echo h($ingredient_obj ? $ingredient_obj->name : ''); ?>
+                        // Only display measurement if it exists and is not '(none)'
+                        if ($measurement && $measurement->name !== '(none)') {
+                            echo h($measurement->get_pluralized_name($ingredient->quantity)) . ' ';
+                        }
+                        echo h($ingredient_obj ? $ingredient_obj->name : ''); ?>
                     </li>
                 <?php } ?>
             </ul>
