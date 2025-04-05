@@ -134,9 +134,7 @@ function initializeAltTextGeneration() {
                 altTextInput.value = ''; // Clear alt text if title is empty
             }
             
-            // For debugging
-            console.log('Title value:', titleValue);
-            console.log('Alt text set to:', altTextInput.value);
+            // Title value has been applied to alt text
         });
     }
 }
@@ -190,7 +188,7 @@ function initializeIngredients() {
                 text: option.textContent
             });
         });
-        console.log('Stored original measurement options:', originalMeasurementOptions);
+        // Original measurement options are now stored for reference
     }
 
     /**
@@ -206,7 +204,7 @@ function initializeIngredients() {
         const measurementSelect = document.querySelector('#measurement_0');
         const measurementOptions = measurementSelect ? measurementSelect.innerHTML : '';
         
-        console.log('Creating new ingredient row with index:', index);
+        // Create a new ingredient row with the given index
         
         row.innerHTML = `
             <div class="form-group">
@@ -327,10 +325,10 @@ function initializeIngredients() {
             if (quantity > 1) {
                 const pluralizedText = pluralizeMeasurement(originalText, quantity);
                 selectedOption.textContent = pluralizedText;
-                console.log(`Updated measurement: ${originalText} → ${pluralizedText}`);
+                // Updated to pluralized measurement
             } else {
                 selectedOption.textContent = originalText;
-                console.log(`Reset measurement to: ${originalText}`);
+                // Reset to singular measurement
             }
         }
     }
