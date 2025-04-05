@@ -47,5 +47,33 @@ class Measurement extends DatabaseObject {
         $sql = "SELECT * FROM " . static::$table_name . " ORDER BY name ASC";
         return static::find_by_sql($sql);
     }
+
+    /**
+     * Gets the pluralized form of the measurement name based on quantity
+     * @param float $quantity The quantity of the measurement
+     * @return string The properly pluralized measurement name
+     */
+    public function get_pluralized_name($quantity) {
+        if (empty($this->name) || $this->name === '(none)') return '';
+        
+        // If quantity is 1 or less, use singular form
+        if ($quantity <= 1) {
+            return $this->name;
+        }
+        
+        // Handle specific measurement cases from the database
+        switch (strtolower(trim($this->name))) {
+            // Measurements that have special plural forms
+            case 'dash':
+                return 'dashes';
+                
+            case 'pinch':
+                return 'pinches';
+                
+            // Default: just add 's' for all other measurements
+            default:
+                return $this->name . 's';
+        }
+    }
 }
 ?>

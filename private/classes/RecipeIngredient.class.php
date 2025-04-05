@@ -42,18 +42,11 @@ class RecipeIngredient extends DatabaseObject {
 
     /**
      * Get the measurement object
-     * @return object|null The measurement object or null if not found
+     * @return Measurement|null The measurement object or null if not found
      */
     public function getMeasurement() {
         if(!isset($this->_measurement) && $this->measurement_id) {
-            $sql = "SELECT name FROM measurement WHERE measurement_id = ?";
-            $stmt = self::$database->prepare($sql);
-            $stmt->bind_param("i", $this->measurement_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if($row = $result->fetch_object()) {
-                $this->_measurement = $row;
-            }
+            $this->_measurement = Measurement::find_by_id($this->measurement_id);
         }
         return $this->_measurement;
     }
