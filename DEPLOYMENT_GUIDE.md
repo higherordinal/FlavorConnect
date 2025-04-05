@@ -222,14 +222,14 @@ Add the API configuration script before other JavaScript files:
 <script src="<?php echo url_for('/assets/js/utils/api-config.js'); ?>?v=<?php echo time(); ?>" defer></script>
 
 <!-- Other scripts -->
-<script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>?v=<?php echo time(); ?>" defer></script>
+<script src="<?php echo url_for('/assets/js/components/recipe-favorite.js'); ?>?v=<?php echo time(); ?>" defer></script>
 ```
 
 ### Updating Favorites Functionality
 
-#### Update public/assets/js/utils/favorites.js
+#### Update public/assets/js/components/recipe-favorite.js
 
-Modify the favorites.js utility to use the centralized API configuration:
+Modify the recipe-favorite.js utility to use the centralized API configuration:
 
 ```javascript
 /**
@@ -367,7 +367,7 @@ foreach ($required_extensions as $ext) {
 - [ ] Update URL constants in initialize.php
 - [ ] Create/update api-config.js with Heroku endpoints
 - [ ] Update member_header.php to include api-config.js
-- [ ] Update favorites.js to use the centralized API configuration
+- [ ] Update recipe-favorite.js to use the centralized API configuration
 - [ ] Update database configuration
 - [ ] Set appropriate file permissions
 - [ ] Configure error reporting for production

@@ -1,7 +1,6 @@
 /**
  * @fileoverview User Favorites page functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.4.0
  * @license MIT
  */
 
@@ -37,8 +36,6 @@ window.FlavorConnect.favoritesPage = {
         // Initialize favorite buttons if not already handled
         if (window.FlavorConnect.favorites) {
             window.FlavorConnect.favorites.initButtons();
-        } else if (typeof window.initializeFavoriteButtons === 'function') {
-            window.initializeFavoriteButtons();
         }
     },
 
@@ -217,8 +214,6 @@ window.FlavorConnect.favoritesPage = {
         // Re-initialize favorite buttons
         if (window.FlavorConnect.favorites) {
             window.FlavorConnect.favorites.initButtons();
-        } else if (typeof window.initializeFavoriteButtons === 'function') {
-            window.initializeFavoriteButtons();
         }
     },
 

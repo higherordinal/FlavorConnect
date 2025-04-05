@@ -1,7 +1,6 @@
 /**
  * @fileoverview Recipe Show page functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.3.0
  * @license MIT
  * @description Handles the interactive functionality on the recipe detail page.
  * This script manages user interactions including:

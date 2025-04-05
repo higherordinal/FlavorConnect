@@ -1,7 +1,6 @@
 /**
  * @fileoverview Common utility functions for FlavorConnect application
- * @author FlavorConnect Team
- * @version 1.0.0
+ * @author Henry Vaughn
  * @license MIT
  */
 

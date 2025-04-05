@@ -44,8 +44,8 @@ const API_CONFIG = {
 window.initializeGallery = function() {
     setupEventListeners();
     loadFiltersFromURL();
-    if (typeof window.initializeFavoriteButtons === 'function') {
-        window.initializeFavoriteButtons();
+    if (window.FlavorConnect && window.FlavorConnect.favorites) {
+        window.FlavorConnect.favorites.initButtons();
     }
 }
 
@@ -159,8 +159,8 @@ function updateRecipeGrid(recipes) {
     } else {
         recipeGrid.innerHTML = recipes.map(recipe => createRecipeCard(recipe)).join('');
         // Initialize favorite buttons for new cards
-        if (typeof window.initializeFavoriteButtons === 'function') {
-            window.initializeFavoriteButtons();
+        if (window.FlavorConnect && window.FlavorConnect.favorites) {
+            window.FlavorConnect.favorites.initButtons();
         }
     }
 }

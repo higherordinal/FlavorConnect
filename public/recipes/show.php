@@ -552,7 +552,7 @@ echo display_session_message();
 </script>
 
 <script src="<?php echo url_for('/assets/js/pages/recipe-scale.js'); ?>?v=<?php echo time(); ?>"></script>
-<script src="<?php echo url_for('/assets/js/utils/favorites.js'); ?>?v=<?php echo time(); ?>"></script>
+<script src="<?php echo url_for('/assets/js/components/recipe-favorite.js'); ?>?v=<?php echo time(); ?>"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', async () => {
@@ -572,8 +572,8 @@ echo display_session_message();
             }
             
             // Initialize favorite button functionality
-            if (typeof window.initializeFavoriteButtons === 'function') {
-                window.initializeFavoriteButtons();
+            if (window.FlavorConnect && window.FlavorConnect.favorites) {
+                window.FlavorConnect.favorites.initButtons();
             }
         }
     });
