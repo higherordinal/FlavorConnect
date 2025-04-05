@@ -10,13 +10,6 @@ function detect_environment() {
         return 'docker';
     }
     
-    // Check if running on Bluehost
-    if (file_exists('/home/swbhdnmy') || 
-        (isset($_SERVER['HTTP_HOST']) && strpos($_SERVER['HTTP_HOST'], 'flavorconnect.space') !== false) || 
-        (isset($_SERVER['DOCUMENT_ROOT']) && strpos($_SERVER['DOCUMENT_ROOT'], 'website_7135c1f5') !== false)) {
-        return 'bluehost';
-    }
-    
     // Default to XAMPP/local environment
     return 'xampp';
 }
@@ -51,16 +44,6 @@ $config = [
         'db_user' => 'user',
         'db_pass' => '@connect4Establish',
         'db_name' => 'flavorconnect'
-    ],
-    
-    // Bluehost/production environment
-    'bluehost' => [
-        'db_host' => 'localhost',
-        'db_port' => 3306,
-        'db_user' => 'swbhdnmy_user',
-        'db_pass' => '@Connect4establish',
-        'db_name' => 'swbhdnmy_db_flavorconnect',
-        'development_mode' => false  // Override development mode for production
     ]
 ];
 
@@ -75,7 +58,7 @@ define('DB_PASS', $env_config['db_pass']);
 define('DB_NAME', $env_config['db_name']);
 
 // Path Configuration
-define('PROJECT_ROOT', dirname(dirname(__DIR__)));  // Go up two levels from config.php to get to project root
+define('PROJECT_ROOT', dirname(dirname(__DIR__)));
 define('PUBLIC_PATH', PROJECT_ROOT . '/public');
 define('PRIVATE_PATH', PROJECT_ROOT . '/private');
 define('SHARED_PATH', PRIVATE_PATH . '/shared');

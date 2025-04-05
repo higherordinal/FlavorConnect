@@ -5,8 +5,8 @@ A recipe sharing and management platform where users can discover, share, and or
 ## Features
 
 - Recipe sharing and discovery
-- User accounts with favorites functionality
-- Recipe search and filtering by cuisine, diet, and meal type
+- User accounts with save favorites functionality
+- Recipe search and filtering by cuisine, diet, meal type, title, and description
 - Responsive design for all devices
 - Image processing with ImageMagick and GD library
 - Measurement pluralization based on quantity
@@ -48,31 +48,23 @@ A recipe sharing and management platform where users can discover, share, and or
    - Website: http://localhost/FlavorConnect
    - API: http://localhost/FlavorConnect/api
 
-## Deployment
+## Development and Deployment
 
-### Bluehost Deployment
+### Environment Separation
 
-For Bluehost deployment, a simplified approach is used:
+FlavorConnect is designed to work in multiple environments:
 
-No manual configuration changes are needed when switching between environments.
+1. **Local Development (FlavorConnect)**:
+   - Supports Docker and XAMPP environments
+   - Uses relative paths for includes
+   - Development mode enabled with detailed error reporting
 
-Example path changes:
+2. **Production (FlavorConnect-Live)**:
+   - Uses absolute paths with `$_SERVER['DOCUMENT_ROOT']`
+   - Production mode with minimal error reporting
+   - Separate configuration files
 
-```php
-// Change this (in local development):
-require_once('../private/core/initialize.php');
-
-// To this (in Bluehost deployment):
-require_once($_SERVER['DOCUMENT_ROOT'] . '/private/core/initialize.php');
-```
-
-**Important Notes:**
-- On Bluehost, the application is deployed as an added domain with all files (including private folder) in the same root directory at `/home2/swbhdnmy/public_html/website_7135c1f5/`
-- The private folder is located at `/home2/swbhdnmy/public_html/website_7135c1f5/private/`
-- All path handling should use the document root's private directory:
-  - For config files: `$_SERVER['DOCUMENT_ROOT'] . '/private/config/'`
-  - For core files: `$_SERVER['DOCUMENT_ROOT'] . '/private/core/'`
-  - For class files: `$_SERVER['DOCUMENT_ROOT'] . '/private/classes/'`
+For deployment details, see the [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) file.
 
 ## Database Configuration
 
@@ -89,13 +81,6 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/private/core/initialize.php');
 - Username: user
 - Password: @connect4Establish
 - Database: flavorconnect
-
-### Bluehost Production Environment
-- Host: localhost
-- Port: 3306
-- Username: swbhdnmy_user
-- Password: @Connect4establish
-- Database: swbhdnmy_db_flavorconnect
 
 ## Stopping the Application
 
