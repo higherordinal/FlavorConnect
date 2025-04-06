@@ -1,8 +1,8 @@
 # FlavorConnect Deployment Guide
 
-This guide documents the necessary changes when deploying the FlavorConnect application from local development to a live server environment.
+This guide documents the process for deploying the FlavorConnect application from local development to the Bluehost production environment.
 
-## 1. Path Adjustments
+## 1. Automated Deployment Process
 
 ### Critical Path Changes
 
@@ -55,40 +55,40 @@ define('DB_NAME', $config['db_name']);
 
 No changes are needed to these constants as they are already optimized for the Bluehost environment.
 
-### Path Adjustment Strategy
+### Comprehensive Deployment Script
 
-#### Automated Path Update
+A comprehensive deployment script is provided to automatically prepare the FlavorConnect application for Bluehost:
 
-A script is provided to automatically update all initialize.php paths to absolute paths for Bluehost deployment:
-
-1. **Run the update script**:
+1. **Run the deployment script**:
    ```bash
    # On Windows
    cd production
-   update_paths.bat
+   deploy_bluehost.bat
    
    # On Linux/Mac
    cd production
-   chmod +x update_paths.sh
-   ./update_paths.sh
+   chmod +x deploy_bluehost.sh
+   ./deploy_bluehost.sh
    ```
 
-2. **What the script does**:
+2. **What the deployment script does**:
    - Scans all PHP files in the public directory recursively
-   - Replaces relative paths to initialize.php with the Bluehost absolute path
+   - Updates all relative paths to use absolute paths for the Bluehost environment
+   - Fixes directory structure issues (handles the fact that 'public' is the document root)
+   - Replaces key files with Bluehost-optimized versions:
+     - RecipeImageProcessor.class.php
+     - Recipe.class.php
+     - .htaccess files
+   - Updates configuration files for the production environment:
+     - Replaces config.php with bluehost_config.php
+     - Replaces api_config.php with bluehost_api_config.php
+     - Updates initialize.php comments for clarity
    - Creates backups of all modified files
    - Provides a summary of changes made
 
-#### Manual Path Adjustment (Alternative)
+### Manual Deployment (Not Recommended)
 
-If you prefer to update paths manually:
-
-1. **Search for all initialize.php includes**:
-   ```
-   grep -r "require.*initialize.php" --include="*.php" .
-   ```
-
-2. **Update each file** with the absolute path for the live server
+The automated deployment script is strongly recommended as it handles all necessary changes in a consistent manner. Manual deployment is complex and error-prone, requiring updates to numerous files and configurations.
 
 ## 2. API Endpoint Changes
 
@@ -109,22 +109,19 @@ The API configuration is  defined in:
 
 ## 3. Configuration Files
 
-### Database and Application Configuration
+### Direct Configuration Approach
 
-For Bluehost deployment, use the dedicated Bluehost configuration file instead of the development config:
+The deployment script implements a direct configuration approach for Bluehost:
 
-1. The `production/bluehost_config.php` file already contains the correct settings for your Bluehost environment:
+1. **Configuration Replacements**:
+   - `config.php` is replaced with `bluehost_config.php`
+   - `api_config.php` is replaced with `bluehost_api_config.php`
+
+2. **Key Configuration Settings**:
 
 ```php
-// Bluehost-specific configurations from bluehost_config.php
+// Database Configuration
 $config = [
-    // Default settings
-    'development_mode' => false,
-    'session_expiry' => 86400,  // 24 hours in seconds
-    'max_file_size' => 10485760,  // 10MB in bytes
-    'allowed_image_types' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
-    'timezone' => 'America/New_York',
-    
     // Bluehost database settings
     'db_host' => 'localhost',
     'db_port' => 3306,
@@ -133,28 +130,23 @@ $config = [
     'db_name' => 'swbhdnmy_db_flavorconnect'
 ];
 
-// Define database constants
-define('DB_HOST', $config['db_host']);
-define('DB_PORT', $config['db_port']);
-define('DB_USER', $config['db_user']);
-define('DB_PASS', $config['db_pass']);
-define('DB_NAME', $config['db_name']);
+// Path Configuration
+define('PROJECT_ROOT', '/home2/swbhdnmy/public_html/website_7135c1f5');
+define('PUBLIC_PATH', PROJECT_ROOT);
+define('PRIVATE_PATH', PROJECT_ROOT . '/private');
 
-// Error Reporting - Production settings
-error_reporting(0);
-ini_set('display_errors', '0');
+// URL Configuration
+define('WWW_ROOT', 'https://flavorconnect.space');
+
+// Environment Setting
+define('ENVIRONMENT', 'production');
 ```
 
-2. For the production version, copy `production/bluehost_config.php` to the private/config directory and modify `initialize.php` to use it:
-
-```php
-// In private/core/initialize.php
-
-// Load the Bluehost configuration file
-require_once(PRIVATE_PATH . '/config/bluehost_config.php');
-```
-
-This approach eliminates environment detection logic and simplifies the codebase for production. The development version will continue to use `config.php`, while the production version will use `bluehost_config.php` exclusively.
+3. **Benefits of Direct Configuration**:
+   - No environment detection logic needed
+   - Simplified codebase for production
+   - Reduced risk of configuration errors
+   - Consistent behavior across the application
 
 ## 4. File Permissions
 
@@ -171,33 +163,34 @@ find /path/to/live/site -type f -exec chmod 644 {} \;
 chmod +x /path/to/live/site/some_script.sh
 ```
 
-## 5. Environment-Specific Configuration
+## 5. Image Upload and Display
 
-### Error Reporting
+### Image Handling in Production
 
-```php
-// Development: Show all errors
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+The deployment script addresses image upload and display issues on Bluehost:
 
-// Production: Hide errors from users
-ini_set('display_errors', 0);
-ini_set('display_startup_errors', 0);
-error_reporting(E_ALL);
-// Log errors instead
-ini_set('log_errors', 1);
-ini_set('error_log', '/path/to/error.log');
-```
+1. **RecipeImageProcessor Class**:
+   - The deployment script replaces the standard RecipeImageProcessor class with a Bluehost-optimized version
+   - This version handles the Bluehost directory structure correctly
+   - Ensures uploaded images are stored in the correct location
 
-### Cache Busting
+2. **Recipe Class**:
+   - The deployment script replaces the standard Recipe class with a Bluehost-optimized version
+   - The optimized version skips file existence checks in the production environment
+   - Ensures image paths are always returned correctly
 
-Ensure CSS and JS files use cache busting in production:
+3. **Image Path Resolution**:
+   - The `url_for()` function uses the correct WWW_ROOT constant for generating absolute URLs
+   - This ensures that image paths are correctly formed in the production environment
 
-```php
-// Example in header.php or footer.php
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/main.css?v=' . filemtime(SITE_ROOT . '/public/assets/css/main.css')); ?>">
-```
+### Troubleshooting Image Issues
+
+If you encounter image upload or display issues after deployment:
+
+1. Check the error logs in `private/logs/`
+2. Verify that the image directories exist and have the correct permissions
+3. Confirm that the WWW_ROOT constant is set correctly in the configuration
+4. Test the image upload functionality using the diagnostic script: `upload_test.php`
 
 ## 6. Heroku API Integration
 
@@ -433,8 +426,9 @@ foreach ($required_extensions as $ext) {
 
 ## 8. Deployment Checklist
 
-- [ ] Update all initialize.php paths to absolute paths (using the provided update_paths script or manually)
+- [ ] Update all relative paths to absolute paths (using the provided update_all_paths script)
 - [ ] Copy `production/bluehost_config.php` to private/config directory
+- [ ] Copy `production/bluehost_api_config.php` to private/config/api_config.php
 - [ ] Verify the constants in bluehost_config.php are correct for your Bluehost environment
 - [ ] Create/update api-config.js with Heroku endpoints
 - [ ] Update member_header.php to include api-config.js

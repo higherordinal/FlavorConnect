@@ -37,7 +37,8 @@ define('UPLOADS_PATH', PUBLIC_PATH . '/uploads');
 define('ASSETS_PATH', PUBLIC_PATH . '/assets');
 
 // URL Configuration
-define('WWW_ROOT', isset($_SERVER['REQUEST_SCHEME']) ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] : '');
+define('WWW_ROOT', 'https://flavorconnect.space');
+define('ENVIRONMENT', 'production');
 
 // Upload Settings
 define('MAX_FILE_SIZE', $config['max_file_size']);

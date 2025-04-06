@@ -778,6 +778,14 @@ class RecipeImageProcessor {
             return $result;
         }
         
+        // Fix target directory path for Bluehost - remove '/public' if it exists in the path
+        // This handles the case where the server structure doesn't have a separate public directory
+        if (defined('ENVIRONMENT') && ENVIRONMENT === 'production') {
+            // For Bluehost, the correct path is /home2/swbhdnmy/public_html/website_7135c1f5/assets/...
+            // Instead of /home2/swbhdnmy/public_html/website_7135c1f5/public/assets/...
+            $target_dir = str_replace('/public_html/website_7135c1f5/public/', '/public_html/website_7135c1f5/', $target_dir);
+        }
+        
         // Ensure target directory exists
         if (!is_dir($target_dir)) {
             if (!mkdir($target_dir, 0755, true)) {
@@ -799,7 +807,7 @@ class RecipeImageProcessor {
         
         // Move uploaded file to target directory
         if (!move_uploaded_file($file_data['tmp_name'], $target_path)) {
-            $this->errors[] = "Failed to move uploaded file to target directory";
+            $this->errors[] = "Failed to move uploaded file to target directory: {$target_path}";
             $result['errors'] = $this->errors;
             return $result;
         }
