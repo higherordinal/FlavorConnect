@@ -2,7 +2,35 @@
 
 This guide documents the process for deploying the FlavorConnect application from local development to the Bluehost production environment.
 
-## 1. Automated Deployment Process
+## 1. Deployment Configuration Notes
+
+### Important: Custom Add-on Domain Configuration for Bluehost
+
+This deployment guide and the accompanying scripts are specifically configured for a **Bluehost add-on domain setup** where FlavorConnect is hosted as an additional domain within an existing Bluehost account. This is a custom configuration specific to the developer's hosting arrangement and not a standard deployment pattern.
+
+In this specific setup, the application is placed in a subfolder structure:
+
+```
+/home2/swbhdnmy/public_html/website_7135c1f5/
+```
+
+If you are deploying FlavorConnect as a primary domain or on a different hosting provider, you will need to adjust the paths accordingly. In a standard single-domain hosting setup, your paths would likely be simpler, such as:
+
+```
+/home/username/public_html/
+```
+
+To adapt this deployment process for your specific hosting environment:
+
+1. Modify the `PROJECT_ROOT` constant in `bluehost_config.php` to match your server's directory structure
+2. Update all absolute paths in the deployment script to reflect your hosting environment
+3. Adjust the WWW_ROOT constant to use your domain name
+
+The core deployment strategy (replacing configuration files, updating the url_for function, etc.) remains valid regardless of hosting setup, but the specific paths will need to be customized to your environment.
+
+**Note for other developers:** This deployment script is primarily designed to make deployment easy for the original developer with their specific Bluehost configuration. If you're deploying FlavorConnect to your own hosting environment, you'll need to adapt these scripts and paths to match your specific hosting setup.
+
+## 2. Automated Deployment Process
 
 ### Critical Path Changes
 
@@ -82,6 +110,7 @@ A comprehensive deployment script is provided to automatically prepare the Flavo
    - Updates configuration files for the production environment:
      - Replaces config.php with bluehost_config.php
      - Replaces api_config.php with bluehost_api_config.php
+   - Updates the url_for() function in core_utilities.php to use WWW_ROOT in production mode
      - Updates initialize.php comments for clarity
    - Creates backups of all modified files
    - Provides a summary of changes made
@@ -90,7 +119,7 @@ A comprehensive deployment script is provided to automatically prepare the Flavo
 
 The automated deployment script is strongly recommended as it handles all necessary changes in a consistent manner. Manual deployment is complex and error-prone, requiring updates to numerous files and configurations.
 
-## 2. API Endpoint Changes
+## 3. API Endpoint Changes
 
 ### API Base URL
 
@@ -107,7 +136,7 @@ define('API_BASE_URL', 'https://flavorconnect-api.herokuapp.com');
 The API configuration is  defined in:
 - `/private/core/api_config.php` 
 
-## 3. Configuration Files
+## 4. Configuration Files
 
 ### Direct Configuration Approach
 
@@ -148,7 +177,7 @@ define('ENVIRONMENT', 'production');
    - Reduced risk of configuration errors
    - Consistent behavior across the application
 
-## 4. File Permissions
+## 5. File Permissions
 
 After uploading files to the live server, ensure proper permissions:
 
@@ -163,7 +192,7 @@ find /path/to/live/site -type f -exec chmod 644 {} \;
 chmod +x /path/to/live/site/some_script.sh
 ```
 
-## 5. Image Upload and Display
+## 6. Image Upload and Display
 
 ### Image Handling in Production
 
@@ -180,8 +209,15 @@ The deployment script addresses image upload and display issues on Bluehost:
    - Ensures image paths are always returned correctly
 
 3. **Image Path Resolution**:
-   - The `url_for()` function uses the correct WWW_ROOT constant for generating absolute URLs
-   - This ensures that image paths are correctly formed in the production environment
+   - The `url_for()` function is updated to use the WWW_ROOT constant for generating absolute URLs in production mode
+   - The updated function includes a specific condition for the production environment:
+   ```php
+   // For production environment (Bluehost)
+   if (ENVIRONMENT === 'production' && defined('WWW_ROOT')) {
+     return WWW_ROOT . $script_path;
+   }
+   ```
+   - This ensures that image paths are correctly formed in the production environment using the domain specified in WWW_ROOT
 
 ### Troubleshooting Image Issues
 
@@ -192,7 +228,7 @@ If you encounter image upload or display issues after deployment:
 3. Confirm that the WWW_ROOT constant is set correctly in the configuration
 4. Test the image upload functionality using the diagnostic script: `upload_test.php`
 
-## 6. Heroku API Integration
+## 7. Heroku API Integration
 
 ### Heroku API Configuration
 
@@ -341,7 +377,7 @@ app.use(cors({
 }));
 ```
 
-## 7. Additional Server Configuration
+## 8. Additional Server Configuration
 
 ### .htaccess Files
 
@@ -424,16 +460,18 @@ foreach ($required_extensions as $ext) {
 }
 ```
 
-## 8. Deployment Checklist
+## 9. Deployment Checklist
 
-- [ ] Update all relative paths to absolute paths (using the provided update_all_paths script)
-- [ ] Copy `production/bluehost_config.php` to private/config directory
-- [ ] Copy `production/bluehost_api_config.php` to private/config/api_config.php
+- [ ] Run the comprehensive deployment script (`deploy_bluehost.php`) which handles:
+  - [ ] Updating all relative paths to absolute paths
+  - [ ] Replacing config files with Bluehost-optimized versions
+  - [ ] Updating the url_for() function to use WWW_ROOT in production mode
+  - [ ] Replacing RecipeImageProcessor and Recipe classes with Bluehost-optimized versions
+  - [ ] Updating .htaccess files
 - [ ] Verify the constants in bluehost_config.php are correct for your Bluehost environment
 - [ ] Create/update api-config.js with Heroku endpoints
 - [ ] Update member_header.php to include api-config.js
 - [ ] Update recipe-favorite.js to use the centralized API configuration
-- [ ] Modify `initialize.php` in the production version to directly load `bluehost_config.php` instead of `config.php`
 - [ ] Copy `production/RecipeImageProcessor.live.class.php` to private/classes directory
 - [ ] Set appropriate file permissions
 - [ ] Configure error reporting for production
@@ -447,7 +485,7 @@ foreach ($required_extensions as $ext) {
   - [ ] Copy `production/.bluehost-api-htaccess` to public/api/.htaccess
 - [ ] Validate .htaccess configurations
 
-## 9. Troubleshooting Common Issues
+## 10. Troubleshooting Common Issues
 
 ### 500 Server Error
 
@@ -481,7 +519,7 @@ If you encounter a 500 server error, check:
 2. Verify session directory permissions
 3. Test session functionality with a simple script
 
-## 10. Reverting to Previous Version
+## 11. Reverting to Previous Version
 
 If needed, you can revert to a previous version:
 

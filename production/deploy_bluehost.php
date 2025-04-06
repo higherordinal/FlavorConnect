@@ -12,7 +12,7 @@
  * 4. Updates configuration files for the production environment:
  *    - Replaces config.php with bluehost_config.php
  *    - Replaces api_config.php with bluehost_api_config.php
- *    - Updates initialize.php comments for clarity
+ * 5. Updates the url_for() function to use WWW_ROOT in production mode
  *
  * This script should be run on the local development environment before uploading
  * files to Bluehost, or directly on the Bluehost server after uploading.
@@ -338,47 +338,54 @@ if (file_exists($production_bluehost_config)) {
     echo "Error: Production bluehost_config.php file not found at: $production_bluehost_config\n";
 }
 
-// Update initialize.php to use the updated config files
-echo "\nUpdating initialize.php for API configuration...\n";
-$initialize_file = $root_dir . 'private/initialize.php';
+// No need to update initialize.php since we're directly replacing the config files
+// and keeping the same filenames
 
-if (file_exists($initialize_file)) {
+// Update url_for function to use WWW_ROOT in production mode
+echo "\nUpdating url_for function to use WWW_ROOT in production mode...\n";
+$core_utilities_file = $root_dir . 'private/core/core_utilities.php';
+
+if (file_exists($core_utilities_file)) {
     // Create backup of original file
-    $backup_initialize = $backup_dir . '/private/initialize.php';
-    $backup_dir_path = dirname($backup_initialize);
+    $backup_core_utilities = $backup_dir . '/private/core/core_utilities.php';
+    $backup_dir_path = dirname($backup_core_utilities);
     
     if (!is_dir($backup_dir_path)) {
         mkdir($backup_dir_path, 0755, true);
     }
     
-    copy($initialize_file, $backup_initialize);
-    echo "Original initialize.php backed up to: $backup_initialize\n";
+    copy($core_utilities_file, $backup_core_utilities);
+    echo "Original core_utilities.php backed up to: $backup_core_utilities\n";
     
     // Read the file content
-    $content = file_get_contents($initialize_file);
+    $content = file_get_contents($core_utilities_file);
     
-    // No need to update main config file inclusion since we're directly replacing config.php
-    // Just update the API config file inclusion if it exists
-    $api_search = "// Load API configuration\nrequire_once('config/api_config.php');";
-    $api_replace = "// Load API configuration\nrequire_once('config/api_config.php'); // Using Bluehost-optimized version";
-    
-    // Replace the API config content
-    $new_content = str_replace($api_search, $api_replace, $content);
-    
-    // Only update if changes were made
-    if ($new_content !== $content) {
-        // Write the updated content back to the file
-        if (file_put_contents($initialize_file, $new_content)) {
-            echo "Successfully updated initialize.php for API configuration!\n";
-            $modified_files++;
+    // Check if the production environment condition is already present
+    if (strpos($content, "ENVIRONMENT === 'production' && defined('WWW_ROOT')") === false) {
+        // Find the position to insert the new code
+        $search = "  // For Docker and other environments\n  return \$base_url . \$script_path;";
+        $replace = "  // For production environment (Bluehost)\n  if (ENVIRONMENT === 'production' && defined('WWW_ROOT')) {\n    return WWW_ROOT . \$script_path;\n  }\n\n  // For Docker and other environments\n  return \$base_url . \$script_path;";
+        
+        // Replace the content
+        $new_content = str_replace($search, $replace, $content);
+        
+        // Only update if changes were made
+        if ($new_content !== $content) {
+            // Write the updated content back to the file
+            if (file_put_contents($core_utilities_file, $new_content)) {
+                echo "Successfully updated url_for function to use WWW_ROOT in production mode!\n";
+                $modified_files++;
+            } else {
+                echo "Failed to update url_for function.\n";
+            }
         } else {
-            echo "Failed to update initialize.php.\n";
+            echo "No changes needed for url_for function.\n";
         }
     } else {
-        echo "No changes needed for initialize.php.\n";
+        echo "url_for function already uses WWW_ROOT in production mode.\n";
     }
 } else {
-    echo "Error: initialize.php not found at: $initialize_file\n";
+    echo "Error: core_utilities.php not found at: $core_utilities_file\n";
 }
 
 // Display the current directory for debugging
