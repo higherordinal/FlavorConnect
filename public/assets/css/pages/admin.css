@@ -1,7 +1,15 @@
 /* ====================================
    ADMIN MANAGEMENT - MAIN LAYOUT
    ==================================== */
-/* Admin Management Styles */
+/* 
+ * Admin Management Styles
+ *
+ * NOTE: This stylesheet uses a desktop-first approach, unlike the rest of the application
+ * which follows mobile-first design principles. This is intentional as the admin interface
+ * is primarily designed for desktop use, with mobile support as a secondary consideration.
+ *
+ * Media queries in this file target smaller screens with max-width breakpoints.
+ */
 
 .admin-management {
   display: grid;
