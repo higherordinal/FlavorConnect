@@ -37,7 +37,8 @@ class RecipeIngredient extends DatabaseObject {
         $this->ingredient_id = isset($args['ingredient_id']) && $args['ingredient_id'] !== '' ? (int)$args['ingredient_id'] : null;
         $this->measurement_id = $args['measurement_id'] ?? '';
         $this->quantity = $args['quantity'] ?? '';
-        $this->name = $args['name'] ?? '';
+        // Convert ingredient name to lowercase
+        $this->name = isset($args['name']) ? strtolower($args['name']) : '';
     }
 
     /**
@@ -63,6 +64,8 @@ class RecipeIngredient extends DatabaseObject {
             $stmt->execute();
             $result = $stmt->get_result();
             if($row = $result->fetch_object()) {
+                // Ensure the name is lowercase when retrieving
+                $row->name = strtolower($row->name);
                 $this->_ingredient = $row;
             }
         }
@@ -108,8 +111,11 @@ class RecipeIngredient extends DatabaseObject {
      * @return int Ingredient ID
      */
     private function get_or_create_ingredient($name) {
-        // Check if ingredient exists
-        $sql = "SELECT ingredient_id FROM ingredient WHERE name='" . self::$database->escape_string($name) . "' LIMIT 1";
+        // Ensure name is lowercase
+        $name = strtolower($name);
+        
+        // Check if ingredient exists (case insensitive search)
+        $sql = "SELECT ingredient_id FROM ingredient WHERE LOWER(name)='" . self::$database->escape_string($name) . "' LIMIT 1";
         $result = self::$database->query($sql);
         
         if($result && $result->num_rows > 0) {
@@ -117,7 +123,7 @@ class RecipeIngredient extends DatabaseObject {
             return $row['ingredient_id'];
         }
         
-        // Create new ingredient
+        // Create new ingredient (stored as lowercase)
         $sql = "INSERT INTO ingredient (name, recipe_id) VALUES ('" . self::$database->escape_string($name) . "', '" . self::$database->escape_string($this->recipe_id) . "')";
         $result = self::$database->query($sql);
         
@@ -248,6 +254,8 @@ class RecipeIngredient extends DatabaseObject {
         
         $ingredients = [];
         while($row = $result->fetch_assoc()) {
+            // Ensure ingredient name is lowercase
+            $row['name'] = strtolower($row['name']);
             $ingredients[] = static::instantiate($row);
         }
         return $ingredients;
