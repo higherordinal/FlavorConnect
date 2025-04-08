@@ -256,6 +256,48 @@
 }
 
 /* ====================================
+   QUANTITY INPUT GROUP
+   ==================================== */
+.quantity-input-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.quantity-input-group input {
+    width: 100%;
+}
+
+.fraction-helpers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+}
+
+.fraction-helper {
+    display: inline-block;
+    cursor: pointer;
+    background-color: var(--color-light);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: 0.15rem 0.4rem;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.fraction-helper:hover {
+    background-color: var(--color-primary-light);
+    border-color: var(--color-primary);
+    color: var(--color-primary-dark);
+}
+
+.fraction-helper:active {
+    transform: scale(0.95);
+}
+
+/* ====================================
    DIRECTIONS SECTION
    ==================================== */
 .directions-section {

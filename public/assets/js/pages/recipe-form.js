@@ -191,6 +191,37 @@ function initializeIngredients() {
         // Original measurement options are now stored for reference
     }
 
+    // Initialize fraction helpers for existing ingredient rows
+    initializeFractionHelpers();
+
+    /**
+     * Initializes the fraction helper buttons for all ingredient rows
+     */
+    function initializeFractionHelpers() {
+        document.querySelectorAll('.fraction-helper').forEach(helper => {
+            helper.addEventListener('click', function() {
+                const value = parseFloat(this.dataset.value);
+                const inputField = this.closest('.quantity-input-group').querySelector('input[type="number"]');
+                
+                // Get current value and handle whole numbers
+                let currentValue = parseFloat(inputField.value) || 0;
+                let wholePart = Math.floor(currentValue);
+                
+                // If the input is empty or 0, just set it to the fraction value
+                if (currentValue === 0) {
+                    inputField.value = value;
+                } else {
+                    // If there's already a whole number, add the fraction to it
+                    inputField.value = wholePart + value;
+                }
+                
+                // Trigger change event to update any dependent fields
+                inputField.dispatchEvent(new Event('change'));
+                inputField.focus();
+            });
+        });
+    }
+
     /**
      * Creates a new ingredient row with quantity, measurement, and name fields
      * @param {number} index The index of the new ingredient row
@@ -209,7 +240,16 @@ function initializeIngredients() {
         row.innerHTML = `
             <div class="form-group">
                 <label for="quantity_${index}">Quantity</label>
-                <input type="number" name="ingredients[${index}][quantity]" id="quantity_${index}" class="form-control" step="0.01" min="0" required>
+                <div class="quantity-input-group">
+                    <input type="number" name="ingredients[${index}][quantity]" id="quantity_${index}" class="form-control" step="0.01" min="0" required>
+                    <div class="fraction-helpers">
+                        <span class="fraction-helper" data-value="0.25">¼</span>
+                        <span class="fraction-helper" data-value="0.33">⅓</span>
+                        <span class="fraction-helper" data-value="0.5">½</span>
+                        <span class="fraction-helper" data-value="0.67">⅔</span>
+                        <span class="fraction-helper" data-value="0.75">¾</span>
+                    </div>
+                </div>
                 <div class="form-error" style="display: none;"></div>
             </div>
             
