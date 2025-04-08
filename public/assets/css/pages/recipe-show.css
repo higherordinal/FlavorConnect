@@ -549,6 +549,31 @@
     }
 }
 
+/* Large screens (1024px and up) */
+@media (min-width: 1024px) {
+    .recipe-container {
+        gap: var(--grid-gap-lg);
+    }
+    
+    .recipe-meta {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    
+    .recipe-time {
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    }
+    
+    .recipe-actions {
+        /* Align to the right side of the container at 1024px+ */
+        justify-content: flex-end;
+        align-items: center;
+        margin-left: auto;
+        width: auto;
+        text-align: right;
+        grid-column: 3 / 4; /* Move to the right column of the grid */
+    }
+}
+
 /* ====================================
    RECIPE CONTENT LAYOUT
    ==================================== */
@@ -878,24 +903,6 @@
 .recipe-actions .btn:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transform: translateY(-1px);
-}
-
-/* ====================================
-   RESPONSIVE STYLING
-   ==================================== */
-@media (max-width: 1024px) {
-    .recipe-container {
-        gap: var(--grid-gap);
-    }
-    .recipe-header-overlay {
-        padding: var(--spacing-lg);
-    }
-    .recipe-meta {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-    .recipe-time {
-        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    }
 }
 
 /* ====================================
