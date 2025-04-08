@@ -115,7 +115,7 @@ A comprehensive deployment script is provided to automatically prepare the Flavo
      - Recipe.class.php
      - .htaccess files
    - Updates configuration files for the production environment:
-     - Replaces config.php with bluehost_config.php (no longer directly modifies config.php references)
+     - Replaces config.php with bluehost_config.php
      - Replaces api_config.php with bluehost_api_config.php
    - Updates the url_for() function in core_utilities.php to use WWW_ROOT in production mode
      - Updates initialize.php comments for clarity
@@ -152,23 +152,6 @@ The deployment script implements a direct configuration approach for Bluehost:
 1. **Configuration Replacements**:
    - `config.php` is replaced with `bluehost_config.php`
    - `api_config.php` is replaced with `bluehost_api_config.php`
-
-### Recent Updates to Deployment Script
-
-The deployment script has been updated with the following improvements:
-
-1. **Improved Configuration Handling**:
-   - The script no longer directly modifies references to `config.php` in PHP files
-   - Instead, it relies on the `initialize.php` file to handle the configuration loading
-   - This approach reduces the risk of configuration errors and simplifies the deployment process
-
-2. **Cleaner Path Management**:
-   - Path replacements are more consistent and reliable
-   - The script now handles edge cases better, ensuring all file paths are correctly updated
-
-3. **Better Error Handling**:
-   - Improved error reporting during the deployment process
-   - More detailed logs of changes made to each file
 
 2. **Key Configuration Settings**:
 

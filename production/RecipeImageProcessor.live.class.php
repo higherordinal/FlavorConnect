@@ -338,6 +338,26 @@ class RecipeImageProcessor {
      * @return bool True if processing was successful, false otherwise
      */
     public function processRecipeImage($source_path, $destination_dir, $filename) {
+        // Register shutdown function to catch fatal errors like memory exhaustion
+        register_shutdown_function(function() {
+            $error = error_get_last();
+            if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+                error_log("FATAL ERROR in RecipeImageProcessor: " . print_r($error, true));
+                
+                // Check if it's a memory exhaustion error
+                if (strpos($error['message'], 'Allowed memory size') !== false) {
+                    error_log("MEMORY EXHAUSTION DETECTED: The script ran out of memory while processing images");
+                    error_log("Current memory_limit: " . ini_get('memory_limit'));
+                    error_log("Peak memory usage: " . $this->formatBytes(memory_get_peak_usage(true)));
+                }
+            }
+        });
+        
+        // Memory debugging - log initial memory usage
+        $initial_memory = memory_get_usage(true);
+        error_log("MEMORY DEBUG: Initial memory usage: " . $this->formatBytes($initial_memory));
+        error_log("MEMORY DEBUG: Current memory_limit: " . ini_get('memory_limit'));
+        
         $this->errors = []; // Reset errors
         
         // Set Bluehost-specific permissions for better security
@@ -348,6 +368,10 @@ class RecipeImageProcessor {
             $this->errors[] = "Source file does not exist: {$source_path}";
             return false;
         }
+        
+        // Log file size for debugging
+        $file_size = filesize($source_path);
+        error_log("MEMORY DEBUG: Processing image of size: " . $this->formatBytes($file_size));
         
         // Ensure destination directory exists and is writable
         if (!is_dir($destination_dir)) {
@@ -372,9 +396,11 @@ class RecipeImageProcessor {
         
         // Check if ImageMagick is available
         $imagemagick_available = $this->isImageMagickAvailable();
+        error_log("MEMORY DEBUG: ImageMagick available: " . ($imagemagick_available ? 'Yes' : 'No'));
         
         // Check if GD is available
         $gd_available = $this->isGDAvailable();
+        error_log("MEMORY DEBUG: GD available: " . ($gd_available ? 'Yes' : 'No'));
         
         // If neither ImageMagick nor GD is available, create simple copies
         if (!$imagemagick_available && !$gd_available) {
@@ -400,14 +426,34 @@ class RecipeImageProcessor {
         
         // Process with ImageMagick if available
         if ($imagemagick_available) {
+            // Process thumbnail (smallest first to minimize memory usage)
+            error_log("MEMORY DEBUG: Before thumbnail processing: " . $this->formatBytes(memory_get_usage(true)));
             $this->destination_path = $thumbnail_path;
             $thumbnail_result = $this->resizeToWebP($source_path, $thumbnail_path, 300, 200, true);
             
+            // Force garbage collection between operations
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
+            }
+            error_log("MEMORY DEBUG: After thumbnail processing: " . $this->formatBytes(memory_get_usage(true)));
+            
+            // Process optimized version
             $this->destination_path = $optimized_path;
             $optimized_result = $this->resizeToWebP($source_path, $optimized_path, 1000, 750, true);
             
+            // Force garbage collection between operations
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
+            }
+            error_log("MEMORY DEBUG: After optimized processing: " . $this->formatBytes(memory_get_usage(true)));
+            
+            // Process banner version
             $this->destination_path = $banner_path;
             $banner_result = $this->resizeToWebP($source_path, $banner_path, 1200, 400, true);
+            
+            // Final memory usage
+            error_log("MEMORY DEBUG: After banner processing: " . $this->formatBytes(memory_get_usage(true)));
+            error_log("MEMORY DEBUG: Peak memory usage: " . $this->formatBytes(memory_get_peak_usage(true)));
             
             // Return true if all operations were successful
             return $thumbnail_result && $optimized_result && $banner_result;
@@ -415,9 +461,31 @@ class RecipeImageProcessor {
         
         // Fall back to GD if ImageMagick is not available
         if ($gd_available) {
-            $thumbnail_result = $this->resizeWithGD($source_path, $thumbnail_path, 300, 200, true);
-            $optimized_result = $this->resizeWithGD($source_path, $optimized_path, 1000, 750, true);
-            $banner_result = $this->resizeWithGD($source_path, $banner_path, 1200, 400, true);
+            // Process thumbnail (smallest first to minimize memory usage)
+            error_log("MEMORY DEBUG: Before thumbnail processing: " . $this->formatBytes(memory_get_usage(true)));
+            $thumbnail_result = $this->processWithGDToWebP($source_path, $thumbnail_path, 300, 200);
+            
+            // Force garbage collection between operations
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
+            }
+            error_log("MEMORY DEBUG: After thumbnail processing: " . $this->formatBytes(memory_get_usage(true)));
+            
+            // Process optimized version
+            $optimized_result = $this->processWithGDToWebP($source_path, $optimized_path, 1000, 750);
+            
+            // Force garbage collection between operations
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
+            }
+            error_log("MEMORY DEBUG: After optimized processing: " . $this->formatBytes(memory_get_usage(true)));
+            
+            // Process banner version
+            $banner_result = $this->processWithGDToWebP($source_path, $banner_path, 1200, 400);
+            
+            // Final memory usage
+            error_log("MEMORY DEBUG: After banner processing: " . $this->formatBytes(memory_get_usage(true)));
+            error_log("MEMORY DEBUG: Peak memory usage: " . $this->formatBytes(memory_get_peak_usage(true)));
             
             // Return true if all operations were successful
             return $thumbnail_result && $optimized_result && $banner_result;
@@ -1056,5 +1124,24 @@ class RecipeImageProcessor {
         }
         
         return true;
+    }
+    
+    /**
+     * Format bytes to human-readable format for debugging
+     * 
+     * @param int $bytes The number of bytes
+     * @param int $precision The number of decimal places
+     * @return string Formatted string
+     */
+    private function formatBytes($bytes, $precision = 2) {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        
+        $bytes /= (1 << (10 * $pow));
+        
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 }
