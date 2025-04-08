@@ -1,0 +1,103 @@
+/* ====================================
+   PAGINATION COMPONENT
+   ==================================== */
+
+/**
+ * Pagination Component
+ * 
+ * A reusable pagination component that provides navigation controls
+ * for paginated content throughout the application.
+ */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+  gap: 0.5rem;
+}
+
+.pagination-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.pagination-link:hover {
+  background-color: var(--primary-color);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination-link.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination-info {
+  padding: 0 1rem;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.records-info {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-color-light);
+  margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+  }
+  
+  .pagination-link {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .pagination-info {
+    width: 100%;
+    text-align: center;
+    order: -1;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.records-info {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-color-light);
+  margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pagination {
+    flex-wrap: wrap;
+  }
+  
+  .pagination-link {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .pagination-info {
+    width: 100%;
+    text-align: center;
+    order: -1;
+    margin-bottom: 0.5rem;
+  }
+}

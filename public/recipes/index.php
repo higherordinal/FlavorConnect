@@ -91,13 +91,15 @@ $recipe_filter = new RecipeFilter($filter_config);
 
 // Get total recipes count for pagination
 $total_recipes = $recipe_filter->count();
-$total_pages = max(1, ceil($total_recipes / $per_page));
+
+// Create pagination object
+$pagination = new Pagination($current_page, $per_page, $total_recipes);
 
 // Get recipes for current page
 $recipes = $recipe_filter->apply();
 
 // Ensure current page is not greater than total pages
-if ($current_page > $total_pages) {
+if ($current_page > $pagination->total_pages()) {
     redirect_to('/recipes/index.php');
 }
 
@@ -327,46 +329,16 @@ $userData = [
             <?php } ?>
         </div>
 
-        <?php if($total_pages > 1) { ?>
-            <nav class="pagination" role="navigation" aria-label="Recipe pages">
-                <?php if($current_page > 1) { ?>
-                    <a href="<?php echo url_for('/recipes/index.php?' . build_query_string(['page' => $current_page - 1])); ?>" 
-                       class="page-link" 
-                       aria-label="Go to previous page">
-                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
-                        <span class="sr-only">Previous page</span>
-                    </a>
-                <?php } ?>
-
-                <?php for($i = 1; $i <= $total_pages; $i++) { ?>
-                    <?php if(
-                        $i <= 2 || 
-                        $i >= $total_pages - 1 || 
-                        ($i >= $current_page - 1 && $i <= $current_page + 1)
-                    ) { ?>
-                        <a href="<?php echo url_for('/recipes/index.php?' . build_query_string(['page' => $i])); ?>" 
-                           class="page-link <?php if($i === $current_page) echo 'active'; ?>"
-                           aria-label="Go to page <?php echo $i; ?>"
-                           <?php if($i === $current_page) echo 'aria-current="page"'; ?>>
-                            <?php echo $i; ?>
-                        </a>
-                    <?php } elseif(
-                        $i === 3 || 
-                        $i === $total_pages - 2
-                    ) { ?>
-                        <span class="page-link" aria-hidden="true">...</span>
-                    <?php } ?>
-                <?php } ?>
-
-                <?php if($current_page < $total_pages) { ?>
-                    <a href="<?php echo url_for('/recipes/index.php?' . build_query_string(['page' => $current_page + 1])); ?>" 
-                       class="page-link" 
-                       aria-label="Go to next page">
-                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
-                        <span class="sr-only">Next page</span>
-                    </a>
-                <?php } ?>
-            </nav>
+        <?php if($pagination->total_pages() > 1) { ?>
+            <!-- Pagination Controls -->
+            <?php 
+            // Generate pagination links
+            $url_pattern = '/recipes/index.php?' . build_query_string(['page' => '{page}']);
+            echo $pagination->page_links($url_pattern);
+            
+            // Display total records info
+            echo '<div class="records-info">Showing ' . count($recipes) . ' of ' . $total_recipes . ' total recipes</div>';
+            ?>
         <?php } ?>
     <?php } ?>
 </div>

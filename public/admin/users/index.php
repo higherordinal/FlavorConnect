@@ -6,6 +6,10 @@ require_admin();
 $page_title = 'Admin: User Management';
 $page_style = 'admin';
 
+// Get pagination parameters
+$current_page = $_GET['page'] ?? 1;
+$per_page = 10; // Number of users per page
+
 // Get sort parameters
 $sort_column = $_GET['sort'] ?? 'username';
 $sort_order = $_GET['order'] ?? 'asc';
@@ -19,18 +23,31 @@ if (!in_array($sort_column, $allowed_columns)) {
 // Validate sort order
 $sort_order = strtolower($sort_order) === 'desc' ? 'DESC' : 'ASC';
 
-// Build the SQL query
+// Get total users count for pagination
+$total_users = User::count_all();
+if(!$session->is_super_admin()) {
+    // Adjust count to exclude super admins
+    $super_admin_count = User::count_by_level('s');
+    $total_users -= $super_admin_count;
+}
+
+// Create pagination object
+$pagination = new Pagination($current_page, $per_page, $total_users);
+
+// Build the SQL query with pagination
 $sql = "SELECT * FROM user_account";
 if(!$session->is_super_admin()) {
     $sql .= " WHERE user_level != 's'";
 }
 $sql .= " ORDER BY {$sort_column} {$sort_order}";
+$sql .= " LIMIT {$per_page} OFFSET {$pagination->offset()}";
 $users = User::find_by_sql($sql);
 
 // Function to generate sort URL
 function sort_link($column, $current_sort, $current_order) {
     $new_order = ($current_sort === $column && $current_order === 'ASC') ? 'DESC' : 'ASC';
-    return url_for('/admin/users/index.php?sort=' . $column . '&order=' . $new_order);
+    $current_page = $_GET['page'] ?? 1;
+    return url_for('/admin/users/index.php?sort=' . $column . '&order=' . $new_order . '&page=' . $current_page);
 }
 
 // Function to display sort indicator
@@ -43,6 +60,10 @@ function sort_indicator($column, $current_sort, $current_order) {
 
 include(SHARED_PATH . '/member_header.php');
 ?>
+
+<!-- Import pagination component styles -->
+<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/pagination.css'); ?>">
+
 
 <div class="admin-content">
     <?php 
@@ -146,6 +167,17 @@ include(SHARED_PATH . '/member_header.php');
             </tbody>
         </table>
     </div>
+    
+    <!-- Pagination Controls -->
+    <?php 
+    // Generate pagination links
+    $url_pattern = '/admin/users/index.php?page={page}';
+    $extra_params = ['sort' => $sort_column, 'order' => strtolower($sort_order)];
+    echo $pagination->page_links($url_pattern, $extra_params);
+    
+    // Display total records info
+    echo '<div class="records-info">Showing ' . count($users) . ' of ' . $total_users . ' total users</div>';
+    ?>
 </div>
 
 <div class="bottom-actions">

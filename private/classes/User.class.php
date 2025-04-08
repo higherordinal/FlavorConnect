@@ -264,6 +264,20 @@ class User extends DatabaseObject {
         $row = $result->fetch_assoc();
         return $row['count'] ?? 0;
     }
+    
+    /**
+     * Counts users with a specific user level
+     * @param string $level User level to count (u, a, s)
+     * @return int Number of users with the specified level
+     */
+    public static function count_by_level($level) {
+        $database = static::get_database();
+        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
+        $sql .= " WHERE user_level='" . $database->real_escape_string($level) . "'";
+        $result = $database->query($sql);
+        $row = $result->fetch_assoc();
+        return $row['count'] ?? 0;
+    }
 
     /**
      * Counts number of recipes created by this user
