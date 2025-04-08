@@ -152,16 +152,28 @@ function format_quantity($value, $precision = 'basic') {
             $fraction = '⅟16';
         }
     } else {
-        // Basic precision (original behavior)
-        if ($decimal >= 0.875) {
+        // Basic precision with expanded fractions
+        if ($decimal >= 0.9375) {
             $fraction = '';
             $wholePart += 1;
-        } else if ($decimal >= 0.625) {
-            $fraction = '¾';
+        } else if ($decimal >= 0.8125) {
+            $fraction = '⅞'; // ⅞
+        } else if ($decimal >= 0.7) {
+            $fraction = '¾'; // ¾
+        } else if ($decimal >= 0.58) {
+            $fraction = '⅔'; // ⅔
+        } else if ($decimal >= 0.45) {
+            $fraction = '½'; // ½
         } else if ($decimal >= 0.375) {
-            $fraction = '½';
-        } else if ($decimal >= 0.125) {
-            $fraction = '¼';
+            $fraction = '⅖'; // ⅖
+        } else if ($decimal >= 0.29) {
+            $fraction = '⅓'; // ⅓
+        } else if ($decimal >= 0.225) {
+            $fraction = '¼'; // ¼
+        } else if ($decimal >= 0.175) {
+            $fraction = '⅕'; // ⅕
+        } else if ($decimal >= 0.0625) {
+            $fraction = '⅛'; // ⅛
         }
     }
     

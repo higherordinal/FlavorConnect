@@ -135,6 +135,26 @@
 }
 
 /* ====================================
+   FORM VALIDATION
+   ==================================== */
+.form-error {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    flex: 0 0 auto;
+}
+
+.form-control.is-invalid {
+    border-color: var(--error-color);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+/* ====================================
    FORM SECTIONS - GENERAL STYLING
    ==================================== */
 .form-section {
@@ -164,6 +184,27 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     margin-bottom: 0.75rem;
     padding: 0.5rem;
+}
+
+.categories-row .form-group {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.categories-row .form-group label {
+    margin-bottom: 0.5rem;
+}
+
+.categories-row .form-group select {
+    flex: 0 0 auto;
+}
+
+.categories-row .form-error {
+    color: var(--error-color);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    flex: 0 0 auto;
 }
 
 /* ====================================
@@ -196,6 +237,10 @@
     display: grid;
     gap: 0.5rem;
     grid-template-columns: 1fr 1fr;
+}
+
+.time-inputs .form-group {
+    margin-bottom: 0.5rem;
 }
 
 /* ====================================
