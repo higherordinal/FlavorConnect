@@ -332,9 +332,9 @@ $userData = [
         <?php if($pagination->total_pages() > 1) { ?>
             <!-- Pagination Controls -->
             <?php 
-            // Generate pagination links
+            // Generate pagination links with recipe gallery style
             $url_pattern = '/recipes/index.php?' . build_query_string(['page' => '{page}']);
-            echo $pagination->page_links($url_pattern);
+            echo $pagination->page_links($url_pattern, [], true);
             
             // Display total records info
             echo '<div class="records-info">Showing ' . count($recipes) . ' of ' . $total_recipes . ' total recipes</div>';

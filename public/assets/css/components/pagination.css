@@ -17,6 +17,7 @@
   gap: 0.5rem;
 }
 
+/* Standard pagination links */
 .pagination-link {
   display: flex;
   align-items: center;
@@ -57,39 +58,43 @@
   margin-bottom: 1rem;
 }
 
+/* Recipe Gallery Pagination Styles */
+.pagination .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--border-radius-sm);
+  background-color: var(--surface-color);
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+  margin: 0 0.25rem;
+}
+
+.pagination .page-link:hover {
+  background-color: var(--primary-color);
+  color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.pagination .page-link.active {
+  background-color: var(--primary-color);
+  color: var(--color-white);
+  font-weight: bold;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .pagination {
     flex-wrap: wrap;
   }
   
-  .pagination-link {
-    width: 2rem;
-    height: 2rem;
-  }
-  
-  .pagination-info {
-    width: 100%;
-    text-align: center;
-    order: -1;
-    margin-bottom: 0.5rem;
-  }
-}
-
-.records-info {
-  text-align: center;
-  font-size: 0.9rem;
-  color: var(--text-color-light);
-  margin-bottom: 1rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .pagination {
-    flex-wrap: wrap;
-  }
-  
-  .pagination-link {
+  .pagination-link,
+  .pagination .page-link {
     width: 2rem;
     height: 2rem;
   }
