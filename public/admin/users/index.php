@@ -136,7 +136,6 @@ include(SHARED_PATH . '/member_header.php');
                             <?php if($user->user_level !== 's') { ?>
                                 <a href="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" 
                                    class="action delete" 
-                                   onclick="return confirm('Are you sure you want to delete this user?');"
                                    title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </a>

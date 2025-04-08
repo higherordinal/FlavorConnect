@@ -52,9 +52,18 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <div class="admin-content">
-    <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to User List
-    </a>
+    <?php 
+    echo unified_navigation(
+        '/admin/users/index.php',
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['url' => '/admin/index.php', 'label' => 'Admin'],
+            ['url' => '/admin/users/index.php', 'label' => 'User Management'],
+            ['label' => 'Edit User']
+        ],
+        'Back to User List'
+    ); 
+    ?>
 
     <div class="admin-header">
         <h1>Edit User: <span class="username-highlight"><?php echo h($user->username); ?></span></h1>

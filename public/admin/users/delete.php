@@ -61,6 +61,19 @@ include(SHARED_PATH . '/member_header.php');
 ?>
 
 <div class="admin-content">
+    <?php 
+    echo unified_navigation(
+        '/admin/users/index.php',
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['url' => '/admin/index.php', 'label' => 'Admin'],
+            ['url' => '/admin/users/index.php', 'label' => 'User Management'],
+            ['label' => 'Delete User']
+        ],
+        'Back to User List'
+    ); 
+    ?>
+    
     <div class="admin-header">
         <h1>Delete User: <span class="username-highlight"><?php echo h($user->username); ?></span></h1>
     </div>
