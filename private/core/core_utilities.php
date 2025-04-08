@@ -105,25 +105,64 @@ function get_raw_quantity($value) {
 /**
  * Formats a recipe quantity as a fraction
  * @param float $value The quantity to format
+ * @param string $precision The precision level ('basic' for ¼, ½, ¾ or 'extended' for more fractions)
  * @return string The formatted quantity
  */
-function format_quantity($value) {
+function format_quantity($value, $precision = 'basic') {
     if ($value == 0) return '0';
     
     $wholePart = floor($value);
     $decimal = $value - $wholePart;
     
-    // Convert decimal to fraction using the same logic as JavaScript
+    // Convert decimal to fraction
     $fraction = '';
-    if ($decimal >= 0.875) {
-        $fraction = '';
-        $wholePart += 1;
-    } else if ($decimal >= 0.625) {
-        $fraction = '¾';
-    } else if ($decimal >= 0.375) {
-        $fraction = '½';
-    } else if ($decimal >= 0.125) {
-        $fraction = '¼';
+    
+    if ($precision === 'extended') {
+        // Extended precision with more fraction options
+        if ($decimal >= 0.9375) {
+            $fraction = '';
+            $wholePart += 1;
+        } else if ($decimal >= 0.875) {
+            $fraction = '⅞';
+        } else if ($decimal >= 0.8125) {
+            $fraction = '⅚';
+        } else if ($decimal >= 0.75) {
+            $fraction = '¾';
+        } else if ($decimal >= 0.6875) {
+            $fraction = '⅔';
+        } else if ($decimal >= 0.625) {
+            $fraction = '⅝';
+        } else if ($decimal >= 0.5625) {
+            $fraction = '⅗';
+        } else if ($decimal >= 0.5) {
+            $fraction = '½';
+        } else if ($decimal >= 0.4375) {
+            $fraction = '⅖';
+        } else if ($decimal >= 0.375) {
+            $fraction = '⅜';
+        } else if ($decimal >= 0.3125) {
+            $fraction = '⅓';
+        } else if ($decimal >= 0.25) {
+            $fraction = '¼';
+        } else if ($decimal >= 0.1875) {
+            $fraction = '⅕';
+        } else if ($decimal >= 0.125) {
+            $fraction = '⅛';
+        } else if ($decimal >= 0.0625) {
+            $fraction = '⅟16';
+        }
+    } else {
+        // Basic precision (original behavior)
+        if ($decimal >= 0.875) {
+            $fraction = '';
+            $wholePart += 1;
+        } else if ($decimal >= 0.625) {
+            $fraction = '¾';
+        } else if ($decimal >= 0.375) {
+            $fraction = '½';
+        } else if ($decimal >= 0.125) {
+            $fraction = '¼';
+        }
     }
     
     // Format the final string

@@ -35,9 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
 /**
  * Formats a number as a fraction when appropriate
  * @param {number} value - Number to format
+ * @param {string} precision - Precision level ('basic' or 'extended')
  * @returns {string} Formatted number
  */
-function formatQuantity(value) {
+function formatQuantity(value, precision = 'basic') {
     if (value === 0) return '0';
     
     const wholePart = Math.floor(value);
@@ -45,15 +46,53 @@ function formatQuantity(value) {
     
     // Convert decimal to fraction
     let fraction = '';
-    if (decimal >= 0.875) {
-        fraction = '';
-        wholePart += 1;
-    } else if (decimal >= 0.625) {
-        fraction = '¾';
-    } else if (decimal >= 0.375) {
-        fraction = '½';
-    } else if (decimal >= 0.125) {
-        fraction = '¼';
+    
+    if (precision === 'extended') {
+        // Extended precision with more fraction options
+        if (decimal >= 0.9375) {
+            fraction = '';
+            wholePart += 1;
+        } else if (decimal >= 0.875) {
+            fraction = '⅞';
+        } else if (decimal >= 0.8125) {
+            fraction = '⅚';
+        } else if (decimal >= 0.75) {
+            fraction = '¾';
+        } else if (decimal >= 0.6875) {
+            fraction = '⅔';
+        } else if (decimal >= 0.625) {
+            fraction = '⅝';
+        } else if (decimal >= 0.5625) {
+            fraction = '⅗';
+        } else if (decimal >= 0.5) {
+            fraction = '½';
+        } else if (decimal >= 0.4375) {
+            fraction = '⅖';
+        } else if (decimal >= 0.375) {
+            fraction = '⅜';
+        } else if (decimal >= 0.3125) {
+            fraction = '⅓';
+        } else if (decimal >= 0.25) {
+            fraction = '¼';
+        } else if (decimal >= 0.1875) {
+            fraction = '⅕';
+        } else if (decimal >= 0.125) {
+            fraction = '⅛';
+        } else if (decimal >= 0.0625) {
+            fraction = '⅟16';
+        }
+    } else {
+        // Basic precision (original behavior)
+        if (decimal >= 0.875) {
+            fraction = '';
+            wholePart += 1;
+        } else if (decimal >= 0.625) {
+            fraction = '¾';
+        } else if (decimal >= 0.375) {
+            fraction = '½';
+        } else if (decimal >= 0.125) {
+            fraction = '¼';
+        }
     }
     
     // Format the final string
