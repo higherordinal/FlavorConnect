@@ -292,7 +292,7 @@
 
 /* Override specific properties for ingredient row */
 .ingredient-row {
-    grid-template-columns: 100px 150px 1fr 40px; /* Adjusted column widths for better balance */
+    grid-template-columns: 120px 150px 1fr 40px; /* Increased quantity column width */
     margin-bottom: 0.5rem;
     padding: 0.75rem;
     align-items: start;
@@ -767,7 +767,7 @@
     .ingredient-row {
         display: grid;
         gap: 1rem;
-        grid-template-columns: 100px 150px 1fr auto;
+        grid-template-columns: 120px 150px 1fr auto;
         margin-bottom: 1rem;
         position: relative;
     }

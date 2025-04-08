@@ -14,14 +14,10 @@ function output_fraction_helpers() {
     echo <<<HTML
     <div class="fraction-helpers">
         <span class="fraction-helper" data-value="0.125">⅛</span>
-        <span class="fraction-helper" data-value="0.166">⅙</span>
         <span class="fraction-helper" data-value="0.2">⅕</span>
         <span class="fraction-helper" data-value="0.25">¼</span>
         <span class="fraction-helper" data-value="0.33">⅓</span>
-        <span class="fraction-helper" data-value="0.375">⅜</span>
-        <span class="fraction-helper" data-value="0.4">⅖</span>
         <span class="fraction-helper" data-value="0.5">½</span>
-        <span class="fraction-helper" data-value="0.6">⅗</span>
         <span class="fraction-helper" data-value="0.67">⅔</span>
         <span class="fraction-helper" data-value="0.75">¾</span>
         <span class="fraction-helper" data-value="0.875">⅞</span>
