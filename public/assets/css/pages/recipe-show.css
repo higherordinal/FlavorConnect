@@ -194,7 +194,7 @@
 }
 
 .recipe-time span {
-    color: #fff;
+    color: var(--color-white);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -921,7 +921,7 @@
     min-height: 400px;
     overflow: hidden;
     position: relative;
-    width: 85%;
+    width: 90%;
 }
 
 .recipe-header-image img {
