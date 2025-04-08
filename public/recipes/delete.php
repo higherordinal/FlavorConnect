@@ -22,7 +22,9 @@ if($recipe->user_id != $session->get_user_id() && !$session->is_admin()) {
 
 // Get referrer for back link
 $ref = $_GET['ref'] ?? '';
-$back_link = get_back_link('/recipes/show.php?id=' . h(u($id)));
+$back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
+$back_link = $back_link_data['url'];
+$back_text = $back_link_data['text'];
 
 // Handle POST request for deletion
 if(is_post_request()) {
@@ -56,7 +58,7 @@ include(SHARED_PATH . '/member_header.php');
                 ['url' => '/recipes/show.php?id=' . h(u($id)), 'label' => h($recipe->title)],
                 ['label' => 'Delete Recipe']
             ],
-            'Back'
+            $back_text
         ); 
         ?>
     </div>

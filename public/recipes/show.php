@@ -66,16 +66,9 @@ switch ($ref) {
         break;
     default:
         // If no ref parameter or unknown value, fall back to the smart back link
-        $back_link = get_back_link('/recipes/index.php');
-        
-        // Set appropriate back text based on the determined back link
-        if (strpos($back_link, '/index.php') !== false && strpos($back_link, '/recipes/index.php') === false) {
-            $back_text = 'Back to Home';
-        } elseif (strpos($back_link, '/users/favorites.php') !== false) {
-            $back_text = 'Back to Favorites';
-        } elseif (strpos($back_link, '/users/profile.php') !== false) {
-            $back_text = 'Back to Profile';
-        }
+        $back_link_data = get_back_link('/recipes/index.php');
+        $back_link = $back_link_data['url'];
+        $back_text = $back_link_data['text'];
         break;
 }
 
