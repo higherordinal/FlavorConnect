@@ -122,8 +122,8 @@ header {
 
 .main-content {
   grid-area: main;
-  margin: var(--spacing-lg) auto;
-  padding: 0 var(--spacing-lg);
+  margin: var(--spacing-sm) auto;
+  padding: 0 var(--spacing-sm);
   width: 100%;
   box-sizing: border-box;
 }
@@ -135,7 +135,7 @@ header {
 
 .container {
   display: grid;
-  gap: var(--grid-gap);
+  gap: var(--grid-gap-sm);
   margin-inline: auto;
   max-width: 1200px;
   padding-inline: var(--container-padding);
@@ -148,16 +148,11 @@ header {
   gap: var(--grid-gap);
 }
 
-.grid-2 {
-  grid-template-columns: repeat(2, 1fr);
-}
-
-.grid-3 {
-  grid-template-columns: repeat(3, 1fr);
-}
-
+/* Mobile-first grid layouts */
+.grid-2,
+.grid-3,
 .grid-4 {
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr;
 }
 
 .grid-auto-fit {
@@ -176,55 +171,83 @@ header {
   }
 }
 
-@media (max-width: 768px) {
-  .grid-3,
-  .grid-4 {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .container {
-    gap: var(--grid-gap-sm);
-  }
+/* ==========================================================================
+   Responsive Design - Mobile First
+   ========================================================================== */
+
+/* Base styles are for mobile (default) */
+:root {
+  --container-padding: var(--spacing-xs);
+  --grid-gap: var(--spacing-md);
+}
+
+.main-content {
+  padding: 0 var(--spacing-xs);
+  margin: var(--spacing-xs) auto;
+}
+
+.container {
+  gap: var(--spacing-md);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Small tablets (480px and up) */
+@media (min-width: 480px) {
   :root {
     --container-padding: var(--spacing-md);
   }
+  
   .main-content {
     padding: 0 var(--spacing-md);
     margin: var(--spacing-md) auto;
   }
+  
+  .container {
+    gap: var(--grid-gap-sm);
+  }
+  
+  .grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-@media (max-width: 480px) {
-  .grid-2,
+/* Tablets and small laptops (768px and up) */
+@media (min-width: 768px) {
   .grid-3,
   .grid-4 {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
-  :root {
-    --container-padding: var(--spacing-sm);
+  
+  .container {
+    gap: var(--grid-gap);
   }
+  
   .main-content {
-    padding: 0 var(--spacing-sm);
-    margin: var(--spacing-sm) auto;
+    padding: 0 var(--spacing-lg);
+    margin: var(--spacing-lg) auto;
   }
-  img {
-    max-width: 100%;
-    height: auto;
+  
+  :root {
+    --container-padding: var(--spacing-lg);
   }
 }
 
-@media (max-width: 390px) {
-  :root {
-    --container-padding: var(--spacing-xs);
-    --grid-gap: var(--spacing-xs);
+/* Desktops and larger screens (1024px and up) */
+@media (min-width: 1024px) {
+  .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
   }
-  .main-content {
-    padding: 0 var(--spacing-xs);
-    margin: var(--spacing-xs) auto;
-  }
-  .container {
-    gap: var(--spacing-xs);
+  
+  .grid-4 {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
+
+/* Extra small devices (below 390px) are covered by the base styles */
 
 /* ==========================================================================
    Typography

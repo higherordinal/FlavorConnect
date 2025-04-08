@@ -142,7 +142,7 @@ HTML;
                     <div class="form-group">
                         <label for="measurement_<?php echo $i; ?>">Measurement</label>
                         <select name="ingredients[<?php echo $i; ?>][measurement_id]" id="measurement_<?php echo $i; ?>" class="form-control<?php echo error_class('ingredients[' . $i . '][measurement_id]', $errors); ?>" required data-error-message="Please select a measurement">
-                            <option value="">Select Measurement</option>
+                            <option value="">Select Unit</option>
                             <?php
                             $measurements = $db->query("SELECT * FROM measurement ORDER BY name");
                             while($measurement = $measurements->fetch_assoc()) {
@@ -181,7 +181,7 @@ HTML;
                     <div class="form-group">
                         <label for="measurement_<?php echo $i; ?>">Measurement</label>
                         <select name="ingredients[<?php echo $i; ?>][measurement_id]" id="measurement_<?php echo $i; ?>" class="form-control<?php echo error_class('ingredients[' . $i . '][measurement_id]', $errors); ?>" required data-error-message="Please select a measurement">
-                            <option value="">Select Measurement</option>
+                            <option value="">Select Unit</option>
                             <?php
                             $measurements = $db->query("SELECT * FROM measurement ORDER BY name");
                             while($measurement = $measurements->fetch_assoc()) {

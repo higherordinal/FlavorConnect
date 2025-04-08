@@ -245,15 +245,25 @@
 }
 
 /* ==========================================================================
-   Responsive Design
+   Responsive Design - Mobile First
    ========================================================================== */
 
-@media (max-width: 480px) {
+/* Base styles for mobile */
+.main-content .recipe-gallery {
+  gap: var(--grid-gap-sm);
+}
+
+.main-content .gallery-filters {
+  grid-template-columns: 1fr;
+}
+
+/* Tablets and larger screens (768px and up) */
+@media (min-width: 768px) {
   .main-content .recipe-gallery {
-    gap: var(--grid-gap-sm);
+    gap: var(--grid-gap);
   }
   
   .main-content .gallery-filters {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }

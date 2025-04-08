@@ -209,72 +209,66 @@
   color: #ff4b4b;
 }
 
-/* Responsive adjustments */
-@media (max-width: 1024px) {
+/* ==========================================================================
+   Responsive Design - Mobile First
+   ========================================================================== */
+
+/* Base styles for mobile */
+.recipe-grid {
+  grid-template-columns: 1fr;
+  gap: var(--spacing-lg);
+}
+
+/* Ensure recipe cards maintain proper spacing and alignment in single column */
+.recipe-card {
+  max-width: 100%;
+}
+
+/* Keep all elements left-aligned by default */
+.recipe-meta,
+.recipe-actions,
+.recipe-footer,
+.recipe-author {
+  justify-content: start;
+  justify-items: start;
+  text-align: left;
+}
+
+.recipe-footer {
+  grid-template-columns: 1fr;
+}
+
+.recipe-attributes {
+  justify-content: flex-start;
+}
+
+/* Keep consistent margins for recipe attributes */
+.recipe-attribute {
+  margin-right: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Small tablets (480px and up) */
+@media (min-width: 480px) {
+  /* No specific changes at this breakpoint */
+}
+
+/* Tablets (768px and up) */
+@media (min-width: 768px) {
   .recipe-grid {
     gap: var(--grid-gap);
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .recipe-grid {
-    gap: var(--grid-gap-sm);
     grid-template-columns: repeat(2, 1fr);
   }
-  
-  /* Keep recipe card content left-aligned */
-  .recipe-footer {
-    grid-template-columns: 1fr;
-    justify-items: start;
-    text-align: left;
-  }
-  
-  .recipe-meta {
-    justify-content: start;
-  }
-  
-  .recipe-actions {
-    justify-content: start;
-  }
-  
-  .recipe-attributes {
-    justify-content: flex-start; 
-  }
 }
 
-@media (max-width: 480px) {
+/* Desktops and larger screens (1024px and up) */
+@media (min-width: 1024px) {
   .recipe-grid {
-    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
+    grid-template-columns: repeat(3, 1fr);
   }
   
-  /* Ensure recipe cards maintain proper spacing and alignment in single column */
-  .recipe-card {
-    max-width: 100%;
-  }
-  
-  /* Adjust padding for smaller screens */
-  .recipe-content {
-    padding: var(--spacing-md);
-  }
-  
-  /* Keep all elements left-aligned */
-  .recipe-meta,
-  .recipe-actions,
-  .recipe-footer,
-  .recipe-author {
-    justify-content: start;
-    justify-items: start;
-    text-align: left;
-  }
-  
-  .recipe-attributes {
-    justify-content: flex-start;
-  }
-  
-  /* Keep consistent margins for recipe attributes */
-  .recipe-attribute {
-    margin-right: var(--spacing-xs);
-    margin-bottom: var(--spacing-xs);
+  .recipe-footer {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
