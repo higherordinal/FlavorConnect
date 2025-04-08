@@ -1456,6 +1456,64 @@ button.action.add:hover {
 }
 
 /* ====================================
+   DELETE PAGE STYLES
+   ==================================== */
+.confirmation-box {
+  background-color: var(--background-color-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-sm);
+  padding: 2rem;
+  max-width: 600px;
+  margin: 1.5rem auto;
+  text-align: center;
+}
+
+.confirmation-box .item-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-sm);
+  display: inline-block;
+}
+
+.confirmation-box .warning-text {
+  color: var(--danger-color);
+  font-weight: 500;
+  margin: 1.5rem 0;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: var(--border-radius-sm);
+  margin: 1.5rem 0;
+}
+
+.alert.warning {
+  background-color: var(--light-gray);
+  border-left: 4px solid var(--accent-color);
+  color: var(--text-color);
+}
+
+.alert p {
+  margin: 0.5rem 0;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.form-buttons .action {
+  min-width: 120px;
+  text-align: center;
+}
+
+/* ====================================
    SORTABLE TABLE STYLES
    ==================================== */
 
