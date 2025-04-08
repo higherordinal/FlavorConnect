@@ -87,10 +87,9 @@ class Pagination {
      * 
      * @param string $url_pattern URL pattern with {page} placeholder
      * @param array $extra_params Additional URL parameters
-     * @param bool $recipe_gallery Whether to use recipe gallery style pagination
      * @return string HTML for pagination links
      */
-    public function page_links($url_pattern, $extra_params = [], $recipe_gallery = false) {
+    public function page_links($url_pattern, $extra_params = []) {
         $total_pages = $this->total_pages();
         
         if($total_pages <= 1) {
@@ -101,14 +100,14 @@ class Pagination {
         $query_string = '';
         if(!empty($extra_params)) {
             foreach($extra_params as $key => $value) {
-                $query_string .= "&{$key}=" . urlencode($value);
+                // Skip null values or empty strings to avoid deprecated warnings
+                if($value !== null && $value !== '') {
+                    $query_string .= "&{$key}=" . urlencode($value);
+                }
             }
         }
         
-        // Use recipe gallery style pagination if requested
-        if($recipe_gallery) {
-            return $this->recipe_gallery_pagination($url_pattern, $query_string, $total_pages);
-        }
+        // Standard pagination style for all pages
         
         $html = '<div class="pagination">';
         
@@ -166,60 +165,5 @@ class Pagination {
         return $html;
     }
     
-    /**
-     * Generate pagination links HTML specifically for recipe gallery
-     * 
-     * @param string $url_pattern URL pattern with {page} placeholder
-     * @param string $query_string Additional query string parameters
-     * @param int $total_pages Total number of pages
-     * @return string HTML for pagination links
-     */
-    private function recipe_gallery_pagination($url_pattern, $query_string, $total_pages) {
-        $html = '<nav class="pagination" role="navigation" aria-label="Recipe pages">';
-        
-        // Previous page link
-        if($this->has_previous_page()) {
-            $html .= '<a href="' . str_replace('{page}', $this->previous_page(), $url_pattern) . $query_string . '" '
-                  . 'class="page-link" '
-                  . 'aria-label="Go to previous page">';
-            $html .= '<i class="fas fa-chevron-left" aria-hidden="true"></i>';
-            $html .= '<span class="sr-only">Previous page</span>';
-            $html .= '</a>';
-        }
-        
-        // Page number links
-        for($i = 1; $i <= $total_pages; $i++) {
-            if(
-                $i <= 2 || 
-                $i >= $total_pages - 1 || 
-                ($i >= $this->current_page - 1 && $i <= $this->current_page + 1)
-            ) {
-                $html .= '<a href="' . str_replace('{page}', $i, $url_pattern) . $query_string . '" '
-                      . 'class="page-link ' . ($i === $this->current_page ? 'active' : '') . '" '
-                      . 'aria-label="Go to page ' . $i . '" '
-                      . ($i === $this->current_page ? 'aria-current="page"' : '') . '>';
-                $html .= $i;
-                $html .= '</a>';
-            } elseif(
-                $i === 3 || 
-                $i === $total_pages - 2
-            ) {
-                $html .= '<span class="page-link" aria-hidden="true">...</span>';
-            }
-        }
-        
-        // Next page link
-        if($this->has_next_page()) {
-            $html .= '<a href="' . str_replace('{page}', $this->next_page(), $url_pattern) . $query_string . '" '
-                  . 'class="page-link" '
-                  . 'aria-label="Go to next page">';
-            $html .= '<i class="fas fa-chevron-right" aria-hidden="true"></i>';
-            $html .= '<span class="sr-only">Next page</span>';
-            $html .= '</a>';
-        }
-        
-        $html .= '</nav>';
-        
-        return $html;
-    }
+    // Removed recipe gallery specific pagination method since we're using a consistent style
 }

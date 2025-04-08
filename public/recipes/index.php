@@ -332,9 +332,20 @@ $userData = [
         <?php if($pagination->total_pages() > 1) { ?>
             <!-- Pagination Controls -->
             <?php 
-            // Generate pagination links with recipe gallery style
-            $url_pattern = '/recipes/index.php?' . build_query_string(['page' => '{page}']);
-            echo $pagination->page_links($url_pattern, [], true);
+            // Generate pagination links with all filter parameters preserved
+            // Use url_for() to ensure we have the correct absolute URL
+            $url_pattern = url_for('/recipes/index.php') . '?page={page}';
+            
+            // Add extra parameters to preserve filters
+            $extra_params = [
+                'search' => $search,
+                'style' => $style_id,
+                'diet' => $diet_id,
+                'type' => $type_id,
+                'sort' => $sort
+            ];
+            
+            echo $pagination->page_links($url_pattern, $extra_params);
             
             // Display total records info
             echo '<div class="records-info">Showing ' . count($recipes) . ' of ' . $total_recipes . ' total recipes</div>';

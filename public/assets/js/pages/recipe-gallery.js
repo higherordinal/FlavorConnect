@@ -71,6 +71,9 @@ function setupEventListeners() {
                 params.set(filterType, value);
             }
             
+            // Reset to page 1 when changing filters
+            params.set('page', 1);
+            
             // Keep other parameters
             currentUrl.search = params.toString();
             
@@ -83,10 +86,26 @@ function setupEventListeners() {
     const sortSelect = document.querySelector('#sort');
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
-            state.currentFilters.sort = e.target.value;
-            applyFilters();
+            // Build the URL with the updated sort parameter
+            const currentUrl = new URL(window.location.href);
+            const params = new URLSearchParams(currentUrl.search);
+            
+            // Update sort parameter
+            params.set('sort', e.target.value);
+            
+            // Reset to page 1 when changing sort
+            params.set('page', 1);
+            
+            // Keep other parameters
+            currentUrl.search = params.toString();
+            
+            // Navigate to the new URL
+            window.location.href = currentUrl.toString();
         });
     }
+    
+    // Initialize pagination links
+    updatePagination();
 }
 
 /**
@@ -256,7 +275,8 @@ function createEmptyState() {
  * @param {number} totalRecipes - Total number of recipes
  */
 function updatePagination(totalRecipes) {
-    // Pagination implementation...
+    // Server-side pagination is now used
+    // No client-side handling needed
 }
 
 /**
