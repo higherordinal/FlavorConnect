@@ -149,7 +149,11 @@ if(is_post_request()) {
     }
 }
 
-$back_link = get_back_link('/recipes/index.php');
+$back_link_data = get_back_link('/recipes/index.php');
+// Extract the URL from the back_link_data array
+$back_link = $back_link_data['url'];
+// Get the suggested back text
+$back_text = $back_link_data['text'];
 ?>
 
 <div class="container">
@@ -161,7 +165,7 @@ $back_link = get_back_link('/recipes/index.php');
             ['url' => '/recipes/index.php', 'label' => 'Recipes'],
             ['label' => 'Create Recipe']
         ],
-        'Back'
+        $back_text
     ); 
     ?>
 </div>

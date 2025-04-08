@@ -70,7 +70,7 @@ include(SHARED_PATH . '/member_header.php');
             ['url' => '/admin/users/index.php', 'label' => 'User Management'],
             ['label' => 'Delete User']
         ],
-        'Back to User List'
+        'Back to User Management'
     ); 
     ?>
     

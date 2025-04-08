@@ -182,15 +182,19 @@ if(is_post_request()) {
 }
 
 $ref = $_GET['ref'] ?? '';
-$back_link = get_back_link('/recipes/show.php?id=' . h(u($id)));
+$back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
 
+// Extract the URL from the back_link_data array
+$back_link = $back_link_data['url'];
+
+// Use custom back text if specified by ref parameter, otherwise use suggested text
 $back_text = match($ref) {
     'profile' => 'Back to Profile',
     'show' => 'Back to Recipe',
     'home' => 'Back to Home',
     'header' => 'Back to Recipes',
     'favorites' => 'Back to Favorites',
-    default => 'Back to Recipe'
+    default => $back_link_data['text']
 };
 ?>
 

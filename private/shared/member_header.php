@@ -62,6 +62,19 @@ if(!isset($page_style)) { $page_style = ''; }
             debug: <?php echo defined('DEBUG_MODE') && DEBUG_MODE ? 'true' : 'false'; ?>
         };
         
+        <?php
+        // Check if we're on a recipe page and capture the recipe ID for navigation
+        $is_recipe_show_page = strpos($_SERVER['PHP_SELF'], '/recipes/show.php') !== false;
+        $recipe_id = $is_recipe_show_page && isset($_GET['id']) ? $_GET['id'] : null;
+        ?>
+        // Add recipe context if we're on a recipe page
+        <?php if($recipe_id): ?>
+        window.FlavorConnect.config.recipeContext = {
+            id: <?php echo $recipe_id; ?>,
+            page: '<?php echo $_SERVER['REQUEST_URI']; ?>'
+        };
+        <?php endif; ?>
+        
         // Log configuration in debug mode
         if (window.FlavorConnect.config.debug) {
             console.log('FlavorConnect Config:', window.FlavorConnect.config);
@@ -98,31 +111,38 @@ if(!isset($page_style)) { $page_style = ''; }
                     <span class="hamburger"></span>
                     <span class="hamburger"></span>
                 </label>
+                <?php
+                // Prepare recipe reference parameter if we're on a recipe page
+                $recipe_ref = '';
+                if($is_recipe_show_page && isset($_GET['id'])) {
+                    $recipe_ref = '?ref=recipe&recipe_id=' . $_GET['id'];
+                }
+                ?>
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li><a href="<?php echo url_for('/index.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
                     <?php 
                     // Check if current page is in recipes section (but not new.php)
                     $is_recipes_page = (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false && 
                                       strpos($_SERVER['PHP_SELF'], '/recipes/new.php') === false);
                     ?>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
                     <?php 
                     // Check if current page is favorites
                     $is_favorites_page = (strtolower($page_title) === 'favorites' || strpos($_SERVER['PHP_SELF'], '/users/favorites.php') !== false);
                     ?>
-                    <li><a href="<?php echo url_for('/users/favorites.php'); ?>" <?php echo $is_favorites_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
+                    <li><a href="<?php echo url_for('/users/favorites.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_favorites_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
                     <?php
                     // Check if current page is create recipe (only new.php)
                     $is_create_recipe_page = (strpos($_SERVER['PHP_SELF'], '/recipes/new.php') !== false || 
                                             $page_title === 'Create Recipe');
                     ?>
-                    <li><a href="<?php echo url_for('/recipes/new.php'); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
+                    <li><a href="<?php echo url_for('/recipes/new.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
                     <?php if($session->is_admin() || $session->is_super_admin()) { 
                         // Check if current page is in admin section
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
                     ?>
                     <li>
-                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI'])); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
+                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI']) . ($is_recipe_show_page ? '&ref=recipe&recipe_id=' . $_GET['id'] : '')); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
                             <i class="fas fa-cog" aria-hidden="true"></i> Admin
                         </a>
                     </li>
@@ -144,9 +164,9 @@ if(!isset($page_style)) { $page_style = ''; }
                         <span class="username"><i class="fas fa-user-circle" aria-hidden="true"></i> <?php echo $username; ?></span>
                     </button>
                     <div class="dropdown-menu">
-                        <a href="<?php echo url_for('/users/profile.php'); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
+                        <a href="<?php echo url_for('/users/profile.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
                         <?php if($session->is_admin() || $session->is_super_admin()) { ?>
-                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI'])); ?>" class="dropdown-item">
+                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI']) . ($is_recipe_show_page ? '&ref=recipe&recipe_id=' . $_GET['id'] : '')); ?>" class="dropdown-item">
                             <i class="fas fa-cog" aria-hidden="true"></i>
                             Admin (Dashboard)
                         </a>

@@ -6,8 +6,13 @@
  * @return string The URL-safe string
  */
 function url_for($script_path) {
+  // Ensure script_path is a string
+  if (!is_string($script_path)) {
+    $script_path = (string)$script_path;
+  }
+  
   // add the leading '/' if not present
-  if($script_path !== '' && $script_path[0] != '/') {
+  if($script_path !== '' && isset($script_path[0]) && $script_path[0] != '/') {
     $script_path = "/" . $script_path;
   }
   
@@ -188,7 +193,7 @@ function format_quantity($value, $precision = 'basic') {
 }
 
 /**
- * Generates a smart back link URL
+ * Generates a smart back link URL and suggested text
  * 
  * This function determines the most appropriate back link based on:
  * 1. The HTTP_REFERER if available
@@ -197,22 +202,46 @@ function format_quantity($value, $precision = 'basic') {
  * 
  * @param string $default_url The default URL to use if no referer is available
  * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
- * @return string The back link URL
+ * @param string $default_text Default text to use for the back link
+ * @return array Array with 'url' and 'text' keys for the back link
  */
-function get_back_link($default_url = '/index.php', $allowed_domains = []) {
+function get_back_link($default_url = '/index.php', $allowed_domains = [], $default_text = 'Back') {
+    // Initialize result array with defaults
+    $result = [
+        'url' => url_for($default_url),
+        'text' => $default_text
+    ];
+    
     // First check for ref parameter in query string
     $ref = $_GET['ref'] ?? '';
     if ($ref) {
         switch ($ref) {
+            case 'recipe':
+                // Handle recipe reference - return to the specific recipe page
+                if (isset($_GET['recipe_id'])) {
+                    $recipe_id = $_GET['recipe_id'];
+                    $result['url'] = url_for('/recipes/show.php?id=' . $recipe_id);
+                    $result['text'] = 'Back to Recipe';
+                    return $result;
+                }
+                break;
             case 'home':
-                return url_for('/index.php');
+                $result['url'] = url_for('/index.php');
+                $result['text'] = 'Back to Home';
+                return $result;
             case 'profile':
-                return url_for('/users/profile.php');
+                $result['url'] = url_for('/users/profile.php');
+                $result['text'] = 'Back to Profile';
+                return $result;
             case 'favorites':
-                return url_for('/users/favorites.php');
+                $result['url'] = url_for('/users/favorites.php');
+                $result['text'] = 'Back to Favorites';
+                return $result;
             case 'gallery':
             case 'recipes':
-                return url_for('/recipes/index.php');
+                $result['url'] = url_for('/recipes/index.php');
+                $result['text'] = 'Back to Recipes';
+                return $result;
             // Add more cases as needed
         }
     }
@@ -223,25 +252,40 @@ function get_back_link($default_url = '/index.php', $allowed_domains = []) {
         // Parse the referer URL
         $referer_parts = parse_url($referer);
         $host = $referer_parts['host'] ?? '';
+        $path = $referer_parts['path'] ?? '';
         
         // If allowed_domains is empty, allow any domain
         // Otherwise, check if the referer's domain is in the allowed list
         $is_allowed = empty($allowed_domains) || in_array($host, $allowed_domains);
         
         if ($is_allowed) {
-            // Extract the path from the referer
-            $path = $referer_parts['path'] ?? '';
-            
             // Don't use referer if it's the same as current page to avoid loops
             $current_path = $_SERVER['REQUEST_URI'] ?? '';
             if ($path !== $current_path) {
-                return $referer;
+                $result['url'] = $referer;
+                
+                // Try to determine a better back text based on the path
+                if (strpos($path, '/admin/users') !== false) {
+                    $result['text'] = 'Back to User Management';
+                } else if (strpos($path, '/admin/categories') !== false) {
+                    $result['text'] = 'Back to Recipe Metadata';
+                } else if (strpos($path, '/admin') !== false) {
+                    $result['text'] = 'Back to Admin';
+                } else if (strpos($path, '/recipes') !== false) {
+                    $result['text'] = 'Back to Recipes';
+                } else if (strpos($path, '/users/profile') !== false) {
+                    $result['text'] = 'Back to Profile';
+                } else if (strpos($path, '/users/favorites') !== false) {
+                    $result['text'] = 'Back to Favorites';
+                }
+                
+                return $result;
             }
         }
     }
     
-    // Fallback to default URL
-    return url_for($default_url);
+    // Fallback to default URL and text
+    return $result;
 }
 
 /**
@@ -254,13 +298,18 @@ function get_back_link($default_url = '/index.php', $allowed_domains = []) {
  * @return string HTML for the unified navigation component with SEO structured data
  */
 function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [], $back_text = 'Back', $allowed_domains = []) {
-    $back_link = get_back_link($default_back_url, $allowed_domains);
+    $back_link_data = get_back_link($default_back_url, $allowed_domains, $back_text);
+    
+    // Use the provided back_text if it's not the default 'Back', otherwise use the suggested text
+    $display_text = ($back_text !== 'Back') ? $back_text : $back_link_data['text'];
     
     $html = '<div class="unified-navigation">';
     
     // Add back link
-    $html .= '<a href="' . h($back_link) . '" class="back-link">';
-    $html .= '<i class="fas fa-arrow-left"></i> ' . h($back_text);
+    // Ensure URL is a string before passing to h()
+    $back_url = is_array($back_link_data['url']) ? json_encode($back_link_data['url']) : $back_link_data['url'];
+    $html .= '<a href="' . h($back_url) . '" class="back-link">';
+    $html .= '<i class="fas fa-arrow-left"></i> ' . h($display_text);
     $html .= '</a>';
     
     // Add breadcrumbs if provided
