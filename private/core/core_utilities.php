@@ -271,6 +271,12 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
                     $result['text'] = 'Back to Recipe Metadata';
                 } else if (strpos($path, '/admin') !== false) {
                     $result['text'] = 'Back to Admin';
+                } else if (strpos($path, '/recipes/new.php') !== false) {
+                    $result['text'] = 'Back to Create Recipe';
+                } else if (strpos($path, '/recipes/edit.php') !== false) {
+                    $result['text'] = 'Back to Edit Recipe';
+                } else if (strpos($path, '/recipes/delete.php') !== false) {
+                    $result['text'] = 'Back to Delete Recipe';
                 } else if (strpos($path, '/recipes') !== false) {
                     $result['text'] = 'Back to Recipes';
                 } else if (strpos($path, '/users/profile') !== false) {
