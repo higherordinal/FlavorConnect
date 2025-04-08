@@ -301,6 +301,34 @@ a.action.delete:hover {
 }
 
 /* ====================================
+   CANCEL BUTTON STYLE
+   ==================================== */
+/* Cancel button style */
+
+a.action.cancel {
+  align-items: center;
+  background: var(--light-gray);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-color);
+  display: inline-flex;
+  font-size: 1rem;
+  font-weight: 500;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+a.action.cancel:hover {
+  background: var(--hover-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  transform: translateY(-1px);
+}
+
+/* ====================================
    ADD BUTTON STYLE
    ==================================== */
 /* Add button style */
