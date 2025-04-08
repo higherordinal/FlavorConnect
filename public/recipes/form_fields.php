@@ -8,6 +8,26 @@ $diets = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
 
 $sql = "SELECT type_id as id, name FROM recipe_type ORDER BY name";
 $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
+
+// Helper function to output fraction buttons
+function output_fraction_helpers() {
+    echo <<<HTML
+    <div class="fraction-helpers">
+        <span class="fraction-helper" data-value="0.125">⅛</span>
+        <span class="fraction-helper" data-value="0.166">⅙</span>
+        <span class="fraction-helper" data-value="0.2">⅕</span>
+        <span class="fraction-helper" data-value="0.25">¼</span>
+        <span class="fraction-helper" data-value="0.33">⅓</span>
+        <span class="fraction-helper" data-value="0.375">⅜</span>
+        <span class="fraction-helper" data-value="0.4">⅖</span>
+        <span class="fraction-helper" data-value="0.5">½</span>
+        <span class="fraction-helper" data-value="0.6">⅗</span>
+        <span class="fraction-helper" data-value="0.67">⅔</span>
+        <span class="fraction-helper" data-value="0.75">¾</span>
+        <span class="fraction-helper" data-value="0.875">⅞</span>
+    </div>
+HTML;
+}
 ?>
 
 <div class="form-group">
@@ -114,17 +134,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                         <div class="quantity-input-group">
                             <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
                                    class="form-control<?php echo error_class('ingredients[' . $i . '][quantity]', $errors); ?>" step="0.01" min="0" value="<?php echo h(get_raw_quantity($ingredient->quantity)); ?>" required data-error-message="Quantity must be a non-negative number">
-                            <div class="fraction-helpers">
-                                <span class="fraction-helper" data-value="0.125">⅛</span>
-                                <span class="fraction-helper" data-value="0.2">⅕</span>
-                                <span class="fraction-helper" data-value="0.25">¼</span>
-                                <span class="fraction-helper" data-value="0.33">⅓</span>
-                                <span class="fraction-helper" data-value="0.4">⅖</span>
-                                <span class="fraction-helper" data-value="0.5">½</span>
-                                <span class="fraction-helper" data-value="0.67">⅔</span>
-                                <span class="fraction-helper" data-value="0.75">¾</span>
-                                <span class="fraction-helper" data-value="0.875">⅞</span>
-                            </div>
+                            <?php output_fraction_helpers(); ?>
                         </div>
                         <?php echo display_error('ingredients[' . $i . '][quantity]', $errors); ?>
                     </div>
@@ -163,17 +173,7 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
                         <div class="quantity-input-group">
                             <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
                                    class="form-control<?php echo error_class('ingredients[' . $i . '][quantity]', $errors); ?>" step="0.01" min="0" required data-error-message="Quantity must be a non-negative number">
-                            <div class="fraction-helpers">
-                                <span class="fraction-helper" data-value="0.125">⅛</span>
-                                <span class="fraction-helper" data-value="0.2">⅕</span>
-                                <span class="fraction-helper" data-value="0.25">¼</span>
-                                <span class="fraction-helper" data-value="0.33">⅓</span>
-                                <span class="fraction-helper" data-value="0.4">⅖</span>
-                                <span class="fraction-helper" data-value="0.5">½</span>
-                                <span class="fraction-helper" data-value="0.67">⅔</span>
-                                <span class="fraction-helper" data-value="0.75">¾</span>
-                                <span class="fraction-helper" data-value="0.875">⅞</span>
-                            </div>
+                            <?php output_fraction_helpers(); ?>
                         </div>
                         <?php echo display_error('ingredients[' . $i . '][quantity]', $errors); ?>
                     </div>
@@ -269,9 +269,9 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
             <small class="form-text text-muted">Upload a high-quality image of your recipe (JPEG, PNG, GIF, or WebP). Maximum size: 10MB.</small>
             <?php echo display_error('recipe_image', $errors); ?>
             <?php if(isset($recipe) && $recipe->img_file_path): ?>
-                <div class="current-image" style="max-width: 300px;">
+                <div class="current-image">
                     <p>Current image:</p>
-                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="<?php echo h($recipe->title); ?>" class="img-thumbnail" style="max-width: 100%; height: auto;">
+                    <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" alt="<?php echo h($recipe->title); ?>" class="img-thumbnail">
                 </div>
             <?php endif; ?>
         </div>

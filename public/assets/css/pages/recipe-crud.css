@@ -246,7 +246,7 @@
 /* ====================================
    INGREDIENTS SECTION
    ==================================== */
-/* Apply form-section-base styles to specific sections */
+/* Base styles for form sections */
 .ingredients-section,
 .directions-section,
 .media-section {
@@ -256,13 +256,13 @@
     padding: var(--spacing-md);
 }
 
-/* Override specific properties as needed */
+/* Override specific properties for ingredients section */
 .ingredients-section {
     margin-bottom: 1rem;
     padding: 1rem;
 }
 
-/* Apply section-header styles to all section headers */
+/* Common styles for all section headers */
 .ingredients-section h4, .ingredients-section .h4,
 .directions-section h4, .directions-section .h4,
 .media-section h4, .media-section .h4,
@@ -272,12 +272,12 @@
     margin-bottom: var(--spacing-sm);
 }
 
-/* Override specific properties as needed */
+/* Override margin for ingredients section header */
 .ingredients-section h4, .ingredients-section .h4 {
     margin-bottom: 0.75rem;
 }
 
-/* Apply form-row-base styles to all form rows */
+/* Common styles for ingredient and direction rows */
 .ingredient-row,
 .direction-row {
     background-color: var(--color-white);
@@ -292,7 +292,7 @@
 
 /* Override specific properties for ingredient row */
 .ingredient-row {
-    grid-template-columns: 100px 219px 1fr 40px;
+    grid-template-columns: 120px 219px 1fr 40px; /* Increased first column width for quantity */
     margin-bottom: 0.5rem;
     padding: 0.75rem;
     align-items: start;
@@ -322,7 +322,7 @@
     min-width: 0; 
 }
 
-/* Apply remove-button-base styles to all remove buttons */
+/* Common styles for remove buttons */
 .ingredient-row .remove-ingredient,
 .direction-row .remove-step {
     font-size: 1.25rem;
@@ -342,6 +342,7 @@
 /* ====================================
    QUANTITY INPUT GROUP
    ==================================== */
+/* Container for quantity input and fraction helpers */
 .quantity-input-group {
     position: relative;
     display: flex;
@@ -350,13 +351,17 @@
 
 .quantity-input-group input {
     width: 100%;
+    min-width: 80px; /* Ensure enough width for decimal values */
+    font-family: var(--font-primary); /* Use monospace or consistent width font */
+    font-variant-numeric: tabular-nums; /* Ensure numbers align properly */
 }
 
+/* Fraction helper buttons container */
 .fraction-helpers {
     display: flex;
     flex-wrap: wrap;
     gap: 0.25rem;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem; /* Increased top margin */
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius-sm);
     padding: 0.35rem;
@@ -364,6 +369,7 @@
     justify-content: center;
 }
 
+/* Individual fraction helper button */
 .fraction-helper {
     display: inline-block;
     cursor: pointer;
@@ -376,13 +382,16 @@
     user-select: none;
 }
 
-.fraction-helper:hover, .fraction-helper:focus {
+/* Hover and focus states for fraction helpers */
+.fraction-helper:hover, 
+.fraction-helper:focus {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: var(--color-white);
     cursor: pointer;
 }
 
+/* Active state for fraction helpers */
 .fraction-helper:active {
     transform: scale(0.95);
 }
@@ -401,15 +410,14 @@
     margin-bottom: 0.75rem;
 }
 
-/* Direction row styles are now handled by the shared selector above */
+/* Specific grid layout for direction row */
 .direction-row {
     grid-template-columns: 40px 1fr 40px;
     margin-bottom: 0.5rem;
     padding: 0.75rem;
 }
 
-/* Direction row form group styles are now handled by the shared selector above */
-
+/* Direction row form group label */
 .direction-row .form-group label {
     display: block;
     margin-bottom: 0.5rem;
@@ -432,13 +440,11 @@
     width: 30px;
 }
 
-/* Override specific properties for direction remove button */
+/* Vertical alignment for direction remove button */
 .direction-row .remove-step {
     align-self: center;
     margin-top: 24px;
 }
-
-/* Combined with .direction-row .step-number above */
 
 .direction-row .btn-danger {
     align-self: center;
@@ -447,9 +453,21 @@
 /* ====================================
    MEDIA SECTION
    ==================================== */
-/* Media section styles are now handled by the shared selector above */
+/* Media section specific styles */
 .media-section {
     margin-bottom: var(--spacing-lg);
+}
+
+/* Current image preview styles */
+.current-image {
+    max-width: 300px;
+    margin-top: 1rem;
+}
+
+.current-image img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* Media section header styles are now handled by the shared selector above */
