@@ -1231,8 +1231,13 @@ button.action.add:hover {
     display: block;
     overflow-x: auto;
     width: 100%;
-    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    font-size: clamp(0.8125rem, 2vw, 0.9375rem);
     table-layout: auto;
+  }
+  
+  .list th,
+  .list td {
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
   }
   
   .list tbody {
@@ -1447,17 +1452,6 @@ button.action.add:hover {
   .table-responsive {
     margin-bottom: 0.25rem;
     border-radius: 0.25rem;
-  }
-}
-
-@media (max-width: 1200px) {
-  .list {
-    font-size: clamp(0.8125rem, 2vw, 0.9375rem);
-  }
-  
-  .list th,
-  .list td {
-    padding: clamp(0.5rem, 1.5vw, 0.75rem);
   }
 }
 
