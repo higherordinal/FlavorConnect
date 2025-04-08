@@ -292,4 +292,4 @@ $types = $db->query($sql)->fetch_all(MYSQLI_ASSOC);
     <small class="form-text text-muted">Add a link to your recipe video if you have one</small>
 </div>
 
-<script src="<?php echo url_for('/assets/js/pages/recipe-form.js'); ?>" defer></script>
+<script src="<?php echo url_for('/assets/js/components/recipe-form.js'); ?>" defer></script>
