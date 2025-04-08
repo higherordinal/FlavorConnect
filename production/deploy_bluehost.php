@@ -63,11 +63,13 @@ $replacements = [
     "require_once('$private_path/core/initialize.php');",
     "require_once('$private_path/core/initialize.php');",
     
-    // Config.php references
-    "require_once('$private_path/config/bluehost_config.php');",
-    "require_once('$private_path/config/bluehost_config.php');",
-    "require_once('$private_path/config/bluehost_config.php');",
-    "require_once('$private_path/config/bluehost_config.php');",
+    // Config.php references - no longer need to update these
+    /*
+    "require_once('$private_path/config/config.php');",
+    "require_once('$private_path/config/config.php');",
+    "require_once('$private_path/config/config.php');",
+    "require_once('$private_path/config/config.php');",
+    */
     
     // API config references
     "require_once('$private_path/config/api_config.php');",
@@ -313,6 +315,7 @@ if (file_exists($production_api_config)) {
 echo "\nReplacing config.php with bluehost_config.php...\n";
 $production_bluehost_config = __DIR__ . '/bluehost_config.php';
 $target_config = $root_dir . 'private/config/config.php';
+$target_bluehost_config = $root_dir . 'private/config/bluehost_config.php';
 
 if (file_exists($production_bluehost_config)) {
     // Create backup of original config.php
@@ -331,6 +334,13 @@ if (file_exists($production_bluehost_config)) {
     // Copy the production-ready version to replace config.php
     if (copy($production_bluehost_config, $target_config)) {
         echo "Successfully replaced config.php with bluehost_config.php!\n";
+        
+        // Also copy to bluehost_config.php for reference
+        if (copy($production_bluehost_config, $target_bluehost_config)) {
+            echo "Successfully copied bluehost_config.php to private/config/bluehost_config.php for reference\n";
+        } else {
+            echo "Note: Could not create a reference copy at private/config/bluehost_config.php\n";
+        }
     } else {
         echo "Failed to replace config.php.\n";
     }
@@ -338,8 +348,8 @@ if (file_exists($production_bluehost_config)) {
     echo "Error: Production bluehost_config.php file not found at: $production_bluehost_config\n";
 }
 
-// No need to update initialize.php since we're directly replacing the config files
-// and keeping the same filenames
+// No need to update initialize.php or config.php references since we're directly replacing the config files
+// and keeping the same filenames (config.php). This maintains compatibility with existing code.
 
 // Update url_for function to use WWW_ROOT in production mode
 echo "\nUpdating url_for function to use WWW_ROOT in production mode...\n";
