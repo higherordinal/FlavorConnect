@@ -357,6 +357,10 @@
     flex-wrap: wrap;
     gap: 0.25rem;
     margin-top: 0.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-sm);
+    padding: 0.35rem;
+    background-color: var(--background-color);
 }
 
 .fraction-helper {
