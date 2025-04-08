@@ -1,4 +1,9 @@
 /* ====================================
+   BASE STYLES AND COMMON PATTERNS
+   ==================================== */
+/* Base styles are now applied directly to elements through shared selectors */
+
+/* ====================================
    MAIN FORM CONTAINER
    ==================================== */
 .recipe-form {
@@ -41,7 +46,6 @@
 /* Recipe header image styling */
 .recipe-form .recipe-header-image {
     position: relative;
-    width: 100%;
     height: 300px;
     overflow: hidden;
     border-radius: var(--border-radius) var(--border-radius) 0 0;
@@ -100,7 +104,7 @@
 }
 
 .recipe-form .page-header h1 {
-    color: white;
+    color: var(--color-white);
     font-family: var(--font-secondary);
     font-size: var(--font-size-xxlarge);
     font-weight: 700;
@@ -197,32 +201,61 @@
 /* ====================================
    INGREDIENTS SECTION
    ==================================== */
-.ingredients-section {
+/* Apply form-section-base styles to specific sections */
+.ingredients-section,
+.directions-section,
+.media-section {
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+}
+
+/* Override specific properties as needed */
+.ingredients-section {
     margin-bottom: 1rem;
     padding: 1rem;
 }
 
-.ingredients-section h4, .ingredients-section .h4 {
+/* Apply section-header styles to all section headers */
+.ingredients-section h4, .ingredients-section .h4,
+.directions-section h4, .directions-section .h4,
+.media-section h4, .media-section .h4,
+.time-section h4, .time-section .h4 {
     color: var(--primary-color);
     font-size: var(--font-size-large);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Override specific properties as needed */
+.ingredients-section h4, .ingredients-section .h4 {
     margin-bottom: 0.75rem;
 }
 
-.ingredient-row {
+/* Apply form-row-base styles to all form rows */
+.ingredient-row,
+.direction-row {
     background-color: var(--color-white);
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow-sm);
     display: grid;
     gap: 1rem;
+    position: relative;
+    margin-bottom: var(--spacing-xs);
+    padding: var(--spacing-sm);
+}
+
+/* Override specific properties for ingredient row */
+.ingredient-row {
     grid-template-columns: 100px 219px 1fr 40px;
     margin-bottom: 0.5rem;
     padding: 0.75rem;
-    position: relative;
+    align-items: start;
 }
 
-.ingredient-row .form-group {
+/* Apply form-group-base styles to all form groups */
+.ingredient-row .form-group,
+.direction-row .form-group {
     display: grid;
     grid-template-rows: auto 1fr;
     margin-bottom: 0;
@@ -244,15 +277,21 @@
     min-width: 0; 
 }
 
-.ingredient-row .remove-ingredient {
-    align-self: center;
+/* Apply remove-button-base styles to all remove buttons */
+.ingredient-row .remove-ingredient,
+.direction-row .remove-step {
     font-size: 1.25rem;
     height: 30px;
     line-height: 30px;
-    margin-top: 24px;
     padding: 0;
     text-align: center;
     width: 30px;
+    align-self: start;
+}
+
+/* Override specific properties for ingredient remove button */
+.ingredient-row .remove-ingredient {
+    margin-top: 2.1rem; /* Align with the input field, accounting for the label */
 }
 
 /* ====================================
@@ -287,10 +326,11 @@
     user-select: none;
 }
 
-.fraction-helper:hover {
-    background-color: var(--color-primary-light);
-    border-color: var(--color-primary);
-    color: var(--color-primary-dark);
+.fraction-helper:hover, .fraction-helper:focus {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--color-white);
+    cursor: pointer;
 }
 
 .fraction-helper:active {
@@ -300,36 +340,25 @@
 /* ====================================
    DIRECTIONS SECTION
    ==================================== */
+/* Directions section styles are now handled by the shared selector above */
 .directions-section {
-    background-color: var(--background-color);
-    border-radius: var(--border-radius-md);
     margin-bottom: 1rem;
     padding: 1rem;
 }
 
+/* Direction section header styles are now handled by the shared selector above */
 .directions-section h4, .directions-section .h4 {
-    color: var(--primary-color);
-    font-size: var(--font-size-large);
     margin-bottom: 0.75rem;
 }
 
+/* Direction row styles are now handled by the shared selector above */
 .direction-row {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    display: grid;
-    gap: 1rem;
     grid-template-columns: 40px 1fr 40px;
     margin-bottom: 0.5rem;
     padding: 0.75rem;
-    position: relative;
 }
 
-.direction-row .form-group {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    margin-bottom: 0;
-}
+/* Direction row form group styles are now handled by the shared selector above */
 
 .direction-row .form-group label {
     display: block;
@@ -353,28 +382,13 @@
     width: 30px;
 }
 
+/* Override specific properties for direction remove button */
 .direction-row .remove-step {
     align-self: center;
-    font-size: 1.25rem;
-    height: 30px;
-    line-height: 30px;
     margin-top: 24px;
-    padding: 0;
-    text-align: center;
-    width: 30px;
 }
 
-.step-number {
-    align-items: center;
-    background: var(--primary-color);
-    border-radius: 50%;
-    color: var(--color-white);
-    display: flex;
-    font-weight: 600;
-    height: 2rem;
-    justify-content: center;
-    width: 2rem;
-}
+/* Combined with .direction-row .step-number above */
 
 .direction-row .btn-danger {
     align-self: center;
@@ -383,13 +397,13 @@
 /* ====================================
    MEDIA SECTION
    ==================================== */
+/* Media section styles are now handled by the shared selector above */
 .media-section {
     margin-bottom: var(--spacing-lg);
 }
 
+/* Media section header styles are now handled by the shared selector above */
 .media-section h4 {
-    color: var(--primary-color);
-    font-size: var(--font-size-large);
     margin-bottom: var(--spacing-md);
 }
 
