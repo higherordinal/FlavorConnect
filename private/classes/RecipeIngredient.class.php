@@ -45,7 +45,7 @@ class RecipeIngredient extends DatabaseObject {
      * Get the measurement object
      * @return Measurement|null The measurement object or null if not found
      */
-    public function getMeasurement() {
+    public function get_measurement() {
         if(!isset($this->_measurement) && $this->measurement_id) {
             $this->_measurement = Measurement::find_by_id($this->measurement_id);
         }
@@ -56,7 +56,7 @@ class RecipeIngredient extends DatabaseObject {
      * Get the ingredient object
      * @return object|null The ingredient object or null if not found
      */
-    public function getIngredient() {
+    public function get_ingredient() {
         if(!isset($this->_ingredient) && $this->ingredient_id) {
             $sql = "SELECT name FROM ingredient WHERE ingredient_id = ?";
             $stmt = self::$database->prepare($sql);
@@ -73,14 +73,14 @@ class RecipeIngredient extends DatabaseObject {
     }
 
     /**
-     * Magic getter for measurement property
+     * Magic getter for measurement and ingredient properties
      */
     public function __get($name) {
         if($name === 'measurement') {
-            return $this->getMeasurement();
+            return $this->get_measurement();
         }
         if($name === 'ingredient') {
-            return $this->getIngredient();
+            return $this->get_ingredient();
         }
     }
 
@@ -114,24 +114,29 @@ class RecipeIngredient extends DatabaseObject {
         // Ensure name is lowercase
         $name = strtolower($name);
         
-        // Check if ingredient exists (case insensitive search)
-        $sql = "SELECT ingredient_id FROM ingredient WHERE LOWER(name)='" . self::$database->escape_string($name) . "' LIMIT 1";
-        $result = self::$database->query($sql);
+        // First, try to find an existing ingredient with this name
+        $sql = "SELECT ingredient_id FROM ingredient WHERE name = ?";
+        $stmt = self::$database->prepare($sql);
+        $stmt->bind_param("s", $name);
+        $stmt->execute();
+        $result = $stmt->get_result();
         
-        if($result && $result->num_rows > 0) {
-            $row = $result->fetch_assoc();
+        if($row = $result->fetch_assoc()) {
+            // Ingredient exists, return its ID
             return $row['ingredient_id'];
-        }
-        
-        // Create new ingredient (stored as lowercase)
-        $sql = "INSERT INTO ingredient (name, recipe_id) VALUES ('" . self::$database->escape_string($name) . "', '" . self::$database->escape_string($this->recipe_id) . "')";
-        $result = self::$database->query($sql);
-        
-        if($result) {
-            return self::$database->insert_id;
         } else {
-            // If failed to create, return a default ID
-            return 1;
+            // Ingredient doesn't exist, create a new one
+            $sql = "INSERT INTO ingredient (name) VALUES (?)";
+            $stmt = self::$database->prepare($sql);
+            $stmt->bind_param("s", $name);
+            $stmt->execute();
+            
+            if($stmt->affected_rows > 0) {
+                return self::$database->insert_id;
+            } else {
+                // If insertion fails, use a default value
+                return 1;
+            }
         }
     }
     
@@ -139,12 +144,7 @@ class RecipeIngredient extends DatabaseObject {
      * Creates a new record in the database
      * @return bool True if creation was successful
      */
-    protected function create() {
-        // If name is provided but no ingredient_id, we need to create or find an ingredient
-        if (!empty($this->name) && empty($this->ingredient_id)) {
-            $this->ingredient_id = $this->get_or_create_ingredient($this->name);
-        }
-        
+    public function create() {
         $this->validate();
         if(!empty($this->errors)) { return false; }
         
@@ -181,25 +181,6 @@ class RecipeIngredient extends DatabaseObject {
             $this->errors[] = "Database error: " . self::$database->error;
             return false;
         }
-    }
-
-    /**
-     * Gets the ingredient object associated with this recipe ingredient
-     * @return Ingredient|null The ingredient object or null if not found
-     */
-    public function get_ingredient() {
-        if($this->ingredient_id) {
-            return Ingredient::find_by_id($this->ingredient_id);
-        }
-        return null;
-    }
-
-    /**
-     * Gets the measurement object associated with this recipe ingredient
-     * @return Measurement|null The measurement object or null if not found
-     */
-    public function get_measurement() {
-        return Measurement::find_by_id($this->measurement_id);
     }
 
     /**
