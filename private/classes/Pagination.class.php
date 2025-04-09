@@ -122,6 +122,105 @@ class Pagination {
         return $html;
     }
     
+    /**
+     * Generate pagination links using a named route
+     * 
+     * @param string $route_name Named route from the router
+     * @param array $route_params Parameters for the route
+     * @param string $page_param Name of the page parameter (default: 'page')
+     * @param array $extra_params Additional query parameters
+     * @return string HTML for pagination links
+     */
+    public function route_links($route_name, $route_params = [], $page_param = 'page', $extra_params = []) {
+        global $router;
+        
+        // Check if router is available
+        if (!isset($router)) {
+            // Fall back to standard page_links with a basic URL pattern
+            return $this->page_links('?'.$page_param.'={page}', $extra_params);
+        }
+        
+        $total_pages = $this->total_pages();
+        
+        if($total_pages <= 1) {
+            return '';
+        }
+        
+        // Build query string for extra parameters
+        $query_string = '';
+        if(!empty($extra_params)) {
+            foreach($extra_params as $key => $value) {
+                if($value !== null && $value !== '') {
+                    $query_string .= "&{$key}=" . urlencode($value);
+                }
+            }
+        }
+        
+        $html = '<div class="pagination">';
+        
+        // First page link
+        $this->add_route_link($html, $router, $route_name, $route_params, $page_param, $query_string, 'first', '1', $this->has_previous_page());
+        
+        // Previous page link
+        $this->add_route_link($html, $router, $route_name, $route_params, $page_param, $query_string, 'prev', $this->previous_page(), $this->has_previous_page());
+        
+        $html .= '<span class="pagination-info">';
+        $html .= 'Page ' . $this->current_page . ' of ' . $total_pages;
+        $html .= '</span>';
+        
+        // Next page link
+        $this->add_route_link($html, $router, $route_name, $route_params, $page_param, $query_string, 'next', $this->next_page(), $this->has_next_page());
+        
+        // Last page link
+        $this->add_route_link($html, $router, $route_name, $route_params, $page_param, $query_string, 'last', $total_pages, $this->has_next_page());
+        
+        $html .= '</div>';
+        
+        return $html;
+    }
+    
+    /**
+     * Add a route-based link to the pagination HTML
+     */
+    private function add_route_link(&$html, $router, $route_name, $route_params, $page_param, $query_string, $class, $page, $enabled) {
+        if($enabled) {
+            try {
+                // Generate the URL using the router
+                $url = $router->url($route_name, $route_params);
+                $html .= '<a href="' . $url . '?' . $page_param . '=' . $page . $query_string . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';
+            } catch (Exception $e) {
+                // If URL generation fails, create a basic link
+                $html .= '<a href="?' . $page_param . '=' . $page . $query_string . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';
+            }
+        } else {
+            $html .= '<span class="pagination-link disabled ' . $class . '">';
+        }
+        
+        switch($class) {
+            case 'first':
+                $html .= '<i class="fas fa-angle-double-left"></i>';
+                break;
+            case 'prev':
+                $html .= '<i class="fas fa-angle-left"></i>';
+                break;
+            case 'next':
+                $html .= '<i class="fas fa-angle-right"></i>';
+                break;
+            case 'last':
+                $html .= '<i class="fas fa-angle-double-right"></i>';
+                break;
+        }
+        
+        if($enabled) {
+            $html .= '</a>';
+        } else {
+            $html .= '</span>';
+        }
+    }
+    
+    /**
+     * Add a link to the pagination HTML
+     */
     private function add_link(&$html, $url_pattern, $query_string, $class, $page, $enabled) {
         if($enabled) {
             $html .= '<a href="' . str_replace('{page}', $page, $url_pattern) . $query_string . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';

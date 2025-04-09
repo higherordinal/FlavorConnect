@@ -205,6 +205,20 @@ function format_quantity($value, $precision = 'basic') {
  * @param string $default_text Default text to use for the back link
  * @return array Array with 'url' and 'text' keys for the back link
  */
+/**
+ * Generates a smart back link URL and suggested text
+ * 
+ * This function determines the most appropriate back link based on:
+ * 1. The HTTP_REFERER if available
+ * 2. The 'ref' parameter in the query string
+ * 3. A default fallback URL
+ * 4. Named routes from the router if available
+ * 
+ * @param string $default_url The default URL to use if no referer is available
+ * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
+ * @param string $default_text Default text to use for the back link
+ * @return array Associative array with 'url' and 'text' keys
+ */
 function get_back_link($default_url = '/index.php', $allowed_domains = [], $default_text = 'Back') {
     // Initialize result array with defaults
     $result = [
@@ -286,6 +300,41 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
                 }
                 
                 return $result;
+            }
+        }
+    }
+    
+    // Try to use router for named routes if available
+    global $router;
+    if (isset($router)) {
+        // Check if we're coming from a recipe page
+        if (isset($_SESSION['from_recipe_id']) && is_numeric($_SESSION['from_recipe_id'])) {
+            try {
+                // Generate URL using named route
+                $recipe_url = $router->url('recipes.show', ['id' => $_SESSION['from_recipe_id']]);
+                if (!empty($recipe_url)) {
+                    $result['url'] = $recipe_url;
+                    $result['text'] = 'Back to Recipe';
+                    return $result;
+                }
+            } catch (Exception $e) {
+                // If router URL generation fails, continue with default behavior
+            }
+        }
+        
+        // Try to determine the named route based on the URL pattern
+        $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        foreach ($router->named_routes as $name => $path) {
+            if (strpos($current_path, $path) !== false) {
+                // We found a matching named route, use it for context-aware back link text
+                if (strpos($name, 'recipes.') === 0) {
+                    $result['text'] = 'Back to Recipes';
+                } else if (strpos($name, 'users.') === 0) {
+                    $result['text'] = 'Back to Profile';
+                } else if (strpos($name, 'admin.') === 0) {
+                    $result['text'] = 'Back to Admin';
+                }
+                break;
             }
         }
     }

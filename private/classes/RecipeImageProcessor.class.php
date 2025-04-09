@@ -87,10 +87,7 @@ class RecipeImageProcessor {
     /**
      * Check if ImageMagick is available on the system
      * 
-     * Tests if the ImageMagick convert command is accessible and functional
-     * by attempting to run a simple version command.
-     * 
-     * @return bool True if ImageMagick is available and functional, false otherwise
+     * @return bool True if ImageMagick is available and functional
      */
     public function isImageMagickAvailable() {
         // Cache the result to avoid repeated checks
@@ -1119,13 +1116,31 @@ class RecipeImageProcessor {
         $result = false;
         
         if (function_exists('imagewebp')) {
-            $result = imagewebp($target_image, $destination_path, $webp_quality);
+            // Create directory if it doesn't exist
+            $destination_dir = dirname($destination_path);
+            if (!is_dir($destination_dir)) {
+                if (!mkdir($destination_dir, 0755, true)) {
+                    $this->errors[] = "Failed to create destination directory: {$destination_dir}";
+                    imagedestroy($source_image);
+                    imagedestroy($target_image);
+                    return false;
+                }
+            }
             
-            // Check if the WebP file is too large (over 300KB)
-            if (file_exists($destination_path) && filesize($destination_path) > 300 * 1024) {
-                // If WebP is too large, try again with lower quality
-                $lower_quality = max(70, $webp_quality - 10);
-                $result = imagewebp($target_image, $destination_path, $lower_quality);
+            // Check if directory is writable
+            if (!is_writable($destination_dir)) {
+                $this->errors[] = "Destination directory is not writable: {$destination_dir}";
+                imagedestroy($source_image);
+                imagedestroy($target_image);
+                return false;
+            }
+            
+            // Save with 80% quality
+            $result = imagewebp($target_image, $destination_path, 80);
+            
+            if (!$result) {
+                $this->errors[] = "Failed to save resized image";
+                return false;
             }
         } else {
             $this->errors[] = "WebP support not available in GD library";
@@ -1138,11 +1153,6 @@ class RecipeImageProcessor {
         imagedestroy($source_image);
         imagedestroy($target_image);
         
-        if (!$result) {
-            $this->errors[] = "Failed to save resized image";
-            return false;
-        }
-        
-        return true;
+        return $result;
     }
 }

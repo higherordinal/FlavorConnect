@@ -102,10 +102,17 @@ if(is_post_request()) {
             $recipe->created_at = date('Y-m-d H:i:s');
 
             if($recipe->save()) {
-                // Save ingredients
+                $ingredient_errors = false;
+                
+                // Save ingredients - now that we have a valid recipe_id
                 if(isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
                     foreach($_POST['ingredients'] as $ingredient_data) {
-                        // Create recipe ingredient directly
+                        // Skip empty ingredient names
+                        if(empty($ingredient_data['name'])) {
+                            continue;
+                        }
+                        
+                        // Create recipe ingredient with the recipe_id
                         $recipe_ingredient = new RecipeIngredient([
                             'recipe_id' => $recipe->recipe_id,
                             'name' => $ingredient_data['name'],
@@ -114,8 +121,14 @@ if(is_post_request()) {
                         ]);
                         
                         if(!$recipe_ingredient->save()) {
+                            $ingredient_errors = true;
                             $errors = array_merge($errors, $recipe_ingredient->errors);
                         }
+                    }
+                    
+                    // If we had ingredient errors, log them but continue
+                    if($ingredient_errors) {
+                        error_log('Errors saving ingredients for recipe ID ' . $recipe->recipe_id . ': ' . print_r($errors, true));
                     }
                 }
                 

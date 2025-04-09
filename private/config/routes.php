@@ -12,9 +12,19 @@ $router->get('/', 'index.php', 'home');
 // Recipe routes
 $router->group('/recipes', function($router) {
     $router->get('/', 'recipes/index.php', 'recipes.index');
-    $router->get('/show.php', 'recipes/show.php', 'recipes.show');
+    
+    // Apply recipe context preservation to show page
+    $router->get('/show.php', 'recipes/show.php', 'recipes.show')
+           ->middleware('preserve_recipe_context');
+    
     $router->get('/new.php', 'recipes/new.php', 'recipes.new');
-    $router->get('/edit.php', 'recipes/edit.php', 'recipes.edit');
+    $router->post('/new.php', 'recipes/new.php', 'recipes.create');
+    
+    $router->get('/edit.php', 'recipes/edit.php', 'recipes.edit')
+           ->middleware('preserve_recipe_context');
+    $router->post('/edit.php', 'recipes/edit.php', 'recipes.update')
+           ->middleware('preserve_recipe_context');
+           
     $router->post('/delete.php', 'recipes/delete.php', 'recipes.delete');
     $router->get('/toggle_favorite.php', 'recipes/toggle_favorite.php', 'recipes.toggle_favorite');
 });
@@ -32,7 +42,8 @@ $router->group('/auth', function($router) {
 $router->group('/users', function($router) {
     $router->get('/favorites.php', 'users/favorites.php', 'users.favorites');
     $router->get('/profile.php', 'users/profile.php', 'users.profile');
-});
+    $router->post('/profile.php', 'users/profile.php', 'users.profile.update');
+}, ['auth']);
 
 // API routes
 $router->group('/api', function($router) {
@@ -53,9 +64,9 @@ $router->group('/admin', function($router) {
         $router->group('/diet', function($router) {
             $router->get('/', 'admin/categories/diet/index.php', 'admin.categories.diet');
             $router->get('/new.php', 'admin/categories/diet/new.php', 'admin.categories.diet.new');
-            $router->post('/create.php', 'admin/categories/diet/create.php', 'admin.categories.diet.create');
+            $router->post('/new.php', 'admin/categories/diet/new.php', 'admin.categories.diet.create');
             $router->get('/edit.php', 'admin/categories/diet/edit.php', 'admin.categories.diet.edit');
-            $router->post('/update.php', 'admin/categories/diet/update.php', 'admin.categories.diet.update');
+            $router->post('/edit.php', 'admin/categories/diet/edit.php', 'admin.categories.diet.update');
             $router->post('/delete.php', 'admin/categories/diet/delete.php', 'admin.categories.diet.delete');
         });
         
@@ -63,9 +74,9 @@ $router->group('/admin', function($router) {
         $router->group('/measurement', function($router) {
             $router->get('/', 'admin/categories/measurement/index.php', 'admin.categories.measurement');
             $router->get('/new.php', 'admin/categories/measurement/new.php', 'admin.categories.measurement.new');
-            $router->post('/create.php', 'admin/categories/measurement/create.php', 'admin.categories.measurement.create');
+            $router->post('/new.php', 'admin/categories/measurement/new.php', 'admin.categories.measurement.create');
             $router->get('/edit.php', 'admin/categories/measurement/edit.php', 'admin.categories.measurement.edit');
-            $router->post('/update.php', 'admin/categories/measurement/update.php', 'admin.categories.measurement.update');
+            $router->post('/edit.php', 'admin/categories/measurement/edit.php', 'admin.categories.measurement.update');
             $router->post('/delete.php', 'admin/categories/measurement/delete.php', 'admin.categories.measurement.delete');
         });
         
@@ -73,9 +84,9 @@ $router->group('/admin', function($router) {
         $router->group('/style', function($router) {
             $router->get('/', 'admin/categories/style/index.php', 'admin.categories.style');
             $router->get('/new.php', 'admin/categories/style/new.php', 'admin.categories.style.new');
-            $router->post('/create.php', 'admin/categories/style/create.php', 'admin.categories.style.create');
+            $router->post('/new.php', 'admin/categories/style/new.php', 'admin.categories.style.create');
             $router->get('/edit.php', 'admin/categories/style/edit.php', 'admin.categories.style.edit');
-            $router->post('/update.php', 'admin/categories/style/update.php', 'admin.categories.style.update');
+            $router->post('/edit.php', 'admin/categories/style/edit.php', 'admin.categories.style.update');
             $router->post('/delete.php', 'admin/categories/style/delete.php', 'admin.categories.style.delete');
         });
         
@@ -83,9 +94,9 @@ $router->group('/admin', function($router) {
         $router->group('/type', function($router) {
             $router->get('/', 'admin/categories/type/index.php', 'admin.categories.type');
             $router->get('/new.php', 'admin/categories/type/new.php', 'admin.categories.type.new');
-            $router->post('/create.php', 'admin/categories/type/create.php', 'admin.categories.type.create');
+            $router->post('/new.php', 'admin/categories/type/new.php', 'admin.categories.type.create');
             $router->get('/edit.php', 'admin/categories/type/edit.php', 'admin.categories.type.edit');
-            $router->post('/update.php', 'admin/categories/type/update.php', 'admin.categories.type.update');
+            $router->post('/edit.php', 'admin/categories/type/edit.php', 'admin.categories.type.update');
             $router->post('/delete.php', 'admin/categories/type/delete.php', 'admin.categories.type.delete');
         });
     });
@@ -94,9 +105,9 @@ $router->group('/admin', function($router) {
     $router->group('/users', function($router) {
         $router->get('/', 'admin/users/index.php', 'admin.users');
         $router->get('/new.php', 'admin/users/new.php', 'admin.users.new');
-        $router->post('/create.php', 'admin/users/create.php', 'admin.users.create');
+        $router->post('/new.php', 'admin/users/new.php', 'admin.users.create');
         $router->get('/edit.php', 'admin/users/edit.php', 'admin.users.edit');
-        $router->post('/update.php', 'admin/users/update.php', 'admin.users.update');
+        $router->post('/edit.php', 'admin/users/edit.php', 'admin.users.update');
         $router->post('/delete.php', 'admin/users/delete.php', 'admin.users.delete');
     });
 }, ['auth']); // Apply auth middleware to all admin routes

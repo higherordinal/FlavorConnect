@@ -125,17 +125,23 @@ class RecipeIngredient extends DatabaseObject {
             // Ingredient exists, return its ID
             return $row['ingredient_id'];
         } else {
-            // Ingredient doesn't exist, create a new one
-            $sql = "INSERT INTO ingredient (name) VALUES (?)";
+            // Ensure we have a recipe_id
+            if (empty($this->recipe_id)) {
+                $this->errors[] = "Cannot create ingredient: recipe_id is required";
+                return null;
+            }
+            
+            // Create a new ingredient with the recipe_id
+            $sql = "INSERT INTO ingredient (name, recipe_id) VALUES (?, ?)";
             $stmt = self::$database->prepare($sql);
-            $stmt->bind_param("s", $name);
+            $stmt->bind_param("si", $name, $this->recipe_id);
             $stmt->execute();
             
             if($stmt->affected_rows > 0) {
                 return self::$database->insert_id;
             } else {
-                // If insertion fails, use a default value
-                return 1;
+                $this->errors[] = "Failed to create ingredient: " . self::$database->error;
+                return null;
             }
         }
     }
@@ -148,12 +154,24 @@ class RecipeIngredient extends DatabaseObject {
         $this->validate();
         if(!empty($this->errors)) { return false; }
         
+        // For recipe_id, we'll handle this in the SQL query
+        // It might be empty for new recipes, but will be set by the database's auto-increment
+        
         $attributes = $this->sanitized_attributes();
         
         // Ensure ingredient_id is properly set
         if (empty($attributes['ingredient_id']) || $attributes['ingredient_id'] === '') {
-            // If still empty, use a default value
-            $attributes['ingredient_id'] = 1;
+            // Try to use a default ingredient if available
+            $sql = "SELECT ingredient_id FROM ingredient LIMIT 1";
+            $result = self::$database->query($sql);
+            if($row = $result->fetch_assoc()) {
+                $attributes['ingredient_id'] = $row['ingredient_id'];
+            } else {
+                // If no ingredients exist, create a basic one
+                $sql = "INSERT INTO ingredient (name, recipe_id) VALUES ('other', 1)";
+                self::$database->query($sql);
+                $attributes['ingredient_id'] = self::$database->insert_id;
+            }
         }
         
         $sql = "INSERT INTO " . static::$table_name . " (";

@@ -400,4 +400,39 @@ class Router {
         require($file);
         return $this;
     }
+    
+    /**
+     * Cache routes to a file for faster loading
+     * 
+     * @param string $file Path to cache file
+     * @return Router For method chaining
+     */
+    public function cacheRoutes($file) {
+        $cache = [
+            'routes' => $this->routes,
+            'patterns' => $this->patterns,
+            'named_routes' => $this->named_routes
+        ];
+        
+        $content = '<?php return ' . var_export($cache, true) . ';';
+        file_put_contents($file, $content);
+        
+        return $this;
+    }
+    
+    /**
+     * Load routes from a cache file
+     * 
+     * @param string $file Path to cache file
+     * @return Router For method chaining
+     */
+    public function loadCachedRoutes($file) {
+        $cache = require($file);
+        
+        $this->routes = $cache['routes'];
+        $this->patterns = $cache['patterns'];
+        $this->named_routes = $cache['named_routes'];
+        
+        return $this;
+    }
 }
