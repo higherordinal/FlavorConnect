@@ -436,6 +436,11 @@ td input.form-control {
     0 0 0 3px rgba(52, 152, 219, 0.15);
 }
 
+/* Ensure all textarea elements use the correct font */
+textarea {
+  font-family: var(--font-primary);
+}
+
 .form-input::placeholder,
 .form-textarea::placeholder {
   color: var(--dark-gray);
