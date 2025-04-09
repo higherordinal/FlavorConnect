@@ -4,7 +4,6 @@ Allow: /
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
-Disallow: /debug_500_page.php
-
-# Sitemap location
-Sitemap: https://flavorconnect.com/sitemap.xml
+Disallow: /auth/
+Disallow: /users/
+Crawl-delay: 10
