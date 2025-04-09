@@ -96,74 +96,58 @@ class Pagination {
             return '';
         }
         
-        // Build query string for extra parameters
         $query_string = '';
         if(!empty($extra_params)) {
             foreach($extra_params as $key => $value) {
-                // Skip null values or empty strings to avoid deprecated warnings
                 if($value !== null && $value !== '') {
                     $query_string .= "&{$key}=" . urlencode($value);
                 }
             }
         }
         
-        // Standard pagination style for all pages
-        
         $html = '<div class="pagination">';
         
-        // First page
-        if($this->has_previous_page()) {
-            $html .= '<a href="' . str_replace('{page}', '1', $url_pattern) . $query_string . '" class="pagination-link first" title="First page">';
-            $html .= '<i class="fas fa-angle-double-left"></i>';
-            $html .= '</a>';
-        } else {
-            $html .= '<span class="pagination-link disabled first">';
-            $html .= '<i class="fas fa-angle-double-left"></i>';
-            $html .= '</span>';
-        }
+        $this->add_link($html, $url_pattern, $query_string, 'first', '1', $this->has_previous_page());
+        $this->add_link($html, $url_pattern, $query_string, 'prev', $this->previous_page(), $this->has_previous_page());
         
-        // Previous page
-        if($this->has_previous_page()) {
-            $html .= '<a href="' . str_replace('{page}', $this->previous_page(), $url_pattern) . $query_string . '" class="pagination-link prev" title="Previous page">';
-            $html .= '<i class="fas fa-angle-left"></i>';
-            $html .= '</a>';
-        } else {
-            $html .= '<span class="pagination-link disabled prev">';
-            $html .= '<i class="fas fa-angle-left"></i>';
-            $html .= '</span>';
-        }
-        
-        // Page numbers
         $html .= '<span class="pagination-info">';
         $html .= 'Page ' . $this->current_page . ' of ' . $total_pages;
         $html .= '</span>';
         
-        // Next page
-        if($this->has_next_page()) {
-            $html .= '<a href="' . str_replace('{page}', $this->next_page(), $url_pattern) . $query_string . '" class="pagination-link next" title="Next page">';
-            $html .= '<i class="fas fa-angle-right"></i>';
-            $html .= '</a>';
-        } else {
-            $html .= '<span class="pagination-link disabled next">';
-            $html .= '<i class="fas fa-angle-right"></i>';
-            $html .= '</span>';
-        }
-        
-        // Last page
-        if($this->has_next_page()) {
-            $html .= '<a href="' . str_replace('{page}', $total_pages, $url_pattern) . $query_string . '" class="pagination-link last" title="Last page">';
-            $html .= '<i class="fas fa-angle-double-right"></i>';
-            $html .= '</a>';
-        } else {
-            $html .= '<span class="pagination-link disabled last">';
-            $html .= '<i class="fas fa-angle-double-right"></i>';
-            $html .= '</span>';
-        }
+        $this->add_link($html, $url_pattern, $query_string, 'next', $this->next_page(), $this->has_next_page());
+        $this->add_link($html, $url_pattern, $query_string, 'last', $total_pages, $this->has_next_page());
         
         $html .= '</div>';
         
         return $html;
     }
     
-    // Removed recipe gallery specific pagination method since we're using a consistent style
+    private function add_link(&$html, $url_pattern, $query_string, $class, $page, $enabled) {
+        if($enabled) {
+            $html .= '<a href="' . str_replace('{page}', $page, $url_pattern) . $query_string . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';
+        } else {
+            $html .= '<span class="pagination-link disabled ' . $class . '">';
+        }
+        
+        switch($class) {
+            case 'first':
+                $html .= '<i class="fas fa-angle-double-left"></i>';
+                break;
+            case 'prev':
+                $html .= '<i class="fas fa-angle-left"></i>';
+                break;
+            case 'next':
+                $html .= '<i class="fas fa-angle-right"></i>';
+                break;
+            case 'last':
+                $html .= '<i class="fas fa-angle-double-right"></i>';
+                break;
+        }
+        
+        if($enabled) {
+            $html .= '</a>';
+        } else {
+            $html .= '</span>';
+        }
+    }
 }
