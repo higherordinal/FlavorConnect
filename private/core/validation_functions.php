@@ -418,27 +418,33 @@ function validate_recipe($recipe_data) {
  * @return array Array of validation errors
  */
 function validate_recipe_step($step_data) {
-    $errors = [];
-
-    // Recipe ID validation
-    if(!is_valid_id($step_data['recipe_id'] ?? null)) {
-        $errors['recipe_id'] = "Recipe ID is required.";
+    $rules = [
+        'recipe_id' => ['id' => true],
+        'step_number' => ['required' => true, 'numeric' => true, 'min' => 1, 'max' => 100],
+        'instruction' => ['required' => true, 'min_length' => 3, 'max_length' => 255]
+    ];
+    
+    $errors = validate($step_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            switch ($field) {
+                case 'recipe_id':
+                    $errors[$field] = "Recipe ID is required.";
+                    break;
+                case 'step_number':
+                    $errors[$field] = "Step number must be between 1 and 100.";
+                    break;
+                case 'instruction':
+                    $errors[$field] = "Instruction must be between 3 and 255 characters.";
+                    break;
+                default:
+                    $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+            }
+        }
     }
-
-    // Step number validation
-    if(!isset($step_data['step_number']) || !is_numeric($step_data['step_number'])) {
-        $errors['step_number'] = "Step number is required.";
-    } elseif(!has_number_between($step_data['step_number'], 1, 100)) {
-        $errors['step_number'] = "Step number must be between 1 and 100.";
-    }
-
-    // Instruction validation
-    if(is_blank($step_data['instruction'])) {
-        $errors['instruction'] = "Instruction cannot be blank.";
-    } elseif(!has_length($step_data['instruction'], ['min' => 3, 'max' => 255])) {
-        $errors['instruction'] = "Instruction must be between 3 and 255 characters.";
-    }
-
+    
     return $errors;
 }
 
@@ -448,30 +454,41 @@ function validate_recipe_step($step_data) {
  * @return array Array of validation errors
  */
 function validate_recipe_comment($comment_data) {
-    $errors = [];
-
-    // Recipe ID validation
-    if(!is_valid_id($comment_data['recipe_id'] ?? null)) {
-        $errors['recipe_id'] = "Recipe ID is required.";
-    }
-
-    // User ID validation
-    if(!is_valid_id($comment_data['user_id'] ?? null)) {
-        $errors['user_id'] = "User ID is required.";
-    }
-
-    // Rating validation
-    if(!is_valid_rating($comment_data['rating_value'] ?? null)) {
-        $errors['rating_value'] = "Rating must be between 1 and 5.";
-    }
-
-    // Comment text validation - only validate if provided
+    $rules = [
+        'recipe_id' => ['id' => true],
+        'user_id' => ['id' => true],
+        'rating_value' => ['rating' => true]
+    ];
+    
+    // Add comment_text validation only if it's provided
     if(isset($comment_data['comment_text']) && $comment_data['comment_text'] !== '') {
-        if(!has_length($comment_data['comment_text'], ['min' => 2, 'max' => 255])) {
-            $errors['comment_text'] = "Comment must be between 2 and 255 characters.";
+        $rules['comment_text'] = ['min_length' => 2, 'max_length' => 255];
+    }
+    
+    $errors = validate($comment_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            switch ($field) {
+                case 'recipe_id':
+                    $errors[$field] = "Recipe ID is required.";
+                    break;
+                case 'user_id':
+                    $errors[$field] = "User ID is required.";
+                    break;
+                case 'rating_value':
+                    $errors[$field] = "Rating must be between 1 and 5.";
+                    break;
+                case 'comment_text':
+                    $errors[$field] = "Comment must be between 2 and 255 characters.";
+                    break;
+                default:
+                    $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+            }
         }
     }
-
+    
     return $errors;
 }
 
@@ -482,43 +499,68 @@ function validate_recipe_comment($comment_data) {
  * @return array Array of validation errors
  */
 function validate_user($user_data, $current_id="0") {
-    $errors = [];
-
-    // Username validation
-    if(is_blank($user_data['username'])) {
-        $errors['username'] = "Username cannot be blank.";
-    } elseif(!has_length($user_data['username'], ['min' => 4, 'max' => 255])) {
-        $errors['username'] = "Username must be between 4 and 255 characters.";
-    } elseif(!has_unique_username($user_data['username'], $current_id)) {
-        $errors['username'] = "Username is already taken.";
-    } elseif(!has_no_spaces($user_data['username'])) {
-        $errors['username'] = "Username cannot contain spaces.";
+    // Basic validation rules
+    $rules = [
+        'username' => ['required' => true, 'min_length' => 4, 'max_length' => 255],
+        'email' => ['required' => true, 'email' => true]
+    ];
+    
+    // Add password validation if password is being set/updated
+    if(isset($user_data['password'])) {
+        $rules['password'] = ['required' => true];
+        $rules['confirm_password'] = ['required' => true];
     }
-
-    // Email validation
-    if(is_blank($user_data['email'])) {
-        $errors['email'] = "Email cannot be blank.";
-    } elseif(!is_valid_email($user_data['email'])) {
-        $errors['email'] = "Please enter a valid email address.";
-    } elseif(!has_unique_email($user_data['email'], $current_id)) {
+    
+    // Run basic validation
+    $errors = validate($user_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            switch ($field) {
+                case 'username':
+                    $errors[$field] = "Username must be between 4 and 255 characters.";
+                    break;
+                case 'email':
+                    $errors[$field] = "Please enter a valid email address.";
+                    break;
+                case 'password':
+                    $errors[$field] = "Password cannot be blank.";
+                    break;
+                case 'confirm_password':
+                    $errors[$field] = "Confirm password cannot be blank.";
+                    break;
+                default:
+                    $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+            }
+        }
+    }
+    
+    // Custom validations that aren't handled by the generic validate function
+    
+    // Username additional validations
+    if(!isset($errors['username'])) {
+        if(!has_unique_username($user_data['username'], $current_id)) {
+            $errors['username'] = "Username is already taken.";
+        } elseif(!has_no_spaces($user_data['username'])) {
+            $errors['username'] = "Username cannot contain spaces.";
+        }
+    }
+    
+    // Email uniqueness validation
+    if(!isset($errors['email']) && !has_unique_email($user_data['email'], $current_id)) {
         $errors['email'] = "Email is already taken.";
     }
-
-    // Password validation
-    if(isset($user_data['password'])) {
-        if(is_blank($user_data['password'])) {
-            $errors['password'] = "Password cannot be blank.";
-        } elseif(!has_valid_password_format($user_data['password'])) {
+    
+    // Password format and confirmation match
+    if(isset($user_data['password']) && !isset($errors['password'])) {
+        if(!has_valid_password_format($user_data['password'])) {
             $errors['password'] = "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.";
-        }
-
-        if(is_blank($user_data['confirm_password'])) {
-            $errors['confirm_password'] = "Confirm password cannot be blank.";
         } elseif($user_data['password'] !== $user_data['confirm_password']) {
             $errors['confirm_password'] = "Password and confirm password must match.";
         }
     }
-
+    
     return $errors;
 }
 
@@ -528,15 +570,20 @@ function validate_user($user_data, $current_id="0") {
  * @return array Array of validation errors
  */
 function validate_login($login_data) {
-    $errors = [];
-
-    if(is_blank($login_data['username'])) {
-        $errors['username'] = "Username cannot be blank.";
+    $rules = [
+        'username' => ['required' => true],
+        'password' => ['required' => true]
+    ];
+    
+    $errors = validate($login_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+        }
     }
-    if(is_blank($login_data['password'])) {
-        $errors['password'] = "Password cannot be blank.";
-    }
-
+    
     return $errors;
 }
 
@@ -548,14 +595,21 @@ function validate_login($login_data) {
  * @return array Array of validation errors
  */
 function validate_recipe_attribute_data($attribute_data, $type = '', $current_id = '0') {
-    $errors = [];
-
-    // Name validation
-    if(is_blank($attribute_data['name'])) {
-        $errors['name'] = "Name cannot be blank.";
-    } elseif (!has_length($attribute_data['name'], ['min' => 2, 'max' => 255])) {
-        $errors['name'] = "Name must be between 2 and 255 characters.";
-    } elseif ($type) {
+    $rules = [
+        'name' => ['required' => true, 'min_length' => 2, 'max_length' => 255]
+    ];
+    
+    $errors = validate($attribute_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+        }
+    }
+    
+    // Check for uniqueness if type is provided
+    if ($type && !isset($errors['name'])) {
         // Map type to table name
         $tables = [
             'style' => 'recipe_style',
