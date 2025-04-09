@@ -2,6 +2,7 @@
 require_once('../private/core/initialize.php');
 $page_title = 'Home';
 $page_style = 'home';
+$component_styles = ['recipe-favorite'];
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');

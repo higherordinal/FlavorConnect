@@ -5,6 +5,7 @@ require_admin();
 
 $page_title = 'Admin: User Management';
 $page_style = 'admin';
+$component_styles = ['pagination'];
 
 // Get pagination parameters
 $current_page = $_GET['page'] ?? 1;
@@ -60,9 +61,6 @@ function sort_indicator($column, $current_sort, $current_order) {
 
 include(SHARED_PATH . '/member_header.php');
 ?>
-
-<!-- Import pagination component styles -->
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/pagination.css'); ?>">
 
 
 <div class="admin-content">

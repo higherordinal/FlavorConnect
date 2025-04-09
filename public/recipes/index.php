@@ -3,6 +3,7 @@ require_once('../../private/core/initialize.php');
 
 $page_title = 'Recipes';
 $page_style = 'recipe-gallery';
+$component_styles = ['recipe-favorite', 'pagination'];
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');

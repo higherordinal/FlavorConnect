@@ -1,6 +1,7 @@
 <?php
 if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
 if(!isset($page_style)) { $page_style = ''; }
+if(!isset($component_styles)) { $component_styles = []; }
 ?>
 
 <!DOCTYPE html>
@@ -27,6 +28,15 @@ if(!isset($page_style)) { $page_style = ''; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=1.0'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=1.0'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/unified-navigation.css?v=1.0'); ?>">
+    
+    <!-- Component Styles (Dynamically Included) -->
+    <?php 
+    if(!empty($component_styles)) {
+        foreach($component_styles as $component) {
+            echo '<link rel="stylesheet" href="' . url_for('/assets/css/components/' . $component . '.css?v=' . time()) . '">'; 
+        }
+    }
+    ?>
     
     <!-- Page Specific Styles -->
     <?php if($page_style): ?>

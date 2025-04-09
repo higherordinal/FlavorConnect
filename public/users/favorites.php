@@ -5,6 +5,7 @@ require_login();
 
 $page_title = 'User Favorites';
 $page_style = 'user-favorites';
+$component_styles = ['recipe-favorite'];
 
 // Get user's favorite recipes
 $favorites = Recipe::find_favorites_by_user_id($session->get_user_id());

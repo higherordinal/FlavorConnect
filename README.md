@@ -14,6 +14,7 @@ A recipe sharing and management platform where users can discover, share, and or
 - Intuitive recipe creation interface
 - Flexible routing system with middleware support
 - Context-aware navigation with recipe state preservation
+- Bluehost deployment support
 
 ## Prerequisites
 
