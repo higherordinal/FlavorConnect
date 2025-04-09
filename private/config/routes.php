@@ -142,7 +142,6 @@ $router->group('/admin', function($router) {
 
 // Static pages
 $router->get('/about.php', 'about.php', 'about');
-$router->get('/contact.php', 'contact.php', 'contact');
 
 // Error pages
 $router->get('/404.php', '404.php', '404');
