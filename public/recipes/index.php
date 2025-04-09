@@ -332,11 +332,7 @@ $userData = [
         <?php if($pagination->total_pages() > 1) { ?>
             <!-- Pagination Controls -->
             <?php 
-            // Generate pagination links with all filter parameters preserved
-            // Use url_for() to ensure we have the correct absolute URL
-            $url_pattern = url_for('/recipes/index.php') . '?page={page}';
-            
-            // Add extra parameters to preserve filters
+            // Add filter parameters to preserve filters
             $extra_params = [
                 'search' => $search,
                 'style' => $style_id,
@@ -345,7 +341,21 @@ $userData = [
                 'sort' => $sort
             ];
             
-            echo $pagination->page_links($url_pattern, $extra_params);
+            // Check if we can use the route_links method with named routes
+            if (function_exists('route')) {
+                // Use route_links with the 'recipes.index' named route
+                try {
+                    echo $pagination->route_links('recipes.index', [], 'page', $extra_params);
+                } catch (Exception $e) {
+                    // Fallback to traditional method if route_links fails
+                    $url_pattern = url_for('/recipes/index.php') . '?page={page}';
+                    echo $pagination->page_links($url_pattern, $extra_params);
+                }
+            } else {
+                // Fallback to traditional method
+                $url_pattern = url_for('/recipes/index.php') . '?page={page}';
+                echo $pagination->page_links($url_pattern, $extra_params);
+            }
             
             // Display total records info
             echo '<div class="records-info">Showing ' . count($recipes) . ' of ' . $total_recipes . ' total recipes</div>';
