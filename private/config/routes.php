@@ -26,7 +26,7 @@ $router->group('/recipes', function($router) {
            ->middleware('preserve_recipe_context');
            
     $router->post('/delete.php', 'recipes/delete.php', 'recipes.delete');
-    $router->get('/toggle_favorite.php', 'recipes/toggle_favorite.php', 'recipes.toggle_favorite');
+    $router->get('/toggle_favorite.php', 'recipes/toggle_favorite.php', 'recipes.favorites.toggle');
 });
 
 // Authentication routes
@@ -43,7 +43,7 @@ $router->group('/users', function($router) {
     $router->get('/favorites.php', 'users/favorites.php', 'users.favorites');
     $router->get('/profile.php', 'users/profile.php', 'users.profile');
     $router->post('/profile.php', 'users/profile.php', 'users.profile.update');
-    $router->post('/toggle_favorite.php', 'users/toggle_favorite.php', 'users.toggle_favorite');
+    $router->post('/toggle_favorite.php', 'users/toggle_favorite.php', 'users.favorites.toggle');
 }, ['auth']);
 
 // API routes
@@ -51,8 +51,8 @@ $router->group('/api', function($router) {
     $router->get('/', 'api/index.php', 'api.index');
     
     // Favorites API
-    $router->get('/toggle_favorite.php', 'api/toggle_favorite.php', 'api.check_favorite');
-    $router->post('/toggle_favorite.php', 'api/toggle_favorite.php', 'api.toggle_favorite');
+    $router->get('/toggle_favorite.php', 'api/toggle_favorite.php', 'api.favorites.check');
+    $router->post('/toggle_favorite.php', 'api/toggle_favorite.php', 'api.favorites.toggle');
     $router->get('/favorites', 'api/favorites/index.php', 'api.favorites.index');
     $router->post('/favorites/toggle', 'api/favorites/toggle.php', 'api.favorites.toggle');
     
@@ -145,3 +145,6 @@ $router->get('/about.php', 'about.php', 'about');
 
 // Error pages
 $router->get('/404.php', '404.php', '404');
+
+// Catch-all route for handling 404 errors
+$router->any('*', '404.php', 'not_found');
