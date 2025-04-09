@@ -14,11 +14,9 @@ if(!$user) {
 $recipes = Recipe::find_by_user_id($user_id);
 
 $page_title = 'User Profile';
-$page_style = 'profile';
+$page_style = 'user-profile';
 include(SHARED_PATH . '/member_header.php');
 ?>
-
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/profile.css'); ?>">
 
 <div class="profile-container">
     <?php 
