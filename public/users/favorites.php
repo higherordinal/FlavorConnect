@@ -12,9 +12,6 @@ $favorites = Recipe::find_favorites_by_user_id($session->get_user_id());
 include(SHARED_PATH . '/member_header.php');
 ?>
 
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css'); ?>">
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/user-favorites.css'); ?>">
-
 <div class="container">
     <?php 
     echo unified_navigation(

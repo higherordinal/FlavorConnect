@@ -202,8 +202,6 @@ if(!empty($errors)) {
 echo display_session_message();
 ?>
 
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-show.css'); ?>">
-
 <div class="recipe-show">
     <div class="container recipe-container">
         <?php 

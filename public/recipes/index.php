@@ -10,7 +10,6 @@ if($session->is_logged_in()) {
     include(SHARED_PATH . '/public_header.php');
 }
 ?>
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/recipe-gallery.css?v=1.0'); ?>">
 
 <div class="container">
     <?php 
