@@ -38,21 +38,20 @@ if(!isset($component_styles)) { $component_styles = []; }
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=1.0'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=1.0'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=1.0'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css?v=1.0'); ?>">
     <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/unified-navigation.css?v=1.0'); ?>">
     
     <!-- Component Styles (Dynamically Included) -->
     <?php 
     if(!empty($component_styles)) {
         foreach($component_styles as $component) {
-            echo '<link rel="stylesheet" href="' . url_for('/assets/css/components/' . $component . '.css?v=' . time()) . '">'; 
+            echo '<link rel="stylesheet" href="' . url_for('/assets/css/components/' . $component . '.css?v=1.0') . '">'; 
         }
     }
     ?>
     
     <!-- Page Specific Styles -->
     <?php if(isset($page_style)) { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=' . time()); ?>">
+    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=1.0'); ?>">
     <?php } ?>
     
     <!-- Global Configuration -->

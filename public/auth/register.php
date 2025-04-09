@@ -4,6 +4,7 @@ require_once(PRIVATE_PATH . '/core/initialize.php');
 
 $page_title = 'Register';
 $page_style = 'auth';
+$component_styles = ['forms'];
 
 $errors = [];
 $username = '';

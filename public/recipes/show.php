@@ -19,7 +19,7 @@ if (!$recipe) {
 // Set page title and style
 $page_title = $recipe->title;
 $page_style = 'recipe-show';
-$component_styles = ['recipe-favorite'];
+$component_styles = ['recipe-favorite', 'forms'];
 
 // Set SEO variables for recipe structured data
 $is_recipe_page = true;

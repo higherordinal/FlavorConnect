@@ -5,7 +5,7 @@ require_admin();
 
 $page_title = 'Admin: User Management';
 $page_style = 'admin';
-$component_styles = ['pagination'];
+$component_styles = ['pagination', 'forms'];
 
 // Get pagination parameters
 $current_page = $_GET['page'] ?? 1;

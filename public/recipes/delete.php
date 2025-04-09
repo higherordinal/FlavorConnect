@@ -44,6 +44,7 @@ if(is_post_request()) {
 
 $page_title = 'Delete Recipe';
 $page_style = 'recipe-crud';
+$component_styles = ['forms'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 

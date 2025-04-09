@@ -4,6 +4,7 @@ require_login();
 
 $page_title = 'Edit Recipe';
 $page_style = 'recipe-crud';
+$component_styles = ['forms'];
 include(SHARED_PATH . '/member_header.php');
 
 if(!isset($_GET['id'])) {

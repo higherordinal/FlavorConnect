@@ -56,6 +56,7 @@ if(is_post_request()) {
 
 $page_title = 'Delete User';
 $page_style = 'admin';
+$component_styles = ['forms'];
 
 include(SHARED_PATH . '/member_header.php');
 ?>
