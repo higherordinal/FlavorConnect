@@ -13,45 +13,81 @@ require_once('core_utilities.php');
 function validate($data, $rules) {
     $errors = [];
     
-    foreach ($rules as $field => $rule) {
+    foreach ($rules as $field => $rule_set) {
         $value = $data[$field] ?? '';
+        $rules_array = is_array($rule_set) ? $rule_set : [$rule_set];
         
-        // Handle different validation types
-        if ($rule === 'required' && is_blank($value)) {
-            $errors[$field] = [
-                'type' => 'required',
-                'message' => ucfirst($field) . " cannot be blank."
-            ];
-        } elseif ($rule === 'email' && !empty($value) && !is_valid_email($value)) {
-            $errors[$field] = [
-                'type' => 'email',
-                'message' => "Please enter a valid email address."
-            ];
-        } elseif ($rule === 'numeric' && !empty($value) && !is_numeric($value)) {
-            $errors[$field] = [
-                'type' => 'numeric',
-                'message' => ucfirst($field) . " must be a number."
-            ];
-        } elseif ($rule === 'url' && !empty($value) && !is_valid_url($value)) {
-            $errors[$field] = [
-                'type' => 'url',
-                'message' => "Please enter a valid URL."
-            ];
-        } elseif (is_array($rule)) {
-            // Handle min/max rules
-            if (isset($rule['min']) && $value < $rule['min']) {
-                $errors[$field] = [
-                    'type' => 'min',
-                    'message' => ucfirst($field) . " must be at least " . $rule['min'] . ".",
-                    'min' => $rule['min']
-                ];
+        foreach ($rules_array as $rule_key => $rule_value) {
+            $rule_name = is_string($rule_key) ? $rule_key : $rule_value;
+            $rule_param = is_string($rule_key) ? $rule_value : null;
+            
+            // Skip further validation if field is empty and not required
+            if ($rule_name !== 'required' && is_blank($value)) {
+                continue;
             }
-            if (isset($rule['max']) && $value > $rule['max']) {
-                $errors[$field] = [
-                    'type' => 'max',
-                    'message' => ucfirst($field) . " must be at most " . $rule['max'] . ".",
-                    'max' => $rule['max']
-                ];
+            
+            // Validate based on rule type
+            switch ($rule_name) {
+                case 'required':
+                    if (is_blank($value)) {
+                        $errors[$field] = [
+                            'type' => 'required',
+                            'message' => ucfirst($field) . " cannot be blank."
+                        ];
+                    }
+                    break;
+                    
+                case 'email':
+                    if (!is_valid_email($value)) {
+                        $errors[$field] = [
+                            'type' => 'email',
+                            'message' => "Please enter a valid email address."
+                        ];
+                    }
+                    break;
+                    
+                case 'numeric':
+                    if (!is_numeric($value)) {
+                        $errors[$field] = [
+                            'type' => 'numeric',
+                            'message' => ucfirst($field) . " must be a number."
+                        ];
+                    }
+                    break;
+                    
+                case 'url':
+                    if (!is_valid_url($value)) {
+                        $errors[$field] = [
+                            'type' => 'url',
+                            'message' => "Please enter a valid URL."
+                        ];
+                    }
+                    break;
+                    
+                case 'min':
+                    if ($value < $rule_param) {
+                        $errors[$field] = [
+                            'type' => 'min',
+                            'message' => ucfirst($field) . " must be at least " . $rule_param . ".",
+                            'min' => $rule_param
+                        ];
+                    }
+                    break;
+                    
+                case 'max':
+                    if ($value > $rule_param) {
+                        $errors[$field] = [
+                            'type' => 'max',
+                            'message' => ucfirst($field) . " must be at most " . $rule_param . ".",
+                            'max' => $rule_param
+                        ];
+                    }
+                    break;
+            }
+            
+            // Stop processing rules for this field if an error was found
+            if (isset($errors[$field])) {
+                break;
             }
         }
     }
@@ -84,13 +120,20 @@ function is_valid_email($email) {
  * @return bool True if length is valid
  */
 function has_length($value, $options=[]) {
-    if(isset($options['min']) && strlen($value) < $options['min']) {
-        return false;
-    } elseif(isset($options['max']) && strlen($value) > $options['max']) {
-        return false;
-    } elseif(isset($options['exact']) && strlen($value) != $options['exact']) {
+    $length = strlen($value);
+    
+    if(isset($options['min']) && $length < $options['min']) {
         return false;
     }
+    
+    if(isset($options['max']) && $length > $options['max']) {
+        return false;
+    }
+    
+    if(isset($options['exact']) && $length != $options['exact']) {
+        return false;
+    }
+    
     return true;
 }
 
@@ -427,18 +470,20 @@ function validate_recipe_attribute_data($attribute_data, $type = '', $current_id
 /**
  * Validates if a metadata name is unique within its type
  * @param string $name The name to check
- * @param string $table The table to check in (recipe_style, recipe_diet, recipe_type)
+ * @param string $table The table to check in (recipe_style, recipe_diet, recipe_type, measurement)
  * @param string $current_id The current ID to exclude
  * @return bool True if name is unique
  */
 function has_unique_metadata_name($name, $table, $current_id="0") {
-    $database = RecipeAttribute::get_database();
+    // Get the appropriate database connection based on table
+    $database = $table === 'measurement' ? Measurement::get_database() : RecipeAttribute::get_database();
     
     // Map table names to their primary key columns
     $primary_keys = [
         'recipe_style' => 'style_id',
         'recipe_diet' => 'diet_id',
-        'recipe_type' => 'type_id'
+        'recipe_type' => 'type_id',
+        'measurement' => 'measurement_id'
     ];
     
     $primary_key = $primary_keys[$table] ?? null;
@@ -582,28 +627,8 @@ function validate_measurement_data($measurement_data, $current_id = '') {
         $errors['name'] = "Name cannot be blank.";
     } elseif (!has_length($measurement_data['name'], ['min' => 2, 'max' => 255])) {
         $errors['name'] = "Name must be between 2 and 255 characters.";
-    } else {
-        // Check if name is unique
-        $database = Measurement::get_database();
-        $sql = "SELECT COUNT(*) FROM measurement";
-        $sql .= " WHERE name='" . db_escape($database, $measurement_data['name']) . "'";
-        if($current_id != '') {
-            $sql .= " AND measurement_id != '" . db_escape($database, $current_id) . "'";
-        }
-        
-        try {
-            $result = mysqli_query($database, $sql);
-            if(!$result) {
-                $errors['name'] = "Database error checking name uniqueness.";
-            } else {
-                $row = mysqli_fetch_row($result);
-                if($row[0] > 0) {
-                    $errors['name'] = "A measurement with this name already exists.";
-                }
-            }
-        } catch(Exception $e) {
-            $errors['name'] = "Error checking name uniqueness: " . $e->getMessage();
-        }
+    } elseif (!has_unique_metadata_name($measurement_data['name'], 'measurement', $current_id)) {
+        $errors['name'] = "A measurement with this name already exists.";
     }
     
     return $errors;
