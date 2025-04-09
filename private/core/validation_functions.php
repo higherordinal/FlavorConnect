@@ -186,6 +186,42 @@ function has_number_between($value, $min, $max) {
 }
 
 /**
+ * Validates if a value is a valid ID (numeric and positive)
+ * @param mixed $value The value to check
+ * @param bool $required Whether the ID is required (cannot be empty)
+ * @return bool True if value is a valid ID
+ */
+function is_valid_id($value, $required = true) {
+    if($required && (is_blank($value) || !isset($value))) {
+        return false;
+    }
+    
+    if(!$required && (is_blank($value) || !isset($value))) {
+        return true; // Not required and empty is valid
+    }
+    
+    return is_numeric($value) && intval($value) > 0;
+}
+
+/**
+ * Validates if a value is a valid rating (1-5)
+ * @param mixed $value The value to check
+ * @param bool $required Whether the rating is required (cannot be empty)
+ * @return bool True if value is a valid rating
+ */
+function is_valid_rating($value, $required = true) {
+    if($required && (is_blank($value) || !isset($value) || $value === '')) {
+        return false;
+    }
+    
+    if(!$required && (is_blank($value) || !isset($value) || $value === '')) {
+        return true; // Not required and empty is valid
+    }
+    
+    return is_numeric($value) && has_number_between($value, 1, 5);
+}
+
+/**
  * Validates if a URL is valid
  * @param string $url The URL to check
  * @return bool True if URL is valid
@@ -242,17 +278,17 @@ function validate_recipe($recipe_data) {
     }
 
     // Style validation
-    if(!isset($recipe_data['style_id']) || !is_numeric($recipe_data['style_id'])) {
+    if(!is_valid_id($recipe_data['style_id'] ?? null)) {
         $errors['style_id'] = "Please select a cuisine style.";
     }
 
     // Diet validation
-    if(!isset($recipe_data['diet_id']) || !is_numeric($recipe_data['diet_id'])) {
+    if(!is_valid_id($recipe_data['diet_id'] ?? null)) {
         $errors['diet_id'] = "Please select a diet type.";
     }
 
     // Type validation
-    if(!isset($recipe_data['type_id']) || !is_numeric($recipe_data['type_id'])) {
+    if(!is_valid_id($recipe_data['type_id'] ?? null)) {
         $errors['type_id'] = "Please select a meal type.";
     }
 
@@ -313,7 +349,7 @@ function validate_recipe_step($step_data) {
     $errors = [];
 
     // Recipe ID validation
-    if(!isset($step_data['recipe_id']) || !is_numeric($step_data['recipe_id'])) {
+    if(!is_valid_id($step_data['recipe_id'] ?? null)) {
         $errors['recipe_id'] = "Recipe ID is required.";
     }
 
@@ -343,19 +379,17 @@ function validate_recipe_comment($comment_data) {
     $errors = [];
 
     // Recipe ID validation
-    if(!isset($comment_data['recipe_id']) || !is_numeric($comment_data['recipe_id'])) {
+    if(!is_valid_id($comment_data['recipe_id'] ?? null)) {
         $errors['recipe_id'] = "Recipe ID is required.";
     }
 
     // User ID validation
-    if(!isset($comment_data['user_id']) || !is_numeric($comment_data['user_id'])) {
+    if(!is_valid_id($comment_data['user_id'] ?? null)) {
         $errors['user_id'] = "User ID is required.";
     }
 
     // Rating validation
-    if(!isset($comment_data['rating_value']) || $comment_data['rating_value'] === '') {
-        $errors['rating_value'] = "Rating is required.";
-    } elseif(!is_numeric($comment_data['rating_value']) || !has_number_between($comment_data['rating_value'], 1, 5)) {
+    if(!is_valid_rating($comment_data['rating_value'] ?? null)) {
         $errors['rating_value'] = "Rating must be between 1 and 5.";
     }
 
@@ -564,6 +598,12 @@ function has_remaining_active_admin($user_id, $is_active=false) {
 function validate_user_deletion($user_id) {
     $errors = [];
     
+    // Validate user ID format first
+    if(!is_valid_id($user_id)) {
+        $errors[] = "Invalid user ID format.";
+        return $errors;
+    }
+    
     $user = User::find_by_id($user_id);
     if(!$user) {
         $errors[] = "User not found.";
@@ -594,12 +634,12 @@ function validate_recipe_ingredient_data($ingredient_data) {
     $errors = [];
 
     // Recipe ID validation
-    if(!isset($ingredient_data['recipe_id']) || !is_numeric($ingredient_data['recipe_id'])) {
+    if(!is_valid_id($ingredient_data['recipe_id'] ?? null)) {
         $errors['recipe_id'] = "Recipe ID is required.";
     }
 
     // Measurement ID validation
-    if(!isset($ingredient_data['measurement_id']) || !is_numeric($ingredient_data['measurement_id'])) {
+    if(!is_valid_id($ingredient_data['measurement_id'] ?? null)) {
         $errors['measurement_id'] = "Measurement is required.";
     }
 
@@ -608,6 +648,15 @@ function validate_recipe_ingredient_data($ingredient_data) {
         $errors['quantity'] = "Quantity cannot be blank.";
     } elseif(!is_numeric($ingredient_data['quantity']) || !has_number_between($ingredient_data['quantity'], 0.01, 9999)) {
         $errors['quantity'] = "Quantity must be a positive number.";
+    }
+    
+    // Ingredient name validation - only validate if the key exists
+    if(isset($ingredient_data['ingredient_name'])) {
+        if(is_blank($ingredient_data['ingredient_name'])) {
+            $errors['ingredient_name'] = "Ingredient name cannot be blank.";
+        } elseif(!has_length($ingredient_data['ingredient_name'], ['min' => 2, 'max' => 100])) {
+            $errors['ingredient_name'] = "Ingredient name must be between 2 and 100 characters.";
+        }
     }
 
     return $errors;
