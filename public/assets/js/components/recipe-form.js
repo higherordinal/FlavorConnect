@@ -241,7 +241,7 @@ function initializeIngredients() {
             <div class="form-group">
                 <label for="quantity_${index}">Quantity</label>
                 <div class="quantity-input-group">
-                    <input type="number" name="ingredients[${index}][quantity]" id="quantity_${index}" class="form-control" step="0.01" min="0" required>
+                    <input type="number" name="ingredients[${index}][quantity]" id="quantity_${index}" class="form-control" step="0.001" min="0" required>
                     <div class="fraction-helpers">
                         <span class="fraction-helper" data-value="0.25">¼</span>
                         <span class="fraction-helper" data-value="0.33">⅓</span>

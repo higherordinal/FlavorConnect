@@ -129,7 +129,7 @@ HTML;
                         <label for="quantity_<?php echo $i; ?>">Quantity</label>
                         <div class="quantity-input-group">
                             <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
-                                   class="form-control<?php echo error_class('ingredients[' . $i . '][quantity]', $errors); ?>" step="0.01" min="0" value="<?php echo h(get_raw_quantity($ingredient->quantity)); ?>" required data-error-message="Quantity must be a non-negative number">
+                                   class="form-control<?php echo error_class('ingredients[' . $i . '][quantity]', $errors); ?>" step="0.001" min="0" value="<?php echo h(get_raw_quantity($ingredient->quantity)); ?>" required data-error-message="Quantity must be a non-negative number">
                             <?php output_fraction_helpers(); ?>
                         </div>
                         <?php echo display_error('ingredients[' . $i . '][quantity]', $errors); ?>
@@ -168,7 +168,7 @@ HTML;
                         <label for="quantity_<?php echo $i; ?>">Quantity</label>
                         <div class="quantity-input-group">
                             <input type="number" name="ingredients[<?php echo $i; ?>][quantity]" id="quantity_<?php echo $i; ?>" 
-                                   class="form-control<?php echo error_class('ingredients[' . $i . '][quantity]', $errors); ?>" step="0.01" min="0" required data-error-message="Quantity must be a non-negative number">
+                                   class="form-control<?php echo error_class('ingredients[' . $i . '][quantity]', $errors); ?>" step="0.001" min="0" required data-error-message="Quantity must be a non-negative number">
                             <?php output_fraction_helpers(); ?>
                         </div>
                         <?php echo display_error('ingredients[' . $i . '][quantity]', $errors); ?>
