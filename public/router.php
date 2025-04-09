@@ -23,15 +23,38 @@ $router->addMiddleware('auth', function($params, $next) use ($session) {
 });
 
 // Add recipe context preservation middleware
-$router->addMiddleware('preserve_recipe', function($params, $next) {
-    if (isset($params['id'])) {
+$router->addMiddleware('preserve_recipe_context', function($params, $next) {
+    // Store current recipe ID if viewing a recipe
+    if (isset($params['id']) && strpos($_SERVER['REQUEST_URI'], '/recipes/show.php') !== false) {
         $_SESSION['current_recipe_id'] = $params['id'];
+        $_SESSION['last_recipe_page'] = $_SERVER['REQUEST_URI'];
     }
+    
+    // Add recipe context to all links if we're coming from a recipe
+    if (isset($_SESSION['current_recipe_id']) && !isset($params['id'])) {
+        $_SESSION['from_recipe_id'] = $_SESSION['current_recipe_id'];
+    }
+    
     return $next($params);
 });
 
-// Load routes from configuration file
-$router->loadRoutes(PRIVATE_PATH . '/config/routes.php');
+// Set up route caching for production
+if (defined('ENVIRONMENT') && ENVIRONMENT === 'production' && file_exists(PRIVATE_PATH . '/cache/routes.cache.php')) {
+    // Use cached routes in production for better performance
+    $router->loadCachedRoutes(PRIVATE_PATH . '/cache/routes.cache.php');
+} else {
+    // Load routes from configuration file
+    $router->loadRoutes(PRIVATE_PATH . '/config/routes.php');
+    
+    // Cache routes in production
+    if (defined('ENVIRONMENT') && ENVIRONMENT === 'production') {
+        // Ensure cache directory exists
+        if (!is_dir(PRIVATE_PATH . '/cache')) {
+            mkdir(PRIVATE_PATH . '/cache', 0755, true);
+        }
+        $router->cacheRoutes(PRIVATE_PATH . '/cache/routes.cache.php');
+    }
+}
 
 // Try to dispatch the request using the new router
 $dispatched = $router->dispatch();
