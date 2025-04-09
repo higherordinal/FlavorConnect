@@ -6,13 +6,19 @@ RewriteEngine On
 # Redirect old API endpoint to new API endpoint
 RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
 
+# Exclude existing files and directories from rewriting
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Route all requests through the router for clean URLs
+# First check if the requested file exists in the public directory
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Then route it through the router.php script
+RewriteRule ^(.*)$ /router.php [QSA,L]
+
 # Custom error pages - use absolute paths for production
 ErrorDocument 404 /404.php
-
-# Custom 404 handling for files that don't exist
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ /404.php [L]
 
 # Prevent directory listing
 Options -Indexes

@@ -1,13 +1,13 @@
-# FlavorConnect API Configuration for Bluehost
+# FlavorConnect API Configuration for Bluehost with Router Support
 
 RewriteEngine On
 # Use absolute path for Bluehost
 RewriteBase /api/
 
-# Route all API requests to index.php
+# Route all API requests through the router
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [L,QSA]
+RewriteRule ^(.*)$ /router.php [L,QSA]
 
 # Set JSON content type for API responses
 Header set Content-Type application/json

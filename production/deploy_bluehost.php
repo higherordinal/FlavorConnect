@@ -42,12 +42,6 @@ $patterns = [
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/\\.\\.\/\\.\\.\/private\/core\/initialize\\.php[\\\'"]\\s*\\)\\s*;~',
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/\\.\\.\/\\.\\.\/\\.\\.\/private\/core\/initialize\\.php[\\\'"]\\s*\\)\\s*;~',
     
-    // Config.php references
-    '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/private\/config\/config\\.php[\\\'"]\\s*\\)\\s*;~',
-    '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\\/\\.\\.\/private\/config\/config\\.php[\\\'"]\\s*\\)\\s*;~',
-    '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/\\.\\.\/\\.\\.\/private\/config\/config\\.php[\\\'"]\\s*\\)\\s*;~',
-    '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/\\.\\.\/\\.\\.\/\\.\\.\/private\/config\/config\\.php[\\\'"]\\s*\\)\\s*;~',
-    
     // API config references
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/private\/config\/api_config\\.php[\\\'"]\\s*\\)\\s*;~',
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\\/\\.\\.\/private\/config\/api_config\\.php[\\\'"]\\s*\\)\\s*;~',
@@ -62,14 +56,6 @@ $replacements = [
     "require_once('$private_path/core/initialize.php');",
     "require_once('$private_path/core/initialize.php');",
     "require_once('$private_path/core/initialize.php');",
-    
-    // Config.php references - no longer need to update these
-    /*
-    "require_once('$private_path/config/config.php');",
-    "require_once('$private_path/config/config.php');",
-    "require_once('$private_path/config/config.php');",
-    "require_once('$private_path/config/config.php');",
-    */
     
     // API config references
     "require_once('$private_path/config/api_config.php');",
