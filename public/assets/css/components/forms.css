@@ -13,7 +13,6 @@
   max-width: 800px;
   padding: 3rem;
   width: 100%;
-  
 }
 
 /* ==========================================================================
@@ -156,25 +155,10 @@ textarea.error {
    Form Sections
    ========================================================================== */
 
-.form-section {
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 1px solid var(--light-gray);
-  border-radius: 6px;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-}
+/* Note: Main form section styles are defined in the Form Section section below */
 
 .form-section:last-child {
   margin-bottom: 0;
-}
-
-.form-section-title {
-  border-bottom: 2px solid var(--light-gray);
-  color: var(--text-color);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
 }
 
 /* ==========================================================================
@@ -224,26 +208,32 @@ textarea.error {
    ========================================================================== */
 
 @media (max-width: 768px) {
+  /* Form layout adjustments */
   .form {
     gap: 1.5rem;
-    padding: 1.5rem;
+    padding: 2rem;
   }
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
+  
+  /* Grid layouts collapse to single column */
+  .form-grid,
   .ingredient-item,
   .instruction-item {
     grid-template-columns: 1fr;
   }
-  .form {
-    padding: 2rem;
-  }
+  
+  /* Header adjustments */
   .form-header {
     margin: -2rem -2rem 1.5rem -2rem;
     padding: 1.25rem;
   }
+  
   .form-header h1 {
     font-size: var(--font-size-large);
+  }
+  
+  /* Form row adjusts to single column */
+  .form-row {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -371,7 +361,8 @@ input[type="file"].form-control:hover {
   margin-bottom: var(--spacing-lg);
 }
 
-@media (min-width: 768px) {
+/* Row layout only applies on larger screens */
+@media (min-width: 769px) {
   .form-row {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
@@ -441,7 +432,6 @@ td input.form-control {
 .form-textarea:focus {
   border-color: var(--secondary-color);
   outline: none;
-
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05),
     0 0 0 3px rgba(52, 152, 219, 0.15);
 }
