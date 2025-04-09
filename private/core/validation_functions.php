@@ -345,35 +345,23 @@ function is_valid_file_upload($file, $options=[]) {
  * @return array Array of validation errors
  */
 function validate_recipe($recipe_data) {
-    $errors = [];
-
-    // Title validation
-    if(is_blank($recipe_data['title'])) {
-        $errors['title'] = "Title cannot be blank.";
-    } elseif(!has_length($recipe_data['title'], ['min' => 2, 'max' => 255])) {
-        $errors['title'] = "Title must be between 2 and 255 characters.";
-    }
-
-    // Description validation
-    if(is_blank($recipe_data['description'])) {
-        $errors['description'] = "Description cannot be blank.";
-    } elseif(!has_length($recipe_data['description'], ['min' => 10, 'max' => 255])) {
-        $errors['description'] = "Description must be between 10 and 255 characters.";
-    }
-
-    // Style validation
-    if(!is_valid_id($recipe_data['style_id'] ?? null)) {
-        $errors['style_id'] = "Please select a cuisine style.";
-    }
-
-    // Diet validation
-    if(!is_valid_id($recipe_data['diet_id'] ?? null)) {
-        $errors['diet_id'] = "Please select a diet type.";
-    }
-
-    // Type validation
-    if(!is_valid_id($recipe_data['type_id'] ?? null)) {
-        $errors['type_id'] = "Please select a meal type.";
+    // Define validation rules
+    $rules = [
+        'title' => ['required' => true, 'min_length' => 2, 'max_length' => 255],
+        'description' => ['required' => true, 'min_length' => 10, 'max_length' => 255],
+        'style_id' => ['id' => true],
+        'diet_id' => ['id' => true],
+        'type_id' => ['id' => true]
+    ];
+    
+    // Use the generic validation function
+    $errors = validate($recipe_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+        }
     }
 
     // Prep time validation
@@ -739,34 +727,38 @@ function validate_user_deletion($user_id) {
  * @return array Array of validation errors
  */
 function validate_recipe_ingredient_data($ingredient_data) {
-    $errors = [];
-
-    // Recipe ID validation
-    if(!is_valid_id($ingredient_data['recipe_id'] ?? null)) {
-        $errors['recipe_id'] = "Recipe ID is required.";
-    }
-
-    // Measurement ID validation
-    if(!is_valid_id($ingredient_data['measurement_id'] ?? null)) {
-        $errors['measurement_id'] = "Measurement is required.";
-    }
-
-    // Quantity validation
-    if(is_blank($ingredient_data['quantity'])) {
-        $errors['quantity'] = "Quantity cannot be blank.";
-    } elseif(!is_numeric($ingredient_data['quantity']) || !has_number_between($ingredient_data['quantity'], 0.01, 9999)) {
-        $errors['quantity'] = "Quantity must be a positive number.";
+    $rules = [
+        'recipe_id' => ['id' => true],
+        'measurement_id' => ['id' => true],
+        'quantity' => ['required' => true, 'numeric' => true, 'min' => 0.01, 'max' => 9999]
+    ];
+    
+    // Add ingredient_name validation if it exists
+    if(isset($ingredient_data['ingredient_name'])) {
+        $rules['ingredient_name'] = ['required' => true, 'min' => 2, 'max' => 100];
     }
     
-    // Ingredient name validation - only validate if the key exists
-    if(isset($ingredient_data['ingredient_name'])) {
-        if(is_blank($ingredient_data['ingredient_name'])) {
-            $errors['ingredient_name'] = "Ingredient name cannot be blank.";
-        } elseif(!has_length($ingredient_data['ingredient_name'], ['min' => 2, 'max' => 100])) {
-            $errors['ingredient_name'] = "Ingredient name must be between 2 and 100 characters.";
+    $errors = validate($ingredient_data, $rules);
+    
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            switch ($field) {
+                case 'recipe_id':
+                    $errors[$field] = "Recipe ID is required.";
+                    break;
+                case 'measurement_id':
+                    $errors[$field] = "Measurement is required.";
+                    break;
+                case 'quantity':
+                    $errors[$field] = "Quantity must be a positive number.";
+                    break;
+                default:
+                    $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+            }
         }
     }
-
+    
     return $errors;
 }
 
@@ -777,14 +769,18 @@ function validate_recipe_ingredient_data($ingredient_data) {
  * @return array Array of validation errors
  */
 function validate_measurement_data($measurement_data, $current_id = '') {
-    $errors = [];
+    $rules = ['name' => ['required' => true, 'min' => 2, 'max' => 255]];
+    $errors = validate($measurement_data, $rules);
     
-    // Name validation
-    if(is_blank($measurement_data['name'])) {
-        $errors['name'] = "Name cannot be blank.";
-    } elseif (!has_length($measurement_data['name'], ['min' => 2, 'max' => 255])) {
-        $errors['name'] = "Name must be between 2 and 255 characters.";
-    } elseif (!has_unique_metadata_name($measurement_data['name'], 'measurement', $current_id)) {
+    // Convert array errors to string errors
+    foreach ($errors as $field => $error) {
+        if (is_array($error)) {
+            $errors[$field] = $error['message'] ?? "Invalid {$field}.";
+        }
+    }
+    
+    // Check for unique name
+    if(!isset($errors['name']) && !has_unique_metadata_name($measurement_data['name'], 'measurement', $current_id)) {
         $errors['name'] = "A measurement with this name already exists.";
     }
     
@@ -840,6 +836,18 @@ function validate_recipe_access($recipe_id = null, $check_ownership = false, $ad
             }
         }
         $recipe_id = $_GET['id'];
+    }
+    
+    // Validate recipe ID format
+    if (!is_valid_id($recipe_id)) {
+        if (!empty($redirect_url)) {
+            $session->message('Invalid recipe ID format.', 'error');
+            redirect_to(url_for($redirect_url));
+            return null;
+        } else {
+            error_404('Invalid recipe ID format.');
+            return null;
+        }
     }
     
     // Find the recipe
