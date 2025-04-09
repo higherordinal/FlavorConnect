@@ -17,7 +17,7 @@ if(!isset($page_keywords)) {
 }
 
 if(!isset($page_image)) {
-    $page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for('/assets/images/flavorconnect_logo.png');
+    $page_image = 'https://' . $_SERVER['HTTP_HOST'] . url_for('/assets/images/flavorconnect_logo.png');
 }
 
 // Output meta tags
@@ -26,18 +26,18 @@ if(!isset($page_image)) {
 <meta name="description" content="<?php echo h($page_description); ?>">
 <meta name="keywords" content="<?php echo h($page_keywords); ?>">
 <meta name="author" content="FlavorConnect">
-<link rel="canonical" href="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+<link rel="canonical" href="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+<meta property="og:url" content="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
 <meta property="og:title" content="FlavorConnect - <?php echo h($page_title); ?>">
 <meta property="og:description" content="<?php echo h($page_description); ?>">
 <meta property="og:image" content="<?php echo h($page_image); ?>">
 
 <!-- Twitter -->
 <meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="<?php echo 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
+<meta property="twitter:url" content="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>">
 <meta property="twitter:title" content="FlavorConnect - <?php echo h($page_title); ?>">
 <meta property="twitter:description" content="<?php echo h($page_description); ?>">
 <meta property="twitter:image" content="<?php echo h($page_image); ?>">
@@ -59,14 +59,52 @@ if(isset($is_recipe_page) && $is_recipe_page === true && isset($recipe) && is_ob
   },
   "datePublished": "<?php echo h($recipe->created_at); ?>",
   "description": "<?php echo h(substr(strip_tags($recipe->description), 0, 160)); ?>",
-  "image": "<?php echo 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path()); ?>",
+  "image": "<?php echo 'https://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path()); ?>",
   "recipeCategory": "<?php echo method_exists($recipe, 'type') && $recipe->type() ? h($recipe->type()->name) : ''; ?>",
   "recipeCuisine": "<?php echo method_exists($recipe, 'style') && $recipe->style() ? h($recipe->style()->name) : ''; ?>",
   "keywords": "<?php echo h($recipe->title) . (method_exists($recipe, 'type') && $recipe->type() ? ', ' . h($recipe->type()->name) : '') . (method_exists($recipe, 'style') && $recipe->style() ? ', ' . h($recipe->style()->name) : '') . (method_exists($recipe, 'diet') && $recipe->diet() ? ', ' . h($recipe->diet()->name) : ''); ?>",
   "recipeYield": "<?php echo isset($recipe->servings) ? h($recipe->servings) . ' servings' : ''; ?>",
   "prepTime": "PT<?php echo isset($recipe->prep_time) ? h($recipe->prep_time) : '0'; ?>M",
   "cookTime": "PT<?php echo isset($recipe->cook_time) ? h($recipe->cook_time) : '0'; ?>M",
-  "totalTime": "PT<?php echo isset($recipe->prep_time) && isset($recipe->cook_time) ? h($recipe->prep_time + $recipe->cook_time) : '0'; ?>M"
+  "totalTime": "PT<?php echo isset($recipe->prep_time) && isset($recipe->cook_time) ? h($recipe->prep_time + $recipe->cook_time) : '0'; ?>M",
+  "recipeIngredient": [
+    <?php 
+    if(isset($ingredients) && is_array($ingredients)) {
+      $ingredient_strings = [];
+      foreach($ingredients as $ingredient) {
+        $measurement = $ingredient->measurement;
+        $ingredient_obj = $ingredient->ingredient;
+        $ingredient_text = '';
+        
+        if($ingredient->quantity) {
+          $ingredient_text .= h($ingredient->quantity) . ' ';
+        }
+        
+        if($measurement && $measurement->name !== '(none)') {
+          $ingredient_text .= h($measurement->get_pluralized_name($ingredient->quantity)) . ' ';
+        }
+        
+        $ingredient_text .= h($ingredient_obj ? $ingredient_obj->name : '');
+        $ingredient_strings[] = '"' . addslashes($ingredient_text) . '"';
+      }
+      echo implode(",\n    ", $ingredient_strings);
+    }
+    ?>
+  ],
+  "recipeInstructions": [
+    <?php 
+    if(isset($directions) && is_array($directions)) {
+      $direction_strings = [];
+      foreach($directions as $direction) {
+        $direction_strings[] = '{
+      "@type": "HowToStep",
+      "text": "' . addslashes(h($direction->description)) . '"
+    }';
+      }
+      echo implode(",\n    ", $direction_strings);
+    }
+    ?>
+  ]
 }
 </script>
 <?php endif; ?>
