@@ -43,13 +43,41 @@ $router->group('/users', function($router) {
     $router->get('/favorites.php', 'users/favorites.php', 'users.favorites');
     $router->get('/profile.php', 'users/profile.php', 'users.profile');
     $router->post('/profile.php', 'users/profile.php', 'users.profile.update');
+    $router->post('/toggle_favorite.php', 'users/toggle_favorite.php', 'users.toggle_favorite');
 }, ['auth']);
 
 // API routes
 $router->group('/api', function($router) {
     $router->get('/', 'api/index.php', 'api.index');
+    
+    // Favorites API
     $router->get('/toggle_favorite.php', 'api/toggle_favorite.php', 'api.check_favorite');
     $router->post('/toggle_favorite.php', 'api/toggle_favorite.php', 'api.toggle_favorite');
+    $router->get('/favorites', 'api/favorites/index.php', 'api.favorites.index');
+    $router->post('/favorites/toggle', 'api/favorites/toggle.php', 'api.favorites.toggle');
+    
+    // Recipes API
+    $router->get('/recipes', 'api/recipes/index.php', 'api.recipes.index');
+    $router->get('/recipes/{id}', 'api/recipes/show.php', 'api.recipes.show');
+    
+    // Apply CORS middleware to all API routes
+    $router->addMiddleware('api_cors', function($params, $next) {
+        // Set CORS headers for API requests
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        
+        // Handle preflight requests
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            http_response_code(200);
+            exit;
+        }
+        
+        // Set JSON content type
+        header('Content-Type: application/json');
+        
+        return $next($params);
+    });
 });
 
 // Admin routes (protected by auth middleware)
@@ -118,3 +146,9 @@ $router->get('/contact.php', 'contact.php', 'contact');
 
 // Error pages
 $router->get('/404.php', '404.php', '404');
+$router->get('/test-404.php', 'test-404.php', 'test-404');
+
+// Utility pages
+$router->get('/env_test.php', 'env_test.php', 'env_test');
+
+
