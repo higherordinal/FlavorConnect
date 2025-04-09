@@ -146,9 +146,3 @@ $router->get('/contact.php', 'contact.php', 'contact');
 
 // Error pages
 $router->get('/404.php', '404.php', '404');
-$router->get('/test-404.php', 'test-404.php', 'test-404');
-
-// Utility pages
-$router->get('/env_test.php', 'env_test.php', 'env_test');
-
-
