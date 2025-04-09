@@ -32,6 +32,16 @@ The core deployment strategy (replacing configuration files, updating the url_fo
 
 ## 2. Automated Deployment Process
 
+### Changes to deploy_bluehost.php
+
+The deployment script has been updated to support the new router implementation:
+
+1. **Simplified Path Patterns**: The script now only updates paths for initialize.php and api_config.php, as config.php is directly replaced rather than modified.
+
+2. **Updated .htaccess Files**: The script replaces the .htaccess files with versions that route requests through router.php instead of index.php.
+
+3. **Router Support**: The deployment process ensures that the router implementation works correctly in the production environment.
+
 ### Critical Path Changes
 
 When deploying to the live server, ensure these paths are updated:
@@ -386,9 +396,23 @@ app.use(cors({
 
 ## 8. Additional Server Configuration
 
+### Router Implementation
+
+FlavorConnect now uses a comprehensive router system that provides flexible routing, middleware support, and improved error handling. The router is implemented in the following files:
+
+- `private/classes/Router.class.php`: The main router class that handles URL routing
+- `private/config/routes.php`: Configuration file that defines all application routes
+
+The router supports:
+- HTTP method-based routing (GET, POST, etc.)
+- Route groups for organizing related routes
+- Named routes for easier URL generation
+- Middleware for cross-cutting concerns like authentication
+- Improved 404 error handling
+
 ### .htaccess Files
 
-The repository contains Bluehost-specific .htaccess files in the `production` folder that are optimized for the production environment. During deployment, you need to copy and rename these files:
+The repository contains Bluehost-specific .htaccess files in the `production` folder that are optimized for the production environment and configured to work with the router. During deployment, you need to copy and rename these files:
 
 #### Main .htaccess (in public directory)
 
@@ -398,6 +422,7 @@ The repository contains Bluehost-specific .htaccess files in the `production` fo
 
 The Bluehost-specific version includes:
 - Absolute path references instead of relative paths
+- Routes all requests through router.php instead of index.php
 - Enhanced security headers for production
 - Cache control for static assets
 - No BASE_PATH detection (not needed in production)
@@ -431,6 +456,7 @@ Header set Referrer-Policy "strict-origin-when-cross-origin"
 
 The Bluehost-specific version includes:
 - Updated RewriteBase for the production URL structure
+- Routing through router.php instead of index.php
 - Additional security headers
 
 ```apache
@@ -439,10 +465,10 @@ RewriteEngine On
 # Use absolute path for Bluehost
 RewriteBase /api/
 
-# Route all API requests to index.php
+# Route all API requests to router.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [L,QSA]
+RewriteRule ^(.*)$ router.php [L,QSA]
 
 # Additional security headers
 Header set X-Content-Type-Options "nosniff"
@@ -474,7 +500,7 @@ foreach ($required_extensions as $ext) {
   - [ ] Replacing config files with Bluehost-optimized versions
   - [ ] Updating the url_for() function to use WWW_ROOT in production mode
   - [ ] Replacing RecipeImageProcessor and Recipe classes with Bluehost-optimized versions
-  - [ ] Updating .htaccess files
+  - [ ] Updating .htaccess files to work with the router implementation
 - [ ] Verify the constants in bluehost_config.php are correct for your Bluehost environment
 - [ ] Create/update api-config.js with Heroku endpoints
 - [ ] Update member_header.php to include api-config.js

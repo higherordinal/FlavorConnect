@@ -12,6 +12,8 @@ A recipe sharing and management platform where users can discover, share, and or
 - Measurement pluralization based on quantity
 - Dynamic form validation
 - Intuitive recipe creation interface
+- Flexible routing system with middleware support
+- Context-aware navigation with recipe state preservation
 
 ## Prerequisites
 
@@ -125,13 +127,14 @@ Stop the Apache and MySQL services from the XAMPP control panel.
     - Data models (Recipe, User, Measurement, etc.)
     - Service classes for business logic
     - Utility classes for common operations
+    - Router.class.php - Flexible routing system with middleware support
   - `/private/config` - Configuration files
     - Database connection settings
     - Environment-specific configurations
     - Feature flags and application settings
+    - routes.php - Application route definitions
   - `/private/core` - Core application classes
     - Initialization and bootstrapping
-    - Routing and request handling
     - Error handling and logging
   - `/private/database` - Database scripts and schemas
     - SQL dump files for different environments
