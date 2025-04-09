@@ -146,7 +146,7 @@ class User extends DatabaseObject {
             $this->errors['username'] = "Username must be between 3 and 255 characters.";
         } elseif (!has_no_spaces($this->username)) {
             $this->errors['username'] = "Username cannot contain spaces.";
-        } elseif (!has_unique_username($this->username, $this->user_id ?? 0)) {
+        } elseif (!has_unique_value($this->username, 'user_account', 'username', 'user_id', $this->user_id ?? 0, static::get_database())) {
             $this->errors['username'] = "Username is already taken. Please choose another.";
         }
 
@@ -156,7 +156,7 @@ class User extends DatabaseObject {
             $this->errors['email'] = "Email must be less than 255 characters.";
         } elseif (!is_valid_email($this->email)) {
             $this->errors['email'] = "Email must be a valid format.";
-        } elseif (!has_unique_email($this->email, $this->user_id ?? 0)) {
+        } elseif (!has_unique_value($this->email, 'user_account', 'email', 'user_id', $this->user_id ?? 0, static::get_database())) {
             $this->errors['email'] = "Email is already taken. Please choose another.";
         }
 
@@ -307,13 +307,7 @@ class User extends DatabaseObject {
      * @return bool True if username is unique
      */
     public static function check_unique_username($username, $current_id=0) {
-        $database = static::get_database();
-        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " ";
-        $sql .= "WHERE username='" . $database->real_escape_string($username) . "' ";
-        $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
-        $result = $database->query($sql);
-        $row = $result->fetch_assoc();
-        return $row['count'] == 0;
+        return has_unique_value($username, static::$table_name, 'username', 'user_id', $current_id, static::get_database());
     }
 
     /**
@@ -323,12 +317,6 @@ class User extends DatabaseObject {
      * @return bool True if email is unique
      */
     public static function check_unique_email($email, $current_id=0) {
-        $database = static::get_database();
-        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name . " ";
-        $sql .= "WHERE email='" . $database->real_escape_string($email) . "' ";
-        $sql .= "AND user_id != '" . $database->real_escape_string($current_id) . "'";
-        $result = $database->query($sql);
-        $row = $result->fetch_assoc();
-        return $row['count'] == 0;
+        return has_unique_value($email, static::$table_name, 'email', 'user_id', $current_id, static::get_database());
     }
 }

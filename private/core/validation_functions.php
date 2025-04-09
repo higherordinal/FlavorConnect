@@ -55,11 +55,38 @@ function validate($data, $rules) {
                     }
                     break;
                     
+                case 'integer':
+                    if (!filter_var($value, FILTER_VALIDATE_INT)) {
+                        $errors[$field] = [
+                            'type' => 'integer',
+                            'message' => ucfirst($field) . " must be an integer."
+                        ];
+                    }
+                    break;
+                    
                 case 'url':
                     if (!is_valid_url($value)) {
                         $errors[$field] = [
                             'type' => 'url',
                             'message' => "Please enter a valid URL."
+                        ];
+                    }
+                    break;
+                    
+                case 'id':
+                    if (!is_valid_id($value, $rule_param ?? true)) {
+                        $errors[$field] = [
+                            'type' => 'id',
+                            'message' => ucfirst($field) . " must be a valid ID."
+                        ];
+                    }
+                    break;
+                    
+                case 'rating':
+                    if (!is_valid_rating($value, $rule_param ?? true)) {
+                        $errors[$field] = [
+                            'type' => 'rating',
+                            'message' => ucfirst($field) . " must be between 1 and 5."
                         ];
                     }
                     break;
@@ -81,6 +108,61 @@ function validate($data, $rules) {
                             'message' => ucfirst($field) . " must be at most " . $rule_param . ".",
                             'max' => $rule_param
                         ];
+                    }
+                    break;
+                    
+                case 'min_length':
+                    if (strlen($value) < $rule_param) {
+                        $errors[$field] = [
+                            'type' => 'min_length',
+                            'message' => ucfirst($field) . " must be at least " . $rule_param . " characters.",
+                            'min_length' => $rule_param
+                        ];
+                    }
+                    break;
+                    
+                case 'max_length':
+                    if (strlen($value) > $rule_param) {
+                        $errors[$field] = [
+                            'type' => 'max_length',
+                            'message' => ucfirst($field) . " must be at most " . $rule_param . " characters.",
+                            'max_length' => $rule_param
+                        ];
+                    }
+                    break;
+                    
+                case 'length':
+                    if (!has_length($value, $rule_param)) {
+                        $min = $rule_param['min'] ?? null;
+                        $max = $rule_param['max'] ?? null;
+                        $exact = $rule_param['exact'] ?? null;
+                        
+                        if ($exact) {
+                            $errors[$field] = [
+                                'type' => 'length',
+                                'message' => ucfirst($field) . " must be exactly " . $exact . " characters.",
+                                'exact' => $exact
+                            ];
+                        } else if ($min && $max) {
+                            $errors[$field] = [
+                                'type' => 'length',
+                                'message' => ucfirst($field) . " must be between " . $min . " and " . $max . " characters.",
+                                'min' => $min,
+                                'max' => $max
+                            ];
+                        } else if ($min) {
+                            $errors[$field] = [
+                                'type' => 'length',
+                                'message' => ucfirst($field) . " must be at least " . $min . " characters.",
+                                'min' => $min
+                            ];
+                        } else if ($max) {
+                            $errors[$field] = [
+                                'type' => 'length',
+                                'message' => ucfirst($field) . " must be at most " . $max . " characters.",
+                                'max' => $max
+                            ];
+                        }
                     }
                     break;
             }
@@ -157,7 +239,8 @@ function has_valid_password_format($password) {
  * @return bool True if username is unique
  */
 function has_unique_username($username, $current_id="0") {
-    return User::check_unique_username($username, $current_id);
+    $database = User::get_database();
+    return has_unique_value($username, 'user_account', 'username', 'user_id', $current_id, $database);
 }
 
 /**
@@ -167,7 +250,8 @@ function has_unique_username($username, $current_id="0") {
  * @return bool True if email is unique
  */
 function has_unique_email($email, $current_id="0") {
-    return User::check_unique_email($email, $current_id);
+    $database = User::get_database();
+    return has_unique_value($email, 'user_account', 'email', 'user_id', $current_id, $database);
 }
 
 /**
@@ -502,6 +586,45 @@ function validate_recipe_attribute_data($attribute_data, $type = '', $current_id
 }
 
 /**
+ * Generic function to check if a value is unique in a database table
+ * @param string $value The value to check for uniqueness
+ * @param string $table The table name to check in
+ * @param string $field The field name to check for uniqueness
+ * @param string $id_field The primary key field name
+ * @param string $current_id The current ID to exclude from the check
+ * @param object $database The database connection to use
+ * @return bool True if the value is unique
+ */
+function has_unique_value($value, $table, $field, $id_field, $current_id="0", $database=null) {
+    if($database === null) {
+        global $db;
+        $database = $db;
+    }
+    
+    if(empty($value) || empty($table) || empty($field) || empty($id_field)) {
+        return false;
+    }
+    
+    $sql = "SELECT COUNT(*) FROM {$table} ";
+    $sql .= "WHERE {$field} = '" . db_escape($database, $value) . "' ";
+    if($current_id != "0") {
+        $sql .= "AND {$id_field} != '" . db_escape($database, $current_id) . "' ";
+    }
+    
+    try {
+        $result = mysqli_query($database, $sql);
+        if(!$result) {
+            return false;
+        }
+        $row = mysqli_fetch_row($result);
+        mysqli_free_result($result);
+        return ($row[0] == 0);
+    } catch(Exception $e) {
+        return false;
+    }
+}
+
+/**
  * Validates if a metadata name is unique within its type
  * @param string $name The name to check
  * @param string $table The table to check in (recipe_style, recipe_diet, recipe_type, measurement)
@@ -525,22 +648,7 @@ function has_unique_metadata_name($name, $table, $current_id="0") {
         return false; // Invalid table name
     }
     
-    $sql = "SELECT COUNT(*) FROM " . $table;
-    $sql .= " WHERE name='" . db_escape($database, $name) . "'";
-    if($current_id != "0") {
-        $sql .= " AND " . $primary_key . " != '" . db_escape($database, $current_id) . "'";
-    }
-    
-    try {
-        $result = mysqli_query($database, $sql);
-        if (!$result) {
-            return false;
-        }
-        $row = mysqli_fetch_row($result);
-        return $row[0] == 0;
-    } catch(Exception $e) {
-        return false;
-    }
+    return has_unique_value($name, $table, 'name', $primary_key, $current_id, $database);
 }
 
 /**

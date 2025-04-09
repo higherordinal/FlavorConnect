@@ -48,7 +48,7 @@ $users = User::find_by_sql($sql);
 function sort_link($column, $current_sort, $current_order) {
     $new_order = ($current_sort === $column && $current_order === 'ASC') ? 'DESC' : 'ASC';
     $current_page = $_GET['page'] ?? 1;
-    return url_for('/admin/users/index.php?sort=' . $column . '&order=' . $new_order . '&page=' . $current_page);
+    return url_for('/admin/users/index.php') . '?sort=' . $column . '&order=' . $new_order . '&page=' . $current_page;
 }
 
 // Function to display sort indicator
@@ -169,7 +169,8 @@ include(SHARED_PATH . '/member_header.php');
     <!-- Pagination Controls -->
     <?php 
     // Generate pagination links
-    $url_pattern = '/admin/users/index.php?page={page}';
+    // Use a base URL without the page parameter, and add sort and order as extra params
+    $url_pattern = url_for('/admin/users/index.php') . '?page={page}';
     $extra_params = ['sort' => $sort_column, 'order' => strtolower($sort_order)];
     echo $pagination->page_links($url_pattern, $extra_params);
     

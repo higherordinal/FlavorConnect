@@ -96,26 +96,43 @@ class Pagination {
             return '';
         }
         
+        // Check if the URL already contains a question mark
+        $has_query = (strpos($url_pattern, '?') !== false);
+        
+        // Build query string from extra parameters
         $query_string = '';
         if(!empty($extra_params)) {
             foreach($extra_params as $key => $value) {
                 if($value !== null && $value !== '') {
-                    $query_string .= "&{$key}=" . urlencode($value);
+                    // If URL already has query params, use & otherwise use ?
+                    $separator = ($has_query || !empty($query_string)) ? '&' : '?';
+                    $query_string .= $separator . $key . '=' . urlencode($value);
+                    $has_query = true; // After adding a param, we need & for subsequent ones
                 }
             }
         }
         
+        // Ensure the page parameter is properly added
+        $page_pattern = '{page}';
+        if (strpos($url_pattern, $page_pattern) === false) {
+            // If URL doesn't contain {page}, add it as a query parameter
+            $separator = ($has_query || !empty($query_string)) ? '&' : '?';
+            $url_with_page = $url_pattern . $separator . 'page=' . $page_pattern;
+        } else {
+            $url_with_page = $url_pattern;
+        }
+        
         $html = '<div class="pagination">';
         
-        $this->add_link($html, $url_pattern, $query_string, 'first', '1', $this->has_previous_page());
-        $this->add_link($html, $url_pattern, $query_string, 'prev', $this->previous_page(), $this->has_previous_page());
+        $this->add_link($html, $url_with_page, $query_string, 'first', '1', $this->has_previous_page());
+        $this->add_link($html, $url_with_page, $query_string, 'prev', $this->previous_page(), $this->has_previous_page());
         
         $html .= '<span class="pagination-info">';
         $html .= 'Page ' . $this->current_page . ' of ' . $total_pages;
         $html .= '</span>';
         
-        $this->add_link($html, $url_pattern, $query_string, 'next', $this->next_page(), $this->has_next_page());
-        $this->add_link($html, $url_pattern, $query_string, 'last', $total_pages, $this->has_next_page());
+        $this->add_link($html, $url_with_page, $query_string, 'next', $this->next_page(), $this->has_next_page());
+        $this->add_link($html, $url_with_page, $query_string, 'last', $total_pages, $this->has_next_page());
         
         $html .= '</div>';
         
@@ -223,7 +240,11 @@ class Pagination {
      */
     private function add_link(&$html, $url_pattern, $query_string, $class, $page, $enabled) {
         if($enabled) {
-            $html .= '<a href="' . str_replace('{page}', $page, $url_pattern) . $query_string . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';
+            // Replace {page} with the actual page number
+            $url = str_replace('{page}', $page, $url_pattern);
+            // Add the query string if it's not empty
+            $full_url = $url . $query_string;
+            $html .= '<a href="' . $full_url . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';
         } else {
             $html .= '<span class="pagination-link disabled ' . $class . '">';
         }
