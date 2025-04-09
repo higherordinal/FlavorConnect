@@ -6,9 +6,35 @@ require_once('core_utilities.php');
 
 /**
  * Generic validation function that validates data against a set of rules
- * @param array $data The data to validate
- * @param array $rules The validation rules
- * @return array Array of validation errors
+ * 
+ * This function serves as the central validation mechanism for FlavorConnect.
+ * It processes an array of data against a set of defined validation rules and
+ * returns any validation errors encountered.
+ * 
+ * Available validation rules:
+ * - required: Ensures the field is not empty
+ * - email: Validates email format
+ * - numeric: Ensures value is a number
+ * - integer: Ensures value is an integer
+ * - url: Validates URL format
+ * - id: Validates ID format (using is_valid_id)
+ * - rating: Validates rating is between 1-5
+ * - min: Ensures numeric value is at least the specified minimum
+ * - max: Ensures numeric value is at most the specified maximum
+ * - min_length: Ensures string length is at least the specified minimum
+ * - max_length: Ensures string length is at most the specified maximum
+ * - match: Ensures value matches another field's value
+ * 
+ * @param array $data The data to validate (associative array of field => value pairs)
+ * @param array $rules The validation rules (associative array of field => rules array)
+ * @return array Array of validation errors (field => error message/array)
+ * 
+ * @example
+ * $rules = [
+ *   'username' => ['required' => true, 'min_length' => 4, 'max_length' => 255],
+ *   'email' => ['required' => true, 'email' => true]
+ * ];
+ * $errors = validate($user_data, $rules);
  */
 function validate($data, $rules) {
     $errors = [];
@@ -340,9 +366,29 @@ function is_valid_file_upload($file, $options=[]) {
 }
 
 /**
- * Validates recipe form data
- * @param array $recipe_data The recipe data to validate
- * @return array Array of validation errors
+ * Validates recipe form data to ensure all required fields and constraints are met
+ * 
+ * This function validates recipe data submitted through forms, ensuring that:
+ * - Title and description meet length requirements
+ * - Category IDs (style, diet, type) are valid
+ * - Preparation and cooking times are within acceptable ranges
+ * - Video URL (if provided) is in a valid format
+ * - Image uploads (if any) meet file type and size requirements
+ * - Alt text is provided for accessibility when images are uploaded
+ * 
+ * The function uses the generic validate() function for basic field validation
+ * and adds custom validation for time fields and file uploads.
+ * 
+ * @param array $recipe_data The recipe data to validate, including form fields and file uploads
+ * @return array Associative array of validation errors (field => error message)
+ * 
+ * @example
+ * $errors = validate_recipe($_POST);
+ * if(empty($errors)) {
+ *     // Process valid recipe data
+ * } else {
+ *     // Display errors to user
+ * }
  */
 function validate_recipe($recipe_data) {
     // Define validation rules
@@ -493,10 +539,28 @@ function validate_recipe_comment($comment_data) {
 }
 
 /**
- * Validates user form data
- * @param array $user_data The user data to validate
- * @param string $current_id Current user ID for unique checks
- * @return array Array of validation errors
+ * Validates user form data for registration and profile updates
+ * 
+ * This function performs comprehensive validation of user account data, ensuring:
+ * - Username meets length requirements (4-255 chars), contains no spaces, and is unique
+ * - Email is properly formatted and unique in the system
+ * - Password (when provided) meets security requirements and matches confirmation
+ * 
+ * The function uses a combination of the generic validate() function for basic validations
+ * and custom validation for uniqueness checks and password requirements. It handles both
+ * new user registration and existing user updates by using the $current_id parameter
+ * to exclude the current user from uniqueness checks.
+ * 
+ * @param array $user_data The user data to validate (username, email, password, etc.)
+ * @param string $current_id Current user ID for unique checks ("0" for new users)
+ * @return array Associative array of validation errors (field => error message)
+ * 
+ * @example
+ * // For new user registration
+ * $errors = validate_user($_POST);
+ * 
+ * // For updating existing user
+ * $errors = validate_user($_POST, $current_user->id);
  */
 function validate_user($user_data, $current_id="0") {
     // Basic validation rules
@@ -629,13 +693,26 @@ function validate_recipe_attribute_data($attribute_data, $type = '', $current_id
 
 /**
  * Generic function to check if a value is unique in a database table
- * @param string $value The value to check for uniqueness
- * @param string $table The table name to check in
- * @param string $field The field name to check for uniqueness
- * @param string $id_field The primary key field name
- * @param string $current_id The current ID to exclude from the check
- * @param object $database The database connection to use
- * @return bool True if the value is unique
+ * 
+ * This function provides a reusable way to check for uniqueness constraints across
+ * the application. It's used to ensure values like usernames, emails, and metadata names
+ * are unique within their respective tables. The function performs a database query
+ * to count matching records, excluding the current record being edited if applicable.
+ * 
+ * @param string $value The value to check for uniqueness (e.g., username, email)
+ * @param string $table The table name to check in (e.g., 'user_account', 'recipe_style')
+ * @param string $field The field name to check for uniqueness (e.g., 'username', 'name')
+ * @param string $id_field The primary key field name (e.g., 'user_id', 'style_id')
+ * @param string $current_id The current ID to exclude from the check (for updates)
+ * @param object $database The database connection to use (defaults to global $db)
+ * @return bool True if the value is unique (no matching records found), false otherwise
+ * 
+ * @example
+ * // Check if username is unique for a new user
+ * $is_unique = has_unique_value('johndoe', 'user_account', 'username', 'user_id');
+ * 
+ * // Check if email is unique when updating user #5
+ * $is_unique = has_unique_value('john@example.com', 'user_account', 'email', 'user_id', '5');
  */
 function has_unique_value($value, $table, $field, $id_field, $current_id="0", $database=null) {
     if($database === null) {
