@@ -6,11 +6,11 @@ error_reporting(E_ERROR | E_PARSE);
 // or via redirection from the error_404() function
 
 // For debugging - uncomment to see how this page is being called
-// echo '<pre>';
-// echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'Not set') . "\n";
-// echo 'REDIRECT_STATUS: ' . ($_SERVER['REDIRECT_STATUS'] ?? 'Not set') . "\n";
-// echo 'HTTP_REFERER: ' . ($_SERVER['HTTP_REFERER'] ?? 'Not set') . "\n";
-// echo '</pre>';
+echo '<pre>';
+echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'Not set') . "\n";
+echo 'REDIRECT_STATUS: ' . ($_SERVER['REDIRECT_STATUS'] ?? 'Not set') . "\n";
+echo 'HTTP_REFERER: ' . ($_SERVER['HTTP_REFERER'] ?? 'Not set') . "\n";
+echo '</pre>';
 
 // Initialize the application if needed
 if (!defined('PRIVATE_PATH')) {
