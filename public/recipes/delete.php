@@ -4,21 +4,13 @@ require_login();
 
 $errors = [];
 
-if(!isset($_GET['id'])) {
-    error_404();
-}
-
-$id = $_GET['id'];
-$recipe = Recipe::find_by_id($id);
-
+// Validate recipe access with ownership check
+$recipe = validate_recipe_access(null, true);
 if(!$recipe) {
-    error_404();
+    exit; // validate_recipe_access already handled the error
 }
 
-// Check if user has permission to delete this recipe
-if($recipe->user_id != $session->get_user_id() && !$session->is_admin()) {
-    error_403();
-}
+$id = $recipe->recipe_id;
 
 // Get referrer for back link
 $ref = $_GET['ref'] ?? '';

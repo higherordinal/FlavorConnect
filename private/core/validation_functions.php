@@ -634,4 +634,65 @@ function error_class($field, $errors) {
     return isset($errors[$field]) ? ' error' : '';
 }
 
+/**
+ * Validates recipe access and existence
+ * @param mixed $recipe_id The recipe ID to validate (can be null, GET parameter, or direct value)
+ * @param bool $check_ownership Whether to check if the current user owns the recipe
+ * @param bool $admin_override Whether admins can access recipes they don't own
+ * @param string $redirect_url URL to redirect to if validation fails (if empty, will use error_404/error_403)
+ * @return Recipe|null The recipe object if validation passes, null if redirected
+ */
+function validate_recipe_access($recipe_id = null, $check_ownership = false, $admin_override = true, $redirect_url = '') {
+    global $session;
+    
+    // Get recipe ID from parameter or GET
+    if ($recipe_id === null) {
+        if (!isset($_GET['id'])) {
+            // No recipe ID provided
+            if (!empty($redirect_url)) {
+                redirect_to(url_for($redirect_url));
+                return null;
+            } else {
+                error_404('Recipe ID is required.');
+                return null;
+            }
+        }
+        $recipe_id = $_GET['id'];
+    }
+    
+    // Find the recipe
+    $recipe = Recipe::find_by_id($recipe_id);
+    
+    // Check if recipe exists
+    if (!$recipe) {
+        if (!empty($redirect_url)) {
+            $session->message('The recipe could not be found.', 'error');
+            redirect_to(url_for($redirect_url));
+            return null;
+        } else {
+            error_404("The recipe you're looking for could not be found. It may have been moved or deleted.");
+            return null;
+        }
+    }
+    
+    // Check ownership if required
+    if ($check_ownership) {
+        $is_owner = ($recipe->user_id == $session->get_user_id());
+        $is_admin_with_override = ($admin_override && $session->is_admin());
+        
+        if (!$is_owner && !$is_admin_with_override) {
+            if (!empty($redirect_url)) {
+                $session->message('You do not have permission to access this recipe.', 'error');
+                redirect_to(url_for($redirect_url));
+                return null;
+            } else {
+                error_403('You do not have permission to access this recipe.');
+                return null;
+            }
+        }
+    }
+    
+    return $recipe;
+}
+
 ?>

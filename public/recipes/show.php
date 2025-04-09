@@ -1,19 +1,10 @@
 <?php
 require_once('../../private/core/initialize.php');
 
-// Get and validate recipe ID
-$rules = ['id' => ['required', 'number', 'min:1']];
-$errors = validate_api_request(['id' => $_GET['id'] ?? ''], $rules);
-
-if (!empty($errors)) {
-    // Use error_404 instead of redirecting
-    error_404('Invalid recipe ID.');
-}
-
-$recipe = Recipe::find_by_id($_GET['id']);
-if (!$recipe) {
-    // Use error_404 instead of redirecting
-    error_404("The recipe you're looking for could not be found. It may have been moved or deleted.");
+// Validate recipe access without ownership check
+$recipe = validate_recipe_access(null, false);
+if(!$recipe) {
+    exit; // validate_recipe_access already handled the error
 }
 
 // Set page title and style

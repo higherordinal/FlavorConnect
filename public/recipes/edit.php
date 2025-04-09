@@ -7,22 +7,13 @@ $page_style = 'recipe-crud';
 $component_styles = ['forms'];
 include(SHARED_PATH . '/member_header.php');
 
-if(!isset($_GET['id'])) {
-    redirect_to(url_for('/recipes/index.php'));
-}
-$id = $_GET['id'];
-$recipe = Recipe::find_by_id($id);
-
+// Validate recipe access with ownership check and redirect to recipes index if invalid
+$recipe = validate_recipe_access(null, true, true, '/recipes/index.php');
 if(!$recipe) {
-    // Use error_404 instead of redirecting
-    error_404("The recipe you're trying to edit could not be found. It may have been moved or deleted.");
+    exit; // validate_recipe_access already handled the error
 }
 
-// Check if user has permission to edit this recipe
-if($recipe->user_id != $session->get_user_id() && !$session->is_admin()) {
-    $session->message('You do not have permission to edit this recipe.', 'error');
-    redirect_to(url_for('/recipes/show.php?id=' . $id));
-}
+$id = $recipe->recipe_id;
 
 // Load recipe ingredients and steps
 $ingredients = RecipeIngredient::find_by_recipe_id($recipe->recipe_id);
