@@ -326,14 +326,38 @@ echo display_session_message();
                         <span class="amount" data-base="<?php echo h($ingredient->quantity); ?>">
                             <?php echo h(format_quantity($ingredient->quantity)); ?>
                         </span>
-                        <?php 
-                        $measurement = $ingredient->measurement;
-                        $ingredient_obj = $ingredient->ingredient;
-                        // Only display measurement if it exists and is not '(none)'
-                        if ($measurement && $measurement->name !== '(none)') {
-                            echo h($measurement->get_pluralized_name($ingredient->quantity)) . ' ';
-                        }
-                        echo h($ingredient_obj ? $ingredient_obj->name : ''); ?>
+                        <div class="ingredient-container">
+                            <?php 
+                            $measurement = $ingredient->measurement;
+                            $ingredient_obj = $ingredient->ingredient;
+                            
+                            // Only add measurement if it exists and is not '(none)'
+                            if ($measurement && $measurement->name !== '(none)') {
+                                $singular = $measurement->name;
+                                $plural = '';
+                                
+                                // Handle special plural cases
+                                switch(strtolower($singular)) {
+                                    case 'dash':
+                                        $plural = 'dashes';
+                                        break;
+                                    case 'pinch':
+                                        $plural = 'pinches';
+                                        break;
+                                    default:
+                                        $plural = $singular . 's';
+                                }
+                                ?>
+                                <span class="measurement" 
+                                     data-singular="<?php echo h($singular); ?>" 
+                                     data-plural="<?php echo h($plural); ?>">
+                                     <?php echo h($measurement->get_pluralized_name($ingredient->quantity)); ?>
+                                </span>
+                            <?php } ?>
+                            <span class="ingredient-name">
+                                <?php echo h($ingredient_obj ? $ingredient_obj->name : ''); ?>
+                            </span>
+                        </div>
                     </li>
                 <?php } ?>
             </ul>

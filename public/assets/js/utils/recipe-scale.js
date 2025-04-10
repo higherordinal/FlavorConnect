@@ -20,12 +20,28 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             this.classList.add('active');
             
-            // Update ingredient amounts
-            const amounts = document.querySelectorAll('.amount');
-            amounts.forEach(amount => {
-                const baseAmount = parseFloat(amount.dataset.base);
-                const newAmount = baseAmount * newScale;
-                amount.textContent = formatQuantity(newAmount);
+            // Update ingredient amounts and measurements
+            const ingredients = document.querySelectorAll('.ingredients-list li');
+            ingredients.forEach(ingredient => {
+                // Update amount
+                const amount = ingredient.querySelector('.amount');
+                if (amount && amount.dataset.base) {
+                    const baseAmount = parseFloat(amount.dataset.base);
+                    const newAmount = baseAmount * newScale;
+                    amount.textContent = formatQuantity(newAmount);
+                    
+                    // Update measurement text if it exists
+                    const measurement = ingredient.querySelector('.measurement');
+                    if (measurement) {
+                        const singular = measurement.dataset.singular;
+                        const plural = measurement.dataset.plural;
+                        
+                        if (singular && plural) {
+                            // Use singular for quantities of 1 or less, plural for greater
+                            measurement.textContent = (newAmount <= 1) ? singular : plural;
+                        }
+                    }
+                }
             });
         });
     });

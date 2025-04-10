@@ -946,7 +946,7 @@
 .scale-btn:hover {
     background-color: var(--color-primary);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-    color: var(--color-white);
+    color: var(--secondary-color);
     transform: translateY(-1px);
 }
 
@@ -982,6 +982,17 @@
     padding: 1rem 1.5rem;
 }
 
+/* Container for measurement and ingredient name */
+.ingredients-list .ingredient-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.ingredients-list .measurement {
+    margin-right: 0.25rem;
+}
+
 .ingredients-list li:last-child {
     margin-bottom: 0;
 }
@@ -992,6 +1003,14 @@
     font-weight: 600;
     margin-right: 0.5rem;
     min-width: 2.5rem;
+}
+
+.ingredients-list .measurement {
+    display: inline;
+}
+
+.ingredients-list .ingredient-name {
+    display: inline;
 }
 
 .recipe-directions {
