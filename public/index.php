@@ -70,71 +70,14 @@ if($session->is_logged_in()) {
                 $type = $recipe->type();
                 $rating = $recipe->get_average_rating();
             ?>
-                <article class="recipe-card" role="article">
-                    <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&ref=home'); ?>" 
-                       class="recipe-link"
-                       role="link"
-                       aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
-                        <div class="recipe-image-container">
-                            <?php if($session->is_logged_in()) { ?>
-                            <button class="favorite-btn <?php echo $recipe->is_favorited ? 'favorited' : ''; ?>"
-                                    data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
-                                    aria-label="<?php echo $recipe->is_favorited ? 'Remove from' : 'Add to'; ?> favorites">
-                                <i class="<?php echo $recipe->is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
-                            </button>
-                            <?php } ?>
-                            <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 
-                                 alt="<?php echo h($recipe->title); ?>" 
-                                 class="recipe-image">
-                        </div>
-                        
-                        <div class="recipe-content">
-                            <h3 class="recipe-title" id="recipe-title-<?php echo h($recipe->recipe_id); ?>"><?php echo h($recipe->title); ?></h3>
-                            
-                            <div class="recipe-meta">
-                                <span class="rating" aria-label="Rating: <?php echo $rating; ?> out of 5 stars">
-                                    <?php 
-                                        // Full stars
-                                        for ($i = 1; $i <= floor($rating); $i++) {
-                                            echo '&#9733;';
-                                        }
-                                        // Half star if needed
-                                        if ($rating - floor($rating) >= 0.5) {
-                                            echo '&#189;';
-                                        }
-                                        // Empty stars
-                                        $remaining = 5 - ceil($rating);
-                                        for ($i = 1; $i <= $remaining; $i++) {
-                                            echo '&#9734;';
-                                        }
-                                        echo ' <span class="review-count" aria-label="' . $recipe->rating_count() . ' reviews">(' . $recipe->rating_count() . ')</span>';
-                                    ?>
-                                </span>
-                                <span class="time" aria-label="Total time: <?php echo $total_time; ?>">
-                                    <?php echo $total_time; ?>
-                                </span>
-                            </div>
-
-                            <div class="recipe-attributes" role="list">
-                                <?php if($style) { ?>
-                                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($style->name); ?></a>
-                                <?php } ?>
-                                <?php if($diet) { ?>
-                                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($diet->name); ?></a>
-                                <?php } ?>
-                                <?php if($type) { ?>
-                                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($type->name); ?></a>
-                                <?php } ?>
-                            </div>
-                        </div>
-
-                        <div class="recipe-footer">
-                            <div class="recipe-author">
-                                <span class="author-name">By <?php echo h($chef->username); ?></span>
-                            </div>
-                        </div>
-                    </a>
-                </article>
+                <?php 
+                    // Set variables for the recipe card component
+                    $ref = 'home';
+                    $user = $chef; // Maintain compatibility with the component
+                    
+                    // Include the recipe card component
+                    include('recipes/recipe-card.php'); 
+                ?>
             <?php } ?>
         </div>
     </section>
