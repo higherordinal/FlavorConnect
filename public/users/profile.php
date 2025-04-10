@@ -120,8 +120,7 @@ include(SHARED_PATH . '/member_header.php');
                                     </a>
                                     <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id)) . '&ref=profile'); ?>" 
                                        class="btn btn-danger"
-                                       aria-label="Delete recipe: <?php echo h($recipe->title); ?>"
-                                       onclick="return confirm('Are you sure you want to delete this recipe?');">
+                                       aria-label="Delete recipe: <?php echo h($recipe->title); ?>">
                                         <i class="fas fa-trash" aria-hidden="true"></i> Delete
                                     </a>
                                 </div>
