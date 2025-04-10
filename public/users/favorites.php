@@ -7,8 +7,24 @@ $page_title = 'User Favorites';
 $page_style = 'recipe-gallery'; // Changed to match recipes/index.php
 $component_styles = ['recipe-favorite', 'pagination', 'forms'];
 
-// Get user's favorite recipes
-$favorites = Recipe::find_favorites_by_user_id($session->get_user_id());
+// Get current page
+$current_page = $_GET['page'] ?? 1;
+$current_page = max(1, (int)$current_page);
+
+// Set recipes per page
+$per_page = 12;
+
+// Calculate offset
+$offset = ($current_page - 1) * $per_page;
+
+// Get total count of user's favorite recipes
+$total_favorites = RecipeFavorite::count_by_user_id($session->get_user_id());
+
+// Create pagination object
+$pagination = new Pagination($current_page, $per_page, $total_favorites);
+
+// Get paginated favorite recipes
+$favorites = Recipe::find_favorites_by_user_id($session->get_user_id(), $per_page, $offset);
 
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -53,6 +69,30 @@ include(SHARED_PATH . '/member_header.php');
                     ?>
                 <?php } ?>
             </div>
+            
+            <?php if($pagination->total_pages() > 1) { ?>
+                <!-- Pagination Controls -->
+                <?php 
+                // Check if we can use the route_links method with named routes
+                if (function_exists('route')) {
+                    // Use route_links with the 'users.favorites' named route
+                    try {
+                        echo $pagination->route_links('users.favorites', [], 'page');
+                    } catch (Exception $e) {
+                        // Fallback to traditional method if route_links fails
+                        $url_pattern = url_for('/users/favorites.php') . '?page={page}';
+                        echo $pagination->page_links($url_pattern);
+                    }
+                } else {
+                    // Fallback to traditional method
+                    $url_pattern = url_for('/users/favorites.php') . '?page={page}';
+                    echo $pagination->page_links($url_pattern);
+                }
+                
+                // Display total records info
+                echo '<div class="records-info">Showing ' . count($favorites) . ' of ' . $total_favorites . ' total favorites</div>';
+                ?>
+            <?php } ?>
         <?php } ?>
     </div>
 

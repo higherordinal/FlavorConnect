@@ -116,6 +116,27 @@ class RecipeFavorite extends DatabaseObject {
     }
 
     /**
+     * Count total favorites for a user
+     * @param int $user_id The user ID
+     * @return int Total count of favorites
+     */
+    public static function count_by_user_id($user_id) {
+        if (!$user_id) return 0;
+        
+        $sql = "SELECT COUNT(*) as count FROM " . static::$table_name;
+        $sql .= " WHERE user_id = ?";
+        
+        $database = static::get_database();
+        $stmt = $database->prepare($sql);
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        return (int)$row['count'];
+    }
+
+    /**
      * Toggle favorite status for a recipe
      * @param int $user_id The user ID
      * @param int $recipe_id The recipe ID

@@ -551,6 +551,38 @@ class Recipe extends DatabaseObject {
     public static function create_objects_from_result($result) {
         return static::instantiate_result($result);
     }
+    
+    /**
+     * Gets all recipes favorited by a specific user with pagination support
+     * @param int $user_id The ID of the user
+     * @param int $limit Number of recipes per page
+     * @param int $offset Offset for pagination
+     * @return array Array of Recipe objects
+     */
+    static public function find_favorites_by_user_id($user_id, $limit = 12, $offset = 0) {
+        if (!$user_id) return [];
+        
+        $database = static::get_database();
+        $sql = "SELECT r.* FROM " . static::$table_name . " r ";
+        $sql .= "JOIN user_favorite f ON r.recipe_id = f.recipe_id ";
+        $sql .= "WHERE f.user_id = ? ";
+        $sql .= "ORDER BY f.created_at DESC";
+        
+        // Add pagination if limit is provided
+        if ($limit > 0) {
+            $sql .= " LIMIT ? OFFSET ?";
+            $stmt = $database->prepare($sql);
+            $stmt->bind_param("iii", $user_id, $limit, $offset);
+        } else {
+            $stmt = $database->prepare($sql);
+            $stmt->bind_param("i", $user_id);
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        return static::instantiate_result($result);
+    }
 
     /**
      * Gets the total time (prep + cook) in a human-readable format

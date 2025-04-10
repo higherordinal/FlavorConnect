@@ -10,11 +10,40 @@ if(!$user) {
     redirect_to(url_for('/index.php'));
 }
 
-// Get all recipes created by this user
-$recipes = Recipe::find_by_user_id($user_id);
+// Get current page
+$current_page = $_GET['page'] ?? 1;
+$current_page = max(1, (int)$current_page);
+
+// Set recipes per page
+$per_page = 6;
+
+// Calculate offset
+$offset = ($current_page - 1) * $per_page;
+
+// Get total count of user's recipes
+$database = Recipe::get_database();
+$count_sql = "SELECT COUNT(*) as count FROM recipe WHERE user_id = ?";
+$count_stmt = $database->prepare($count_sql);
+$count_stmt->bind_param("i", $user_id);
+$count_stmt->execute();
+$count_result = $count_stmt->get_result();
+$count_row = $count_result->fetch_assoc();
+$total_recipes = (int)$count_row['count'];
+
+// Create pagination object
+$pagination = new Pagination($current_page, $per_page, $total_recipes);
+
+// Get paginated recipes
+$sql = "SELECT * FROM recipe WHERE user_id = ? ORDER BY created_at DESC LIMIT ? OFFSET ?";
+$stmt = $database->prepare($sql);
+$stmt->bind_param("iii", $user_id, $per_page, $offset);
+$stmt->execute();
+$result = $stmt->get_result();
+$recipes = Recipe::create_objects_from_result($result);
 
 $page_title = 'User Profile';
 $page_style = 'user-profile';
+$component_styles = ['pagination']; // Add pagination styles
 include(SHARED_PATH . '/member_header.php');
 ?>
 
@@ -35,7 +64,7 @@ include(SHARED_PATH . '/member_header.php');
         <div class="profile-stats">
             <div class="stat">
                 <i class="fas fa-utensils" aria-hidden="true"></i>
-                <span><?php echo count($recipes); ?> Recipes Created</span>
+                <span><?php echo $total_recipes; ?> Recipes Created</span>
             </div>
         </div>
     </div>
@@ -100,6 +129,30 @@ include(SHARED_PATH . '/member_header.php');
                         </div>
                     <?php } ?>
                 </div>
+                
+                <?php if($pagination->total_pages() > 1) { ?>
+                    <!-- Pagination Controls -->
+                    <?php 
+                    // Check if we can use the route_links method with named routes
+                    if (function_exists('route')) {
+                        // Use route_links with the 'users.profile' named route
+                        try {
+                            echo $pagination->route_links('users.profile', [], 'page');
+                        } catch (Exception $e) {
+                            // Fallback to traditional method if route_links fails
+                            $url_pattern = url_for('/users/profile.php') . '?page={page}';
+                            echo $pagination->page_links($url_pattern);
+                        }
+                    } else {
+                        // Fallback to traditional method
+                        $url_pattern = url_for('/users/profile.php') . '?page={page}';
+                        echo $pagination->page_links($url_pattern);
+                    }
+                    
+                    // Display total records info
+                    echo '<div class="records-info">Showing ' . count($recipes) . ' of ' . $total_recipes . ' total recipes</div>';
+                    ?>
+                <?php } ?>
             <?php } ?>
         </section>
     </div>
