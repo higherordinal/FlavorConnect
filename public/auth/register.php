@@ -58,14 +58,18 @@ include(SHARED_PATH . '/public_header.php');
         <div class="name-fields-container">
             <div class="form-group">
                 <label class="form-label" for="first_name">First Name</label>
-                <input class="form-input <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required data-error-message="First name cannot be blank">
-                <?php echo display_error('first_name', $errors); ?>
+                <div class="input-container">
+                    <input class="form-input <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required data-error-message="First name cannot be blank">
+                    <?php echo display_error('first_name', $errors); ?>
+                </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="last_name">Last Name</label>
-                <input class="form-input <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required data-error-message="Last name cannot be blank">
-                <?php echo display_error('last_name', $errors); ?>
+                <div class="input-container">
+                    <input class="form-input <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required data-error-message="Last name cannot be blank">
+                    <?php echo display_error('last_name', $errors); ?>
+                </div>
             </div>
         </div>
 

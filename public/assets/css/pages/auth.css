@@ -51,7 +51,7 @@ form {
 
 /* Register form is wider */
 .register-form form {
-  max-width: 500px;
+  max-width: 600px;
 }
 
 form > div {
@@ -63,7 +63,8 @@ form > div {
 .name-fields-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--spacing-md);
+  gap: 8px; /* Explicit small gap */
+  margin-bottom: 8px; /* Add small margin at bottom */
 }
 
 /* Media query for larger screens */
@@ -71,6 +72,18 @@ form > div {
   .name-fields-container {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+/* Structure for name fields to ensure alignment */
+.name-fields-container .form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0; /* Remove bottom margin */
+}
+
+/* Create consistent structure for input containers */
+.name-fields-container .form-group .input-container {
+  flex: 1;
 }
 
 /* ====================================

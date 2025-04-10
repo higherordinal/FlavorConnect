@@ -1,9 +1,9 @@
 <?php
 /**
- * Simple Router for FlavorConnect
+ * Main Router for FlavorConnect
  * 
  * This file serves as a front controller for the application.
- * It handles basic routing with fallbacks to direct file inclusion.
+ * It handles routing using the Router class with fallbacks to direct file inclusion.
  */
 
 require_once('../private/core/initialize.php');
@@ -26,47 +26,40 @@ if (defined('PROJECT_FOLDER') && !empty(PROJECT_FOLDER)) {
 // Normalize the URI
 $request_uri = '/' . trim($request_uri, '/');
 
-// Define route mappings - static routes
-$routes = [
-    // Basic pages
-    '/' => 'index.php',
-    '/index.php' => 'index.php',
+// Create a new router instance
+$router = new Router();
+
+// Add middleware for recipe context
+$router->addMiddleware('recipe_context', function($params, $next) {
+    // For recipe pages, check if the recipe exists and set context
+    if (isset($params['id'])) {
+        $recipe_id = (int)$params['id'];
+        
+        try {
+            $recipe = Recipe::find_by_id($recipe_id);
+            
+            if (!$recipe) {
+                error_404("The recipe you're looking for could not be found.");
+                exit();
+            }
+            
+            // Store recipe context for navigation
+            if (strpos($_SERVER['REQUEST_URI'], 'recipes/show.php') !== false) {
+                $_SESSION['current_recipe_id'] = $recipe_id;
+                $_SESSION['last_recipe_page'] = $_SERVER['REQUEST_URI'];
+            }
+        } catch (Exception $e) {
+            error_log("Router error: " . $e->getMessage());
+            error_404("The recipe you're looking for could not be found.");
+            exit();
+        }
+    }
     
-    // Recipe routes
-    '/recipes' => 'recipes/index.php',
-    '/recipes/' => 'recipes/index.php',
-    '/recipes/index.php' => 'recipes/index.php',
-    '/recipes/new' => 'recipes/new.php',
-    '/recipes/new/' => 'recipes/new.php',
-    '/recipes/new.php' => 'recipes/new.php',
-    '/recipes/show.php' => 'recipes/show.php',
-    '/recipes/edit.php' => 'recipes/edit.php',
-    '/recipes/delete.php' => 'recipes/delete.php',
-    
-    // User routes
-    '/users/profile' => 'users/profile.php',
-    '/users/profile/' => 'users/profile.php',
-    '/users/profile.php' => 'users/profile.php',
-    '/users/favorites' => 'users/favorites.php',
-    '/users/favorites/' => 'users/favorites.php',
-    '/users/favorites.php' => 'users/favorites.php',
-    
-    // Authentication routes
-    '/auth/login' => 'auth/login.php',
-    '/auth/login/' => 'auth/login.php',
-    '/auth/login.php' => 'auth/login.php',
-    '/auth/register' => 'auth/register.php',
-    '/auth/register/' => 'auth/register.php',
-    '/auth/register.php' => 'auth/register.php',
-    '/auth/logout' => 'auth/logout.php',
-    '/auth/logout/' => 'auth/logout.php',
-    '/auth/logout.php' => 'auth/logout.php',
-    
-    // API routes
-    '/api/recipes' => 'api/recipes/index.php',
-    '/api/recipes/' => 'api/recipes/index.php',
-    '/api/recipes/index.php' => 'api/recipes/index.php',
-];
+    return $next($params);
+});
+
+// Load routes from the configuration file
+$router->loadRoutes(PRIVATE_PATH . '/config/routes.php');
 
 /**
  * Helper function to generate URLs for named routes
@@ -140,7 +133,7 @@ function route_links($route_name, $params = [], $page_param = 'page') {
     return $base_url . $separator . $page_param . '={page}';
 }
 
-// First, check if the requested file exists directly
+// First, check if the requested file exists directly (for static assets)
 $requested_file = PUBLIC_PATH . $request_uri;
 if (file_exists($requested_file) && !is_dir($requested_file) && pathinfo($requested_file, PATHINFO_EXTENSION) != '') {
     // Direct file access (CSS, JS, images, etc.)
@@ -148,56 +141,72 @@ if (file_exists($requested_file) && !is_dir($requested_file) && pathinfo($reques
     exit();
 }
 
-// Check if we have a direct route mapping
-if (isset($routes[$request_uri])) {
-    include(PUBLIC_PATH . '/' . $routes[$request_uri]);
-    exit();
-}
+// Try to dispatch the request using the Router class
+$method = $_SERVER['REQUEST_METHOD'];
+$dispatched = $router->dispatch($method, $request_uri);
 
-// Handle dynamic routes with query parameters
-$dynamic_routes = [
-    // Pattern => target file
-    '#^/recipes/show\.php$#' => 'recipes/show.php',
-    '#^/recipes/edit\.php$#' => 'recipes/edit.php',
-    '#^/recipes/delete\.php$#' => 'recipes/delete.php',
-    '#^/api/recipes/\d+$#' => 'api/recipes/show.php',
-];
-
-foreach ($dynamic_routes as $pattern => $target) {
-    if (preg_match($pattern, $request_uri)) {
-        // For recipe pages, check if the recipe exists
-        if (in_array($target, ['recipes/show.php', 'recipes/edit.php', 'recipes/delete.php'])) {
-            parse_str($query_string, $params);
-            
-            if (isset($params['id'])) {
-                $recipe_id = (int)$params['id'];
-                
-                try {
-                    $recipe = Recipe::find_by_id($recipe_id);
-                    
-                    if (!$recipe) {
-                        error_404("The recipe you're looking for could not be found.");
-                        exit();
-                    }
-                    
-                    // Store recipe context for navigation
-                    if ($target === 'recipes/show.php') {
-                        $_SESSION['current_recipe_id'] = $recipe_id;
-                        $_SESSION['last_recipe_page'] = $_SERVER['REQUEST_URI'];
-                    }
-                } catch (Exception $e) {
-                    error_log("Router error: " . $e->getMessage());
-                    error_404("The recipe you're looking for could not be found.");
-                    exit();
-                }
-            }
-        }
+// If the Router class couldn't handle the request, fall back to legacy routing
+if (!$dispatched) {
+    // Legacy static routes (these should eventually be migrated to routes.php)
+    $legacy_routes = [
+        // Basic pages
+        '/' => 'index.php',
+        '/index.php' => 'index.php',
         
-        include(PUBLIC_PATH . '/' . $target);
+        // Recipe routes
+        '/recipes' => 'recipes/index.php',
+        '/recipes/' => 'recipes/index.php',
+        '/recipes/index.php' => 'recipes/index.php',
+        '/recipes/new' => 'recipes/new.php',
+        '/recipes/new/' => 'recipes/new.php',
+        '/recipes/new.php' => 'recipes/new.php',
+        '/recipes/show.php' => 'recipes/show.php',
+        '/recipes/edit.php' => 'recipes/edit.php',
+        '/recipes/delete.php' => 'recipes/delete.php',
+        
+        // User routes
+        '/users/profile' => 'users/profile.php',
+        '/users/profile/' => 'users/profile.php',
+        '/users/profile.php' => 'users/profile.php',
+        '/users/favorites' => 'users/favorites.php',
+        '/users/favorites/' => 'users/favorites.php',
+        '/users/favorites.php' => 'users/favorites.php',
+        
+        // Authentication routes
+        '/auth/login' => 'auth/login.php',
+        '/auth/login/' => 'auth/login.php',
+        '/auth/login.php' => 'auth/login.php',
+        '/auth/register' => 'auth/register.php',
+        '/auth/register/' => 'auth/register.php',
+        '/auth/register.php' => 'auth/register.php',
+        '/auth/logout' => 'auth/logout.php',
+        '/auth/logout/' => 'auth/logout.php',
+        '/auth/logout.php' => 'auth/logout.php',
+    ];
+    
+    // Check if we have a direct route mapping
+    if (isset($legacy_routes[$request_uri])) {
+        include(PUBLIC_PATH . '/' . $legacy_routes[$request_uri]);
         exit();
     }
+    
+    // Handle dynamic routes with query parameters
+    $dynamic_routes = [
+        // Pattern => target file
+        '#^/recipes/show\.php$#' => 'recipes/show.php',
+        '#^/recipes/edit\.php$#' => 'recipes/edit.php',
+        '#^/recipes/delete\.php$#' => 'recipes/delete.php',
+        '#^/api/recipes/\d+$#' => 'api/recipes/show.php',
+    ];
+    
+    foreach ($dynamic_routes as $pattern => $target) {
+        if (preg_match($pattern, $request_uri)) {
+            include(PUBLIC_PATH . '/' . $target);
+            exit();
+        }
+    }
+    
+    // If we get here, the route doesn't exist - trigger 404 error
+    error_404("The page you requested could not be found.");
 }
-
-// If we get here, the route doesn't exist - trigger 404 error
-error_404("The page you requested could not be found.");
 ?>
