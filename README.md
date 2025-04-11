@@ -12,7 +12,7 @@ A recipe sharing and management platform where users can discover, share, and or
 - Measurement pluralization based on quantity
 - Dynamic form validation
 - Intuitive recipe creation interface
-- Flexible routing system with middleware support
+- Enhanced error handling and 404 page system
 - Context-aware navigation with recipe state preservation
 - Bluehost deployment support
 
@@ -128,12 +128,10 @@ Stop the Apache and MySQL services from the XAMPP control panel.
     - Data models (Recipe, User, Measurement, etc.)
     - Service classes for business logic
     - Utility classes for common operations
-    - Router.class.php - Flexible routing system with middleware support
   - `/private/config` - Configuration files
     - Database connection settings
     - Environment-specific configurations
     - Feature flags and application settings
-    - routes.php - Application route definitions
   - `/private/core` - Core application classes
     - Initialization and bootstrapping
     - Error handling and logging
@@ -149,8 +147,6 @@ Stop the Apache and MySQL services from the XAMPP control panel.
 ### Docker Configuration
 - `/docker` - Docker configuration files
   - Docker Compose configuration
-  - Container definitions and environment settings
-  - Development environment setup
 
 ## Additional Documentation
 
