@@ -10,12 +10,8 @@ RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
-# Route all requests through the router for clean URLs
-# First check if the requested file exists in the public directory
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-# Then route it through the router.php script
-RewriteRule ^(.*)$ /router.php [QSA,L]
+# Direct file access - no router implementation
+# URLs will be handled by their corresponding PHP files directly
 
 # Custom error pages - use absolute paths for production
 ErrorDocument 404 /404.php

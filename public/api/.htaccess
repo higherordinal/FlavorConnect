@@ -4,10 +4,8 @@
 RewriteEngine On
 RewriteBase /FlavorConnect/public/api/
 
-# Route all API requests to index.php
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php [L,QSA]
+# Direct file access - no router implementation
+# API requests will be handled by their corresponding PHP files directly
 
 # Set JSON content type for API responses (only for PHP files)
 <FilesMatch "\.php$">

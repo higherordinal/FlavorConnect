@@ -10,10 +10,8 @@ RewriteRule ^recipes/api\.php$ %{ENV:BASE_PATH}/api/recipes/ [R=301,L]
 # Custom error pages - use a relative path without leading slash for XAMPP
 ErrorDocument 404 404.php
 
-# Handle front controller pattern for all URLs that don't exist as files or directories
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ %{ENV:BASE_PATH}/router.php [L]
+# Direct file access - no router implementation
+# URLs will be handled by the corresponding PHP files directly
 
 # Prevent directory listing
 Options -Indexes
