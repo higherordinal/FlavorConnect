@@ -142,6 +142,7 @@ Stop the Apache and MySQL services from the XAMPP control panel.
   - `.htaccess` - Main Apache configuration for URL handling and 404 error handling
   - `index.php` - Main entry point for the application
   - `404.php` - Custom 404 error page
+  - `env_test.php` - Environment detection and configuration test utility
   - `/public/assets` - Static assets
     - `/public/assets/css` - Stylesheets
       - `/public/assets/css/pages` - Page-specific styles (recipe-crud.css, etc.)
@@ -278,15 +279,29 @@ If you encounter any issues:
    docker exec -it flavorconnect-web bash /var/www/html/install-imagemagick-docker.sh
    ```
 
+### Environment and Configuration Issues
+1. Use the environment test utility to verify your setup:
+   ```
+   http://localhost:8080/env_test.php     (Docker)
+   http://localhost/FlavorConnect/env_test.php     (XAMPP)
+   ```
+2. The env_test.php utility will show:
+   - Which environment was detected (Docker or XAMPP)
+   - Database connection status for both web and API
+   - Server information and configuration details
+   - Environment variables and detection methods
+
 ### Database Issues
 1. Verify database connection settings
 2. Check that the database user has proper permissions
 3. For XAMPP, ensure MySQL service is running
+4. Use env_test.php to test database connections
 
 ### API Issues
 1. Check that the API server is running
 2. Verify API endpoints in the browser console
 3. Check API logs for errors
+4. Use env_test.php to verify API database connection
 
 ## Technologies Used
 
