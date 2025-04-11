@@ -85,7 +85,13 @@ window.FlavorConnect.favoritesPage = {
                 console.log('Toggle result:', result);
                 
                 if (result.success && !result.isFavorited) {
+                    // Remove the recipe card with animation
                     this.removeRecipeCard(button);
+                    
+                    // Check if we need to show empty state after removing
+                    setTimeout(() => {
+                        this.updateEmptyState();
+                    }, 350); // Wait a bit longer than the animation duration
                 } else if (result.html_response) {
                     // If we got an HTML response, try the direct approach
                     console.log('Got HTML response, trying direct approach');
@@ -286,12 +292,7 @@ window.FlavorConnect.favoritesPage = {
             recipeCard.remove();
             
             // Check if we need to show empty state
-            if (document.querySelectorAll('.recipe-card').length === 0) {
-                const container = document.querySelector('.recipe-gallery');
-                if (container && window.FlavorConnect.favorites) {
-                    container.innerHTML = window.FlavorConnect.favorites.createEmptyState();
-                }
-            }
+            this.updateEmptyState();
         }, 300);
     },
 

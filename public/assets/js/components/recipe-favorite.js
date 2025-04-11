@@ -210,7 +210,20 @@ window.FlavorConnect.favorites = {
 
             try {
                 const data = await response.json();
-
+                
+                // Check if we're on the favorites page and need to remove the card
+                if (data.success === true && data.is_favorited === false) {
+                    // If we're on the favorites page, check if we need to remove the recipe card
+                    const currentPath = window.location.pathname;
+                    if (currentPath.includes('/users/favorites.php')) {
+                        // Find the recipe card for this recipe
+                        const button = document.querySelector(`.favorite-btn[data-recipe-id="${recipeId}"]`);
+                        if (button && window.FlavorConnect.favoritesPage) {
+                            // Use the favoritesPage.removeRecipeCard method to remove it with animation
+                            window.FlavorConnect.favoritesPage.removeRecipeCard(button);
+                        }
+                    }
+                }
                 
                 return {
                     success: data.success === true,
