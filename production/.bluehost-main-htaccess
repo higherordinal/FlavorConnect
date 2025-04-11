@@ -13,7 +13,12 @@ RewriteCond %{REQUEST_FILENAME} !-d
 # Direct file access - no router implementation
 # URLs will be handled by their corresponding PHP files directly
 
-# Custom error pages - use absolute paths for production
+# Handle 404 errors with a rewrite rule optimized for Bluehost
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* /404.php [L]
+
+# Fallback ErrorDocument directive
 ErrorDocument 404 /404.php
 
 # Prevent directory listing

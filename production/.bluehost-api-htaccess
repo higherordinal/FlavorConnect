@@ -7,6 +7,13 @@ RewriteBase /api/
 # Direct file access - no router implementation
 # API requests will be handled by their corresponding PHP files directly
 
+# Handle API 404 errors with a rewrite rule optimized for Bluehost
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* /api/error.php [L]
+
+# Fallback ErrorDocument directive
+ErrorDocument 404 /api/error.php
+
 # Set JSON content type for API responses
 Header set Content-Type application/json
 
