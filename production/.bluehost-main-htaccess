@@ -3,9 +3,6 @@ RewriteEngine On
 # Bluehost-specific configuration
 # No need for BASE_PATH detection as we're using absolute paths
 
-# Redirect old API endpoint to new API endpoint
-RewriteRule ^recipes/api\.php$ /api/recipes/ [R=301,L]
-
 # Exclude existing files and directories from rewriting
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
