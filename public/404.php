@@ -2,24 +2,34 @@
 // Suppress all warnings and notices for 404 page
 error_reporting(E_ERROR | E_PARSE);
 
-// This file is designed to be accessed directly by Apache through the ErrorDocument directive
-// or via redirection from the error_404() function
+// Set proper HTTP status code
+if (!headers_sent()) {
+    http_response_code(404);
+}
 
-// For debugging - uncomment to see how this page is being called
-echo '<pre>';
-echo 'REQUEST_URI: ' . ($_SERVER['REQUEST_URI'] ?? 'Not set') . "\n";
-echo 'REDIRECT_STATUS: ' . ($_SERVER['REDIRECT_STATUS'] ?? 'Not set') . "\n";
-echo 'HTTP_REFERER: ' . ($_SERVER['HTTP_REFERER'] ?? 'Not set') . "\n";
-echo '</pre>';
+// For direct access via ErrorDocument, REQUEST_URI might be empty
+// In that case, we need to use REDIRECT_URL instead
+$request_uri = $_SERVER['REQUEST_URI'] ?? ($_SERVER['REDIRECT_URL'] ?? '');
 
-// Initialize the application if needed
-if (!defined('PRIVATE_PATH')) {
-    // Try to find the initialize.php file
-    $initialize_path = null;
+// Determine if we're in XAMPP or production
+$in_xampp = (strpos($request_uri, '/FlavorConnect/') === 0);
+
+// Set the correct path to initialize.php based on environment
+if ($in_xampp) {
+    // XAMPP environment
+    $initialize_path = $_SERVER['DOCUMENT_ROOT'] . '/FlavorConnect/private/core/initialize.php';
+} else {
+    // Production environment
+    $initialize_path = __DIR__ . '/../private/core/initialize.php';
+}
+
+// Make sure the initialize file exists
+if (!file_exists($initialize_path)) {
+    // Fallback to other possible paths
     $possible_paths = [
-        '../private/core/initialize.php',
-        '/var/www/html/private/core/initialize.php',
-        $_SERVER['DOCUMENT_ROOT'] . '/private/core/initialize.php'
+        __DIR__ . '/../private/core/initialize.php',
+        $_SERVER['DOCUMENT_ROOT'] . '/FlavorConnect/private/core/initialize.php',
+        '../private/core/initialize.php'
     ];
     
     foreach ($possible_paths as $path) {
@@ -28,11 +38,11 @@ if (!defined('PRIVATE_PATH')) {
             break;
         }
     }
-    
-    // If we found initialize.php, include it
-    if ($initialize_path) {
-        include_once($initialize_path);
-    }
+}
+
+// Initialize the application if needed
+if (!defined('PRIVATE_PATH') && $initialize_path) {
+    include_once($initialize_path);
 }
 
 // If we have the application initialized, use the proper headers and templates

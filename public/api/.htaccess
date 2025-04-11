@@ -7,6 +7,14 @@ RewriteBase /FlavorConnect/public/api/
 # Direct file access - no router implementation
 # API requests will be handled by their corresponding PHP files directly
 
+# Handle API 404 errors with a rewrite rule
+# This approach works reliably across all environments
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* %{ENV:BASE_PATH}/api/error.php [L]
+
+# Fallback ErrorDocument directive (should rarely be used)
+ErrorDocument 404 /FlavorConnect/public/api/error.php
+
 # Set JSON content type for API responses (only for PHP files)
 <FilesMatch "\.php$">
     Header set Content-Type application/json

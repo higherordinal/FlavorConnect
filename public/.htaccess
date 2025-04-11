@@ -4,11 +4,16 @@ RewriteEngine On
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE_PATH:%1]
 
-# Redirect old API endpoint to new API endpoint
-RewriteRule ^recipes/api\.php$ %{ENV:BASE_PATH}/api/recipes/ [R=301,L]
+# Direct file access approach - no redirects needed
 
-# Custom error pages - use a relative path without leading slash for XAMPP
-ErrorDocument 404 404.php
+# Handle 404 errors with a rewrite rule
+# This approach works reliably across all environments
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* %{ENV:BASE_PATH}/404.php [L]
+
+# Fallback ErrorDocument directive (should rarely be used)
+ErrorDocument 404 /FlavorConnect/public/404.php
 
 # Direct file access - no router implementation
 # URLs will be handled by the corresponding PHP files directly
