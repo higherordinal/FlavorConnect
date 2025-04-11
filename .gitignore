@@ -1,6 +1,3 @@
-# Configuration
-config/config.php
-
 # Dependencies
 vendor/
 node_modules/
