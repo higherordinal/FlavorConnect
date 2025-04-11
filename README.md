@@ -233,10 +233,18 @@ Stop the Apache and MySQL services from the XAMPP control panel.
     - `custom.ini` - PHP settings
 
 ### Production Configuration
-- `/production` - Production deployment files
+- `/production` - Production deployment files and documentation
   - `.bluehost-main-htaccess` - Bluehost-specific Apache configuration
   - `.bluehost-api-htaccess` - Bluehost-specific API Apache configuration
-  - `deploy_bluehost.php` - Deployment script for Bluehost
+  - `bluehost_config.php` - Production environment configuration
+  - `bluehost_api_config.php` - Production API configuration
+  - `Recipe.live.class.php` - Production-optimized Recipe class
+  - `RecipeImageProcessor.live.class.php` - Production-optimized image processor
+  - `deploy_bluehost.php` - PHP deployment script for Bluehost
+  - `deploy_bluehost.bat` - Windows batch script for deployment
+  - `deploy_bluehost.sh` - Linux/macOS shell script for deployment
+  - `DEPLOYMENT_GUIDE.md` - Comprehensive deployment instructions
+  - `COM_WITH_AI.md` - Documentation about AI-assisted development
 
 ## Additional Documentation
 
