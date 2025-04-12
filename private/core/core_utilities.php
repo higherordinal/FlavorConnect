@@ -16,19 +16,29 @@ function url_for($script_path) {
     $script_path = "/" . $script_path;
   }
   
-  // Get the base URL from the server
-  $base_url = isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST']) 
-    ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] 
-    : '';
-  
-  // Direct approach for XAMPP environment
-  if (ENVIRONMENT === 'xampp') {
-    // Hardcode the project folder and public directory for XAMPP
-    return $base_url . '/FlavorConnect/public' . $script_path;
+  // Environment-specific URL handling
+  switch(ENVIRONMENT) {
+    case 'production':
+      // Use the WWW_ROOT constant defined in bluehost_config.php
+      return WWW_ROOT . $script_path;
+      
+    case 'xampp':
+      // Get the base URL from the server
+      $base_url = isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST']) 
+        ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] 
+        : '';
+      // Hardcode the project folder and public directory for XAMPP
+      return $base_url . '/FlavorConnect/public' . $script_path;
+      
+    case 'docker':
+    default:
+      // Get the base URL from the server
+      $base_url = isset($_SERVER['REQUEST_SCHEME']) && isset($_SERVER['HTTP_HOST']) 
+        ? $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] 
+        : '';
+      // For Docker, the document root is already set to the public directory
+      return $base_url . $script_path;
   }
-  
-  // For Docker and other environments
-  return $base_url . $script_path;
 }
 
 /**
@@ -192,19 +202,6 @@ function format_quantity($value, $precision = 'basic') {
     }
 }
 
-/**
- * Generates a smart back link URL and suggested text
- * 
- * This function determines the most appropriate back link based on:
- * 1. The HTTP_REFERER if available
- * 2. The 'ref' parameter in the query string
- * 3. A default fallback URL
- * 
- * @param string $default_url The default URL to use if no referer is available
- * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
- * @param string $default_text Default text to use for the back link
- * @return array Array with 'url' and 'text' keys for the back link
- */
 /**
  * Generates a smart back link URL and suggested text
  * 
