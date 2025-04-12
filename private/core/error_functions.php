@@ -69,7 +69,9 @@ function display_session_message() {
     if($session) {
         $msg = $session->message();
         if(isset($msg) && $msg != '') {
-            return '<div class="message success">' . h($msg) . '</div>';
+            // Use the message_type property to determine the CSS class
+            $type = $session->message_type ?? 'success';
+            return '<div class="message ' . h($type) . '">' . h($msg) . '</div>';
         }
     }
     return '';

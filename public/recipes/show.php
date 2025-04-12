@@ -140,8 +140,10 @@ if (is_post_request()) {
     );
 
     if (!empty($existing_review)) {
-        $session->message('You have already reviewed this recipe.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
+        // Set message type to 'error' for the already reviewed message
+        $session->message('You have already reviewed this recipe.', 'error');
+        // Don't auto-scroll to reviews section when showing this error
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
     }
 
     $review_data = [
