@@ -196,8 +196,15 @@
 
 .recipe-time span,
 .recipe-attributes span {
-    composes: recipe-meta-item;
-    composes: header-text-shadow;
+    /* Inherit styles from recipe-meta-item */
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    /* Inherit styles from header-text-shadow */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 /* Recipe actions */
@@ -568,7 +575,7 @@
     color: var(--color-gray-300);
 }
 
-/* Color the hovered star and all stars after it */
+/* Color the hovered star and all stars before it (since we're using flex-direction: row-reverse) */
 .star-rating label:hover,
 .star-rating label:hover ~ label {
     color: #ffd700 !important;
@@ -576,7 +583,12 @@
 
 /* Keep the selected stars colored */
 .star-rating input:checked + label,
-.star-rating input:checked + label ~ label {
+.star-rating input:checked ~ label {
+    color: #ffd700;
+}
+
+/* Add active class for JavaScript enhancement */
+.star-rating label.active {
     color: #ffd700;
 }
 
@@ -1412,12 +1424,18 @@
     
     /* Ingredient list formatting */
     .ingredients-list {
-        composes: print-list;
+        /* Inherit styles from print-list */
+        font-size: 7pt !important;
+        line-height: 1.1 !important;
+        padding-left: 0.2cm !important;
     }
     
     /* Direction steps formatting */
     .directions-list {
-        composes: print-list;
+        /* Inherit styles from print-list */
+        font-size: 7pt !important;
+        line-height: 1.1 !important;
+        padding-left: 0.2cm !important;
     }
     
     .direction-step {

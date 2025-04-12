@@ -29,6 +29,35 @@ const state = {
 };
 
 /**
+ * Updates the visual state of the star rating
+ * This ensures the stars stay highlighted when selected
+ */
+function updateStarRating() {
+    const ratingInputs = document.querySelectorAll('.star-rating input[type="radio"]');
+    const labels = document.querySelectorAll('.star-rating label');
+    
+    // First, clear all active states
+    labels.forEach(label => {
+        label.classList.remove('active');
+    });
+    
+    // Then, set the active state based on the current rating
+    ratingInputs.forEach(input => {
+        const value = parseInt(input.value, 10);
+        const label = document.querySelector(`label[for="${input.id}"]`);
+        
+        if (value <= state.currentRating) {
+            label.classList.add('active');
+        }
+        
+        // If this input is the one that's checked, make sure it stays checked
+        if (value === state.currentRating) {
+            input.checked = true;
+        }
+    });
+}
+
+/**
  * Initializes recipe show page functionality
  * Sets up all event listeners and initializes the page state
  */
@@ -42,13 +71,13 @@ function initializeRecipeShow() {
  */
 function setupEventListeners() {
     // Rating functionality
-    const ratingStars = document.querySelectorAll('.rating-star');
-    ratingStars.forEach(star => {
-        addSafeEventListener(star, 'click', handleRatingClick);
+    const ratingInputs = document.querySelectorAll('.star-rating input[type="radio"]');
+    ratingInputs.forEach(input => {
+        addSafeEventListener(input, 'change', handleRatingClick);
     });
 
     // Comment functionality
-    const commentForm = document.querySelector('#comment-form');
+    const commentForm = document.querySelector('form');
     if (commentForm) {
         addSafeEventListener(commentForm, 'submit', handleCommentSubmit);
     }
@@ -61,8 +90,14 @@ function setupEventListeners() {
  * @param {Event} event - The click event object
  */
 function handleRatingClick(event) {
-    // Rating functionality would go here
-    console.log('Rating clicked');
+    const starInput = event.target.closest('input[type="radio"]');
+    if (!starInput) return;
+    
+    // Update the current rating in our state
+    state.currentRating = parseInt(starInput.value, 10);
+    
+    // Update the visual state of all stars
+    updateStarRating();
 }
 
 /**
