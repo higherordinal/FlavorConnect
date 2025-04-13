@@ -1,6 +1,5 @@
 <?php
-require_once('../../private/config/config.php');
-require_once(PRIVATE_PATH . '/core/initialize.php');
+require_once('../../private/core/initialize.php');
 
 $page_title = 'Register';
 $page_style = 'auth';
