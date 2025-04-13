@@ -4,6 +4,8 @@
  * @license MIT
  */
 
+'use strict';
+
 /**
  * Debounces a function to limit the rate at which it is called
  * @param {Function} func - The function to debounce

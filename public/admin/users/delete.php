@@ -58,6 +58,11 @@ $page_title = 'Delete User';
 $page_style = 'admin';
 $component_styles = ['forms'];
 
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
+
 include(SHARED_PATH . '/member_header.php');
 ?>
 
@@ -109,7 +114,7 @@ include(SHARED_PATH . '/member_header.php');
         <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" method="post">
             <div class="form-buttons" style="justify-content: center;">
                 <button type="submit" class="action delete">Delete User</button>
-                <a href="#" onclick="history.back(); return false;" class="cancel">Cancel</a>
+                <a href="#" class="cancel">Cancel</a>
             </div>
         </form>
     </div>

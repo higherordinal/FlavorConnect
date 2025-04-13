@@ -3,6 +3,8 @@
  * Provides functions for managing recipe favorites
  */
 
+'use strict';
+
 // Initialize FlavorConnect namespace
 window.FlavorConnect = window.FlavorConnect || {};
 

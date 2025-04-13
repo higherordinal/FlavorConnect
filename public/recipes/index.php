@@ -5,6 +5,11 @@ $page_title = 'Recipes';
 $page_style = 'recipe-gallery';
 $component_styles = ['recipe-favorite', 'pagination', 'forms'];
 
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['recipe-favorite'];
+$page_scripts = ['recipe-gallery'];
+
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
 } else {
@@ -307,8 +312,6 @@ $userData = [
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
 
-<!-- Load JavaScript files -->
-<script src="<?php echo url_for('/assets/js/pages/recipe-gallery.js?v=' . time()); ?>" defer></script>
 
 <?php
 // Helper function to maintain query parameters

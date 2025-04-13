@@ -49,6 +49,11 @@ if(is_post_request()) {
 $page_title = 'Edit User';
 $page_style = 'admin';
 $component_styles = ['forms'];
+
+// Scripts
+$utility_scripts = ['common', 'form-validation', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 
@@ -77,7 +82,7 @@ include(SHARED_PATH . '/member_header.php');
             <?php include('form_fields.php'); ?>
             <div class="form-buttons">
                 <button type="submit" class="action update">Update User</button>
-                <a href="#" onclick="history.back(); return false;" class="cancel">Cancel</a>
+                <a href="#" class="cancel">Cancel</a>
             </div>
         </form>
     </div>

@@ -1,7 +1,6 @@
 /**
  * @fileoverview Recipe gallery functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.2.0
  * @license MIT
  * @description Manages the recipe gallery page functionality including:
  * - Filter and sort controls
@@ -13,6 +12,8 @@
  * This script works with server-side rendered recipe cards and enhances
  * the user experience with client-side filtering and sorting when available.
  */
+
+'use strict';
 
 // Global state
 const state = {

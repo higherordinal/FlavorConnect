@@ -44,6 +44,10 @@ $recipes = Recipe::create_objects_from_result($result);
 $page_title = 'User Profile';
 $page_style = 'user-profile';
 $component_styles = ['pagination']; // Add pagination styles
+
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 

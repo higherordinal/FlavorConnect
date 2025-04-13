@@ -19,24 +19,28 @@ if(is_post_request()) {
 $page_title = 'Create Measurement Unit';
 $page_style = 'admin';
 $component_styles = ['forms'];
+
+// Scripts
+$utility_scripts = ['common', 'form-validation', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 
 <main class="main-content">
     <div class="admin-content">
-        <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to Recipe Metadata
-        </a>
-
-        <div class="breadcrumbs">
-            <a href="<?php echo url_for('/'); ?>" class="breadcrumb-item">Home</a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="<?php echo url_for('/admin/index.php'); ?>" class="breadcrumb-item">Admin</a>
-            <span class="breadcrumb-separator">/</span>
-            <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="breadcrumb-item">Recipe Metadata</a>
-            <span class="breadcrumb-separator">/</span>
-            <span class="breadcrumb-item active">Create Measurement Unit</span>
-        </div>
+        <?php 
+        echo unified_navigation(
+            '/admin/categories/index.php',
+            [
+                ['url' => '/index.php', 'label' => 'Home'],
+                ['url' => '/admin/index.php', 'label' => 'Admin'],
+                ['url' => '/admin/categories/index.php', 'label' => 'Recipe Metadata'],
+                ['label' => 'Create Measurement Unit']
+            ],
+            'Back to Recipe Metadata'
+        ); 
+        ?>
 
         <div class="admin-header">
             <h1>Create Measurement Unit</h1>

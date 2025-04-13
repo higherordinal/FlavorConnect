@@ -37,6 +37,10 @@ if(is_post_request()) {
 $page_title = 'Delete Recipe';
 $page_style = 'recipe-crud';
 $component_styles = ['forms'];
+
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 

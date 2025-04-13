@@ -6,8 +6,10 @@
  * This script manages user interactions including:
  * - Recipe rating system
  * - Comment submission
- * - Print functionality (handled in show.php)
+ * - Print functionality
  */
+
+'use strict';
 
 // Functions from common.js that we need
 /**
@@ -67,7 +69,7 @@ function initializeRecipeShow() {
 
 /**
  * Sets up event listeners for the page
- * Attaches handlers to rating stars and comment form
+ * Attaches handlers to rating stars, comment form, and print button
  */
 function setupEventListeners() {
     // Rating functionality
@@ -82,7 +84,13 @@ function setupEventListeners() {
         addSafeEventListener(commentForm, 'submit', handleCommentSubmit);
     }
 
-    // Note: Print functionality is now handled directly in show.php
+    // Print functionality
+    const printBtn = document.getElementById('printRecipeBtn');
+    if (printBtn) {
+        addSafeEventListener(printBtn, 'click', function() {
+            window.print();
+        });
+    }
 }
 
 /**

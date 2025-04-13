@@ -47,9 +47,34 @@
 
     <!-- Load JavaScript files -->
     <?php
-    if(isset($scripts) && is_array($scripts)) {
-        foreach($scripts as $script) {
-            echo '<script src="' . url_for('/assets/js/pages/' . $script . '.js?v=' . time()) . '"></script>';
+    // Initialize script arrays if not set
+    if(!isset($page_scripts)) { $page_scripts = []; }
+    if(!isset($component_scripts)) { $component_scripts = []; }
+    if(!isset($utility_scripts)) { $utility_scripts = []; }
+    
+    // Add admin.js to page scripts if on admin page
+    if(strpos($_SERVER['REQUEST_URI'], '/admin/') !== false && !in_array('admin', $page_scripts)) {
+        $page_scripts[] = 'admin';
+    }
+    
+    // Load utility scripts
+    if(!empty($utility_scripts)) {
+        foreach($utility_scripts as $script) {
+            echo '<script src="' . url_for('/assets/js/utils/' . $script . '.js?v=' . time()) . '" defer></script>';
+        }
+    }
+    
+    // Load component scripts
+    if(!empty($component_scripts)) {
+        foreach($component_scripts as $script) {
+            echo '<script src="' . url_for('/assets/js/components/' . $script . '.js?v=' . time()) . '" defer></script>';
+        }
+    }
+    
+    // Load page-specific scripts
+    if(!empty($page_scripts)) {
+        foreach($page_scripts as $script) {
+            echo '<script src="' . url_for('/assets/js/pages/' . $script . '.js?v=' . time()) . '" defer></script>';
         }
     }
     ?>

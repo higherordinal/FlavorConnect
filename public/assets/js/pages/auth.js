@@ -9,6 +9,8 @@
  * - Form validation
  */
 
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize password validation if on register page
     initPasswordValidation();

@@ -4,6 +4,11 @@ $page_title = 'Home';
 $page_style = 'home';
 $component_styles = ['recipe-favorite', 'forms'];
 
+// Scripts
+$utility_scripts = ['common'];
+$component_scripts = ['recipe-favorite'];
+$page_scripts = ['home'];
+
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
 } else {

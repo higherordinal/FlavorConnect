@@ -5,6 +5,11 @@ require_admin();
 $page_title = 'Admin: Recipe Metadata Management';
 $page_style = 'admin';
 
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
+
 // Get all metadata
 $styles = RecipeAttribute::find_by_type('style');
 $diets = RecipeAttribute::find_by_type('diet');

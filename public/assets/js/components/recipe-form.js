@@ -11,6 +11,8 @@
  * - Form validation
  */
 
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Ensure we only initialize once
     if (window.recipeFormInitialized) return;

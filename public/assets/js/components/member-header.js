@@ -14,6 +14,8 @@
  * between header.js and member-header.js to avoid redundancy.
  */
 
+'use strict';
+
 document.addEventListener('DOMContentLoaded', () => {
     // User Menu Toggle - Support both old and new menu selectors for backward compatibility
     const userMenuBtn = document.querySelector('.user-menu-button') || document.querySelector('.user-dropdown');

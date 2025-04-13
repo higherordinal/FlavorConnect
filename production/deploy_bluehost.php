@@ -47,6 +47,13 @@ $patterns = [
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\\/\\.\\.\/private\/config\/api_config\\.php[\\\'"]\\s*\\)\\s*;~',
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/\\.\\.\/\\.\\.\/private\/config\/api_config\\.php[\\\'"]\\s*\\)\\s*;~',
     '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/\\.\\.\/\\.\\.\/\\.\\.\/private\/config\/api_config\\.php[\\\'"]\\s*\\)\\s*;~',
+    
+    // Config references
+    '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\/private\/config\/config\\.php[\\\'"]\\s*\\)\\s*;~',
+    '~(require|include)(_once)?\\s*\\(\\s*[\\\'"]\\.\\.\\/\\.\\.\/private\/config\/config\\.php[\\\'"]\\s*\\)\\s*;~',
+    
+    // Component includes are now handled directly in the code with environment detection
+    // No need to replace recipe-card.php includes anymore
 ];
 
 // Replacements
@@ -62,6 +69,13 @@ $replacements = [
     "require_once('$private_path/config/api_config.php');",
     "require_once('$private_path/config/api_config.php');",
     "require_once('$private_path/config/api_config.php');",
+    
+    // Config references
+    "require_once('$private_path/config/config.php');",
+    "require_once('$private_path/config/config.php');",
+    
+    // Component includes are now handled directly in the code with environment detection
+    // No need for recipe-card.php replacements anymore
 ];
 
 // Counter for modified files
@@ -157,17 +171,17 @@ if (file_exists($production_file)) {
     if (file_exists($target_file)) {
         // Backup the original file
         copy($target_file, $backup_file);
-        echo "Original RecipeImageProcessor class backed up to: $backup_file\n";
+        echo "Original RecipeImageProcessor.class.php backed up to: $backup_file\n";
     }
     
     // Copy the production-ready version to replace the original
     if (copy($production_file, $target_file)) {
-        echo "Successfully replaced RecipeImageProcessor class with Bluehost-optimized version!\n";
+        echo "Successfully replaced RecipeImageProcessor.class.php with Bluehost-optimized version!\n";
     } else {
-        echo "Failed to replace RecipeImageProcessor class.\n";
+        echo "Failed to replace RecipeImageProcessor.class.php.\n";
     }
 } else {
-    echo "Error: Production RecipeImageProcessor file not found at: $production_file\n";
+    echo "Error: Production RecipeImageProcessor.class.php file not found at: $production_file\n";
 }
 
 // Replace Recipe class with the Bluehost-optimized version
@@ -187,17 +201,17 @@ if (file_exists($production_file)) {
     if (file_exists($target_file)) {
         // Backup the original file
         copy($target_file, $backup_file);
-        echo "Original Recipe class backed up to: $backup_file\n";
+        echo "Original Recipe.class.php backed up to: $backup_file\n";
     }
     
     // Copy the production-ready version to replace the original
     if (copy($production_file, $target_file)) {
-        echo "Successfully replaced Recipe class with Bluehost-optimized version!\n";
+        echo "Successfully replaced Recipe.class.php with Bluehost-optimized version!\n";
     } else {
-        echo "Failed to replace Recipe class.\n";
+        echo "Failed to replace Recipe.class.php.\n";
     }
 } else {
-    echo "Error: Production Recipe file not found at: $production_file\n";
+    echo "Error: Production Recipe.class.php file not found at: $production_file\n";
 }
 
 // Replace .htaccess files with the Bluehost-optimized versions
@@ -297,8 +311,8 @@ if (file_exists($production_api_config)) {
     echo "Error: Production api_config.php file not found at: $production_api_config\n";
 }
 
-// Replace config.php with bluehost_config.php
-echo "\nReplacing config.php with bluehost_config.php...\n";
+// Replace config.php with the Bluehost-optimized version
+echo "\nReplacing config.php with Bluehost-optimized version...\n";
 $production_bluehost_config = __DIR__ . '/bluehost_config.php';
 $target_config = $root_dir . 'private/config/config.php';
 $target_bluehost_config = $root_dir . 'private/config/bluehost_config.php';
@@ -317,7 +331,7 @@ if (file_exists($production_bluehost_config)) {
         echo "Original config.php backed up to: $backup_config\n";
     }
     
-    // Copy the production-ready version to replace config.php
+    // Copy the production-ready version to replace the original
     if (copy($production_bluehost_config, $target_config)) {
         echo "Successfully replaced config.php with bluehost_config.php!\n";
         

@@ -7,6 +7,8 @@
  * scaling buttons that recalculate ingredient amounts in real-time.
  */
 
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Scale buttons
     const scaleButtons = document.querySelectorAll('.scale-btn');

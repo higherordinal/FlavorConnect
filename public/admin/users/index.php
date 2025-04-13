@@ -7,6 +7,11 @@ $page_title = 'Admin: User Management';
 $page_style = 'admin';
 $component_styles = ['pagination', 'forms'];
 
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
+
 // Get pagination parameters
 $current_page = $_GET['page'] ?? 1;
 $per_page = 10; // Number of users per page

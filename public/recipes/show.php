@@ -560,46 +560,19 @@ echo display_session_message();
 ?>
 </script>
 
-<script src="<?php echo url_for('/assets/js/utils/recipe-scale.js'); ?>?v=<?php echo time(); ?>"></script>
-<script src="<?php echo url_for('/assets/js/components/recipe-favorite.js'); ?>?v=<?php echo time(); ?>"></script>
+<?php
+// Add utility scripts
+$utility_scripts = ['common', 'form-validation', 'recipe-scale', 'back-link'];
 
-<script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const favoriteBtn = document.querySelector('.favorite-btn');
-        if (favoriteBtn) {
-            const recipeId = favoriteBtn.dataset.recipeId;
-            
-            // Check initial favorite status
-            if (typeof window.checkFavoriteStatus === 'function') {
-                const isFavorited = await window.checkFavoriteStatus(recipeId);
-                if (isFavorited) {
-                    favoriteBtn.classList.add('favorited');
-                    favoriteBtn.querySelector('i').classList.remove('far');
-                    favoriteBtn.querySelector('i').classList.add('fas');
-                    favoriteBtn.setAttribute('aria-label', 'Remove from favorites');
-                }
-            }
-            
-            // Initialize favorite button functionality
-            if (window.FlavorConnect && window.FlavorConnect.favorites) {
-                window.FlavorConnect.favorites.initButtons();
-            }
-        }
-    });
-</script>
+// Add component scripts
+$component_scripts = ['member-header', 'recipe-favorite'];
 
-<script>
-    // Print button functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        const printBtn = document.getElementById('printRecipeBtn');
-        if (printBtn) {
-            printBtn.addEventListener('click', function() {
-                window.print();
-            });
-        }
-    });
-</script>
+// Add page scripts
+$page_scripts = ['recipe-show'];
+?>
 
-<script src="<?php echo url_for('/assets/js/pages/recipe-show.js'); ?>?v=<?php echo time(); ?>"></script>
+
+
+
 
 <?php include(SHARED_PATH . '/footer.php'); ?>

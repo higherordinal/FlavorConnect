@@ -4,6 +4,8 @@
  * @license MIT
  */
 
+'use strict';
+
 // Initialize FlavorConnect namespace
 window.FlavorConnect = window.FlavorConnect || {};
 

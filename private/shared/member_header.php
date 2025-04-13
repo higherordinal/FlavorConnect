@@ -2,6 +2,9 @@
 if(!isset($page_title)) { $page_title = 'FlavorConnect'; }
 if(!isset($page_style)) { $page_style = ''; }
 if(!isset($component_styles)) { $component_styles = []; }
+if(!isset($page_scripts)) { $page_scripts = []; }
+if(!isset($component_scripts)) { $component_scripts = []; }
+if(!isset($utility_scripts)) { $utility_scripts = []; }
 ?>
 
 <!DOCTYPE html>
@@ -24,8 +27,11 @@ if(!isset($component_styles)) { $component_styles = []; }
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Utility Scripts -->
-    <script src="<?php echo url_for('/assets/js/utils/form-validation.js'); ?>"></script>
+    <!-- Utility Scripts are now loaded in footer.php -->
+    <?php 
+    // Add form-validation.js to utility scripts
+    $utility_scripts[] = 'form-validation';
+    ?>
     
     <!-- JavaScript Detection -->
     <script>
@@ -90,16 +96,20 @@ if(!isset($component_styles)) { $component_styles = []; }
         }
     </script>
     
-    <!-- Core Utility Scripts -->
-    <script src="<?php echo url_for('/assets/js/utils/common.js?v=' . time()); ?>"></script>
-    <script src="<?php echo url_for('/assets/js/components/recipe-favorite.js?v=' . time()); ?>"></script>
-    <script src="<?php echo url_for('/assets/js/utils/back-link.js?v=' . time()); ?>"></script>
+    <?php 
+    // Add core utility scripts
+    $utility_scripts[] = 'common';
+    $utility_scripts[] = 'back-link';
     
-    <!-- Component Scripts -->
-    <script src="<?php echo url_for('/assets/js/components/member-header.js?v=' . time()); ?>" defer></script>
-    <?php if($page_style === 'recipe-form') { ?>
-    <script src="<?php echo url_for('/assets/js/pages/recipe-form.js?v=' . time()); ?>" defer></script>
-    <?php } ?>
+    // Add component scripts
+    $component_scripts[] = 'recipe-favorite';
+    $component_scripts[] = 'member-header';
+    
+    // Add page-specific scripts
+    if($page_style === 'recipe-form') {
+        $page_scripts[] = 'recipe-form';
+    }
+    ?>
 </head>
 <body>
     <header class="header" role="banner">

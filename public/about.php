@@ -4,6 +4,9 @@ $page_title = 'About';
 $page_style = 'about';
 $component_styles = ['forms'];
 
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
 } else {

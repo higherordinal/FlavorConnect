@@ -5,6 +5,10 @@ $page_title = 'Login';
 $page_style = 'auth';
 $component_styles = ['forms'];
 
+// Scripts
+$utility_scripts = ['common', 'form-validation'];
+$page_scripts = ['auth'];
+
 $errors = [];
 $username = '';
 $password = '';
@@ -66,5 +70,3 @@ include(SHARED_PATH . '/public_header.php');
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
 
-<!-- Load authentication JavaScript -->
-<script src="<?php echo url_for('/assets/js/pages/auth.js'); ?>"></script>

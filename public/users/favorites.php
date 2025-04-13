@@ -4,8 +4,13 @@ require_once('../../private/core/initialize.php');
 require_login();
 
 $page_title = 'User Favorites';
-$page_style = 'recipe-gallery'; // Changed to match recipes/index.php
+$page_style = 'recipe-gallery';
 $component_styles = ['recipe-favorite', 'pagination', 'forms'];
+
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header', 'recipe-favorite'];
+$page_scripts = ['user-favorites'];
 
 // Get current page
 $current_page = $_GET['page'] ?? 1;
@@ -118,6 +123,5 @@ include(SHARED_PATH . '/member_header.php');
         window.initialFavoritesData = <?php echo json_encode($favoritesData); ?>;
     </script>
 
-    <script src="<?php echo url_for('/assets/js/pages/user-favorites.js?v=' . time()); ?>"></script>
 
     <?php include(SHARED_PATH . '/footer.php'); ?>

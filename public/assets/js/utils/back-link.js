@@ -11,6 +11,8 @@
  */
 
 (function() {
+    'use strict';
+    
     // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', function() {
         // Handle back links

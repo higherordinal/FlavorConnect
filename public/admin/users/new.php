@@ -20,6 +20,11 @@ if(is_post_request()) {
 $page_title = 'Create User';
 $page_style = 'admin';
 $component_styles = ['forms'];
+
+// Scripts
+$utility_scripts[] = 'form-validation';
+$component_scripts[] = 'member-header';
+$page_scripts[] = 'admin';
 include(SHARED_PATH . '/member_header.php');
 ?>
 
@@ -39,7 +44,7 @@ include(SHARED_PATH . '/member_header.php');
             <?php include('form_fields.php'); ?>
             <div class="form-buttons">
                 <button type="submit" class="action create">Create User</button>
-                <a href="#" onclick="history.back(); return false;" class="cancel">Cancel</a>
+                <a href="#" class="cancel">Cancel</a>
             </div>
         </form>
     </div>

@@ -6,6 +6,11 @@ require_admin();
 $page_title = 'Admin Dashboard';
 $page_style = 'admin';
 
+// Scripts
+$utility_scripts = ['common', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
+
 // Determine the back link based on the ref_page parameter
 $back_link = '/index.php';
 $back_text = 'Back to Home';
