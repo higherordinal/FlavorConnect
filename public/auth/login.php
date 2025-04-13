@@ -65,3 +65,6 @@ include(SHARED_PATH . '/public_header.php');
 </div>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
+
+<!-- Load authentication JavaScript -->
+<script src="<?php echo url_for('/assets/js/pages/auth.js'); ?>"></script>
