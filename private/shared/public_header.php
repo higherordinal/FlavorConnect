@@ -100,7 +100,18 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
                     $is_recipes_page = (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false);
                     ?>
                     <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
-                    <li><a href="<?php echo url_for('/about.php'); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
+                    <?php
+                    // Determine the current section for the ref parameter
+                    $ref_param = '';
+                    if (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false) {
+                        $ref_param = '?ref=recipes';
+                    } elseif (strpos($_SERVER['PHP_SELF'], '/users/profile.php') !== false) {
+                        $ref_param = '?ref=profile';
+                    } elseif (strpos($_SERVER['PHP_SELF'], '/users/favorites.php') !== false) {
+                        $ref_param = '?ref=favorites';
+                    }
+                    ?>
+                    <li><a href="<?php echo url_for('/about.php' . $ref_param); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                 </ul>
             </nav>
 

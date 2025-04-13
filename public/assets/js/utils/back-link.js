@@ -2,7 +2,7 @@
  * Unified Navigation Component
  * 
  * This script enhances navigation elements:
- * 1. Back links: Uses browser history when possible or falls back to href
+ * 1. Back links: Uses the href attribute directly to ensure consistent navigation
  * 2. Breadcrumbs: Adds active class to current page breadcrumb
  * 3. Unified navigation: Handles both components together
  * 
@@ -15,37 +15,28 @@
     
     // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', function() {
-        // Handle back links
-        enhanceBackLinks();
-        
         // Handle breadcrumbs
         highlightCurrentBreadcrumb();
+        
+        // Store the current page in session storage for back navigation
+        storeCurrentPageForBackNavigation();
     });
     
     /**
-     * Enhances back links with browser history functionality
+     * Stores the current page URL in session storage for better back navigation
      */
-    function enhanceBackLinks() {
-        // Find all back-link elements
-        const backLinks = document.querySelectorAll('.back-link');
+    function storeCurrentPageForBackNavigation() {
+        // Get the current page URL
+        const currentUrl = window.location.pathname;
         
-        // Process each back link
-        backLinks.forEach(function(link) {
-            // Skip if the link has data-force-href attribute
-            if (link.hasAttribute('data-force-href')) {
-                return;
-            }
-            
-            // Add click event listener
-            link.addEventListener('click', function(event) {
-                // If we have history and we're not on the first page
-                if (window.history.length > 1) {
-                    event.preventDefault();
-                    window.history.back();
-                }
-                // Otherwise, the default link behavior will be used (PHP fallback)
-            });
-        });
+        // Store previous page before updating
+        const currentPage = sessionStorage.getItem('currentPage');
+        if (currentPage) {
+            sessionStorage.setItem('previousPage', currentPage);
+        }
+        
+        // Update current page
+        sessionStorage.setItem('currentPage', currentUrl);
     }
     
     /**
@@ -65,6 +56,8 @@
             if (!hasActive && items.length > 0) {
                 const lastItem = items[items.length - 1];
                 lastItem.classList.add('breadcrumb-active');
+                // Also add aria-current attribute for accessibility
+                lastItem.setAttribute('aria-current', 'page');
                 
                 // If it's a link, convert it to a span
                 if (lastItem.tagName === 'A') {

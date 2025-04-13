@@ -17,13 +17,32 @@ if($session->is_logged_in()) {
 <main>
     <section class="about-section">
         <?php 
+        // Get the back URL from query parameter if available
+        $back_url = '/index.php';
+        $back_text = 'Back';
+        
+        // Check if we have a ref parameter in the URL
+        if (isset($_GET['ref'])) {
+            switch ($_GET['ref']) {
+                case 'recipes':
+                    $back_url = '/recipes/index.php';
+                    $back_text = 'Back to Recipes';
+                    break;
+                case 'profile':
+                    $back_url = '/users/profile.php';
+                    $back_text = 'Back to Profile';
+                    break;
+                // Add more cases as needed
+            }
+        }
+        
         echo unified_navigation(
-            '/index.php',
+            $back_url,
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['label' => 'About Us']
             ],
-            'Back'
+            $back_text
         ); 
         ?>
         <div class="about-hero">

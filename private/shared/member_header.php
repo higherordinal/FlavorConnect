@@ -156,6 +156,21 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
                                             $page_title === 'Create Recipe');
                     ?>
                     <li><a href="<?php echo url_for('/recipes/new.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
+                    <?php
+                    // Check if current page is about page
+                    $is_about_page = (strpos($_SERVER['PHP_SELF'], '/about.php') !== false || $page_title === 'About');
+                    
+                    // Determine the ref parameter based on current section
+                    $about_ref = '';
+                    if ($is_recipes_page) {
+                        $about_ref = '?ref=recipes';
+                    } elseif (strpos($_SERVER['PHP_SELF'], '/users/profile.php') !== false) {
+                        $about_ref = '?ref=profile';
+                    } elseif ($is_favorites_page) {
+                        $about_ref = '?ref=favorites';
+                    }
+                    ?>
+                    <li><a href="<?php echo url_for('/about.php' . $about_ref); ?>" <?php echo $is_about_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                     <?php if($session->is_admin() || $session->is_super_admin()) { 
                         // Check if current page is in admin section
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;

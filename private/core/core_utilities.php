@@ -206,8 +206,8 @@ function format_quantity($value, $precision = 'basic') {
  * Generates a smart back link URL and suggested text
  * 
  * This function determines the most appropriate back link based on:
- * 1. The HTTP_REFERER if available
- * 2. The 'ref' parameter in the query string
+ * 1. The 'ref' parameter in the query string (highest priority)
+ * 2. The HTTP_REFERER if available
  * 3. A default fallback URL
  * 4. Named routes from the router if available
  * 
@@ -223,7 +223,7 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         'text' => $default_text
     ];
     
-    // First check for ref parameter in query string
+    // First check for ref parameter in query string (highest priority)
     $ref = $_GET['ref'] ?? '';
     if ($ref) {
         switch ($ref) {
