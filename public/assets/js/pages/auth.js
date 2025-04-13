@@ -36,9 +36,6 @@ function initPasswordValidation() {
         passwordMatch.style.display = 'none';
     }
     
-    // Style for the password requirements
-    addPasswordValidationStyles();
-    
     // Add event listeners
     if (passwordInput) {
         passwordInput.addEventListener('input', validatePassword);
@@ -50,53 +47,6 @@ function initPasswordValidation() {
     
     // Initial validation
     validatePassword();
-    
-    /**
-     * Adds CSS styles for password validation
-     */
-    function addPasswordValidationStyles() {
-        document.head.insertAdjacentHTML('beforeend', `
-            <style>
-                .password-requirements {
-                    margin-top: 10px;
-                    padding: 10px;
-                    border-radius: 4px;
-                    background-color: #f8f9fa;
-                    font-size: 0.85rem;
-                }
-                .password-requirements ul {
-                    list-style: none;
-                    padding-left: 10px;
-                    margin: 5px 0;
-                }
-                .requirement-heading {
-                    margin: 0 0 5px 0;
-                    font-weight: bold;
-                }
-                .check-icon {
-                    display: inline-block;
-                    width: 16px;
-                    color: #ccc;
-                }
-                .valid .check-icon {
-                    color: #28a745;
-                }
-                .invalid .check-icon {
-                    color: #dc3545;
-                }
-                .password-match {
-                    margin-top: 5px;
-                    font-size: 0.85rem;
-                }
-                .match-valid {
-                    color: #28a745;
-                }
-                .match-invalid {
-                    color: #dc3545;
-                }
-            </style>
-        `);
-    }
     
     /**
      * Validates password against requirements
