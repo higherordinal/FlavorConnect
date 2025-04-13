@@ -22,16 +22,25 @@ $page_style = 'admin';
 $component_styles = ['forms'];
 
 // Scripts
-$utility_scripts[] = 'form-validation';
-$component_scripts[] = 'member-header';
-$page_scripts[] = 'admin';
+$utility_scripts = ['common', 'form-validation', 'back-link'];
+$component_scripts = ['member-header'];
+$page_scripts = ['admin'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 
 <div class="admin-content">
-    <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="back-link">
-        <i class="fas fa-arrow-left"></i> Back to User List
-    </a>
+    <?php 
+    echo unified_navigation(
+        '/admin/users/index.php',
+        [
+            ['url' => '/index.php', 'label' => 'Home'],
+            ['url' => '/admin/index.php', 'label' => 'Admin'],
+            ['url' => '/admin/users/index.php', 'label' => 'User Management'],
+            ['label' => 'Create User']
+        ],
+        'Back to User Management'
+    ); 
+    ?>
 
     <div class="admin-header">
         <h1>Create New User</h1>

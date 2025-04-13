@@ -244,7 +244,8 @@ class Pagination {
             $url = str_replace('{page}', $page, $url_pattern);
             // Add the query string if it's not empty
             $full_url = $url . $query_string;
-            $html .= '<a href="' . $full_url . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page">';
+            // Add data-page attribute to help the JavaScript component
+            $html .= '<a href="' . $full_url . '" class="pagination-link ' . $class . '" title="' . ucfirst($class) . ' page" data-page="' . $page . '">';
         } else {
             $html .= '<span class="pagination-link disabled ' . $class . '">';
         }

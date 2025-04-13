@@ -7,6 +7,12 @@
  * 
  * A reusable pagination component that provides navigation controls
  * for paginated content throughout the application.
+ * 
+ * Features:
+ * - AJAX-based content loading
+ * - Loading indicators
+ * - Error handling
+ * - Responsive design
  */
 
 .pagination {
@@ -39,6 +45,12 @@
   box-shadow: var(--shadow-sm);
 }
 
+.pagination-link.active {
+  background-color: var(--primary-color);
+  color: var(--color-white);
+  font-weight: bold;
+}
+
 .pagination-link.disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -58,7 +70,51 @@
   margin-bottom: 1rem;
 }
 
+/* AJAX Loading Indicator */
+.fc-loading {
+  position: relative;
+  min-height: 100px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
 
+.pagination-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: var(--border-radius);
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+}
+
+.loading-spinner i {
+  font-size: 2rem;
+}
+
+/* Error Message */
+.pagination-error-message {
+  background-color: var(--error-bg-color, #ffebee);
+  color: var(--error-text-color, #d32f2f);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: var(--border-radius);
+  text-align: center;
+  border-left: 4px solid var(--error-text-color, #d32f2f);
+  box-shadow: var(--shadow-sm);
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {

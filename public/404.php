@@ -51,6 +51,9 @@ if (defined('PRIVATE_PATH')) {
     $page_title = '404 - Page Not Found';
     $page_style = '404';
     
+    // Scripts
+    $utility_scripts = ['common'];
+    
     // Use member header if user is logged in, otherwise use public header
     if (function_exists('is_logged_in') && is_logged_in()) {
         include(SHARED_PATH . '/member_header.php');

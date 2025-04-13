@@ -7,7 +7,7 @@ $component_styles = ['recipe-favorite', 'pagination', 'forms'];
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
-$component_scripts = ['recipe-favorite'];
+$component_scripts = ['recipe-favorite', 'pagination'];
 $page_scripts = ['recipe-gallery'];
 
 if($session->is_logged_in()) {
