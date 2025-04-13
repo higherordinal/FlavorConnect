@@ -137,40 +137,37 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
                     $recipe_ref = '?ref=recipe&recipe_id=' . $_GET['id'];
                 }
                 ?>
+                <?php
+                // Get the ref parameter for consistent back navigation
+                $ref_param = get_ref_parameter();
+                ?>
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li><a href="<?php echo url_for('/index.php' . $ref_param); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
                     <?php 
                     // Check if current page is in recipes section (but not new.php)
                     $is_recipes_page = (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false && 
                                       strpos($_SERVER['PHP_SELF'], '/recipes/new.php') === false);
                     ?>
-                    <li><a href="<?php echo url_for('/recipes/index.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
+                    <li><a href="<?php echo url_for('/recipes/index.php' . $ref_param); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
                     <?php 
                     // Check if current page is favorites
                     $is_favorites_page = (strtolower($page_title) === 'favorites' || strpos($_SERVER['PHP_SELF'], '/users/favorites.php') !== false);
                     ?>
-                    <li><a href="<?php echo url_for('/users/favorites.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_favorites_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
+                    <li><a href="<?php echo url_for('/users/favorites.php' . $ref_param); ?>" <?php echo $is_favorites_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-heart" aria-hidden="true"></i> Favorites</a></li>
                     <?php
                     // Check if current page is create recipe (only new.php)
                     $is_create_recipe_page = (strpos($_SERVER['PHP_SELF'], '/recipes/new.php') !== false || 
                                             $page_title === 'Create Recipe');
                     ?>
-                    <li><a href="<?php echo url_for('/recipes/new.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
+                    <li><a href="<?php echo url_for('/recipes/new.php' . $ref_param); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
                     <?php
                     // Check if current page is about page
                     $is_about_page = (strpos($_SERVER['PHP_SELF'], '/about.php') !== false || $page_title === 'About');
                     
-                    // Determine the ref parameter based on current section
-                    $about_ref = '';
-                    if ($is_recipes_page) {
-                        $about_ref = '?ref=recipes';
-                    } elseif (strpos($_SERVER['PHP_SELF'], '/users/profile.php') !== false) {
-                        $about_ref = '?ref=profile';
-                    } elseif ($is_favorites_page) {
-                        $about_ref = '?ref=favorites';
-                    }
+                    // Get the ref parameter for consistent back navigation
+                    $ref_param = get_ref_parameter();
                     ?>
-                    <li><a href="<?php echo url_for('/about.php' . $about_ref); ?>" <?php echo $is_about_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
+                    <li><a href="<?php echo url_for('/about.php' . $ref_param); ?>" <?php echo $is_about_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                     <?php if($session->is_admin() || $session->is_super_admin()) { 
                         // Check if current page is in admin section
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;

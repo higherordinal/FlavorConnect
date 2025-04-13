@@ -93,24 +93,17 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
                     <span class="hamburger"></span>
                     <span class="hamburger"></span>
                 </label>
+                <?php
+                // Get the ref parameter for consistent back navigation
+                $ref_param = get_ref_parameter();
+                ?>
                 <ul>
-                    <li><a href="<?php echo url_for('/index.php'); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
+                    <li><a href="<?php echo url_for('/index.php' . $ref_param); ?>" <?php echo $page_title === 'Home' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-home" aria-hidden="true"></i> Home</a></li>
                     <?php 
                     // Check if current page is in recipes section
                     $is_recipes_page = (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false);
                     ?>
-                    <li><a href="<?php echo url_for('/recipes/index.php'); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
-                    <?php
-                    // Determine the current section for the ref parameter
-                    $ref_param = '';
-                    if (strpos($_SERVER['PHP_SELF'], '/recipes/') !== false) {
-                        $ref_param = '?ref=recipes';
-                    } elseif (strpos($_SERVER['PHP_SELF'], '/users/profile.php') !== false) {
-                        $ref_param = '?ref=profile';
-                    } elseif (strpos($_SERVER['PHP_SELF'], '/users/favorites.php') !== false) {
-                        $ref_param = '?ref=favorites';
-                    }
-                    ?>
+                    <li><a href="<?php echo url_for('/recipes/index.php' . $ref_param); ?>" <?php echo $is_recipes_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-utensils" aria-hidden="true"></i> Recipes</a></li>
                     <li><a href="<?php echo url_for('/about.php' . $ref_param); ?>" <?php echo $page_title === 'About' ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                 </ul>
             </nav>

@@ -341,6 +341,45 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
 }
 
 /**
+ * Generates a reference parameter for consistent back navigation
+ * 
+ * This function determines the current section of the site and returns
+ * an appropriate ref parameter that can be appended to URLs.
+ * 
+ * @return string The ref parameter (e.g., '?ref=recipes') or empty string if not applicable
+ */
+function get_ref_parameter() {
+    // Determine the current section based on the URL
+    $current_path = $_SERVER['PHP_SELF'] ?? '';
+    $ref_param = '';
+    
+    // Check for specific sections
+    if (strpos($current_path, '/recipes/') !== false) {
+        $ref_param = '?ref=recipes';
+    } elseif (strpos($current_path, '/users/profile.php') !== false) {
+        $ref_param = '?ref=profile';
+    } elseif (strpos($current_path, '/users/favorites.php') !== false) {
+        $ref_param = '?ref=favorites';
+    } elseif (strpos($current_path, '/admin/') !== false) {
+        $ref_param = '?ref=admin';
+    } elseif (strpos($current_path, '/about.php') !== false) {
+        $ref_param = '?ref=about';
+    }
+    
+    // Add recipe ID if we're on a recipe page
+    if (strpos($current_path, '/recipes/show.php') !== false && isset($_GET['id'])) {
+        if (!empty($ref_param)) {
+            $ref_param .= '&';
+        } else {
+            $ref_param = '?';
+        }
+        $ref_param .= 'recipe_id=' . $_GET['id'];
+    }
+    
+    return $ref_param;
+}
+
+/**
  * Generates a unified navigation component with back link and breadcrumbs
  * 
  * @param string $default_back_url The default URL to use if no referer is available
