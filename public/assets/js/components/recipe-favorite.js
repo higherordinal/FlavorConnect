@@ -1,6 +1,8 @@
 /**
  * FlavorConnect Favorites Utility
  * Provides functions for managing recipe favorites
+ * @author Henry Vaughn
+ * @version 1.1.0
  */
 
 'use strict';
@@ -9,88 +11,92 @@
 window.FlavorConnect = window.FlavorConnect || {};
 
 // Favorites utility functions
-window.FlavorConnect.favorites = {
-    /**
-     * Initialize favorite buttons on the page
-     */
-    initButtons: function() {
-        const buttons = document.querySelectorAll('.favorite-btn:not([data-initialized])');
-        
-        buttons.forEach(button => {
-            const recipeId = button.dataset.recipeId;
-            if (!recipeId) return;
-            
-            // Check initial favorite status
-            this.checkStatus(recipeId)
-                .then(isFavorited => {
-                    // Update button state based on favorite status
-                    if (isFavorited) {
-                        button.classList.add('favorited');
-                        const icon = button.querySelector('i');
-                        if (icon) {
-                            icon.classList.remove('far');
-                            icon.classList.add('fas');
-                        }
-                        // Set aria-label for favorited state
-                        button.setAttribute('aria-label', 'Remove from favorites');
-                    } else {
-                        // Ensure aria-label is set for non-favorited state
-                        button.setAttribute('aria-label', 'Add to favorites');
-                    }
-                })
-                .catch(error => {/* Error silently handled */});
-            
-            // Mark as initialized
-            button.dataset.initialized = 'true';
-            
-            // Add click handler
-            button.addEventListener('click', async (e) => {
-                e.preventDefault();
-                
-                try {
-                    const result = await this.toggle(recipeId);
-                    
-                    if (result.success) {
-                        // Update button state
-                        button.classList.toggle('favorited', result.isFavorited);
-                        
-                        // Update icon
-                        const icon = button.querySelector('i');
-                        if (icon) {
-                            if (result.isFavorited) {
-                                icon.classList.remove('far');
-                                icon.classList.add('fas');
-                            } else {
-                                icon.classList.remove('fas');
-                                icon.classList.add('far');
-                            }
-                        }
-                        
-                        // Update aria-label
-                        const actionText = result.isFavorited ? 'Remove from' : 'Add to';
-                        button.setAttribute('aria-label', `${actionText} favorites`);
-                    } else if (result.error) {
-                    }
-                } catch (error) {
-                }
-            });
-        });
-    },
+window.FlavorConnect.favorites = (function() {
+    // Private variables and functions
+    const config = {
+        baseUrl: window.FlavorConnect.config ? window.FlavorConnect.config.baseUrl : '/',
+        isLoggedIn: window.FlavorConnect.config ? window.FlavorConnect.config.isLoggedIn : false
+    };
     
     /**
-     * Check if a recipe is favorited by the current user
-     * @param {number} recipeId - The ID of the recipe to check
-     * @returns {Promise<boolean>} - Whether the recipe is favorited
+     * Update button appearance based on favorite status
+     * @param {HTMLElement} button - The button to update
+     * @param {boolean} isFavorited - Whether the recipe is favorited
      */
-    checkStatus: async function(recipeId) {
-        try {
-            if (!window.FlavorConnect.config.isLoggedIn) return false;
+    function updateButtonState(button, isFavorited) {
+        // Update button class
+        button.classList.toggle('favorited', isFavorited);
+        
+        // Update icon
+        const icon = button.querySelector('i');
+        if (icon) {
+            if (isFavorited) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            }
+        }
+        
+        // Update aria-label
+        const actionText = isFavorited ? 'Remove from' : 'Add to';
+        button.setAttribute('aria-label', `${actionText} favorites`);
+    }
+    
+    // Public API
+    return {
+        /**
+         * Initialize favorite buttons on the page
+         */
+        initButtons: function() {
+            const buttons = document.querySelectorAll('.favorite-btn:not([data-initialized])');
             
-            // Use the toggle_favorite.php endpoint with GET method
-            const baseUrl = window.FlavorConnect.config.baseUrl;
-            // Remove trailing slash if present
-            const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-            const fullUrl = `${url}/api/toggle_favorite.php?recipe_id=${recipeId}`;
+            buttons.forEach(button => {
+                const recipeId = button.dataset.recipeId;
+                if (!recipeId) return;
+                
+                // Check initial favorite status
+                this.checkStatus(recipeId)
+                    .then(isFavorited => {
+                        // Update button state based on favorite status
+                        updateButtonState(button, isFavorited);
+                    })
+                    .catch(error => {/* Error silently handled */});
+                
+                // Mark as initialized
+                button.dataset.initialized = 'true';
+                
+                // Add click handler
+                button.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    
+                    try {
+                        const result = await this.toggle(recipeId);
+                        
+                        if (result.success) {
+                            // Update button state using the shared function
+                            updateButtonState(button, result.isFavorited);
+                        }
+                    } catch (error) {
+                        // Silent error handling
+                    }
+                });
+            });
+        },
+    
+        /**
+         * Check if a recipe is favorited by the current user
+         * @param {number} recipeId - The ID of the recipe to check
+         * @returns {Promise<boolean>} - Whether the recipe is favorited
+         */
+        checkStatus: async function(recipeId) {
+            try {
+                if (!config.isLoggedIn) return false;
+                
+                // Use the toggle_favorite.php endpoint with GET method
+                const url = config.baseUrl.endsWith('/') ? config.baseUrl.slice(0, -1) : config.baseUrl;
+                const fullUrl = `${url}/api/toggle_favorite.php?recipe_id=${recipeId}`;
 
             
             // Add cache-busting parameter to prevent caching
@@ -147,9 +153,7 @@ window.FlavorConnect.favorites = {
             }
 
             // Use the toggle_favorite.php endpoint with POST method
-            const baseUrl = window.FlavorConnect.config.baseUrl;
-            // Remove trailing slash if present
-            const url = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+            const url = config.baseUrl.endsWith('/') ? config.baseUrl.slice(0, -1) : config.baseUrl;
             const fullUrl = `${url}/api/toggle_favorite.php`;
 
 
@@ -243,14 +247,14 @@ window.FlavorConnect.favorites = {
         }
     },
     
-    /**
-     * Get all favorite recipes for the current user
-     * @param {string} sortBy - Sort parameter (date, name, etc.)
-     * @returns {Promise<Array>} Array of favorite recipe objects
-     */
-    getAllFavorites: async function(sortBy = 'date') {
-        try {
-            if (!window.FlavorConnect.config.isLoggedIn) return [];
+        /**
+         * Get all favorite recipes for the current user
+         * @param {string} sortBy - Sort parameter (date, name, etc.)
+         * @returns {Promise<Array>} Array of favorite recipe objects
+         */
+        getAllFavorites: async function(sortBy = 'date') {
+            try {
+                if (!config.isLoggedIn) return [];
             
             // In this implementation, we're relying on the server-side rendering
             // to provide the favorites data directly in the DOM
@@ -282,25 +286,25 @@ window.FlavorConnect.favorites = {
         }
     },
     
-    /**
-     * Create empty state HTML for favorites page
-     * @returns {string} HTML for empty state
-     */
-    createEmptyState: function() {
-        return `
-            <div class="empty-state">
-                <i class="far fa-heart empty-icon"></i>
-                <h3>No Favorite Recipes Yet</h3>
-                <p>Explore recipes and click the heart icon to add them to your favorites.</p>
-                <a href="${window.FlavorConnect.config.baseUrl}recipes" class="btn btn-primary">Explore Recipes</a>
-            </div>
-        `;
-    }
-};
+        /**
+         * Create empty state HTML for favorites page
+         * @returns {string} HTML for empty state
+         */
+        createEmptyState: function() {
+            return `
+                <div class="empty-state">
+                    <i class="far fa-heart empty-icon"></i>
+                    <h3>No Favorite Recipes Yet</h3>
+                    <p>Explore recipes and click the heart icon to add them to your favorites.</p>
+                    <a href="${config.baseUrl}recipes" class="btn btn-primary">Explore Recipes</a>
+                </div>
+            `;
+        }
+    };
+})();
 
 // For backward compatibility (DEPRECATED - use window.FlavorConnect.favorites.initButtons instead)
 window.initializeFavoriteButtons = function() {
-
     if (window.FlavorConnect && window.FlavorConnect.favorites) {
         window.FlavorConnect.favorites.initButtons();
     }
@@ -308,11 +312,9 @@ window.initializeFavoriteButtons = function() {
 
 // For backward compatibility (DEPRECATED - use window.FlavorConnect.favorites.toggle instead)
 window.toggleFavorite = async function(recipeId) {
-
     if (window.FlavorConnect && window.FlavorConnect.favorites) {
         return await window.FlavorConnect.favorites.toggle(recipeId);
     } else {
-
         return { success: false, error: 'Favorite functionality not available' };
     }
 };
