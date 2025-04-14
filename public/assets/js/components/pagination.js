@@ -11,11 +11,14 @@
  * Works with the Pagination.class.php output format
  */
 
+'use strict';
+
 // Add to FlavorConnect namespace
 window.FlavorConnect = window.FlavorConnect || {};
 window.FlavorConnect.components = window.FlavorConnect.components || {};
 
-(function() {
+// Pagination component
+window.FlavorConnect.components.pagination = (function() {
     'use strict';
     
     // Configuration
@@ -31,29 +34,19 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
         paginationSelector: '.pagination',
         paginationLinkSelector: '.pagination a', // Simplified selector to match all links
         loadingClass: 'fc-loading',
-        debug: true,
-        ajaxRequestCount: 0 // Track AJAX requests
+        debug: false,                 // Set to false in production
+        ajaxRequestCount: 0           // Track AJAX requests
     };
     
     // Store original content for fallback
     let originalContent = null;
     let contentContainer = null;
     
-    // Wait for DOM to be fully loaded with a slight delay to ensure all scripts are loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(initPagination, 50);
-        });
-    } else {
-        setTimeout(initPagination, 50);
-    }
-    
     /**
      * Initialize pagination enhancement
      */
     function initPagination() {
         log('Initializing pagination component...');
-        console.info('%c[Pagination] Initializing AJAX pagination', 'color: green; font-weight: bold');
         
         // Find all pagination containers
         const paginationContainers = document.querySelectorAll(config.paginationSelector);
@@ -63,7 +56,9 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
             return; // No pagination on this page
         }
         
-        log(`Found ${paginationContainers.length} pagination containers`);
+        // Update active page based on current URL
+        const currentUrl = new URL(window.location.href);
+        updateActivePage(currentUrl);
         
         // Find the content container that will be updated
         contentContainer = findContentContainer();
@@ -71,8 +66,6 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
             log('Could not find a suitable content container, pagination will use traditional page loads');
             return;
         }
-        
-        log(`Using content container: ${contentContainer.tagName}${contentContainer.id ? ' #' + contentContainer.id : ''}${contentContainer.className ? ' .' + contentContainer.className.replace(/ /g, ' .') : ''}`);
         
         // Store original content for fallback
         originalContent = contentContainer.innerHTML;
@@ -95,15 +88,13 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
             }
         });
         
-        log(`Found ${paginationLinks.length} pagination links`);
-        
         if (paginationLinks.length === 0) {
             log('No pagination links found, disabling AJAX pagination');
             return;
         }
         
         // Add click handlers to all pagination links
-        paginationLinks.forEach(function(link, index) {
+        paginationLinks.forEach(function(link) {
             // Remove any existing event listeners to prevent duplicates
             link.removeEventListener('click', handlePaginationClick);
             
@@ -112,12 +103,9 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
             
             // Mark this link as AJAX-enabled
             link.setAttribute('data-ajax-pagination', 'true');
-            
-            log(`Added click handler to link ${index}: ${link.href}`);
         });
         
         log('Pagination component initialized successfully');
-        console.info('%c[Pagination] AJAX Pagination Ready - ' + paginationLinks.length + ' links enabled', 'color: green; font-weight: bold');
     }
     
     /**
@@ -125,7 +113,7 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
      * @return {HTMLElement|null} The content container or null if not found
      */
     function findContentContainer() {
-        // Try each of the possible content selectors
+        // Try each selector in order until we find a match
         for (const selector of config.contentSelectors) {
             const container = document.querySelector(selector);
             if (container) {
@@ -134,22 +122,14 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
             }
         }
         
-        // If we couldn't find a container using our predefined selectors,
-        // look for any container that contains the pagination
-        const pagination = document.querySelector(config.paginationSelector);
-        if (pagination) {
-            // Find the closest parent that could be a content container
-            let parent = pagination.parentNode;
-            while (parent && parent !== document.body) {
-                if (parent.classList.length > 0) {
-                    log(`Found content container by traversing up from pagination: ${parent.className}`);
-                    return parent;
-                }
-                parent = parent.parentNode;
-            }
+        // If no specific container found, use main content area as fallback
+        const mainContent = document.querySelector('main') || document.getElementById('main-content');
+        if (mainContent) {
+            log('Using main content area as fallback container');
+            return mainContent;
         }
         
-        log('Could not find any suitable content container', true);
+        log('No content container found', true);
         return null;
     }
     
@@ -163,68 +143,65 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
             return;
         }
         
-        // Prevent default link behavior
         event.preventDefault();
+        const url = this.getAttribute('href');
         
-        // Get the URL from the link
-        const url = this.href || this.getAttribute('href');
-        
-        if (!contentContainer) {
-            // Fallback to traditional navigation if we can't find the content container
-            log('No content container found, falling back to traditional navigation', true);
-            window.location.href = url;
+        if (!url) {
+            log('No URL found in pagination link', true);
             return;
         }
         
-        log(`Handling pagination click for URL: ${url}`);
-        console.info(`%c[Pagination] Loading page via AJAX: ${url}`, 'color: green; font-weight: bold;');
+        // Ensure we have a full URL with proper query parameters
+        const fullUrl = new URL(url, window.location.origin).href;
         
-        // Show loading indicator
+        log(`Handling pagination click for URL: ${fullUrl}`);
+        
+        // For recipe gallery, preload content before showing loading indicator
+        const isRecipeGallery = window.location.pathname.includes('/recipes/');
+        
+        // Show loading indicator (subtle for recipe gallery)
         showLoadingIndicator();
         
         // Increment AJAX request counter
         config.ajaxRequestCount++;
         log(`AJAX request count: ${config.ajaxRequestCount}`);
         
-        // Create XMLHttpRequest object (more widely supported than fetch)
+        // Create XMLHttpRequest object
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
+        xhr.open('GET', fullUrl, true);
         
+        // Handle response
         xhr.onload = function() {
             if (xhr.status >= 200 && xhr.status < 400) {
                 // Success!
-                log('Page loaded successfully via AJAX');
-                
-                // Process the new content
-                processNewContent(xhr.responseText, url);
-                
-                // Update browser history
-                updateHistory(url);
+                const responseHTML = xhr.responseText;
+                processNewContent(responseHTML, fullUrl);
+                hideLoadingIndicator();
+                log(`Successfully loaded content from ${fullUrl}`);
             } else {
                 // Error
-                log(`Error loading page: ${xhr.status}`, true);
+                log(`Error loading content: ${xhr.status} ${xhr.statusText}`, true);
                 restoreOriginalContent();
-                showErrorMessage(`Failed to load content (${xhr.status}). Please try again.`);
+                hideLoadingIndicator();
+                showErrorMessage(`Failed to load content (${xhr.status})`);
                 
-                // Fall back to traditional navigation
-                window.location.href = url;
+                // Fallback to traditional navigation
+                window.location.href = fullUrl;
             }
-            
-            // Hide loading indicator
-            hideLoadingIndicator();
         };
         
         xhr.onerror = function() {
-            // Connection error
-            log('Network error occurred', true);
+            // Network error
+            log('Network error while loading content', true);
             restoreOriginalContent();
-            showErrorMessage('Network error. Please try again.');
             hideLoadingIndicator();
+            showErrorMessage('Network error. Please try again.');
             
-            // Fall back to traditional navigation
-            window.location.href = url;
+            // Fallback to traditional navigation
+            window.location.href = fullUrl;
         };
         
+        // Send the request
         xhr.send();
     }
     
@@ -232,20 +209,29 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
      * Show a loading indicator while content is being fetched
      */
     function showLoadingIndicator() {
-        // Add loading class to content container
-        contentContainer.classList.add(config.loadingClass);
-        
-        // Create loading overlay if it doesn't exist
-        if (!document.querySelector('.pagination-loading-overlay')) {
-            const overlay = document.createElement('div');
-            overlay.className = 'pagination-loading-overlay';
-            overlay.innerHTML = `
-                <div class="loading-spinner">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <span>Loading...</span>
-                </div>
-            `;
-            contentContainer.appendChild(overlay);
+        if (contentContainer) {
+            // For recipe gallery, use a more subtle loading indicator
+            if (window.location.pathname.includes('/recipes/')) {
+                // Just add the loading class without the message
+                contentContainer.classList.add(config.loadingClass);
+                log('Showing subtle loading indicator for recipe gallery');
+            } else {
+                // Standard loading indicator for other pages
+                contentContainer.classList.add(config.loadingClass);
+                
+                // Create a loading message if it doesn't exist
+                if (!document.getElementById('ajax-loading-message')) {
+                    const loadingMessage = document.createElement('div');
+                    loadingMessage.id = 'ajax-loading-message';
+                    loadingMessage.className = 'ajax-loading-message';
+                    loadingMessage.innerHTML = '<span class="spinner"></span> Loading...';
+                    
+                    // Add to the top of the content container
+                    contentContainer.insertBefore(loadingMessage, contentContainer.firstChild);
+                }
+                
+                log('Showing loading indicator');
+            }
         }
     }
     
@@ -253,40 +239,17 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
      * Hide the loading indicator
      */
     function hideLoadingIndicator() {
-        // Remove loading class
-        contentContainer.classList.remove(config.loadingClass);
-        
-        // Remove loading overlay if it exists
-        const overlay = document.querySelector('.pagination-loading-overlay');
-        if (overlay && overlay.parentNode) {
-            overlay.parentNode.removeChild(overlay);
+        if (contentContainer) {
+            contentContainer.classList.remove(config.loadingClass);
+            
+            // Remove the loading message if it exists
+            const loadingMessage = document.getElementById('ajax-loading-message');
+            if (loadingMessage && loadingMessage.parentNode) {
+                loadingMessage.parentNode.removeChild(loadingMessage);
+            }
+            
+            log('Hiding loading indicator');
         }
-    }
-    
-    /**
-     * Fetch new content via AJAX
-     * @param {string} url The URL to fetch
-     */
-    function fetchContent(url) {
-        log(`Fetching content from ${url}`);
-        
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(html => {
-                processNewContent(html, url);
-            })
-            .catch(error => {
-                log(`Error fetching content: ${error.message}`, true);
-                restoreOriginalContent();
-                
-                // Show error message
-                showErrorMessage('Failed to load content. Please try again.');
-            });
     }
     
     /**
@@ -295,82 +258,178 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
      * @param {string} url The URL that was fetched
      */
     function processNewContent(html, url) {
-        log('Processing new content');
+        if (!contentContainer) {
+            log('No content container available', true);
+            return;
+        }
         
-        // Create a temporary element to parse the HTML
+        // Parse the HTML
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         
         // Find the corresponding content in the new page
-        let newContentContainer = null;
+        let newContent = null;
         
-        // Try each of the possible content selectors
-        for (const selector of config.contentSelectors) {
-            const container = doc.querySelector(selector);
-            if (container) {
-                newContentContainer = container;
-                log(`Found content container using selector: ${selector}`);
-                break;
+        // For recipe gallery, try to find the recipe-grid specifically
+        if (window.location.pathname.includes('/recipes/')) {
+            log('Processing recipe gallery content');
+            // First try to find the recipe grid
+            newContent = doc.querySelector('.recipe-grid');
+            // Also get pagination if available
+            const newPagination = doc.querySelector('.pagination');
+            if (newPagination) {
+                // Store pagination for later use
+                window.newPaginationContent = newPagination.outerHTML;
+            }
+        }
+        
+        // If not found or not on recipe page, use standard approach
+        if (!newContent) {
+            // Try to find the same container by ID or class
+            if (contentContainer.id) {
+                newContent = doc.getElementById(contentContainer.id);
+            }
+            
+            if (!newContent && contentContainer.className) {
+                // Try each class individually
+                const classes = contentContainer.className.split(' ');
+                for (const className of classes) {
+                    if (className && className !== config.loadingClass) {
+                        const elements = doc.querySelectorAll('.' + className);
+                        if (elements.length === 1) {
+                            newContent = elements[0];
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            // If we couldn't find an exact match, look for common content containers
+            if (!newContent) {
+                for (const selector of config.contentSelectors) {
+                    newContent = doc.querySelector(selector);
+                    if (newContent) break;
+                }
             }
         }
         
         // Update the container with the new content
-        if (newContentContainer) {
-            log('Found new content container, updating');
-            
-            // Extract the pagination container from the new content
-            const newPagination = tempDiv.querySelector(config.paginationSelector);
-            
-            // Update the content container
-            contentContainer.innerHTML = newContentContainer.innerHTML;
-            
-            // If we found a new pagination container, replace the old one
-            if (newPagination) {
-                const oldPagination = document.querySelector(config.paginationSelector);
-                if (oldPagination && oldPagination.parentNode) {
-                    log('Replacing pagination container');
-                    oldPagination.parentNode.replaceChild(newPagination, oldPagination);
-                }
+        if (newContent) {
+            // Special handling for recipe gallery
+            if (window.location.pathname.includes('/recipes/')) {
+                // Create a temporary container for the new content
+                const tempContainer = document.createElement('div');
+                tempContainer.innerHTML = newContent.innerHTML;
+                tempContainer.style.opacity = '0';
+                
+                // Replace content with a smooth transition
+                contentContainer.style.transition = 'opacity 0.1s ease-out';
+                contentContainer.style.opacity = '0';
+                
+                // Short timeout to allow opacity transition to complete
+                setTimeout(() => {
+                    // Update recipe grid content
+                    contentContainer.innerHTML = newContent.innerHTML;
+                    
+                    // Update pagination if we have it
+                    if (window.newPaginationContent) {
+                        const paginationContainer = document.querySelector('.pagination');
+                        if (paginationContainer) {
+                            paginationContainer.outerHTML = window.newPaginationContent;
+                            // Clear the stored pagination
+                            window.newPaginationContent = null;
+                        }
+                    }
+                    
+                    // Update records info if present
+                    const newRecordsInfo = doc.querySelector('.records-info');
+                    const currentRecordsInfo = document.querySelector('.records-info');
+                    if (newRecordsInfo && currentRecordsInfo) {
+                        currentRecordsInfo.innerHTML = newRecordsInfo.innerHTML;
+                    }
+                    
+                    // Fade content back in
+                    contentContainer.style.opacity = '1';
+                }, 50);
+                
+                // After the content is updated, preserve filter selections
+                setTimeout(() => {
+                    const parsedUrl = new URL(url, window.location.origin);
+                    const params = new URLSearchParams(parsedUrl.search);
+                    
+                    // Update style filter
+                    const styleFilter = document.querySelector('#style-filter');
+                    if (styleFilter && params.has('style')) {
+                        styleFilter.value = params.get('style');
+                    }
+                    
+                    // Update diet filter
+                    const dietFilter = document.querySelector('#diet-filter');
+                    if (dietFilter && params.has('diet')) {
+                        dietFilter.value = params.get('diet');
+                    }
+                    
+                    // Update type filter
+                    const typeFilter = document.querySelector('#type-filter');
+                    if (typeFilter && params.has('type')) {
+                        typeFilter.value = params.get('type');
+                    }
+                    
+                    // Update sort filter
+                    const sortFilter = document.querySelector('#sort');
+                    if (sortFilter && params.has('sort')) {
+                        sortFilter.value = params.get('sort');
+                    }
+                }, 60);
             } else {
-                log('No pagination container found in new content', true);
+                // Standard content update for other pages
+                contentContainer.innerHTML = newContent.innerHTML;
             }
+            
+            // Update browser history
+            updateHistory(url);
             
             // Re-initialize pagination for the new content
             initPagination();
             
-            // Re-initialize other components if needed
-            if (window.FlavorConnect && window.FlavorConnect.initComponents) {
-                log('Initializing other FlavorConnect components');
-                window.FlavorConnect.initComponents();
+            // Re-initialize favorites functionality
+            if (window.FlavorConnect && window.FlavorConnect.favorites) {
+                window.FlavorConnect.favorites.initButtons();
             }
             
-            // Re-initialize recipe favorite functionality if it exists
-            if (window.FlavorConnect.initFavorites) {
-                log('Re-initializing favorites functionality');
-                window.FlavorConnect.initFavorites();
+            // Re-initialize favorites page functionality if on favorites page
+            if (window.FlavorConnect && window.FlavorConnect.favoritesPage) {
+                window.FlavorConnect.favoritesPage.setupEventListeners();
+                window.FlavorConnect.favoritesPage.loadFavorites();
             }
             
-            // Scroll to top of content container
-            contentContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Re-initialize recipe gallery functionality if on recipe gallery page
+            if (typeof window.initializeFavorites === 'function') {
+                window.initializeFavorites();
+            }
+            
+            log(`Updated content container with new content from ${url}`);
+            
+            // Scroll to top of content if needed
+            if (contentContainer.getBoundingClientRect().top < 0) {
+                contentContainer.scrollIntoView({ behavior: 'smooth' });
+            }
         } else {
-            log('Could not find new content container, restoring original', true);
+            log('Could not find matching content in the new page', true);
             restoreOriginalContent();
+            
+            // Fallback to traditional navigation
+            window.location.href = url;
         }
-        
-        // Hide loading indicator
-        hideLoadingIndicator();
     }
     
     /**
      * Restore the original content if something goes wrong
      */
     function restoreOriginalContent() {
-        if (originalContent && contentContainer) {
+        if (contentContainer && originalContent) {
             contentContainer.innerHTML = originalContent;
-            hideLoadingIndicator();
-            
-            // Re-initialize pagination
-            initPagination();
+            log('Restored original content');
         }
     }
     
@@ -379,19 +438,21 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
      * @param {string} message The error message to display
      */
     function showErrorMessage(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'pagination-error-message';
-        errorDiv.textContent = message;
-        
-        // Add to content container
-        contentContainer.appendChild(errorDiv);
-        
-        // Remove after 5 seconds
-        setTimeout(() => {
-            if (errorDiv.parentNode) {
-                errorDiv.parentNode.removeChild(errorDiv);
-            }
-        }, 5000);
+        if (contentContainer) {
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'error-message';
+            errorMessage.textContent = message;
+            contentContainer.appendChild(errorMessage);
+            
+            // Remove error message after a delay
+            setTimeout(function() {
+                if (errorMessage.parentNode) {
+                    errorMessage.parentNode.removeChild(errorMessage);
+                }
+            }, 5000);
+            
+            log(`Showing error message: ${message}`, true);
+        }
     }
     
     /**
@@ -400,21 +461,63 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
      */
     function updateHistory(url) {
         if (window.history && window.history.pushState) {
-            log(`Updating history with URL: ${url}`);
-            window.history.pushState({ ajaxPagination: true, url: url }, '', url);
+            // Parse the URL to handle complex query parameters properly
+            const parsedUrl = new URL(url, window.location.origin);
+            
+            // Store the full URL with all query parameters
+            window.history.pushState({ url: parsedUrl.href }, '', parsedUrl.href);
+            
+            // Update active page in pagination links
+            updateActivePage(parsedUrl);
             
             // Handle browser back/forward buttons
-            if (!window.onpopstate) {
-                window.onpopstate = function(event) {
-                    if (event.state && event.state.ajaxPagination) {
-                        log('Handling popstate event');
-                        fetchContent(event.state.url);
+            window.onpopstate = function(event) {
+                if (event.state && event.state.url) {
+                    const containers = document.querySelectorAll('.content-container, .recipe-grid, .user-list, table');
+                    if (containers.length > 0) {
+                        fetchContent(event.state.url, containers[0]);
                     } else {
-                        // If no state or not our state, reload the page
-                        window.location.reload();
+                        // Fallback to traditional navigation
+                        window.location.href = event.state.url;
                     }
-                };
+                }
+            };
+        }
+    }
+    
+    /**
+     * Update active page in pagination links based on the URL
+     * @param {URL} url The parsed URL object
+     */
+    function updateActivePage(url) {
+        // Get page number from URL
+        const params = new URLSearchParams(url.search);
+        const currentPage = params.get('page') || '1';
+        
+        // Update active page in pagination links
+        const paginationLinks = document.querySelectorAll('.pagination a');
+        paginationLinks.forEach(link => {
+            // Remove active class from all links
+            link.classList.remove('active');
+            
+            // Add active class to current page link
+            const linkUrl = new URL(link.href, window.location.origin);
+            const linkParams = new URLSearchParams(linkUrl.search);
+            const linkPage = linkParams.get('page') || '1';
+            
+            if (linkPage === currentPage) {
+                link.classList.add('active');
+                link.setAttribute('aria-current', 'page');
+            } else {
+                link.removeAttribute('aria-current');
             }
+        });
+        
+        // Update records-info if present
+        const recordsInfo = document.querySelector('.records-info');
+        if (recordsInfo) {
+            // We'll update this with correct information after content loads
+            log('Updated active page to: ' + currentPage);
         }
     }
     
@@ -431,22 +534,23 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
                 console.log(`[Pagination] ${message}`);
             }
         }
-        
-        // Also update the status message on the test page if it exists
-        const statusMessage = document.getElementById('status-message');
-        if (statusMessage && isError) {
-            statusMessage.textContent = `Error: ${message}`;
-            statusMessage.style.color = 'red';
-        }
     }
     
-    // Expose the pagination component to the FlavorConnect namespace
-    window.FlavorConnect.components.pagination = {
+    // Wait for DOM to be fully loaded with a slight delay to ensure all scripts are loaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(initPagination, 50);
+        });
+    } else {
+        setTimeout(initPagination, 50);
+    }
+    
+    // Public API
+    return {
         init: initPagination,
-        config: config, // Expose config for testing
         enable: function() {
-            // Re-initialize pagination with AJAX enabled
             initPagination();
+            log('AJAX pagination enabled');
         },
         disable: function() {
             // Remove event listeners from pagination links
@@ -457,213 +561,9 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
                 link.parentNode.replaceChild(newLink, link);
             });
             log('AJAX pagination disabled');
+        },
+        getConfig: function() {
+            return config;
         }
     };
-})();
-    
-    /**
-     * Handle pagination link clicks
-     * @param {Event} event Click event
-     */
-    function handlePaginationClick(event) {
-        // Don't intercept if modifier keys are pressed (new tab, etc.)
-        if (event.ctrlKey || event.metaKey || event.shiftKey) {
-            return;
-        }
-        
-        event.preventDefault();
-        const url = this.getAttribute('href');
-        const targetContainer = findContentContainer(this);
-        
-        if (!targetContainer) {
-            // Fallback to traditional navigation if we can't find the content container
-            window.location.href = url;
-            return;
-        }
-        
-        // Show loading indicator
-        showLoadingIndicator(targetContainer);
-        
-        // Load the new content via AJAX
-        fetchContent(url, targetContainer);
-        
-        // Update browser history
-        updateHistory(url);
-    }
-    
-    /**
-     * Find the content container that should be updated
-     * @param {HTMLElement} paginationLink The clicked pagination link
-     * @return {HTMLElement|null} The content container or null if not found
-     */
-    function findContentContainer(paginationLink) {
-        // First check for a data attribute that explicitly defines the target
-        const targetSelector = paginationLink.getAttribute('data-target');
-        if (targetSelector) {
-            return document.querySelector(targetSelector);
-        }
-        
-        // Otherwise, look for common content containers
-        let container = paginationLink.closest('.pagination-container');
-        if (container) {
-            // Look for the content container as a sibling of the pagination container
-            const parent = container.parentNode;
-            const contentContainers = parent.querySelectorAll('.content-container, .recipe-grid, .user-list, table');
-            if (contentContainers.length > 0) {
-                return contentContainers[0];
-            }
-        }
-        
-        // If we can't determine the container, return null
-        return null;
-    }
-    
-    /**
-     * Show a loading indicator while content is being fetched
-     * @param {HTMLElement} container The container to show loading in
-     */
-    function showLoadingIndicator(container) {
-        // Save the original content
-        container.setAttribute('data-original-content', container.innerHTML);
-        
-        // Create and show loading indicator
-        const loadingHTML = `
-            <div class="loading-indicator">
-                <div class="spinner"></div>
-                <p>Loading content...</p>
-            </div>
-        `;
-        
-        // Only replace content if this isn't already a loading indicator
-        if (!container.querySelector('.loading-indicator')) {
-            container.innerHTML = loadingHTML;
-        }
-    }
-    
-    /**
-     * Fetch new content via AJAX
-     * @param {string} url The URL to fetch
-     * @param {HTMLElement} container The container to update
-     */
-    function fetchContent(url, container) {
-        fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(html => {
-                processNewContent(html, container, url);
-            })
-            .catch(error => {
-                console.error('Error fetching content:', error);
-                restoreOriginalContent(container);
-                
-                // Show error message
-                const errorMessage = document.createElement('div');
-                errorMessage.className = 'error-message';
-                errorMessage.textContent = 'Failed to load content. Please try again.';
-                container.appendChild(errorMessage);
-                
-                // Remove error message after a delay
-                setTimeout(() => {
-                    if (errorMessage.parentNode) {
-                        errorMessage.parentNode.removeChild(errorMessage);
-                    }
-                }, 5000);
-            });
-    }
-    
-    /**
-     * Process the new content and update the container
-     * @param {string} html The HTML content
-     * @param {HTMLElement} container The container to update
-     * @param {string} url The URL that was fetched
-     */
-    function processNewContent(html, container) {
-        // Create a temporary element to parse the HTML
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        
-        // Find the corresponding content in the new page
-        let newContent;
-        
-        // Try to find the same container by ID or class
-        if (container.id) {
-            newContent = tempDiv.querySelector('#' + container.id);
-        }
-        
-        if (!newContent && container.className) {
-            // Try each class individually
-            const classes = container.className.split(' ');
-            for (const className of classes) {
-                if (className && className !== 'loading') {
-                    const elements = tempDiv.querySelectorAll('.' + className);
-                    if (elements.length === 1) {
-                        newContent = elements[0];
-                        break;
-                    }
-                }
-            }
-        }
-        
-        // If we couldn't find an exact match, look for common content containers
-        if (!newContent) {
-            newContent = tempDiv.querySelector('.content-container, .recipe-grid, .user-list, table');
-        }
-        
-        // Update the container with the new content
-        if (newContent) {
-            container.innerHTML = newContent.innerHTML;
-            
-            // Re-initialize pagination for the new content
-            initPagination();
-            
-            // Re-initialize other components if needed
-            if (window.FlavorConnect && window.FlavorConnect.initComponents) {
-                window.FlavorConnect.initComponents();
-            }
-        } else {
-            // If we couldn't find the new content, restore the original
-            restoreOriginalContent(container);
-        }
-    }
-    
-    /**
-     * Restore the original content if something goes wrong
-     * @param {HTMLElement} container The container to restore
-     */
-    function restoreOriginalContent(container) {
-        const originalContent = container.getAttribute('data-original-content');
-        if (originalContent) {
-            container.innerHTML = originalContent;
-            
-            // Re-initialize pagination
-            initPagination();
-        }
-    }
-    
-    /**
-     * Update browser history to maintain back/forward navigation
-     * @param {string} url The URL to add to history
-     */
-    function updateHistory(url) {
-        if (window.history && window.history.pushState) {
-            window.history.pushState({ url: url }, '', url);
-            
-            // Handle browser back/forward buttons
-            window.onpopstate = function(event) {
-                if (event.state && event.state.url) {
-                    const containers = document.querySelectorAll('.content-container, .recipe-grid, .user-list, table');
-                    if (containers.length > 0) {
-                        fetchContent(event.state.url, containers[0]);
-                    } else {
-                        // Fallback to traditional navigation
-                        window.location.href = event.state.url;
-                    }
-                }
-            };
-        }
-    }
 })();
