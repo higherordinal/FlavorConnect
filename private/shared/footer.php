@@ -52,11 +52,6 @@
     if(!isset($component_scripts)) { $component_scripts = []; }
     if(!isset($utility_scripts)) { $utility_scripts = []; }
     
-    // Add admin.js to page scripts if on admin page
-    if(strpos($_SERVER['REQUEST_URI'], '/admin/') !== false && !in_array('admin', $page_scripts)) {
-        $page_scripts[] = 'admin';
-    }
-    
     // Load utility scripts
     if(!empty($utility_scripts)) {
         foreach($utility_scripts as $script) {
