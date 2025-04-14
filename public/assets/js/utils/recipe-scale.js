@@ -9,45 +9,91 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Scale buttons
-    const scaleButtons = document.querySelectorAll('.scale-btn');
-    scaleButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const newScale = parseFloat(this.dataset.scale);
-            
-            // Update active button state
-            document.querySelectorAll('.scale-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            this.classList.add('active');
-            
-            // Update ingredient amounts and measurements
-            const ingredients = document.querySelectorAll('.ingredients-list li');
-            ingredients.forEach(ingredient => {
-                // Update amount
-                const amount = ingredient.querySelector('.amount');
-                if (amount && amount.dataset.base) {
-                    const baseAmount = parseFloat(amount.dataset.base);
-                    const newAmount = baseAmount * newScale;
-                    amount.textContent = formatQuantity(newAmount);
-                    
-                    // Update measurement text if it exists
-                    const measurement = ingredient.querySelector('.measurement');
-                    if (measurement) {
-                        const singular = measurement.dataset.singular;
-                        const plural = measurement.dataset.plural;
-                        
-                        if (singular && plural) {
-                            // Use singular for quantities of 1 or less, plural for greater
-                            measurement.textContent = (newAmount <= 1) ? singular : plural;
-                        }
-                    }
-                }
-            });
+// Add to FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+window.FlavorConnect.utils = window.FlavorConnect.utils || {};
+
+// Recipe Scale utility
+window.FlavorConnect.utils.recipeScale = (function() {
+    'use strict';
+    
+    /**
+     * Initialize recipe scaling functionality
+     */
+    function initialize() {
+        // Scale buttons
+        const scaleButtons = document.querySelectorAll('.scale-btn');
+        if (!scaleButtons.length) return;
+        
+        scaleButtons.forEach(button => {
+            button.addEventListener('click', handleScaleClick);
         });
-    });
-});
+    }
+    
+    /**
+     * Handle click on scale button
+     * @param {Event} e - Click event
+     */
+    function handleScaleClick(e) {
+        const newScale = parseFloat(this.dataset.scale);
+        
+        // Update active button state
+        document.querySelectorAll('.scale-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        this.classList.add('active');
+        
+        // Update ingredient amounts and measurements
+        updateIngredients(newScale);
+    }
+    
+    /**
+     * Update all ingredients with new scale
+     * @param {number} newScale - The scaling factor
+     */
+    function updateIngredients(newScale) {
+        const ingredients = document.querySelectorAll('.ingredients-list li');
+        
+        ingredients.forEach(ingredient => {
+            // Update amount
+            const amount = ingredient.querySelector('.amount');
+            if (amount && amount.dataset.base) {
+                const baseAmount = parseFloat(amount.dataset.base);
+                const newAmount = baseAmount * newScale;
+                amount.textContent = formatQuantity(newAmount);
+                
+                // Update measurement text if it exists
+                updateMeasurement(ingredient, newAmount);
+            }
+        });
+    }
+    
+    /**
+     * Update measurement text based on quantity
+     * @param {HTMLElement} ingredient - The ingredient element
+     * @param {number} newAmount - The new quantity amount
+     */
+    function updateMeasurement(ingredient, newAmount) {
+        const measurement = ingredient.querySelector('.measurement');
+        if (measurement) {
+            const singular = measurement.dataset.singular;
+            const plural = measurement.dataset.plural;
+            
+            if (singular && plural) {
+                // Use singular for quantities of 1 or less, plural for greater
+                measurement.textContent = (newAmount <= 1) ? singular : plural;
+            }
+        }
+    }
+    
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', initialize);
+    
+    // Return public API
+    return {
+        init: initialize
+    };
+})();
 
 /**
  * Formats a number as a fraction when appropriate
@@ -58,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function formatQuantity(value, precision = 'basic') {
     if (value === 0) return '0';
     
-    const wholePart = Math.floor(value);
+    let wholePart = Math.floor(value);
     const decimal = value - wholePart;
     
     // Convert decimal to fraction
