@@ -1547,8 +1547,6 @@ button.action.add:hover {
   color: var(--color-white);
 }
 
-/* Import pagination component */
-@import url('../components/pagination.css');
 
 .list td[data-label="Email"] {
   max-width: 200px;
