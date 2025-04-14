@@ -15,6 +15,9 @@
 
 'use strict';
 
+// Initialize FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+
 // Global state
 const state = {
     isLoggedIn: window.initialUserData?.isLoggedIn || false,
@@ -45,6 +48,14 @@ const API_CONFIG = {
 window.initializeGallery = function() {
     setupEventListeners();
     loadFiltersFromURL();
+    initializeFavorites();
+}
+
+/**
+ * Initialize favorites functionality
+ * This function is separated to allow it to be called after AJAX content loads
+ */
+window.initializeFavorites = function() {
     if (window.FlavorConnect && window.FlavorConnect.favorites) {
         window.FlavorConnect.favorites.initButtons();
     }

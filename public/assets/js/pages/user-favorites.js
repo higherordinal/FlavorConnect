@@ -23,11 +23,58 @@ window.FlavorConnect.favoritesPage = {
      * Sets up event listeners for the page
      */
     setupEventListeners: function() {
-        // Handle unfavorite buttons (both dedicated unfavorite buttons and regular favorite buttons)
-        document.querySelectorAll('.favorite-btn.favorited').forEach(button => {
-            console.log('Setting up event listener for button:', button);
-            button.addEventListener('click', this.handleUnfavorite.bind(this));
-        });
+        // Check if we're on the favorites page
+        const isOnFavoritesPage = window.location.pathname.includes('favorites') || 
+                                  document.querySelector('.favorites-page, .user-favorites') !== null;
+        
+        // On the favorites page, all buttons should be treated as favorited
+        if (isOnFavoritesPage) {
+            // Get all favorite buttons on the page
+            const allButtons = document.querySelectorAll('.favorite-btn');
+            
+            // Mark all buttons as favorited if they aren't already
+            allButtons.forEach(button => {
+                // Add favorited class if not present
+                if (!button.classList.contains('favorited')) {
+                    button.classList.add('favorited');
+                }
+                
+                // Update icon to solid heart if needed
+                const icon = button.querySelector('i');
+                if (icon) {
+                    if (!icon.classList.contains('fas')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    }
+                }
+                
+                // Update aria-label
+                button.setAttribute('aria-label', 'Remove from favorites');
+                
+                // Remove existing listeners to prevent duplicates
+                button.removeEventListener('click', this.handleUnfavorite.bind(this));
+                // Add click handler
+                button.addEventListener('click', this.handleUnfavorite.bind(this));
+            });
+        } else {
+            // Regular behavior for non-favorites pages
+            // Find all favorite buttons with solid heart icons (favorited state)
+            const favoritedButtons = [];
+            document.querySelectorAll('.favorite-btn').forEach(button => {
+                const icon = button.querySelector('i');
+                if (icon && icon.classList.contains('fas') && icon.classList.contains('fa-heart')) {
+                    favoritedButtons.push(button);
+                }
+            });
+            
+            // Handle unfavorite buttons (identified by solid heart icons)
+            favoritedButtons.forEach(button => {
+                // Remove existing listeners to prevent duplicates
+                button.removeEventListener('click', this.handleUnfavorite.bind(this));
+                // Add click handler
+                button.addEventListener('click', this.handleUnfavorite.bind(this));
+            });
+        }
 
         // Handle sort select
         const sortSelect = document.querySelector('#sort-select');
@@ -48,16 +95,62 @@ window.FlavorConnect.favoritesPage = {
         this.showLoadingState(true);
         
         try {
-            // Get favorites directly from the DOM
-            const favoriteButtons = document.querySelectorAll('.favorite-btn.favorited');
+            // Check for recipe cards
+            const recipeCards = document.querySelectorAll('.recipe-card');
+            
+            // Check for all favorite buttons regardless of state
+            const allFavoriteButtons = document.querySelectorAll('.favorite-btn');
+            
+            // Check if we're on the favorites page
+            const isOnFavoritesPage = window.location.pathname.includes('favorites') || 
+                                      document.querySelector('.favorites-page, .user-favorites') !== null;
+            
+            // If we're on the favorites page, all recipes should be marked as favorited
+            if (isOnFavoritesPage && recipeCards.length > 0) {
+                // Mark all buttons as favorited
+                allFavoriteButtons.forEach(btn => {
+                    // Add favorited class
+                    btn.classList.add('favorited');
+                    
+                    // Update icon to solid heart
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                    }
+                    
+                    // Update aria-label
+                    btn.setAttribute('aria-label', 'Remove from favorites');
+                });
+                
+                // Re-attach event listeners
+                this.setupEventListeners();
+                return;
+            }
+            
+            // Find favorited recipes by checking for solid heart icons inside buttons
+            let favoriteButtons = [];
+            
+            // Check each button for solid heart icon
+            allFavoriteButtons.forEach(btn => {
+                const icon = btn.querySelector('i');
+                if (icon && icon.classList.contains('fas') && icon.classList.contains('fa-heart')) {
+                    // This is a favorited button (solid heart icon)
+                    favoriteButtons.push(btn);
+                }
+            });
+            
             if (favoriteButtons.length > 0) {
-                console.log('Favorites already loaded in the DOM');
+                // Re-attach event listeners to make sure they work after AJAX pagination
+                this.setupEventListeners();
                 return; // Favorites are already loaded in the DOM
             }
             
-            // If we get here, we need to load favorites (this shouldn't happen with the current implementation)
-            console.log('No favorites found in DOM, attempting to load from server');
-            this.showError('No favorite recipes found. Please try refreshing the page.');
+            // We're already on the favorites page but no favorited recipes were found
+            if (isOnFavoritesPage) {
+                // Only show empty state if we're actually on the favorites page
+                this.updateEmptyState();
+            }
         } catch (error) {
             console.error('Error loading favorites:', error);
             this.showError('Failed to load your favorite recipes. Please try again later.');
@@ -82,9 +175,7 @@ window.FlavorConnect.favoritesPage = {
         try {
             // Use the favorites utility if available
             if (window.FlavorConnect.favorites && typeof window.FlavorConnect.favorites.toggle === 'function') {
-                console.log('Using window.FlavorConnect.favorites.toggle');
                 const result = await window.FlavorConnect.favorites.toggle(recipeId);
-                console.log('Toggle result:', result);
                 
                 if (result.success && !result.isFavorited) {
                     // Remove the recipe card with animation
@@ -96,7 +187,6 @@ window.FlavorConnect.favoritesPage = {
                     }, 350); // Wait a bit longer than the animation duration
                 } else if (result.html_response) {
                     // If we got an HTML response, try the direct approach
-                    console.log('Got HTML response, trying direct approach');
                     await this.directUnfavorite(recipeId, button);
                 }
             } else {
