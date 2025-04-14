@@ -13,36 +13,45 @@
 
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Ensure we only initialize once
-    if (window.recipeFormInitialized) return;
-    window.recipeFormInitialized = true;
+// Add to FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+window.FlavorConnect.components = window.FlavorConnect.components || {};
 
-    // Image Preview Functionality
-    initializeImagePreview();
+// Recipe Form component
+window.FlavorConnect.components.recipeForm = (function() {
+    'use strict';
     
-    // Alt Text Generation
-    initializeAltTextGeneration();
-    
-    // Ingredients Functionality
-    initializeIngredients();
-    
-    // Directions Functionality
-    initializeDirections();
-    
-    // Form Validation
-    initializeFormValidation();
-    
-    // Recipe Header Background
-    initializeRecipeHeaderBackground();
-});
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Ensure we only initialize once
+        if (window.recipeFormInitialized) return;
+        window.recipeFormInitialized = true;
 
-/**
- * Initializes image preview functionality for the recipe image upload
- * Creates a preview of the selected image below the file input
- * Validates file size and displays error messages
- */
-function initializeImagePreview() {
+        // Image Preview Functionality
+        initializeImagePreview();
+        
+        // Alt Text Generation
+        initializeAltTextGeneration();
+        
+        // Ingredients Functionality
+        initializeIngredients();
+        
+        // Directions Functionality
+        initializeDirections();
+        
+        // Form Validation
+        initializeFormValidation();
+        
+        // Recipe Header Background
+        initializeRecipeHeaderBackground();
+    });
+
+    /**
+     * Initializes image preview functionality for the recipe image upload
+     * Creates a preview of the selected image below the file input
+     * Validates file size and displays error messages
+     */
+    function initializeImagePreview() {
     const imageInput = document.getElementById('recipe_image');
     const previewContainer = document.createElement('div');
     previewContainer.className = 'mt-2';
@@ -111,11 +120,11 @@ function initializeImagePreview() {
     }
 }
 
-/**
- * Initializes automatic alt text generation based on recipe title
- * Updates the alt text field when the title changes
- */
-function initializeAltTextGeneration() {
+    /**
+     * Initializes automatic alt text generation based on recipe title
+     * Updates the alt text field when the title changes
+     */
+    function initializeAltTextGeneration() {
     const titleInput = document.getElementById('title');
     const altTextInput = document.getElementById('alt_text');
     
@@ -141,13 +150,13 @@ function initializeAltTextGeneration() {
     }
 }
 
-/**
- * Pluralizes a measurement name based on quantity
- * @param {string} measurementName The measurement name to pluralize
- * @param {number} quantity The quantity of the measurement
- * @returns {string} The properly pluralized measurement name
- */
-function pluralizeMeasurement(measurementName, quantity) {
+    /**
+     * Pluralizes a measurement name based on quantity
+     * @param {string} measurementName The measurement name to pluralize
+     * @param {number} quantity The quantity of the measurement
+     * @returns {string} The properly pluralized measurement name
+     */
+    function pluralizeMeasurement(measurementName, quantity) {
     if (!measurementName || measurementName === '(none)') return '';
     
     // If quantity is 1 or less, use singular form
@@ -170,11 +179,11 @@ function pluralizeMeasurement(measurementName, quantity) {
     }
 }
 
-/**
- * Initializes dynamic ingredient rows functionality
- * Allows users to add and remove ingredient rows with quantity, measurement, and name
- */
-function initializeIngredients() {
+    /**
+     * Initializes dynamic ingredient rows functionality
+     * Allows users to add and remove ingredient rows with quantity, measurement, and name
+     */
+    function initializeIngredients() {
     const ingredientsContainer = document.getElementById('ingredients-container');
     const addIngredientBtn = document.getElementById('add-ingredient');
     let ingredientCount = ingredientsContainer ? 
@@ -389,11 +398,11 @@ function initializeIngredients() {
     }
 }
 
-/**
- * Initializes dynamic direction steps functionality
- * Allows users to add and remove direction steps with step number and instructions
- */
-function initializeDirections() {
+    /**
+     * Initializes dynamic direction steps functionality
+     * Allows users to add and remove direction steps with step number and instructions
+     */
+    function initializeDirections() {
     const directionsContainer = document.getElementById('directions-container');
     const addStepBtn = document.getElementById('add-step');
     let stepCount = directionsContainer ? 
@@ -474,11 +483,11 @@ function initializeDirections() {
     }
 }
 
-/**
- * Initializes form validation functionality
- * Checks for required fields and displays error messages if necessary
- */
-function initializeFormValidation() {
+    /**
+     * Initializes form validation functionality
+     * Checks for required fields and displays error messages if necessary
+     */
+    function initializeFormValidation() {
     const form = document.querySelector('.recipe-form form');
     if (form) {
         form.addEventListener('submit', function(e) {
@@ -554,24 +563,41 @@ function initializeFormValidation() {
     }
 }
 
-/**
- * Initializes recipe header background functionality
- * Sets the background image of the recipe header based on the uploaded image
- */
-function initializeRecipeHeaderBackground() {
-    const imageInput = document.getElementById('recipe_image');
-    const headerContainer = document.querySelector('.recipe-form .page-header');
-    
-    if (imageInput && headerContainer) {
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
-            if (file) {
-                // Create a URL for the uploaded image
-                const url = URL.createObjectURL(file);
-                
-                // Set the background image of the recipe header
-                headerContainer.style.backgroundImage = `url(${url})`;
-            }
-        });
+    /**
+     * Initializes recipe header background functionality
+     * Sets the background image of the recipe header based on the uploaded image
+     */
+    function initializeRecipeHeaderBackground() {
+        const imageInput = document.getElementById('recipe_image');
+        const headerContainer = document.querySelector('.recipe-form .page-header');
+        
+        if (imageInput && headerContainer) {
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    // Create a URL for the uploaded image
+                    const url = URL.createObjectURL(file);
+                    
+                    // Set the background image of the recipe header
+                    headerContainer.style.backgroundImage = `url(${url})`;
+                }
+            });
+        }
     }
-}
+    
+    // Public API
+    return {
+        init: function() {
+            // Ensure we only initialize once
+            if (window.recipeFormInitialized) return;
+            window.recipeFormInitialized = true;
+            
+            initializeImagePreview();
+            initializeAltTextGeneration();
+            initializeIngredients();
+            initializeDirections();
+            initializeFormValidation();
+            initializeRecipeHeaderBackground();
+        }
+    };
+})();
