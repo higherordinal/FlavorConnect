@@ -8,15 +8,39 @@
  * - URL format
  * - Numeric values
  * - File uploads
+ * 
+ * @author Henry Vaughn
+ * @version 1.1.0
  */
 
-(function() {
+// Add to FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+window.FlavorConnect.utils = window.FlavorConnect.utils || {};
+
+// Form validation utility
+window.FlavorConnect.utils.formValidation = (function() {
     'use strict';
     
-    // Initialize validation when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function() {
+    // Configuration options
+    const config = {
+        passwordMinLength: 8,
+        showValidationStyles: true,
+        validationClasses: {
+            error: 'error',
+            valid: 'valid',
+            invalid: 'invalid'
+        }
+    };
+    
+    /**
+     * Initialize validation when DOM is loaded
+     */
+    function initialize() {
         initializeFormValidation();
-    });
+    }
+    
+    // Initialize validation when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initialize);
     
     /**
      * Main initialization function for form validation
@@ -710,4 +734,71 @@
             });
         });
     }
+    // Return public API
+    return {
+        init: initialize,
+        validateForm: function(form) {
+            // Validate all fields in the form
+            let isValid = true;
+            
+            // Validate required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                if (!validateRequiredField(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate email fields
+            const emailFields = form.querySelectorAll('input[type="email"]');
+            emailFields.forEach(field => {
+                if (!validateEmail(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate URL fields
+            const urlFields = form.querySelectorAll('input[type="url"], input[data-type="url"]');
+            urlFields.forEach(field => {
+                if (!validateUrl(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate numeric fields
+            const numericFields = form.querySelectorAll('input[type="number"], input[data-type="numeric"]');
+            numericFields.forEach(field => {
+                if (!validateNumeric(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate file fields
+            const fileFields = form.querySelectorAll('input[type="file"]');
+            fileFields.forEach(field => {
+                if (!validateFile(field)) {
+                    isValid = false;
+                }
+            });
+            
+            // Validate password fields
+            const passwordFields = form.querySelectorAll('input[type="password"][id="password"]');
+            passwordFields.forEach(passwordField => {
+                const confirmPasswordField = form.querySelector('input[type="password"][id="confirm_password"]');
+                if (confirmPasswordField) {
+                    if (!validatePassword(passwordField, confirmPasswordField)) {
+                        isValid = false;
+                    }
+                }
+            });
+            
+            return isValid;
+        },
+        validateEmail: validateEmail,
+        validateUrl: validateUrl,
+        validateNumeric: validateNumeric,
+        validateFile: validateFile,
+        validatePassword: validatePassword,
+        validateRequiredField: validateRequiredField
+    };
 })();
