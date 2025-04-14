@@ -1,7 +1,6 @@
 /**
  * @fileoverview Recipe Form functionality for FlavorConnect
  * @author Henry Vaughn
- * @version 1.0.0
  * @license MIT
  * @description Handles the recipe creation and editing form functionality.
  * This script provides interactive features for the recipe form including:
@@ -21,8 +20,8 @@ window.FlavorConnect.components = window.FlavorConnect.components || {};
 window.FlavorConnect.components.recipeForm = (function() {
     'use strict';
     
-    // Initialize when DOM is ready
-    document.addEventListener('DOMContentLoaded', function() {
+    // Function to initialize all form components
+    function initialize() {
         // Ensure we only initialize once
         if (window.recipeFormInitialized) return;
         window.recipeFormInitialized = true;
@@ -44,81 +43,90 @@ window.FlavorConnect.components.recipeForm = (function() {
         
         // Recipe Header Background
         initializeRecipeHeaderBackground();
-    });
+    }
+    
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', initialize);
 
     /**
      * Initializes image preview functionality for the recipe image upload
      * Creates a preview of the selected image below the file input
      * Validates file size and displays error messages
      */
+    /**
+     * Helper function to clear all child elements from a container
+     * @param {HTMLElement} container The container to clear
+     */
+    function clearContainer(container) {
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    }
+
     function initializeImagePreview() {
-    const imageInput = document.getElementById('recipe_image');
-    const previewContainer = document.createElement('div');
-    previewContainer.className = 'mt-2';
-    
-    // Create error message container
-    const errorContainer = document.createElement('div');
-    errorContainer.className = 'form-error';
-    errorContainer.style.display = 'none';
-    
-    if (imageInput) {
-        // Add error container after the file input
-        imageInput.parentNode.insertBefore(errorContainer, imageInput.nextSibling);
+        const imageInput = document.getElementById('recipe_image');
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'mt-2';
         
-        imageInput.addEventListener('change', function() {
-            const file = this.files[0];
+        // Create error message container
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'form-error';
+        errorContainer.style.display = 'none';
+        
+        if (imageInput) {
+            // Add error container after the file input
+            imageInput.parentNode.insertBefore(errorContainer, imageInput.nextSibling);
             
-            // Clear any existing error
-            errorContainer.textContent = '';
-            errorContainer.style.display = 'none';
-            imageInput.classList.remove('error');
-            
-            if (file) {
-                // Check file size (max 10MB)
-                const maxSize = 10 * 1024 * 1024; // 10MB in bytes
-                if (file.size > maxSize) {
-                    // Show error message
-                    errorContainer.textContent = 'File is too large. Maximum size is 10MB';
-                    errorContainer.style.display = 'block';
-                    imageInput.classList.add('error');
-                    
-                    // Clear the file input
-                    this.value = '';
-                    
-                    // Remove any existing preview
-                    while (previewContainer.firstChild) {
-                        previewContainer.removeChild(previewContainer.firstChild);
+            imageInput.addEventListener('change', function() {
+                const file = this.files[0];
+                
+                // Clear any existing error
+                errorContainer.textContent = '';
+                errorContainer.style.display = 'none';
+                imageInput.classList.remove('error');
+                
+                if (file) {
+                    // Check file size (max 10MB)
+                    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+                    if (file.size > maxSize) {
+                        // Show error message
+                        errorContainer.textContent = 'File is too large. Maximum size is 10MB';
+                        errorContainer.style.display = 'block';
+                        imageInput.classList.add('error');
+                        
+                        // Clear the file input
+                        this.value = '';
+                        
+                        // Remove any existing preview
+                        clearContainer(previewContainer);
+                        
+                        return;
                     }
                     
-                    return;
-                }
-                
-                // Remove any existing preview
-                while (previewContainer.firstChild) {
-                    previewContainer.removeChild(previewContainer.firstChild);
-                }
+                    // Remove any existing preview
+                    clearContainer(previewContainer);
 
-                // Create preview image
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.alt = 'Recipe image preview';
-                        img.className = 'img-thumbnail';
-                        img.style.maxWidth = '300px';
-                        img.style.height = 'auto';
-                        previewContainer.appendChild(img);
-                    };
-                    reader.readAsDataURL(file);
+                    // Create preview image
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.alt = 'Recipe image preview';
+                            img.className = 'img-thumbnail';
+                            img.style.maxWidth = '300px';
+                            img.style.height = 'auto';
+                            previewContainer.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
                 }
-            }
-        });
+            });
 
-        // Insert preview container after the file input and error container
-        imageInput.parentNode.insertBefore(previewContainer, errorContainer.nextSibling);
+            // Insert preview container after the file input and error container
+            imageInput.parentNode.insertBefore(previewContainer, errorContainer.nextSibling);
+        }
     }
-}
 
     /**
      * Initializes automatic alt text generation based on recipe title
@@ -184,26 +192,26 @@ window.FlavorConnect.components.recipeForm = (function() {
      * Allows users to add and remove ingredient rows with quantity, measurement, and name
      */
     function initializeIngredients() {
-    const ingredientsContainer = document.getElementById('ingredients-container');
-    const addIngredientBtn = document.getElementById('add-ingredient');
-    let ingredientCount = ingredientsContainer ? 
-        ingredientsContainer.querySelectorAll('.ingredient-row').length : 0;
-        
-    // Store original measurement options for reference
-    let originalMeasurementOptions = [];
-    const firstMeasurementSelect = document.querySelector('#measurement_0');
-    if (firstMeasurementSelect) {
-        Array.from(firstMeasurementSelect.options).forEach(option => {
-            originalMeasurementOptions.push({
-                value: option.value,
-                text: option.textContent
+        const ingredientsContainer = document.getElementById('ingredients-container');
+        const addIngredientBtn = document.getElementById('add-ingredient');
+        let ingredientCount = ingredientsContainer ? 
+            ingredientsContainer.querySelectorAll('.ingredient-row').length : 0;
+            
+        // Store original measurement options for reference
+        let originalMeasurementOptions = [];
+        const firstMeasurementSelect = document.querySelector('#measurement_0');
+        if (firstMeasurementSelect) {
+            Array.from(firstMeasurementSelect.options).forEach(option => {
+                originalMeasurementOptions.push({
+                    value: option.value,
+                    text: option.textContent
+                });
             });
-        });
-        // Original measurement options are now stored for reference
-    }
+            // Original measurement options are now stored for reference
+        }
 
-    // Initialize fraction helpers for existing ingredient rows
-    initializeFractionHelpers();
+        // Initialize fraction helpers for existing ingredient rows
+        initializeFractionHelpers();
 
     /**
      * Initializes the fraction helper buttons for all ingredient rows
@@ -388,11 +396,12 @@ window.FlavorConnect.components.recipeForm = (function() {
     }
     
     /**
-     * Updates the visibility of remove buttons based on the number of ingredient rows
-     * Hides remove buttons if there's only one row
+     * Updates the visibility of remove buttons based on the number of elements
+     * Hides remove buttons if there's only one element
+     * @param {string} buttonSelector - CSS selector for the remove buttons
      */
-    function updateRemoveButtons() {
-        const removeButtons = document.querySelectorAll('.remove-ingredient');
+    function updateRemoveButtons(buttonSelector = '.remove-ingredient') {
+        const removeButtons = document.querySelectorAll(buttonSelector);
         const showButtons = removeButtons.length > 1;
         removeButtons.forEach(button => button.style.display = showButtons ? 'flex' : 'none');
     }
@@ -473,13 +482,11 @@ window.FlavorConnect.components.recipeForm = (function() {
     }
 
     /**
-     * Updates the visibility of remove buttons based on the number of direction steps
-     * Hides remove buttons if there's only one step
+     * Updates the visibility of remove buttons for direction steps
+     * Uses the generic updateRemoveButtons function with a specific selector
      */
     function updateRemoveStepButtons() {
-        const removeButtons = document.querySelectorAll('.remove-step');
-        const showButtons = removeButtons.length > 1;
-        removeButtons.forEach(button => button.style.display = showButtons ? 'flex' : 'none');
+        updateRemoveButtons('.remove-step');
     }
 }
 
@@ -498,7 +505,7 @@ window.FlavorConnect.components.recipeForm = (function() {
                 if (selectedOption && selectedOption.hasAttribute('data-singular')) {
                     // Restore the original singular text for database storage
                     const singularText = selectedOption.getAttribute('data-singular');
-                    console.log(`Restoring singular form: ${singularText} for measurement ID: ${selectedOption.value}`);
+                    // Removed console.log for production
                     selectedOption.textContent = singularText;
                 }
             });
@@ -587,17 +594,6 @@ window.FlavorConnect.components.recipeForm = (function() {
     
     // Public API
     return {
-        init: function() {
-            // Ensure we only initialize once
-            if (window.recipeFormInitialized) return;
-            window.recipeFormInitialized = true;
-            
-            initializeImagePreview();
-            initializeAltTextGeneration();
-            initializeIngredients();
-            initializeDirections();
-            initializeFormValidation();
-            initializeRecipeHeaderBackground();
-        }
+        init: initialize
     };
 })();
