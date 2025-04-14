@@ -8,19 +8,29 @@
  * 
  * Works in conjunction with the PHP unified_navigation() function for
  * complete progressive enhancement - everything works without JavaScript.
+ * 
+ * @author Henry Vaughn
+ * @version 1.1.0
  */
 
-(function() {
+// Add to FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+window.FlavorConnect.utils = window.FlavorConnect.utils || {};
+
+// Back Link utility
+window.FlavorConnect.utils.backLink = (function() {
     'use strict';
     
-    // Wait for DOM to be fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
+    /**
+     * Initialize the back link functionality
+     */
+    function initialize() {
         // Handle breadcrumbs
         highlightCurrentBreadcrumb();
         
         // Store the current page in session storage for back navigation
         storeCurrentPageForBackNavigation();
-    });
+    }
     
     /**
      * Stores the current page URL in session storage for better back navigation
@@ -69,4 +79,13 @@
             }
         });
     }
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', initialize);
+    
+    // Return public API
+    return {
+        init: initialize,
+        highlightBreadcrumbs: highlightCurrentBreadcrumb,
+        storePage: storeCurrentPageForBackNavigation
+    };
 })();
