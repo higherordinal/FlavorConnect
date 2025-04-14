@@ -62,8 +62,11 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
     
     <!-- Global Configuration -->
     <script>
-        // Initialize FlavorConnect namespace
+        // Initialize FlavorConnect namespace and structure
         window.FlavorConnect = window.FlavorConnect || {};
+        window.FlavorConnect.utils = window.FlavorConnect.utils || {};
+        window.FlavorConnect.components = window.FlavorConnect.components || {};
+        window.FlavorConnect.pages = window.FlavorConnect.pages || {};
         
         // Global configuration
         window.FlavorConnect.config = {

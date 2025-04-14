@@ -56,15 +56,22 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
     
     <!-- Global Configuration -->
     <script>
-        // Initialize FlavorConnect namespace
+        // Initialize FlavorConnect namespace and structure
         window.FlavorConnect = window.FlavorConnect || {};
+        window.FlavorConnect.utils = window.FlavorConnect.utils || {};
+        window.FlavorConnect.components = window.FlavorConnect.components || {};
+        window.FlavorConnect.pages = window.FlavorConnect.pages || {};
         
         // Global configuration
         window.FlavorConnect.config = {
             baseUrl: '<?php echo url_for('/'); ?>',
             isLoggedIn: <?php echo $session->is_logged_in() ? 'true' : 'false'; ?>,
             userId: <?php echo $session->is_logged_in() ? $session->get_user_id() : 'null'; ?>,
-            csrfToken: '<?php echo $session->get_csrf_token(); ?>'
+            csrfToken: '<?php echo $session->get_csrf_token(); ?>',
+            apiBaseUrl: '<?php echo url_for('/api'); ?>',
+            currentPage: '<?php echo $_SERVER['REQUEST_URI']; ?>',
+            isFavoritesPage: false,
+            debug: <?php echo defined('DEBUG_MODE') && DEBUG_MODE ? 'true' : 'false'; ?>
         };
     </script>
     
