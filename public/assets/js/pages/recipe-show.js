@@ -7,117 +7,165 @@
  * - Recipe rating system
  * - Comment submission
  * - Print functionality
+ * @version 1.1.0
  */
 
-'use strict';
+// Add to FlavorConnect namespace
+window.FlavorConnect = window.FlavorConnect || {};
+window.FlavorConnect.pages = window.FlavorConnect.pages || {};
 
-// Functions from common.js that we need
-/**
- * Safely adds an event listener with error handling
- * @param {HTMLElement} element - The DOM element to attach the listener to
- * @param {string} event - The event type to listen for
- * @param {Function} handler - The event handler function
- */
-function addSafeEventListener(element, event, handler) {
-    if (element) {
-        element.addEventListener(event, handler);
-    }
-}
-
-// State management
-const state = {
-    currentRating: 0,
-    isSubmitting: false
-};
-
-/**
- * Updates the visual state of the star rating
- * This ensures the stars stay highlighted when selected
- */
-function updateStarRating() {
-    const ratingInputs = document.querySelectorAll('.star-rating input[type="radio"]');
-    const labels = document.querySelectorAll('.star-rating label');
+// Recipe show page module
+window.FlavorConnect.pages.recipeShow = (function() {
+    'use strict';
     
-    // First, clear all active states
-    labels.forEach(label => {
-        label.classList.remove('active');
-    });
+    // Configuration
+    const config = {
+        selectors: {
+            starRating: '.star-rating input[type="radio"]',
+            starLabels: '.star-rating label',
+            commentForm: 'form',
+            printButton: '#printRecipeBtn'
+        },
+        classes: {
+            active: 'active'
+        }
+    };
     
-    // Then, set the active state based on the current rating
-    ratingInputs.forEach(input => {
-        const value = parseInt(input.value, 10);
-        const label = document.querySelector(`label[for="${input.id}"]`);
-        
-        if (value <= state.currentRating) {
-            label.classList.add('active');
+    // State management
+    const state = {
+        currentRating: 0,
+        isSubmitting: false
+    };
+    
+    /**
+     * Safely adds an event listener with error handling
+     * @param {HTMLElement} element - The DOM element to attach the listener to
+     * @param {string} event - The event type to listen for
+     * @param {Function} handler - The event handler function
+     * @private
+     */
+    function addSafeEventListener(element, event, handler) {
+        if (element) {
+            element.addEventListener(event, handler);
         }
-        
-        // If this input is the one that's checked, make sure it stays checked
-        if (value === state.currentRating) {
-            input.checked = true;
-        }
-    });
-}
-
-/**
- * Initializes recipe show page functionality
- * Sets up all event listeners and initializes the page state
- */
-function initializeRecipeShow() {
-    setupEventListeners();
-}
-
-/**
- * Sets up event listeners for the page
- * Attaches handlers to rating stars, comment form, and print button
- */
-function setupEventListeners() {
-    // Rating functionality
-    const ratingInputs = document.querySelectorAll('.star-rating input[type="radio"]');
-    ratingInputs.forEach(input => {
-        addSafeEventListener(input, 'change', handleRatingClick);
-    });
-
-    // Comment functionality
-    const commentForm = document.querySelector('form');
-    if (commentForm) {
-        addSafeEventListener(commentForm, 'submit', handleCommentSubmit);
     }
-
-    // Print functionality
-    const printBtn = document.getElementById('printRecipeBtn');
-    if (printBtn) {
-        addSafeEventListener(printBtn, 'click', function() {
-            window.print();
+    
+    /**
+     * Updates the visual state of the star rating
+     * This ensures the stars stay highlighted when selected
+     * @private
+     */
+    function updateStarRating() {
+        const ratingInputs = document.querySelectorAll(config.selectors.starRating);
+        const labels = document.querySelectorAll(config.selectors.starLabels);
+        
+        // First, clear all active states
+        labels.forEach(label => {
+            label.classList.remove(config.classes.active);
+        });
+        
+        // Then, set the active state based on the current rating
+        ratingInputs.forEach(input => {
+            const value = parseInt(input.value, 10);
+            const label = document.querySelector(`label[for="${input.id}"]`);
+            
+            if (value <= state.currentRating) {
+                label.classList.add(config.classes.active);
+            }
+            
+            // If this input is the one that's checked, make sure it stays checked
+            if (value === state.currentRating) {
+                input.checked = true;
+            }
         });
     }
-}
-
-/**
- * Handles rating click
- * @param {Event} event - The click event object
- */
-function handleRatingClick(event) {
-    const starInput = event.target.closest('input[type="radio"]');
-    if (!starInput) return;
     
-    // Update the current rating in our state
-    state.currentRating = parseInt(starInput.value, 10);
+    /**
+     * Handles rating click
+     * @param {Event} event - The click event object
+     * @private
+     */
+    function handleRatingClick(event) {
+        const starInput = event.target.closest('input[type="radio"]');
+        if (!starInput) return;
+        
+        // Update the current rating in our state
+        state.currentRating = parseInt(starInput.value, 10);
+        
+        // Update the visual state of all stars
+        updateStarRating();
+    }
     
-    // Update the visual state of all stars
-    updateStarRating();
-}
-
-/**
- * Handles comment form submission
- * @param {Event} event - The submit event object
- */
-function handleCommentSubmit(event) {
-    // Comment submission functionality would go here
-    console.log('Comment submitted');
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    initializeRecipeShow();
-});
+    /**
+     * Handles comment form submission
+     * @param {Event} event - The submit event object
+     * @private
+     */
+    function handleCommentSubmit(event) {
+        // Prevent double submissions
+        if (state.isSubmitting) {
+            event.preventDefault();
+            return;
+        }
+        
+        state.isSubmitting = true;
+        
+        // Comment submission functionality would go here
+        // In a real implementation, we'd handle the AJAX submission
+        // and reset state.isSubmitting when complete
+        
+        // For now, just log it
+        console.log('Comment submitted');
+        
+        // Reset submission state after a delay (simulating AJAX)
+        setTimeout(() => {
+            state.isSubmitting = false;
+        }, 1000);
+    }
+    
+    /**
+     * Sets up event listeners for the page
+     * Attaches handlers to rating stars, comment form, and print button
+     * @private
+     */
+    function setupEventListeners() {
+        // Rating functionality
+        const ratingInputs = document.querySelectorAll(config.selectors.starRating);
+        ratingInputs.forEach(input => {
+            addSafeEventListener(input, 'change', handleRatingClick);
+        });
+    
+        // Comment functionality
+        const commentForm = document.querySelector(config.selectors.commentForm);
+        if (commentForm) {
+            addSafeEventListener(commentForm, 'submit', handleCommentSubmit);
+        }
+    
+        // Print functionality
+        const printBtn = document.getElementById('printRecipeBtn');
+        if (printBtn) {
+            addSafeEventListener(printBtn, 'click', function() {
+                window.print();
+            });
+        }
+    }
+    
+    /**
+     * Initializes recipe show page functionality
+     * @public
+     */
+    function initialize() {
+        setupEventListeners();
+    }
+    
+    // Initialize when DOM is ready
+    document.addEventListener('DOMContentLoaded', initialize);
+    
+    // Return public API
+    return {
+        init: initialize,
+        getCurrentRating: function() {
+            return state.currentRating;
+        }
+    };
+})();
