@@ -60,21 +60,27 @@
     // Load utility scripts
     if(!empty($utility_scripts)) {
         foreach($utility_scripts as $script) {
-            echo '<script src="' . url_for('/assets/js/utils/' . $script . '.js?v=' . time()) . '" defer></script>';
+            $file_path = PUBLIC_PATH . '/assets/js/utils/' . $script . '.js';
+            $file_version = file_exists($file_path) ? filemtime($file_path) : time();
+            echo '<script src="' . url_for('/assets/js/utils/' . $script . '.js?v=' . $file_version) . '" defer></script>';
         }
     }
     
     // Load component scripts
     if(!empty($component_scripts)) {
         foreach($component_scripts as $script) {
-            echo '<script src="' . url_for('/assets/js/components/' . $script . '.js?v=' . time()) . '" defer></script>';
+            $file_path = PUBLIC_PATH . '/assets/js/components/' . $script . '.js';
+            $file_version = file_exists($file_path) ? filemtime($file_path) : time();
+            echo '<script src="' . url_for('/assets/js/components/' . $script . '.js?v=' . $file_version) . '" defer></script>';
         }
     }
     
     // Load page-specific scripts
     if(!empty($page_scripts)) {
         foreach($page_scripts as $script) {
-            echo '<script src="' . url_for('/assets/js/pages/' . $script . '.js?v=' . time()) . '" defer></script>';
+            $file_path = PUBLIC_PATH . '/assets/js/pages/' . $script . '.js';
+            $file_version = file_exists($file_path) ? filemtime($file_path) : time();
+            echo '<script src="' . url_for('/assets/js/pages/' . $script . '.js?v=' . $file_version) . '" defer></script>';
         }
     }
     ?>

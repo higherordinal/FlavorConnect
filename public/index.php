@@ -7,7 +7,7 @@ $component_styles = ['recipe-favorite', 'forms'];
 // Scripts
 $utility_scripts = ['common'];
 $component_scripts = ['recipe-favorite'];
-$page_scripts = ['home'];
+$page_scripts = [];
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');
