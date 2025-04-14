@@ -10,7 +10,6 @@
  * complete progressive enhancement - everything works without JavaScript.
  * 
  * @author Henry Vaughn
- * @version 1.1.0
  */
 
 // Add to FlavorConnect namespace
