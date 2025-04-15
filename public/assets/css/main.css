@@ -13,7 +13,7 @@
   --color-white: #ffffff;
   --container-padding: var(--spacing-lg);
   --container-width: min(100% - var(--spacing-lg), 1200px);
-  --danger-color: #dc3545;
+  --danger-color: #b91c1c;
   --danger-color-dark: #c82333;
   --danger-color-light: #fff5f5;
   --dark-gray: #7f8c8d;

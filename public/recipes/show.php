@@ -274,18 +274,19 @@ echo display_session_message();
                             <div class="recipe-attributes-wrapper">
                                 <h4 class="visually-hidden">Recipe Attributes</h4>
                                 <ul class="recipe-attributes">
-                                <span role="listitem">
-                                    <i class="fas fa-utensils"></i>
-                                    <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>
-                                </span>
-                                <span role="listitem">
-                                    <i class="fas fa-leaf"></i>
-                                    <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
-                                </span>
-                                <span role="listitem">
-                                    <i class="fas fa-plate"></i>
-                                    <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
-                                </span>
+                                    <li>
+                                        <i class="fas fa-utensils"></i>
+                                        <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-leaf"></i>
+                                        <?php echo h($recipe->diet() ? $recipe->diet()->name : 'Any Diet'); ?>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-plate"></i>
+                                        <?php echo h($recipe->type() ? $recipe->type()->name : 'Any Type'); ?>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
@@ -572,9 +573,5 @@ $component_scripts = ['member-header', 'recipe-favorite'];
 // Add page scripts
 $page_scripts = ['recipe-show'];
 ?>
-
-
-
-
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
