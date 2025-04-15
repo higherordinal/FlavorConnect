@@ -235,9 +235,9 @@ function createRecipeCard(recipe) {
                     <div class="recipe-attributes-wrapper">
                         <h3 class="visually-hidden">Recipe Attributes</h3>
                         <ul class="recipe-attributes">
-                            ${recipe.style ? `<li><span class="recipe-attribute">${recipe.style}</span></li>` : ''}
-                            ${recipe.diet ? `<li><span class="recipe-attribute">${recipe.diet}</span></li>` : ''}
-                            ${recipe.type ? `<li><span class="recipe-attribute">${recipe.type}</span></li>` : ''}
+                            ${recipe.style ? `<li><a href="/recipes/index.php?style=${recipe.style_id}" class="recipe-attribute">${recipe.style}</a></li>` : ''}
+                            ${recipe.diet ? `<li><a href="/recipes/index.php?diet=${recipe.diet_id}" class="recipe-attribute">${recipe.diet}</a></li>` : ''}
+                            ${recipe.type ? `<li><a href="/recipes/index.php?type=${recipe.type_id}" class="recipe-attribute">${recipe.type}</a></li>` : ''}
                         </ul>
                     </div>
                 </div>
