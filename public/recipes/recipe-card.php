@@ -50,16 +50,9 @@ if (isset($gallery_params) && $ref === 'gallery') {
            class="image-link"
            aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
             <?php if($recipe->get_image_path('thumb')) { ?>
-                <?php 
-                // Get the base image path (without the thumb suffix)
-                $image_path = str_replace('-thumb.webp', '.webp', $recipe->get_image_path('thumb'));
-                echo responsive_image(
-                    $image_path,
-                    h($recipe->alt_text ?: $recipe->title),
-                    'recipe-image',
-                    true
-                ); 
-                ?>
+                <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 
+                     alt="<?php echo h($recipe->alt_text ?: $recipe->title); ?>" 
+                     class="recipe-image">
             <?php } else { ?>
                 <img src="<?php echo url_for('/assets/images/recipe-placeholder.png'); ?>" 
                      alt="Recipe placeholder image" 
