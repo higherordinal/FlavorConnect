@@ -64,6 +64,9 @@ include(SHARED_PATH . '/member_header.php');
                     $type = $recipe->type();
                     $rating = $recipe->get_average_rating();
                     $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
+                    
+                    // Set is_favorited to true since these are from the favorites page
+                    $recipe->is_favorited = true;
                 ?>
                     <?php 
                         // Set variables for the recipe card component
@@ -113,7 +116,7 @@ include(SHARED_PATH . '/member_header.php');
     $userData = [
         'isLoggedIn' => $session->is_logged_in(),
         'userId' => $session->get_user_id(),
-        'apiBaseUrl' => 'http://localhost:3000'
+        'apiBaseUrl' => 'https://flavorconnect-api-f240ecae55b2.herokuapp.com'
     ];
     ?>
 
