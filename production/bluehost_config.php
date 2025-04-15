@@ -30,7 +30,7 @@ define('DB_NAME', $config['db_name']);
 
 // Path Configuration - Hardcoded for Bluehost
 define('PROJECT_ROOT', '/home2/swbhdnmy/public_html/website_7135c1f5');
-define('PUBLIC_PATH', PROJECT_ROOT . '/public');
+define('PUBLIC_PATH', PROJECT_ROOT); // Document root contains public files directly
 define('PRIVATE_PATH', PROJECT_ROOT . '/private');
 define('SHARED_PATH', PRIVATE_PATH . '/shared');
 define('UPLOADS_PATH', PUBLIC_PATH . '/uploads');
