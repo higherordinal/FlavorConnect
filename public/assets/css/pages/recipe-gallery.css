@@ -6,7 +6,7 @@
   display: grid;
   gap: var(--grid-gap-lg);
   margin-inline: auto;
-  max-width: 1200px;
+  max-width: var(--container-width, 1200px);
   padding-inline: var(--container-padding);
   width: 100%;
 }
@@ -48,7 +48,7 @@
 .main-content .search-button {
   background: none;
   border: none;
-  color: var(--text-color-light);
+  color: var(--text-muted);
   cursor: pointer;
   display: grid;
   padding: 0 var(--spacing-sm);
@@ -76,7 +76,7 @@
 }
 
 .main-content .filter-label {
-  color: var(--text-color-light);
+  color: var(--text-muted);
   font-size: var(--font-size-small);
   font-weight: 600;
   margin: 0;
@@ -186,10 +186,10 @@
 
 .toast {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 1rem 2rem;
-  border-radius: 4px;
+  bottom: var(--spacing-md);
+  right: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-sm);
   color: var(--color-white);
   font-weight: 500;
   z-index: 1000;
@@ -197,11 +197,11 @@
 }
 
 .toast.success {
-  background-color: #4caf50;
+  background-color: var(--success-color);
 }
 
 .toast.error {
-  background-color: #f44336;
+  background-color: var(--error-color);
 }
 
 @keyframes slideIn {
@@ -229,19 +229,19 @@
 .main-content .page-link {
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--border-radius-sm);
-  background: var(--surface-color);
+  background: var(--color-white);
   color: var(--text-color);
   text-decoration: none;
   transition: background-color var(--transition-fast);
 }
 
 .main-content .page-link:hover {
-  background: var(--hover-color);
+  background: var(--light-gray);
 }
 
 .main-content .page-link.current {
   background: var(--primary-color);
-  color: var(--on-primary-color);
+  color: var(--color-white);
 }
 
 /* ==========================================================================

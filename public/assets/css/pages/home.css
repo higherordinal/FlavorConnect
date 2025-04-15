@@ -10,7 +10,7 @@
     "cta"
     "featured";
   margin: var(--spacing-lg) auto;
-  max-width: 1400px;
+  max-width: var(--container-width, 1400px);
   padding-inline: var(--container-padding);
   width: 100%;
 }
@@ -42,18 +42,18 @@
 .hero-content {
   display: grid;
   gap: var(--spacing-lg);
-  max-width: 600px;
+  max-width: var(--content-width-sm, 600px);
 }
 
 .hero-content h1 {
-  font-size: clamp(2rem, 4vw, var(--font-size-xxlarge));
+  font-size: clamp(var(--font-size-xlarge), 4vw, var(--font-size-xxlarge));
   font-weight: 700;
   line-height: 1.2;
   margin: 0;
 }
 
 .hero-text {
-  font-size: clamp(1rem, 2vw, var(--font-size-large));
+  font-size: clamp(var(--font-size-medium), 2vw, var(--font-size-large));
   line-height: 1.6;
   margin: 0;
   opacity: 0.9;
@@ -107,7 +107,7 @@
   gap: var(--spacing-xl);
   grid-area: cta;
   grid-template-columns: repeat(3, 1fr);
-  max-width: 1200px;
+  max-width: var(--container-width, 1200px);
   margin-inline: auto;
   width: 100%;
 }
@@ -136,7 +136,7 @@
 
 .cta-card p {
   color: var(--text-color);
-  font-size: clamp(0.875rem, 1.5vw, 1rem);
+  font-size: clamp(var(--font-size-small), 1.5vw, var(--font-size-medium));
   line-height: 1.6;
   margin: 0;
 }
@@ -149,14 +149,14 @@
   display: grid;
   gap: var(--spacing-xl);
   grid-area: featured;
-  max-width: 1200px;
+  max-width: var(--container-width, 1200px);
   margin-inline: auto;
   width: 100%;
 }
 
 .featured-recipes h2 {
   color: var(--primary-color);
-  font-size: clamp(1.5rem, 3vw, var(--font-size-xlarge));
+  font-size: clamp(var(--font-size-large), 3vw, var(--font-size-xlarge));
   margin: 0;
   text-align: center;
 }

@@ -1,7 +1,6 @@
 /* ====================================
    BASE STYLES AND COMMON PATTERNS
    ==================================== */
-/* Base styles are now applied directly to elements through shared selectors */
 
 /* ====================================
    MAIN FORM CONTAINER
@@ -12,7 +11,7 @@
     box-shadow: var(--shadow-lg);
     margin: 0 auto;
     max-width: 1000px;
-    padding: 1rem;
+    padding: var(--spacing-md);
 }
 
 /* ====================================
@@ -31,6 +30,36 @@
     background-repeat: no-repeat;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
+}
+
+.recipe-form .page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--border-radius);
+}
+
+.recipe-form .page-header h1 {
+    color: var(--color-white);
+    font-family: var(--font-secondary);
+    font-size: var(--font-size-xxlarge);
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 0 auto;
+    padding: var(--spacing-sm) var(--spacing-md);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 
+                 0 0 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: var(--border-radius);
+    display: inline-block;
+    max-width: 80%;
 }
 
 .recipe-form .page-header.with-banner {
@@ -92,36 +121,6 @@
     font-size: 2.5rem;
 }
 
-.recipe-form .page-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--border-radius);
-}
-
-.recipe-form .page-header h1 {
-    color: var(--color-white);
-    font-family: var(--font-secondary);
-    font-size: var(--font-size-xxlarge);
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0 auto;
-    padding: var(--spacing-sm) var(--spacing-md);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 
-                 0 0 10px rgba(0, 0, 0, 0.5);
-    letter-spacing: 0.05em;
-    position: relative;
-    z-index: 1;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: var(--border-radius);
-    display: inline-block;
-    max-width: 80%;
-}
-
 /* ====================================
    FORM LAYOUT
    ==================================== */
@@ -137,35 +136,63 @@
 /* ====================================
    FORM VALIDATION
    ==================================== */
-.form-error {
+.form-error,
+.recipe-form .invalid-feedback {
     color: var(--error-color);
     font-size: 0.875rem;
     margin-top: 0.25rem;
     flex: 0 0 auto;
 }
 
-.form-control.is-invalid {
+.form-control.is-invalid,
+.recipe-form .form-control.is-invalid {
     border-color: var(--error-color);
+    background-color: rgba(231, 76, 60, 0.05);
+}
+
+.recipe-form .invalid-feedback {
+    align-items: center;
+    display: grid;
+    font-weight: 500;
+    gap: var(--spacing-xs);
+    grid-template-columns: auto 1fr;
+    font-size: var(--font-size-base);
+}
+
+.recipe-form .invalid-feedback::before {
+    content: "⚠";
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
 }
 
 /* ====================================
    FORM SECTIONS - GENERAL STYLING
    ==================================== */
-.form-section {
+.form-section,
+.ingredients-section,
+.directions-section,
+.media-section {
     background: var(--color-white);
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
-    margin-bottom: 1rem;
-    padding: 1rem;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
 }
 
-.form-section h4, .form-section .h4 {
+.form-section h4, 
+.form-section .h4,
+.ingredients-section h4, 
+.ingredients-section .h4,
+.directions-section h4, 
+.directions-section .h4,
+.media-section h4, 
+.media-section .h4,
+.time-section h4, 
+.time-section .h4 {
     border-bottom: 2px solid var(--primary-color);
     color: var(--primary-color);
     font-size: var(--font-size-large);
@@ -176,7 +203,8 @@
 /* ====================================
    CATEGORIES SECTION
    ==================================== */
-.categories-row {
+.categories-row,
+.time-row {
     background-color: var(--background-color);
     border-radius: var(--border-radius-md);
     display: grid;
@@ -200,37 +228,14 @@
     flex: 0 0 auto;
 }
 
-.categories-row .form-error {
-    color: var(--error-color);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    flex: 0 0 auto;
-}
-
 /* ====================================
    TIME SECTION
    ==================================== */
-.time-row {
-    background-color: var(--background-color);
-    border-radius: var(--border-radius-md);
-    display: grid;
-    gap: 0.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-}
-
 .time-section {
     background-color: var(--color-white);
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow-sm);
     padding: 0.5rem;
-}
-
-.time-section h4, .time-section .h4 {
-    color: var(--primary-color);
-    font-size: var(--font-size-large);
-    margin-bottom: 0.5rem;
 }
 
 .time-inputs {
@@ -246,38 +251,7 @@
 /* ====================================
    INGREDIENTS SECTION
    ==================================== */
-/* Base styles for form sections */
-.ingredients-section,
-.directions-section,
-.media-section {
-    background-color: var(--background-color);
-    border-radius: var(--border-radius-md);
-    margin-bottom: var(--spacing-md);
-    padding: var(--spacing-md);
-}
-
-/* Override specific properties for ingredients section */
-.ingredients-section {
-    margin-bottom: 1rem;
-    padding: 1rem;
-}
-
-/* Common styles for all section headers */
-.ingredients-section h4, .ingredients-section .h4,
-.directions-section h4, .directions-section .h4,
-.media-section h4, .media-section .h4,
-.time-section h4, .time-section .h4 {
-    color: var(--primary-color);
-    font-size: var(--font-size-large);
-    margin-bottom: var(--spacing-sm);
-}
-
-/* Override margin for ingredients section header */
-.ingredients-section h4, .ingredients-section .h4 {
-    margin-bottom: 0.75rem;
-}
-
-/* Common styles for ingredient and direction rows */
+/* Base styles for ingredient and direction rows */
 .ingredient-row,
 .direction-row {
     background-color: var(--color-white);
@@ -290,7 +264,7 @@
     padding: var(--spacing-sm);
 }
 
-/* Override specific properties for ingredient row */
+/* Specific properties for ingredient row */
 .ingredient-row {
     grid-template-columns: 120px 150px 1fr 40px; /* Increased quantity column width */
     margin-bottom: 0.5rem;
@@ -306,12 +280,14 @@
     margin-bottom: 0;
 }
 
-.ingredient-row .form-group label {
+.ingredient-row .form-group label,
+.direction-row .form-group label {
     display: block;
     margin-bottom: 0.5rem;
 }
 
-.ingredient-row .form-group input {
+.ingredient-row .form-group input,
+.direction-row .form-group textarea {
     display: block;
 }
 
@@ -334,7 +310,7 @@
     align-self: start;
 }
 
-/* Override specific properties for ingredient remove button */
+/* Specific properties for ingredient remove button */
 .ingredient-row .remove-ingredient {
     margin-top: 2.1rem; /* Align with the input field, accounting for the label */
 }
@@ -399,32 +375,11 @@
 /* ====================================
    DIRECTIONS SECTION
    ==================================== */
-/* Directions section styles are now handled by the shared selector above */
-.directions-section {
-    margin-bottom: 1rem;
-    padding: 1rem;
-}
-
-/* Direction section header styles are now handled by the shared selector above */
-.directions-section h4, .directions-section .h4 {
-    margin-bottom: 0.75rem;
-}
-
 /* Specific grid layout for direction row */
 .direction-row {
     grid-template-columns: 40px 1fr 40px;
     margin-bottom: 0.5rem;
     padding: 0.75rem;
-}
-
-/* Direction row form group label */
-.direction-row .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-}
-
-.direction-row .form-group textarea {
-    display: block;
 }
 
 .direction-row .step-number {
@@ -453,11 +408,6 @@
 /* ====================================
    MEDIA SECTION
    ==================================== */
-/* Media section specific styles */
-.media-section {
-    margin-bottom: var(--spacing-lg);
-}
-
 /* Current image preview styles */
 .current-image {
     max-width: 300px;
@@ -468,11 +418,6 @@
     max-width: 100%;
     height: auto;
     display: block;
-}
-
-/* Media section header styles are now handled by the shared selector above */
-.media-section h4 {
-    margin-bottom: var(--spacing-md);
 }
 
 /* ====================================
@@ -566,7 +511,6 @@
 #add-ingredient,
 #add-step {
     margin-top: 0.5rem;
-    width: fit-content;
     width: 100%;
 }
 
@@ -649,28 +593,6 @@
 }
 
 /* ====================================
-   FORM VALIDATION AND ERROR STATES
-   ==================================== */
-.recipe-form .form-control.is-invalid {
-    background-color: rgba(231, 76, 60, 0.05);
-    border-color: var(--error-color);
-}
-
-.recipe-form .invalid-feedback {
-    align-items: center;
-    color: var(--error-color);
-    display: grid;
-    font-size: var(--font-size-base);
-    font-weight: 500;
-    gap: var(--spacing-xs);
-    grid-template-columns: auto 1fr;
-}
-
-.recipe-form .invalid-feedback::before {
-    content: "⚠";
-}
-
-/* ====================================
    DELETE CONFIRMATION
    ==================================== */
 .delete-confirmation {
@@ -701,95 +623,50 @@
 }
 
 /* ====================================
-   RESPONSIVE STYLES - MOBILE FIRST
+   RESPONSIVE STYLES
    ==================================== */
-
-/* Base styles for mobile */
-.recipe-form {
-    padding: var(--spacing-md);
-}
-
-.form-section,
-.categories-row,
-.time-row,
-.image-section,
-.ingredients-section,
-.directions-section {
-    padding: 1.5rem;
-}
-
-.ingredient-row {
-    gap: 0.5rem;
-    grid-template-columns: 1fr;
-}
-
-.ingredient-row .remove-ingredient {
-    justify-self: end;
-    margin-top: 0;
-}
-
-.direction-row {
-    gap: 0.5rem;
-    grid-template-columns: 1fr;
-}
-
-.direction-row .step-number {
-    justify-self: start;
-    margin-top: 0;
-}
-
-.direction-row .remove-step {
-    justify-self: end;
-    margin-top: 0;
-}
-
-.remove-ingredient,
-.remove-step {
-    position: absolute;
-    right: 0.5rem;
-    top: 0.5rem;
-}
-
-.form-buttons {
-    grid-template-columns: 1fr;
-}
-
-.form-buttons .btn {
-    width: 100%;
-}
-
-/* Tablets and larger screens (768px and up) */
-@media (min-width: 768px) {
+/* Mobile styles (default) */
+@media (max-width: 767px) {
     .recipe-form {
-        padding: 1rem;
+        padding: var(--spacing-md);
     }
     
     .ingredient-row {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: 120px 150px 1fr auto;
-        margin-bottom: 1rem;
-        position: relative;
+        gap: 0.5rem;
+        grid-template-columns: 1fr;
+    }
+    
+    .ingredient-row .remove-ingredient {
+        justify-self: end;
+        margin-top: 0;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
     }
     
     .direction-row {
-        display: grid;
-        gap: 1rem;
-        grid-template-columns: auto 1fr auto;
-        margin-bottom: 1rem;
-        position: relative;
+        gap: 0.5rem;
+        grid-template-columns: 1fr;
+    }
+    
+    .direction-row .step-number {
+        justify-self: start;
+        margin-top: 0;
+    }
+    
+    .direction-row .remove-step {
+        justify-self: end;
+        margin-top: 0;
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
     }
     
     .form-buttons {
-        grid-template-columns: auto auto;
+        grid-template-columns: 1fr;
     }
     
     .form-buttons .btn {
-        width: auto;
-    }
-    
-    .remove-ingredient,
-    .remove-step {
-        position: static;
+        width: 100%;
     }
 }

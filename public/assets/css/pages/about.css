@@ -6,7 +6,7 @@
   display: grid;
   gap: var(--spacing-lg); /* Increased spacing between sections */
   margin: 0 auto;
-  max-width: 1200px;
+  max-width: var(--container-width, 1200px);
   padding: var(--spacing-md) var(--spacing-xl) 0;
 }
 
@@ -69,7 +69,7 @@
   border-radius: var(--border-radius-lg);
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform var(--transition-fast);
   width: 100%;
 }
 
@@ -102,7 +102,7 @@
   font-size: var(--font-size-large);
   line-height: 1.6;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: var(--content-width, 800px);
 }
 
 /* ====================================
@@ -137,7 +137,7 @@
   display: grid;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .feature-card:hover {
@@ -147,7 +147,7 @@
 
 .feature-icon {
   color: var(--primary-color);
-  font-size: 2.5rem;
+  font-size: var(--font-size-xxlarge);
 }
 
 .feature-card h3 {
@@ -191,7 +191,7 @@
   font-size: var(--font-size-large);
   line-height: 1.6;
   margin: 0 auto;
-  max-width: 800px;
+  max-width: var(--content-width, 800px);
   opacity: 0.9;
 }
 

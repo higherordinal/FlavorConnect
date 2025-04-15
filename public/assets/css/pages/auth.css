@@ -63,7 +63,7 @@ form > div {
 .name-fields-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px;
+  gap: var(--spacing-xs);
 }
 
 /* Media query for larger screens */
@@ -131,9 +131,9 @@ form > div {
   border: none;
   color: var(--accent-color);
   font-weight: 600;
-  padding: 0.875rem 1.5rem;
+  padding: var(--spacing-sm) var(--spacing-md);
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  transition: all var(--transition-medium);
   display: inline-block;
   text-align: center;
   margin: auto;
@@ -146,7 +146,7 @@ form > div {
     color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 40%,
     color-mix(in srgb, var(--secondary-color) 30%, var(--primary-color) 70%) 70%,
     color-mix(in srgb, var(--secondary-color) 50%, var(--primary-color) 50%) 100%);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
@@ -164,7 +164,7 @@ form > div {
   color: var(--secondary-color);
   font-weight: 500;
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .form-footer a:hover {
@@ -176,47 +176,47 @@ form > div {
    PASSWORD VALIDATION
    ==================================== */
 .password-requirements {
-  margin-top: 10px;
-  padding: 10px;
-  border-radius: 4px;
-  background-color: #f8f9fa;
-  font-size: 0.85rem;
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--light-gray);
+  font-size: var(--font-size-small);
 }
 
 .password-requirements ul {
   list-style: none;
-  padding-left: 10px;
-  margin: 5px 0;
+  padding-left: var(--spacing-sm);
+  margin: var(--spacing-xs) 0;
 }
 
 .requirement-heading {
-  margin: 0 0 5px 0;
+  margin: 0 0 var(--spacing-xs) 0;
   font-weight: bold;
 }
 
 .check-icon {
   display: inline-block;
   width: 16px;
-  color: #ccc;
+  color: var(--text-muted);
 }
 
 .valid .check-icon {
-  color: #28a745;
+  color: var(--success-color);
 }
 
 .invalid .check-icon {
-  color: #dc3545;
+  color: var(--error-color);
 }
 
 .password-match {
-  margin-top: 5px;
-  font-size: 0.85rem;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-small);
 }
 
 .match-valid {
-  color: #28a745;
+  color: var(--success-color);
 }
 
 .match-invalid {
-  color: #dc3545;
+  color: var(--error-color);
 }
