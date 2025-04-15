@@ -496,27 +496,35 @@ window.FlavorConnect.components.pagination = (function() {
         
         // Update active page in pagination links
         const paginationLinks = document.querySelectorAll('.pagination a');
+        
+        // First remove active class from all links
         paginationLinks.forEach(link => {
-            // Remove active class from all links
             link.classList.remove('active');
-            
-            // Add active class to current page link
+            link.removeAttribute('aria-current');
+        });
+        
+        // Then add active class to current page link
+        paginationLinks.forEach(link => {
+            // Parse the link URL to get its page parameter
             const linkUrl = new URL(link.href, window.location.origin);
             const linkParams = new URLSearchParams(linkUrl.search);
-            const linkPage = linkParams.get('page') || '1';
+            let linkPage = linkParams.get('page') || '1';
             
+            // Also check for data-page attribute
+            if (link.hasAttribute('data-page')) {
+                linkPage = link.getAttribute('data-page');
+            }
+            
+            // Compare as strings to avoid type conversion issues
             if (linkPage === currentPage) {
                 link.classList.add('active');
                 link.setAttribute('aria-current', 'page');
-            } else {
-                link.removeAttribute('aria-current');
             }
         });
         
         // Update records-info if present
         const recordsInfo = document.querySelector('.records-info');
         if (recordsInfo) {
-            // We'll update this with correct information after content loads
             log('Updated active page to: ' + currentPage);
         }
     }
