@@ -20,7 +20,9 @@ function url_for($script_path) {
   switch(ENVIRONMENT) {
     case 'production':
       // Use the WWW_ROOT constant defined in bluehost_config.php
-      return WWW_ROOT . $script_path;
+      // Add a fallback value if WWW_ROOT is not defined
+      $root = defined('WWW_ROOT') ? WWW_ROOT : 'https://flavorconnect.space';
+      return $root . $script_path;
       
     case 'xampp':
       // Get the base URL from the server
