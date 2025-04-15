@@ -271,7 +271,9 @@ echo display_session_message();
                                     Total: <?php echo h(TimeUtility::format_time($recipe->prep_time + $recipe->cook_time)); ?>
                                 </span>
                             </div>
-                            <div class="recipe-attributes" role="list">
+                            <div class="recipe-attributes-wrapper">
+                                <h4 class="visually-hidden">Recipe Attributes</h4>
+                                <ul class="recipe-attributes">
                                 <span role="listitem">
                                     <i class="fas fa-utensils"></i>
                                     <?php echo h($recipe->style() ? $recipe->style()->name : 'Any Style'); ?>

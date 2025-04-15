@@ -37,17 +37,16 @@ if (isset($gallery_params) && $ref === 'gallery') {
 }
 ?>
 
-<article class="recipe-card" role="article">
+<article class="recipe-card">
     <a href="<?php echo url_for('/recipes/show.php?' . $url_params); ?>" 
        class="recipe-link"
-       role="link"
        aria-labelledby="recipe-title-<?php echo h($recipe->recipe_id); ?>">
         <div class="recipe-image-container">
             <?php if($session->is_logged_in()) { ?>
                 <button class="favorite-btn <?php echo $recipe->is_favorited ? 'favorited' : ''; ?>"
                         data-recipe-id="<?php echo h($recipe->recipe_id); ?>"
                         aria-label="<?php echo $recipe->is_favorited ? 'Remove from' : 'Add to'; ?> favorites">
-                    <i class="<?php echo $recipe->is_favorited ? 'fas' : 'far'; ?> fa-heart"></i>
+                    <i class="<?php echo $recipe->is_favorited ? 'fas' : 'far'; ?> fa-heart" aria-hidden="true"></i>
                 </button>
             <?php } ?>
             <?php if($recipe->get_image_path('thumb')) { ?>
@@ -62,7 +61,7 @@ if (isset($gallery_params) && $ref === 'gallery') {
         </div>
         
         <div class="recipe-content">
-            <h3 class="recipe-title" id="recipe-title-<?php echo h($recipe->recipe_id); ?>"><?php echo h($recipe->title); ?></h3>
+            <h2 class="recipe-title" id="recipe-title-<?php echo h($recipe->recipe_id); ?>"><?php echo h($recipe->title); ?></h2>
             
             <div class="recipe-meta">
                 <span class="rating" aria-label="Rating: <?php echo $rating; ?> out of 5 stars">
@@ -88,16 +87,25 @@ if (isset($gallery_params) && $ref === 'gallery') {
                 </span>
             </div>
 
-            <div class="recipe-attributes" role="list">
-                <?php if($style) { ?>
-                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($style->name); ?></a>
-                <?php } ?>
-                <?php if($diet) { ?>
-                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($diet->name); ?></a>
-                <?php } ?>
-                <?php if($type) { ?>
-                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute" role="listitem"><?php echo h($type->name); ?></a>
-                <?php } ?>
+            <div class="recipe-attributes-wrapper">
+                <h3 class="visually-hidden">Recipe Attributes</h3>
+                <ul class="recipe-attributes">
+                    <?php if($style) { ?>
+                    <li>
+                        <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
+                    </li>
+                    <?php } ?>
+                    <?php if($diet) { ?>
+                    <li>
+                        <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
+                    </li>
+                    <?php } ?>
+                    <?php if($type) { ?>
+                    <li>
+                        <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
+                    </li>
+                    <?php } ?>
+                </ul>
             </div>
         </div>
 

@@ -203,7 +203,7 @@ function updateRecipeGrid(recipes) {
  */
 function createRecipeCard(recipe) {
     return `
-        <article class="recipe-card" role="article">
+        <article class="recipe-card">
             <a href="/recipes/show.php?id=${recipe.recipe_id}" 
                class="recipe-link"
                aria-labelledby="recipe-title-${recipe.recipe_id}">
@@ -212,7 +212,7 @@ function createRecipeCard(recipe) {
                         <button class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}"
                                 data-recipe-id="${recipe.recipe_id}"
                                 aria-label="${recipe.is_favorited ? 'Remove from' : 'Add to'} favorites">
-                            <i class="${recipe.is_favorited ? 'fas' : 'far'} fa-heart"></i>
+                            <i class="${recipe.is_favorited ? 'fas' : 'far'} fa-heart" aria-hidden="true"></i>
                         </button>
                     ` : ''}
                     <img src="${recipe.img_file_path}" 
@@ -232,10 +232,13 @@ function createRecipeCard(recipe) {
                         </span>
                     </div>
 
-                    <div class="recipe-attributes" role="list">
-                        ${recipe.style ? `<span class="recipe-attribute">${recipe.style}</span>` : ''}
-                        ${recipe.diet ? `<span class="recipe-attribute">${recipe.diet}</span>` : ''}
-                        ${recipe.type ? `<span class="recipe-attribute">${recipe.type}</span>` : ''}
+                    <div class="recipe-attributes-wrapper">
+                        <h3 class="visually-hidden">Recipe Attributes</h3>
+                        <ul class="recipe-attributes">
+                            ${recipe.style ? `<li><span class="recipe-attribute">${recipe.style}</span></li>` : ''}
+                            ${recipe.diet ? `<li><span class="recipe-attribute">${recipe.diet}</span></li>` : ''}
+                            ${recipe.type ? `<li><span class="recipe-attribute">${recipe.type}</span></li>` : ''}
+                        </ul>
                     </div>
                 </div>
 

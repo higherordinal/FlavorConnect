@@ -76,9 +76,9 @@
 }
 
 .main-content .filter-label {
-  color: var(--text-muted);
+  color: var(--text-color);
   font-size: var(--font-size-small);
-  font-weight: 600;
+  font-weight: 700;
   margin: 0;
 }
 

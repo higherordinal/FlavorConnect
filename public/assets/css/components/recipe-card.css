@@ -82,7 +82,7 @@
 
 /* Recipe meta information */
 .recipe-meta {
-  color: var(--text-muted, #4a5555);
+  color: var(--text-color);
   display: grid;
   font-size: var(--font-size-small);
   gap: var(--spacing-xs);
@@ -90,6 +90,7 @@
   justify-content: start;
   margin-top: var(--spacing-sm);
   align-items: center;
+  font-weight: 500;
 }
 
 /* Rating component */
@@ -126,6 +127,22 @@
 }
 
 /* Recipe attributes container */
+.recipe-attributes-wrapper {
+  width: 100%;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .recipe-attributes {
   display: flex;
   flex-wrap: wrap;
@@ -136,6 +153,15 @@
   padding-bottom: var(--spacing-sm); /* Add padding at the bottom for spacing when wrapped */
   width: 100%;
   justify-content: flex-start; /* Ensure left alignment */
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.recipe-attributes li {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
 }
 
 /* Recipe attribute styling */
@@ -173,11 +199,12 @@
 
 .recipe-author {
   font-size: var(--font-size-small);
-  color: var(--text-muted, #4a5555);
+  color: var(--text-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  font-weight: 500;
 }
 
 /* Favorite button */

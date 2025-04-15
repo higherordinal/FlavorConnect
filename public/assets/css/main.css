@@ -45,7 +45,7 @@
   --spacing-xs: clamp(0.25rem, 0.5vw, 0.5rem);
   --success-color: #1a7740;
   --text-color: #2c3e50;
-  --text-muted: #95a5a6;
+  --text-muted: #4a5555;
   --transition-fast: 150ms ease-in-out;
   --transition-medium: 300ms ease-in-out;
   --transition-slow: 500ms ease-in-out;
