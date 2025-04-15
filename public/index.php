@@ -29,7 +29,9 @@ if($session->is_logged_in()) {
             </div>
         </div>
         <div class="hero-image">
-            <?php echo responsive_image('/assets/images/hero-img.webp', 'Colorful array of fresh ingredients and prepared dishes', 'hero-img', false); ?>
+            <img src="<?php echo url_for('/assets/images/hero-img.webp'); ?>" 
+                 alt="Colorful array of fresh ingredients and prepared dishes" 
+                 class="hero-img">
         </div>
     </section>
 
