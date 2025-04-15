@@ -17,7 +17,7 @@
   margin: 0 auto;
   max-width: var(--container-width);
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  padding: 1rem;
+  padding: var(--spacing-md);
   width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -25,7 +25,7 @@
 
 /* Ensure unified navigation has consistent spacing within admin layout */
 .admin-management .unified-navigation {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-xs);
 }
 
 /* ====================================
@@ -356,18 +356,18 @@ button.action.add:hover {
 .admin-content .form-group input[type="password"],
 .admin-content .form-group select {
   background: var(--color-white);
-  border: 2px solid #d1d5db;
+  border: 2px solid var(--border-color);
   border-radius: var(--border-radius-sm);
-  font-size: 1rem;
+  font-size: var(--font-size-medium);
   padding: var(--spacing-md);
-  transition: all 0.3s ease;
+  transition: all var(--transition-medium);
   width: 100%;
 }
 
 .admin-content .form-group input:focus,
 .admin-content .form-group select:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.1);
+  box-shadow: var(--shadow-sm);
   outline: none;
 }
 
@@ -614,7 +614,7 @@ button.action.add:hover {
    ==================================== */
 
 .status-badge {
-  border-radius: 50px;
+  border-radius: var(--border-radius-pill);
   font-size: 0.875rem;
   font-weight: 500;
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -684,7 +684,7 @@ button.action.add:hover {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .section-header h2 {
@@ -1462,18 +1462,18 @@ button.action.add:hover {
   background-color: var(--background-color-secondary);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow-sm);
-  padding: 2rem;
-  max-width: 600px;
-  margin: 1.5rem auto;
+  padding: var(--spacing-xl);
+  max-width: var(--content-width-sm, 600px);
+  margin: var(--spacing-lg) auto;
   text-align: center;
 }
 
 .confirmation-box .item-name {
-  font-size: 1.5rem;
+  font-size: var(--font-size-xlarge);
   font-weight: 600;
   color: var(--primary-color);
-  margin: 1rem 0;
-  padding: 0.5rem;
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-xs);
   background-color: var(--background-color);
   border-radius: var(--border-radius-sm);
   display: inline-block;
@@ -1486,30 +1486,30 @@ button.action.add:hover {
 }
 
 .alert {
-  padding: 1rem;
+  padding: var(--spacing-md);
   border-radius: var(--border-radius-sm);
-  margin: 1.5rem 0;
+  margin: var(--spacing-lg) 0;
 }
 
 .alert.warning {
   background-color: var(--light-gray);
-  border-left: 4px solid var(--accent-color);
+  border-left: var(--spacing-xs) solid var(--accent-color);
   color: var(--text-color);
 }
 
 .alert p {
-  margin: 0.5rem 0;
+  margin: var(--spacing-xs) 0;
 }
 
 .form-buttons {
   display: flex;
-  gap: 1rem;
+  gap: var(--spacing-md);
   justify-content: center;
-  margin-top: 2rem;
+  margin-top: var(--spacing-xl);
 }
 
 .form-buttons .action {
-  min-width: 120px;
+  min-width: calc(var(--spacing-md) * 7.5);
   text-align: center;
 }
 
@@ -1531,8 +1531,8 @@ button.action.add:hover {
 }
 
 .sort-link i {
-  font-size: 0.8em;
-  margin-left: 0.5rem;
+  font-size: var(--font-size-small);
+  margin-left: var(--spacing-xs);
   opacity: 0.5;
 }
 

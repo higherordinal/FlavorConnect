@@ -34,6 +34,7 @@
   color: var(--primary-color);
   font-weight: 600;
   padding: var(--spacing-sm) var(--spacing-md);
+  transition: all var(--transition-fast);
 }
 
 .auth-links .sign-up:hover {
