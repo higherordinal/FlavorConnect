@@ -638,7 +638,7 @@
 .add-comment .btn-primary {
     background-color: var(--primary-color);
     font-weight: 600;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-lg);
 }
 
 .add-comment .btn-primary:hover {
