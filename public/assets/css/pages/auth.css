@@ -63,8 +63,7 @@ form > div {
 .name-fields-container {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 8px; /* Explicit small gap */
-  margin-bottom: 8px; /* Add small margin at bottom */
+  gap: 8px;
 }
 
 /* Media query for larger screens */
