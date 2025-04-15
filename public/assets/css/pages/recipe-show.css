@@ -43,6 +43,9 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: visible;
 }
 
 /* Common text shadow for header text */
@@ -56,6 +59,10 @@
     flex-direction: column;
     width: 100%;
     gap: var(--spacing-xs);
+    height: auto;
+    align-self: flex-end;
+    overflow: visible;
+    min-height: fit-content;
 }
 
 /* Title section */
@@ -129,7 +136,9 @@
     width: 100%;
     max-width: 100%; 
     box-sizing: border-box; 
-    overflow: hidden; 
+    overflow: visible; 
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
 }
 
 /* Rating section - now in its own row spanning both columns */
@@ -141,9 +150,8 @@
     gap: var(--spacing-xs);
     max-width: 100%; 
     flex-wrap: wrap;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: normal;
+    overflow: visible;
     margin-bottom: var(--spacing-xs);
 }
 
@@ -157,9 +165,8 @@
 .recipe-rating .rating-count {
     color: rgba(255, 255, 255, 0.8);
     font-size: clamp(0.8rem, 2vw, 0.9rem);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow: visible;
+    white-space: normal;
 }
 
 /* Recipe details */
@@ -169,7 +176,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-sm);
-    max-width: 70%;
+    max-width: 100%;
 }
 
 /* Common styles for recipe metadata items */
