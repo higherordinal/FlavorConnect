@@ -36,7 +36,7 @@
 }
 
 .logo a {
-  color: white;
+  color: var(--color-white);
   display: grid;
   justify-items: center;
   text-decoration: none;
@@ -52,8 +52,8 @@
   color: var(--accent-color);
   font-size: var(--font-size-small);
   font-weight: 600;
-  letter-spacing: 2px;
-  margin-bottom: -0.5rem;
+  letter-spacing: var(--letter-spacing-wide, 2px);
+  margin-bottom: calc(-1 * var(--spacing-xs));
   text-transform: uppercase;
 }
 
@@ -112,12 +112,12 @@
 .hamburger::before,
 .hamburger::after {
   background-color: var(--color-white);
-  border-radius: 2px;
+  border-radius: var(--border-radius-xs, 2px);
   content: "";
   display: block;
   height: 2px;
-  margin: 5px 0;
-  width: 24px;
+  margin: var(--spacing-xs) 0;
+  width: var(--icon-size-sm, 24px);
 }
 
 /* ==========================================================================
@@ -171,7 +171,7 @@
   }
   
   .main-nav ul li:not(:last-child) {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.15));
   }
 
   .main-nav ul li a {
@@ -183,7 +183,7 @@
   
   .main-nav ul li a i {
     margin-right: var(--spacing-sm);
-    width: 20px;
+    width: var(--icon-size-xs, 20px);
     text-align: center;
   }
 

@@ -83,14 +83,14 @@
 .user-menu-button::after {
   content: "\f107";
   font-family: "Font Awesome 5 Free";
-  font-size: 0.9rem;
+  font-size: var(--font-size-small);
   font-weight: 900;
-  margin-left: 0.25rem;
-  transition: transform 0.2s ease;
+  margin-left: var(--spacing-xs);
+  transition: transform var(--transition-fast);
 }
 
 .user-menu-button:hover::after {
-  transform: translateY(2px);
+  transform: translateY(var(--spacing-xxs, 2px));
 }
 
 .user-menu-button:active {
@@ -100,7 +100,7 @@
 
 .user-menu-button span {
   position: relative;
-  top: 1px;
+  top: var(--spacing-xxs, 1px);
   display: flex;
   align-items: center;
 }
@@ -112,9 +112,9 @@
 
 .user-menu-button img {
   border-radius: 50%;
-  height: 32px;
-  transition: transform 0.3s ease;
-  width: 32px;
+  height: var(--avatar-size-sm, 32px);
+  transition: transform var(--transition-medium);
+  width: var(--avatar-size-sm, 32px);
 }
 
 .user-menu-button:hover img,
@@ -123,7 +123,7 @@
 }
 
 .user-menu-button:focus-visible {
-  box-shadow: 0 0 0 2px var(--accent-color);
+  box-shadow: 0 0 0 var(--spacing-xxs, 2px) var(--accent-color);
 }
 
 /* ==========================================================================
@@ -160,7 +160,7 @@
 
 .dropdown-menu a i {
   margin-right: var(--spacing-sm);
-  width: 20px; /* Fixed width for consistent alignment */
+  width: var(--icon-size-xs, 20px); /* Fixed width for consistent alignment */
   text-align: center;
   color: var(--primary-color);
 }
@@ -177,7 +177,7 @@
 .dropdown-menu hr {
   border: none;
   border-top: 1px solid var(--border-color);
-  margin: 0.5rem 0;
+  margin: var(--spacing-xs) 0;
 }
 
 /* ==========================================================================
@@ -211,11 +211,11 @@ html.no-js .js-disabled {
 .user-menu-link {
   display: flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  color: var(--color-text);
+  padding: var(--spacing-xs) var(--spacing-md);
+  color: var(--text-color);
   text-decoration: none;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  border-radius: var(--border-radius-sm);
+  transition: background-color var(--transition-fast);
 }
 
 .user-menu-link:hover {
@@ -225,7 +225,7 @@ html.no-js .js-disabled {
 .user-menu-link .username {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 /* ==========================================================================
@@ -257,7 +257,7 @@ html.no-js .js-disabled {
   .hamburger::before,
   .hamburger::after {
     background-color: var(--color-white);
-    border-radius: 2px;
+    border-radius: var(--border-radius-xs, 2px);
     content: "";
     display: block;
     height: 2px;
@@ -289,12 +289,12 @@ html.no-js .js-disabled {
 
   .main-nav ul {
     background-color: var(--primary-color);
-    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-light, 0 4px 6px rgba(255, 255, 255, 0.1));
     display: none;
     flex-direction: column;
     gap: var(--spacing-sm);
     left: 50%;
-    min-width: 200px;
+    min-width: var(--dropdown-width, 200px);
     padding: var(--spacing-md) var(--spacing-2xl);
     position: absolute;
     top: 100%;
@@ -337,13 +337,13 @@ html.no-js .js-disabled {
   }
 
   .dropdown-menu {
-    min-width: 180px;
-    right: -10px;
+    min-width: var(--dropdown-width-sm, 180px);
+    right: calc(-1 * var(--spacing-sm));
   }
 
   .user-menu-button img {
-    height: 28px;
-    width: 28px;
+    height: var(--avatar-size-xs, 28px);
+    width: var(--avatar-size-xs, 28px);
   }
 
   .user-menu-button span {

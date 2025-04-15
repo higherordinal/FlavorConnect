@@ -5,14 +5,14 @@
 .favorite-btn, .unfavorite-btn {
   background: rgba(255, 255, 255, 0.9); border: none; border-radius: 50%;
   box-shadow: var(--shadow-sm); cursor: pointer; display: grid;
-  height: 36px; width: 36px; place-items: center; position: absolute;
+  height: var(--icon-size-md, 36px); width: var(--icon-size-md, 36px); place-items: center; position: absolute;
   right: var(--spacing-sm); top: var(--spacing-sm); 
-  transition: all 0.2s ease; z-index: 2;
+  transition: all var(--transition-fast); z-index: 2;
 }
 
 .favorite-btn i, .unfavorite-btn i {
   color: var(--danger-color-dark); font-size: var(--font-size-large);
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-fast);
 }
 
 .favorite-btn:hover, .unfavorite-btn:hover {
@@ -22,7 +22,7 @@
 .favorite-btn:hover i, .unfavorite-btn:hover i { transform: scale(1.1); }
 
 .favorite-btn.favorited i, .unfavorite-btn i {
-  animation: favorite-pop 0.3s ease-out; color: var(--danger-color-dark);
+  animation: favorite-pop var(--transition-medium) ease-out; color: var(--danger-color-dark);
 }
 
 @keyframes favorite-pop {
