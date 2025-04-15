@@ -204,42 +204,46 @@ function updateRecipeGrid(recipes) {
 function createRecipeCard(recipe) {
     return `
         <article class="recipe-card">
-            <a href="/recipes/show.php?id=${recipe.recipe_id}" 
-               class="recipe-link"
-               aria-labelledby="recipe-title-${recipe.recipe_id}">
-                <div class="recipe-image-container">
-                    ${state.isLoggedIn ? `
-                        <button class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}"
-                                data-recipe-id="${recipe.recipe_id}"
-                                aria-label="${recipe.is_favorited ? 'Remove from' : 'Add to'} favorites">
-                            <i class="${recipe.is_favorited ? 'fas' : 'far'} fa-heart" aria-hidden="true"></i>
-                        </button>
-                    ` : ''}
+            <div class="recipe-image-container">
+                ${state.isLoggedIn ? `
+                    <button class="favorite-btn ${recipe.is_favorited ? 'favorited' : ''}"
+                            data-recipe-id="${recipe.recipe_id}"
+                            aria-label="${recipe.is_favorited ? 'Remove from' : 'Add to'} favorites">
+                        <i class="${recipe.is_favorited ? 'fas' : 'far'} fa-heart" aria-hidden="true"></i>
+                    </button>
+                ` : ''}
+                <a href="/recipes/show.php?id=${recipe.recipe_id}" 
+                   class="image-link"
+                   aria-labelledby="recipe-title-${recipe.recipe_id}">
                     <img src="${recipe.img_file_path}" 
                          alt="Photo of ${recipe.title}" 
                          class="recipe-image">
-                </div>
-                
-                <div class="recipe-content">
+                </a>
+            </div>
+            
+            <div class="recipe-content">
+                <a href="/recipes/show.php?id=${recipe.recipe_id}" 
+                   class="title-link"
+                   aria-labelledby="recipe-title-${recipe.recipe_id}">
                     <h2 class="recipe-title" id="recipe-title-${recipe.recipe_id}">${recipe.title}</h2>
-                    
-                    <div class="recipe-meta">
-                        <span class="rating" aria-label="Rating: ${recipe.rating || 0} out of 5 stars">
-                            ${createRatingStars(recipe.rating, recipe.rating_count)}
-                        </span>
-                        <span class="time">
-                            ${recipe.prep_time + recipe.cook_time} mins
-                        </span>
-                    </div>
+                </a>
+                
+                <div class="recipe-meta">
+                    <span class="rating" aria-label="Rating: ${recipe.rating || 0} out of 5 stars">
+                        ${createRatingStars(recipe.rating, recipe.rating_count)}
+                    </span>
+                    <span class="time">
+                        <i class="far fa-clock" aria-hidden="true"></i>&nbsp;${recipe.prep_time + recipe.cook_time} mins
+                    </span>
+                </div>
 
-                    <div class="recipe-attributes-wrapper">
-                        <h3 class="visually-hidden">Recipe Attributes</h3>
-                        <ul class="recipe-attributes">
-                            ${recipe.style ? `<li><a href="/recipes/index.php?style=${recipe.style_id}" class="recipe-attribute">${recipe.style}</a></li>` : ''}
-                            ${recipe.diet ? `<li><a href="/recipes/index.php?diet=${recipe.diet_id}" class="recipe-attribute">${recipe.diet}</a></li>` : ''}
-                            ${recipe.type ? `<li><a href="/recipes/index.php?type=${recipe.type_id}" class="recipe-attribute">${recipe.type}</a></li>` : ''}
-                        </ul>
-                    </div>
+                <div class="recipe-attributes-wrapper">
+                    <h3 class="visually-hidden">Recipe Attributes</h3>
+                    <ul class="recipe-attributes">
+                        ${recipe.style ? `<li><a href="/recipes/index.php?style=${recipe.style_id}" class="recipe-attribute">${recipe.style}</a></li>` : ''}
+                        ${recipe.diet ? `<li><a href="/recipes/index.php?diet=${recipe.diet_id}" class="recipe-attribute">${recipe.diet}</a></li>` : ''}
+                        ${recipe.type ? `<li><a href="/recipes/index.php?type=${recipe.type_id}" class="recipe-attribute">${recipe.type}</a></li>` : ''}
+                    </ul>
                 </div>
 
                 <div class="recipe-footer">
@@ -247,7 +251,7 @@ function createRecipeCard(recipe) {
                         <span class="author-name">By ${recipe.username}</span>
                     </div>
                 </div>
-            </a>
+            </div>
         </article>
     `;
 }

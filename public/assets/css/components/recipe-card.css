@@ -23,20 +23,20 @@
 }
 
 /* Recipe links */
-.recipe-link {
-  color: inherit;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+.image-link {
+  display: block;
   height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   text-decoration: none;
 }
 
-.recipe-content-link {
+.title-link {
   color: inherit;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  height: 100%;
   text-decoration: none;
+  display: block;
 }
 
 /* Recipe image container */
@@ -68,6 +68,12 @@
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
   height: 100%;
+}
+
+/* Recipe card layout */
+.recipe-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .recipe-title {
@@ -116,7 +122,9 @@
 
 .recipe-meta .time {
   align-items: center;
-  display: grid;
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-xxs);
 }
 
 .recipe-description {
@@ -146,16 +154,18 @@
 .recipe-attributes {
   display: flex;
   flex-wrap: wrap;
-  gap: 0; /* Remove gap from container */
-  min-height: var(--element-height-md, 4rem); /* Set minimum height to accommodate two lines */
-  align-items: center; /* Center alignment for better appearance */
-  padding-top: var(--spacing-sm); /* Add padding at the top for spacing */
-  padding-bottom: var(--spacing-sm); /* Add padding at the bottom for spacing when wrapped */
+  gap: 0; 
+  min-height: 5.5rem; 
+  height: 5.5rem; 
+  align-items: flex-start; 
+  padding-top: var(--spacing-sm); 
+  padding-bottom: var(--spacing-sm); 
   width: 100%;
-  justify-content: flex-start; /* Ensure left alignment */
+  justify-content: flex-start; 
   list-style: none;
   padding-left: 0;
   margin: 0;
+  overflow: hidden; 
 }
 
 .recipe-attributes li {
@@ -193,18 +203,20 @@
   border-top: 1px solid var(--light-gray);
   display: grid;
   gap: var(--spacing-sm);
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr auto;
   padding: var(--spacing-sm) var(--spacing-md);
+  min-height: 3.5rem;
+  height: auto;
 }
 
 .recipe-author {
   font-size: var(--font-size-small);
   color: var(--text-color);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
   font-weight: 500;
+  min-width: 0;
+  flex: 1;
+  display: flex;
 }
 
 /* Favorite button */
