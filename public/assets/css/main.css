@@ -274,8 +274,8 @@ h1:not(.logo h1) {
   font-size: var(--font-size-xxlarge);
   letter-spacing: 0.25em; 
   font-weight: 700; 
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); 
-  padding-bottom: 0.5rem; 
+  text-shadow: var(--shadow-sm); 
+  padding-bottom: var(--spacing-xs); 
 }
 
 h2 {
@@ -458,7 +458,7 @@ a:hover {
 }
 
 .alert-error {
-  background-color: rgba(192, 57, 43, 0.1);
+  background-color: var(--danger-color-light);
   border: 1px solid var(--error-color);
   color: var(--error-color);
 }
@@ -539,7 +539,7 @@ a:hover {
   font-size: var(--font-size-xlarge);
   line-height: 1;
   margin: 0;
-  padding-bottom: 0.5rem;
+  padding-bottom: var(--spacing-xs);
   border-bottom: 1px solid var(--accent-color);
   width: 100%;
 }
