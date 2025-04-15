@@ -1,6 +1,7 @@
 RewriteEngine On
 
 # Detect base path - needed for XAMPP subfolder installations
+# Using alternative syntax to avoid PowerShell linting errors
 RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
 RewriteRule ^(.*) - [E=BASE_PATH:%1]
 
@@ -13,7 +14,8 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule .* %{ENV:BASE_PATH}/404.php [L]
 
 # Fallback ErrorDocument directive (should rarely be used)
-ErrorDocument 404 /FlavorConnect/public/404.php
+# Using environment-agnostic path that works in both XAMPP and Docker
+ErrorDocument 404 %{ENV:BASE_PATH}/404.php
 
 # Direct file access - no router implementation
 # URLs will be handled by the corresponding PHP files directly
@@ -35,7 +37,7 @@ Options -Indexes
     Header set X-XSS-Protection "1; mode=block"
     
     # Content Security Policy (CSP) to prevent XSS attacks
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self'; frame-src https://www.youtube.com https://youtube.com; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'"
+    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com https://s.ytimg.com https://*.doubleclick.net https://*.googlesyndication.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://*.doubleclick.net https://*.google-analytics.com; frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://*.doubleclick.net; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'"
     
     # HTTP Strict Transport Security (HSTS)
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
@@ -45,7 +47,8 @@ Options -Indexes
     
     # Additional cross-origin policies for better security
     Header always set Cross-Origin-Resource-Policy "same-origin"
-    Header always set Cross-Origin-Embedder-Policy "require-corp"
+    # Temporarily commenting out COEP to test YouTube embeds
+    # Header always set Cross-Origin-Embedder-Policy "credentialless"
     
     # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"

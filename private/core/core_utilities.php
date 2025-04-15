@@ -466,5 +466,71 @@ function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [],
     
     return $html;
 }
+/**
+ * Generates responsive image markup with srcset and sizes attributes
+ * 
+ * This function creates HTML for responsive images that load the appropriate size
+ * based on the user's device and viewport. It supports WebP images and implements
+ * lazy loading for images below the fold.
+ * 
+ * @param string $base_path Base path to the original image (e.g., '/assets/images/hero-img.webp')
+ * @param string $alt_text Alt text for the image (required for accessibility)
+ * @param string $class CSS class(es) to apply to the image
+ * @param bool $lazy Whether to use lazy loading (should be false for above-the-fold images)
+ * @param string $sizes Custom sizes attribute (defaults to responsive breakpoints)
+ * @return string HTML markup for the responsive image
+ */
+function responsive_image($base_path, $alt_text, $class = '', $lazy = true, $sizes = null) {
+    // Extract filename and extension
+    $path_parts = pathinfo($base_path);
+    $filename = $path_parts['filename'];
+    $extension = isset($path_parts['extension']) ? $path_parts['extension'] : 'webp';
+    $dir = $path_parts['dirname'];
+    
+    // Responsive directory path
+    $responsive_dir = '/assets/images/responsive';
+    
+    // Construct responsive image paths
+    $large_src = "$responsive_dir/$filename-large.$extension";
+    $medium_src = "$responsive_dir/$filename-medium.$extension";
+    $small_src = "$responsive_dir/$filename-small.$extension";
+    $thumb_src = "$responsive_dir/$filename-thumb.$extension";
+    
+    // Fallback to original if responsive images don't exist
+    $original_src = $base_path;
+    
+    // Check if responsive images exist, if not use original
+    $responsive_base_path = $_SERVER['DOCUMENT_ROOT'] . '/FlavorConnect/public' . $responsive_dir;
+    if (!file_exists($responsive_base_path . "/$filename-medium.$extension")) {
+        // If responsive images don't exist, just return a regular image tag with the original
+        $img_src = url_for($base_path);
+        $lazy_attr = $lazy ? 'loading="lazy"' : '';
+        $class_attr = !empty($class) ? "class=\"$class\"" : '';
+        return "<img src=\"$img_src\" alt=\"$alt_text\" $lazy_attr $class_attr>";
+    }
+    
+    // Convert paths to full URLs
+    $large_url = url_for($large_src);
+    $medium_url = url_for($medium_src);
+    $small_url = url_for($small_src);
+    $thumb_url = url_for($thumb_src);
+    
+    // Lazy loading attribute
+    $lazy_attr = $lazy ? 'loading="lazy"' : '';
+    
+    // Generate srcset attribute
+    $srcset = "$large_url 1200w, $medium_url 768w, $small_url 480w, $thumb_url 240w";
+    
+    // Default sizes attribute if not provided
+    if ($sizes === null) {
+        $sizes = "(max-width: 480px) 100vw, (max-width: 768px) 768px, 1200px";
+    }
+    
+    // Class attribute
+    $class_attr = !empty($class) ? "class=\"$class\"" : '';
+    
+    // Return responsive image markup
+    return "<img src=\"$medium_url\" srcset=\"$srcset\" sizes=\"$sizes\" alt=\"$alt_text\" $lazy_attr $class_attr>";
+}
 
 ?>
