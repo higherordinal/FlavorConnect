@@ -393,6 +393,32 @@ input[type="file"].form-control:hover {
    Form Label and Input Styles
    ========================================================================== */
 
+/* Form control class for admin forms */
+.form-control {
+  background-color: var(--color-white);
+  border: 2px solid var(--dark-gray);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-inner);
+  color: var(--text-color);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-medium);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all var(--transition-fast);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-control:hover {
+  border-color: var(--secondary-color);
+}
+
+.form-control:focus {
+  border-color: var(--secondary-color);
+  outline: none;
+  box-shadow: var(--shadow-inner),
+    0 0 0 3px rgba(var(--secondary-color-rgb), 0.15);
+}
+
 .form-label {
   color: var(--text-color);
   font-size: var(--font-size-medium);

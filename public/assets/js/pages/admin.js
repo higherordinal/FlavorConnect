@@ -1,9 +1,8 @@
 /**
  * @fileoverview Admin page functionality for FlavorConnect
- * @author Cascade AI
+ * @author Henry Vaughn
  * @license MIT
  * @description Handles the interactive functionality on the admin pages.
- * @version 1.1.0
  */
 
 // Add to FlavorConnect namespace

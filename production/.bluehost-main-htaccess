@@ -44,9 +44,10 @@ Options -Indexes
     Header always set Cross-Origin-Opener-Policy "same-origin"
     
     # Additional cross-origin policies for better security
-    Header always set Cross-Origin-Resource-Policy "same-origin"
-    # Using credentialless to allow YouTube embeds while maintaining security
-    Header always set Cross-Origin-Embedder-Policy "credentialless"
+    # Using cross-origin to allow YouTube embeds
+    Header always set Cross-Origin-Resource-Policy "cross-origin"
+    # Using unsafe-none to allow YouTube embeds without restrictions
+    Header always set Cross-Origin-Embedder-Policy "unsafe-none"
     
     # Referrer Policy
     Header always set Referrer-Policy "strict-origin-when-cross-origin"

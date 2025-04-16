@@ -16,7 +16,7 @@
  * - Provides comprehensive error handling and reporting
  * - Implements method chaining for fluent API usage
  * 
- * @author FlavorConnect Development Team
+ * @author Henry Vaughn
  */
 class RecipeImageProcessor {
     /** @var string Path to the source image */
