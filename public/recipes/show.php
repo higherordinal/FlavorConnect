@@ -7,6 +7,9 @@ if(!$recipe) {
     exit; // validate_recipe_access already handled the error
 }
 
+// Store the current recipe ID in the session for back navigation
+$_SESSION['from_recipe_id'] = $recipe->recipe_id;
+
 // Set page title and style
 $page_title = $recipe->title;
 $page_style = 'recipe-show';
@@ -200,7 +203,7 @@ echo display_session_message();
     <div class="container recipe-container">
         <?php 
         echo unified_navigation(
-            '/recipes/index.php',
+            $back_link, // Pass the already determined back_link instead of default
             $breadcrumbs,
             $back_text
         ); 

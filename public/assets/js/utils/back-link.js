@@ -29,14 +29,43 @@ window.FlavorConnect.utils.backLink = (function() {
         
         // Store the current page in session storage for back navigation
         storeCurrentPageForBackNavigation();
+        
+        // Enhance back links with recipe context
+        enhanceBackLinks();
     }
     
     /**
-     * Stores the current page URL in session storage for better back navigation
+     * Enhances back links to preserve recipe context
+     */
+    function enhanceBackLinks() {
+        const backLinks = document.querySelectorAll('.back-link');
+        
+        backLinks.forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                // Get the last viewed recipe ID from session storage
+                const lastRecipeId = sessionStorage.getItem('lastViewedRecipeId');
+                
+                // If we have a recipe ID and the link doesn't already have recipe context
+                const href = link.getAttribute('href');
+                if (lastRecipeId && href && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
+                    // Modify the link to include the recipe context
+                    e.preventDefault();
+                    
+                    // Add the recipe_id parameter to the URL
+                    const separator = href.includes('?') ? '&' : '?';
+                    window.location.href = href + separator + 'ref=recipe&recipe_id=' + lastRecipeId;
+                }
+            });
+        });
+    }
+    
+    /**
+     * Stores the current page URL and context in session storage for better back navigation
      */
     function storeCurrentPageForBackNavigation() {
-        // Get the current page URL
+        // Get the current page URL and search params
         const currentUrl = window.location.pathname;
+        const searchParams = new URLSearchParams(window.location.search);
         
         // Store previous page before updating
         const currentPage = sessionStorage.getItem('currentPage');
@@ -46,6 +75,12 @@ window.FlavorConnect.utils.backLink = (function() {
         
         // Update current page
         sessionStorage.setItem('currentPage', currentUrl);
+        
+        // Store recipe context if available
+        const recipeId = searchParams.get('id');
+        if (recipeId && currentUrl.includes('/recipes/show.php')) {
+            sessionStorage.setItem('lastViewedRecipeId', recipeId);
+        }
     }
     
     /**

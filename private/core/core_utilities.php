@@ -211,7 +211,6 @@ function format_quantity($value, $precision = 'basic') {
  * 1. The 'ref' parameter in the query string (highest priority)
  * 2. The HTTP_REFERER if available
  * 3. A default fallback URL
- * 4. Named routes from the router if available
  * 
  * @param string $default_url The default URL to use if no referer is available
  * @param array $allowed_domains Array of allowed domains for referer (empty allows any)
@@ -303,39 +302,25 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         }
     }
     
-    // Try to use router for named routes if available
-    global $router;
-    if (isset($router)) {
-        // Check if we're coming from a recipe page
-        if (isset($_SESSION['from_recipe_id']) && is_numeric($_SESSION['from_recipe_id'])) {
-            try {
-                // Generate URL using named route
-                $recipe_url = $router->url('recipes.show', ['id' => $_SESSION['from_recipe_id']]);
-                if (!empty($recipe_url)) {
-                    $result['url'] = $recipe_url;
-                    $result['text'] = 'Back to Recipe';
-                    return $result;
-                }
-            } catch (Exception $e) {
-                // If router URL generation fails, continue with default behavior
-            }
-        }
-        
-        // Try to determine the named route based on the URL pattern
-        $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        foreach ($router->named_routes as $name => $path) {
-            if (strpos($current_path, $path) !== false) {
-                // We found a matching named route, use it for context-aware back link text
-                if (strpos($name, 'recipes.') === 0) {
-                    $result['text'] = 'Back to Recipes';
-                } else if (strpos($name, 'users.') === 0) {
-                    $result['text'] = 'Back to Profile';
-                } else if (strpos($name, 'admin.') === 0) {
-                    $result['text'] = 'Back to Admin';
-                }
-                break;
-            }
-        }
+    // Check if we're coming from a recipe page (using session)
+    if (isset($_SESSION['from_recipe_id']) && is_numeric($_SESSION['from_recipe_id'])) {
+        $result['url'] = url_for('/recipes/show.php?id=' . $_SESSION['from_recipe_id']);
+        $result['text'] = 'Back to Recipe';
+        return $result;
+    }
+    
+    // Try to determine a better text based on the current path
+    $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    
+    // Set appropriate back text based on current path
+    if (strpos($current_path, '/recipes/') !== false) {
+        $result['text'] = 'Back to Recipes';
+    } else if (strpos($current_path, '/users/profile') !== false) {
+        $result['text'] = 'Back to Profile';
+    } else if (strpos($current_path, '/users/favorites') !== false) {
+        $result['text'] = 'Back to Favorites';
+    } else if (strpos($current_path, '/admin/') !== false) {
+        $result['text'] = 'Back to Admin';
     }
     
     // Fallback to default URL and text
@@ -399,8 +384,13 @@ function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [],
     $html = '<div class="unified-navigation">';
     
     // Add back link
-    // Ensure URL is a string before passing to h()
+    // Ensure URL is a string and properly formatted
     $back_url = is_array($back_link_data['url']) ? json_encode($back_link_data['url']) : $back_link_data['url'];
+    
+    // Make sure the URL is properly formatted with url_for if it's a relative path
+    if ($back_url && substr($back_url, 0, 1) === '/' && substr($back_url, 0, 4) !== 'http') {
+        $back_url = url_for($back_url);
+    }
     $html .= '<a href="' . h($back_url) . '" class="back-link">';
     $html .= '<i class="fas fa-arrow-left"></i> ' . h($display_text);
     $html .= '</a>';
