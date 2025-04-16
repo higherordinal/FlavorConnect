@@ -15,6 +15,7 @@ A recipe sharing and management platform where users can discover, share, and or
 - Enhanced error handling and 404 page system
 - Context-aware navigation with recipe state preservation
 - Bluehost deployment support
+- Admin dashboard for content management
 
 ## Prerequisites
 
@@ -136,6 +137,7 @@ Stop the Apache and MySQL services from the XAMPP control panel.
 - `install-imagemagick-docker.sh` - Script for installing ImageMagick in Docker environment
 - `install-imagemagick-xampp.sh` - Script for installing ImageMagick in XAMPP environment
 - `README.md` - Project documentation (this file)
+- `.gitignore` - Git configuration for ignored files
 
 ### Public Directory
 - `/public` - Web accessible files
@@ -244,8 +246,9 @@ Stop the Apache and MySQL services from the XAMPP control panel.
   - `deploy_bluehost.php` - PHP deployment script for Bluehost
   - `deploy_bluehost.bat` - Windows batch script for deployment
   - `deploy_bluehost.sh` - Linux/macOS shell script for deployment
-  - `DEPLOYMENT_GUIDE.md` - Comprehensive deployment instructions
-  - `COM_WITH_AI.md` - Documentation about AI-assisted development
+  - `DEPLOYMENT_GUIDE.md` - Comprehensive but not yet completed deployment instructions
+  
+**Note:** The production environment uses a simplified configuration approach where the public folder contents are placed directly in the document root.
 
 ## Additional Documentation
 
@@ -284,12 +287,14 @@ If you encounter any issues:
    ```
    http://localhost:8080/env_test.php     (Docker)
    http://localhost/FlavorConnect/env_test.php     (XAMPP)
+   https://flavorconnect.space/env_test.php     (Production)
    ```
 2. The env_test.php utility will show:
-   - Which environment was detected (Docker or XAMPP)
+   - Which environment was detected (Docker, XAMPP, or Production)
    - Database connection status for both web and API
    - Server information and configuration details
    - Environment variables and detection methods
+   - Image processing capabilities and configuration
 
 ### Database Issues
 1. Verify database connection settings
@@ -310,7 +315,9 @@ If you encounter any issues:
 - Apache Web Server
 - Node.js for API services
 - JavaScript (ES6+)
-- CSS3 with custom variables for theming
+- CSS3 with custom variables for theming and consistent form styling
 - Docker (primary development environment)
 - XAMPP (alternative development environment)
 - ImageMagick for image processing (with GD library fallback)
+- Modular CSS architecture with component-based styling
+- Responsive design principles for all screen sizes
