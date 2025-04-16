@@ -900,7 +900,7 @@ function validate_recipe_ingredient_data($ingredient_data) {
  * @return array Array of validation errors
  */
 function validate_measurement_data($measurement_data, $current_id = '') {
-    $rules = ['name' => ['required' => true, 'min' => 2, 'max' => 255]];
+    $rules = ['name' => ['required' => true, 'min_length' => 2, 'max_length' => 255]];
     $errors = validate($measurement_data, $rules);
     
     // Convert array errors to string errors
