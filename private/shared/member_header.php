@@ -164,13 +164,10 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
                     ?>
                     <li><a href="<?php echo url_for('/recipes/new.php' . $ref_param); ?>" <?php echo $is_create_recipe_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-plus-circle" aria-hidden="true"></i> Create Recipe</a></li>
                     <?php
-                    // Check if current page is about page
-                    $is_about_page = (strpos($_SERVER['PHP_SELF'], '/about.php') !== false || $page_title === 'About');
-                    
+                    // About page link is hidden in member header
                     // Get the ref parameter for consistent back navigation
                     $ref_param = get_ref_parameter();
                     ?>
-                    <li><a href="<?php echo url_for('/about.php' . $ref_param); ?>" <?php echo $is_about_page ? 'class="active" aria-current="page"' : ''; ?>><i class="fas fa-info-circle" aria-hidden="true"></i> About</a></li>
                     <?php if($session->is_admin() || $session->is_super_admin()) { 
                         // Check if current page is in admin section
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
