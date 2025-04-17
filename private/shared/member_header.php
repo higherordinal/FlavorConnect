@@ -40,24 +40,57 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
     </script>
     
     <!-- Component Styles -->
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css?v=1.0'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/member-header.css?v=1.0'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css?v=1.0'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/recipe-card.css?v=1.0'); ?>">
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/components/unified-navigation.css?v=1.0'); ?>">
+    <?php
+$css_file = '/assets/css/components/header.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+?>
+<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
+    <?php
+$css_file = '/assets/css/components/member-header.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+?>
+<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
+    <?php
+$css_file = '/assets/css/components/footer.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+?>
+<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
+    <?php
+$css_file = '/assets/css/components/recipe-card.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+?>
+<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
+    <?php
+$css_file = '/assets/css/components/unified-navigation.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+?>
+<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
     
     <!-- Component Styles (Dynamically Included) -->
     <?php 
     if(!empty($component_styles)) {
         foreach($component_styles as $component) {
-            echo '<link rel="stylesheet" href="' . url_for('/assets/css/components/' . $component . '.css?v=1.0') . '">'; 
+            $css_file = '/assets/css/components/' . $component . '.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+echo '<link rel="stylesheet" href="' . url_for($css_file) . '?v=' . $css_version . '">'; 
         }
     }
     ?>
     
     <!-- Page Specific Styles -->
     <?php if(isset($page_style)) { ?>
-    <link rel="stylesheet" href="<?php echo url_for('/assets/css/pages/' . $page_style . '.css?v=1.0'); ?>">
+    <?php
+$css_file = '/assets/css/pages/' . $page_style . '.css';
+$css_path = PUBLIC_PATH . $css_file;
+$css_version = file_exists($css_path) ? filemtime($css_path) : time();
+?>
+<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
     <?php } ?>
     
     <!-- Global Configuration -->

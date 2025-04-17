@@ -287,10 +287,9 @@ If you encounter any issues:
    ```
    http://localhost:8080/env_test.php     (Docker)
    http://localhost/FlavorConnect/env_test.php     (XAMPP)
-   https://flavorconnect.space/env_test.php     (Production)
    ```
 2. The env_test.php utility will show:
-   - Which environment was detected (Docker, XAMPP, or Production)
+   - Which environment was detected (Docker or XAMPP)
    - Database connection status for both web and API
    - Server information and configuration details
    - Environment variables and detection methods
