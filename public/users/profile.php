@@ -91,7 +91,7 @@ include(SHARED_PATH . '/member_header.php');
             <?php } else { ?>
                 <div class="recipe-grid">
                     <?php foreach($recipes as $recipe) { ?>
-                        <div class="recipe-card">
+                        <div class="user-recipe-card">
                             <div class="recipe-image">
                                 <?php if($recipe->get_image_path('thumb')) { ?>
                                     <img src="<?php echo url_for($recipe->get_image_path('thumb')); ?>" 

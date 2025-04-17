@@ -1,15 +1,15 @@
-/* ====================================
+/* ==========================================================================
    PROFILE CONTAINER
-   ==================================== */
+   ========================================================================== */
 .profile-container {
   margin: 0 auto;
   max-width: var(--max-width);
   padding: var(--spacing-lg);
 }
 
-/* ====================================
+/* ==========================================================================
    PROFILE HEADER
-   ==================================== */
+   ========================================================================== */
 .profile-header {
   display: grid;
   gap: var(--spacing-md);
@@ -26,9 +26,9 @@
   padding: var(--spacing-md) var(--spacing-lg);
 }
 
-/* ====================================
+/* ==========================================================================
    PROFILE STATISTICS
-   ==================================== */
+   ========================================================================== */
 .profile-stats {
   display: flex;
   gap: var(--spacing-lg);
@@ -38,8 +38,8 @@
   align-items: center;
   color: var(--text-color);
   display: flex;
-  gap: var(--spacing-sm);
   font-weight: 500;
+  gap: var(--spacing-sm);
 }
 
 .stat i {
@@ -52,9 +52,9 @@
   font-weight: 600;
 }
 
-/* ====================================
+/* ==========================================================================
    SECTION HEADERS
-   ==================================== */
+   ========================================================================== */
 .section-header {
   align-items: center;
   display: flex;
@@ -71,10 +71,10 @@
 /* Make the Create New Recipe button more visible */
 .section-header .btn-primary {
   background-color: var(--primary-color);
-  color: var(--color-white);
-  font-weight: 700;
   border: 2px solid var(--primary-color);
+  color: var(--color-white);
   font-size: var(--font-size-base);
+  font-weight: 700;
   padding: var(--spacing-sm) var(--spacing-md);
 }
 
@@ -83,9 +83,9 @@
   border-color: var(--accent-color-dark);
 }
 
-/* ====================================
+/* ==========================================================================
    EMPTY STATE STYLING
-   ==================================== */
+   ========================================================================== */
 .empty-state {
   background-color: var(--light-gray);
   border-radius: var(--border-radius-lg);
@@ -101,17 +101,17 @@
 
 .empty-state p {
   color: var(--text-color);
-  margin-bottom: var(--spacing-lg);
   font-weight: 500;
+  margin-bottom: var(--spacing-lg);
 }
 
 .empty-state .btn-primary {
   background-color: var(--primary-color);
-  color: var(--color-white);
-  font-weight: 700;
   border: 2px solid var(--primary-color);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  color: var(--color-white);
   font-size: var(--font-size-base);
+  font-weight: 700;
+  padding: var(--spacing-sm) var(--spacing-lg);
 }
 
 .empty-state .btn-primary:hover {
@@ -119,41 +119,42 @@
   border-color: var(--accent-color-dark);
 }
 
-/* ====================================
+/* ==========================================================================
    RECIPE GRID LAYOUT
-   ==================================== */
+   ========================================================================== */
 .recipe-grid {
   display: grid;
   gap: var(--grid-gap);
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 }
 
-/* ====================================
+/* ==========================================================================
    RECIPE CARD STYLING
-   ==================================== */
-.recipe-card {
+   ========================================================================== */
+.user-recipe-card {
   background: var(--color-white);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
-  transition: transform var(--transition-medium),
+
+transition: transform var(--transition-medium),
     box-shadow var(--transition-medium);
 }
 
-.recipe-card:hover {
+.user-recipe-card:hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-4px);
 }
 
-/* ====================================
+/* ==========================================================================
    RECIPE IMAGE
-   ==================================== */
-.recipe-image {
+   ========================================================================== */
+.user-recipe-card .recipe-image {
   padding-top: 60%;
   position: relative;
 }
 
-.recipe-image img {
+.user-recipe-card .recipe-image img {
   height: 100%;
   object-fit: cover;
   position: absolute;
@@ -161,23 +162,23 @@
   width: 100%;
 }
 
-/* ====================================
+/* ==========================================================================
    RECIPE CONTENT
-   ==================================== */
-.recipe-content {
+   ========================================================================== */
+.user-recipe-card .recipe-content {
   padding: var(--spacing-md);
 }
 
-.recipe-content h3 {
+.user-recipe-card .recipe-content h3 {
   color: var(--text-color);
   font-size: var(--font-size-large);
   margin: 0 0 var(--spacing-sm);
 }
 
-/* ====================================
+/* ==========================================================================
    RECIPE METADATA
-   ==================================== */
-.recipe-meta {
+   ========================================================================== */
+.user-recipe-card .recipe-meta {
   color: var(--text-color);
   display: flex;
   font-size: var(--font-size-small);
@@ -186,59 +187,59 @@
   margin-bottom: var(--spacing-md);
 }
 
-.recipe-meta span {
+.user-recipe-card .recipe-meta span {
   align-items: center;
   display: flex;
   gap: var(--spacing-xs);
 }
 
-.recipe-meta span span {
+.user-recipe-card .recipe-meta span span {
   color: var(--text-color);
   font-weight: 600;
 }
 
-.recipe-meta i {
+.user-recipe-card .recipe-meta i {
   color: var(--primary-color);
   font-weight: bold;
 }
 
-/* ====================================
+/* ==========================================================================
    RECIPE ACTIONS
-   ==================================== */
-.recipe-actions {
+   ========================================================================== */
+.user-recipe-card .recipe-actions {
   display: grid;
   gap: var(--spacing-sm);
   grid-template-columns: repeat(3, 1fr);
 }
 
-.recipe-actions .btn {
+.user-recipe-card .recipe-actions .btn {
   font-size: var(--font-size-small);
-  padding: var(--spacing-sm);
   font-weight: 600;
+  padding: var(--spacing-sm);
 }
 
 /* Improve Edit button contrast */
-.recipe-actions .btn-primary {
+.user-recipe-card .recipe-actions .btn-primary {
   background-color: var(--primary-color);
-  color: var(--color-white);
   border: 2px solid var(--primary-color);
+  color: var(--color-white);
   font-weight: 700;
 }
 
-.recipe-actions .btn-primary:hover {
+.user-recipe-card .recipe-actions .btn-primary:hover {
   background-color: var(--accent-color-dark);
   border-color: var(--accent-color-dark);
 }
 
 /* Improve View button contrast */
-.recipe-actions .btn-secondary {
+.user-recipe-card .recipe-actions .btn-secondary {
   background-color: var(--secondary-color);
-  color: var(--color-white);
   border: 1px solid var(--secondary-color);
+  color: var(--color-white);
   font-weight: 600;
 }
 
-.recipe-actions .btn-secondary:hover {
+.user-recipe-card .recipe-actions .btn-secondary:hover {
   background-color: var(--accent-color-dark);
   border-color: var(--accent-color-dark);
 }
@@ -249,26 +250,26 @@
   font-weight: 500;
 }
 
-/* ====================================
+/* ==========================================================================
    RESPONSIVE STYLING
-   ==================================== */
+   ========================================================================== */
 @media (max-width: 768px) {
   .profile-container {
     padding: var(--spacing-md);
-  }
+ }
 
   .profile-stats {
     flex-direction: column;
     gap: var(--spacing-sm);
-  }
+ }
 
   .section-header {
     flex-direction: column;
     gap: var(--spacing-md);
     text-align: center;
-  }
+ }
 
   .recipe-grid {
     grid-template-columns: 1fr;
-  }
+ }
 }
