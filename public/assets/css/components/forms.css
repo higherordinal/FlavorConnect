@@ -22,7 +22,8 @@
 .form-header {
   background-color: var(--primary-color);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
-  margin: calc(-1 * var(--spacing-xl)) calc(-1 * var(--spacing-xl)) var(--spacing-lg) calc(-1 * var(--spacing-xl));
+  margin: calc(-1 * var(--spacing-xl)) calc(-1 * var(--spacing-xl))
+    var(--spacing-lg) calc(-1 * var(--spacing-xl));
   padding: var(--spacing-md);
   text-align: center;
   width: auto;
@@ -80,8 +81,8 @@
 
 .form-button:hover {
   background-color: #051628;
-  transform: translateY(-1px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
 }
 
 .form-button:active {
@@ -105,9 +106,9 @@
 
 .form-error {
   color: var(--error-color);
+  display: block;
   font-size: 0.875rem;
   margin-top: 0.25rem;
-  display: block;
 }
 
 .form-error.inline {
@@ -122,19 +123,19 @@
 }
 
 /* Error state for form inputs */
-input.error, 
-select.error, 
+input.error,
+select.error,
 textarea.error {
-  border-color: var(--error-color);
   background-color: rgba(255, 0, 0, 0.03);
+  border-color: var(--error-color);
 }
 
 /* Error message icon */
 .form-error::before {
   content: "⚠️";
   display: inline-block;
-  margin-right: var(--spacing-xs);
   font-size: var(--font-size-small);
+  margin-right: var(--spacing-xs);
 }
 
 /* ==========================================================================
@@ -208,33 +209,30 @@ textarea.error {
    ========================================================================== */
 
 @media (max-width: 768px) {
-  /* Form layout adjustments */
   .form {
     gap: 1.5rem;
     padding: 2rem;
   }
-  
-  /* Grid layouts collapse to single column */
   .form-grid,
   .ingredient-item,
   .instruction-item {
     grid-template-columns: 1fr;
   }
-  
-  /* Header adjustments */
   .form-header {
     margin: -2rem -2rem 1.5rem -2rem;
     padding: 1.25rem;
   }
-  
   .form-header h1 {
     font-size: var(--font-size-large);
   }
-  
-  /* Form row adjusts to single column */
   .form-row {
     grid-template-columns: 1fr;
   }
+
+  /* Form layout adjustments */
+  /* Grid layouts collapse to single column */
+  /* Header adjustments */
+  /* Form row adjusts to single column */
 }
 
 @media (max-width: 480px) {
@@ -395,25 +393,25 @@ input[type="file"].form-control:hover {
 
 /* Form control class for admin forms */
 .form-control {
-    background-color: var(--color-white);
-    border: 2px solid var(--dark-gray);
-    border-radius: var(--border-radius-md);
-    color: var(--text-color);
-    font-size: var(--font-size-base);
-    padding: var(--spacing-sm) var(--spacing-md);
-    transition: all 0.2s ease;
-    width: 100%;
-} 
+  background-color: var(--color-white);
+  border: 2px solid var(--dark-gray);
+  border-radius: var(--border-radius-md);
+  color: var(--text-color);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: all 0.2s ease;
+  width: 100%;
+}
 
 .form-control:hover {
-    border-color: var(--accent-color);
-} 
+  border-color: var(--accent-color);
+}
 
 .form-control:focus {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-    outline: none;
-} 
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
 
 .form-label {
   color: var(--text-color);
@@ -434,13 +432,13 @@ td input.form-control {
   border: 2px solid var(--dark-gray);
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-inner);
+  box-sizing: border-box;
   color: var(--text-color);
   font-family: var(--font-primary);
   font-size: var(--font-size-medium);
   padding: var(--spacing-sm) var(--spacing-md);
   transition: all var(--transition-fast);
   width: 100%;
-  box-sizing: border-box;
 }
 
 .form-input:hover,
@@ -454,6 +452,7 @@ td input.form-control {
 .form-textarea:focus {
   border-color: var(--secondary-color);
   outline: none;
+
   box-shadow: var(--shadow-inner),
     0 0 0 3px rgba(var(--secondary-color-rgb), 0.15);
 }

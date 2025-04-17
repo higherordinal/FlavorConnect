@@ -26,17 +26,18 @@
 }
 
 .error-404 h1 {
-  /* Use primary color background with accent color text */
   background-color: var(--primary-color);
+  border-radius: var(--border-radius-md);
   color: var(--accent-color);
+  display: inline-block;
   font-size: var(--font-size-xxlarge);
   font-weight: 700;
   line-height: 1;
   margin: 0;
   padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-md);
-  display: inline-block;
   text-shadow: var(--shadow-sm);
+
+  /* Use primary color background with accent color text */
 }
 
 .error-404 h2 {
@@ -46,11 +47,13 @@
 }
 
 .error-404 p {
-  /* Darker text-muted color for better contrast */
-  color: var(--text-color); /* Using standard text color for better contrast */
+  color: var(--text-color);
   font-size: var(--font-size-large);
   line-height: 1.6;
   margin-bottom: var(--spacing-xl);
+
+  /* Darker text-muted color for better contrast */
+  /* Using standard text color for better contrast */
 }
 
 .error-actions {
@@ -93,20 +96,17 @@
 /* ====================================
    Responsive Styles
    ==================================== */
-   
+
 @media (max-width: 768px) {
   .error-404 h1 {
     font-size: calc(var(--font-size-xxlarge) * 0.8);
   }
-
   .error-content {
     padding: var(--spacing-lg);
   }
-
   .error-actions {
     flex-direction: column;
   }
-
   .error-actions .btn {
     justify-content: center;
     width: 100%;

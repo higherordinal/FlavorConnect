@@ -3,15 +3,15 @@
    ========================================================================== */
 
 .header {
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-md) 0;
+  position: relative;
+  z-index: 1000;
   background: linear-gradient(135deg, 
     var(--primary-color) 0%,
     var(--primary-color) 60%, 
     color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 75%,
     color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
-  box-shadow: var(--shadow-md);
-  padding: var(--spacing-md) 0;
-  position: relative;
-  z-index: 1000;
 }
 
 .header-grid {
@@ -127,73 +127,70 @@
 @media (max-width: 768px) {
   .header-grid {
     gap: var(--spacing-md);
-  }
+ }
   .nav-toggle-label {
     display: block;
     position: relative;
     z-index: 1002;
-  }
+ }
   .nav-toggle {
     opacity: 0;
     position: absolute;
-  }
+ }
   .main-nav {
     justify-self: center;
     position: static;
-  }
+ }
 
   .main-nav > ul {
+    box-shadow: var(--shadow-md);
+    display: none;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    z-index: 1001;
     background: linear-gradient(90deg, 
       var(--primary-color) 0%,
       var(--primary-color) 55%, 
       color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 75%,
       color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
-    box-shadow: var(--shadow-md);
-    display: none;
-    left: 0;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 100%;
-    width: 100%;
-    z-index: 1001;
-  }
-  
+ }
   .nav-toggle:checked ~ ul {
     display: flex;
     flex-direction: column;
     gap: 0;
     padding: 0;
-  }
+ }
 
   .main-nav ul li {
     width: 100%;
-  }
-  
+ }
   .main-nav ul li:not(:last-child) {
     border-bottom: 1px solid var(--border-light, rgba(255, 255, 255, 0.15));
-  }
+ }
 
   .main-nav ul li a {
-    display: flex;
     align-items: center;
+    display: flex;
     padding: var(--spacing-md);
     width: 100%;
-  }
-  
+ }
   .main-nav ul li a i {
     margin-right: var(--spacing-sm);
-    width: var(--icon-size-xs, 20px);
     text-align: center;
-  }
+    width: var(--icon-size-xs, 20px);
+ }
 
   .main-nav ul li a:hover {
     background-color: var(--primary-color-dark);
-  }
+ }
 }
 
 @media (max-width: 480px) {
   .header-grid {
     padding: 0 var(--spacing-sm);
-  }
+ }
 }

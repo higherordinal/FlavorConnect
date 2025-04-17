@@ -8,30 +8,30 @@
     flex-direction: column;
     gap: var(--spacing-xs);
     margin-bottom: var(--spacing-md);
-}
+ }
 
 /* ====================================
    BACK LINK STYLES
    ==================================== */
 
 .unified-navigation .back-link {
-    display: inline-flex;
     align-items: center;
     color: var(--primary-color);
+    display: inline-flex;
     font-weight: 500;
+    margin-bottom: 0;
     text-decoration: none;
     transition: color var(--transition-fast);
-    margin-bottom: 0;
-}
+ }
 
 .unified-navigation .back-link:hover {
     color: var(--primary-color-dark);
-}
+ }
 
 .unified-navigation .back-link i {
-    margin-right: var(--spacing-xs);
     font-size: var(--font-size-small);
-}
+    margin-right: var(--spacing-xs);
+ }
 
 /* ====================================
    UNIFIED NAVIGATION BREADCRUMBS
@@ -40,43 +40,43 @@
 .unified-navigation nav {
     margin: 0;
     padding: 0;
-}
+ }
 
 .unified-navigation ol.breadcrumbs {
+    align-items: center;
+    color: var(--text-muted);
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     font-size: var(--font-size-small);
-    color: var(--text-muted);
     list-style: none;
     margin: 0;
     padding: 0;
-}
+ }
 
 .unified-navigation li {
-    display: flex;
     align-items: center;
-}
+    display: flex;
+ }
 
 .unified-navigation .breadcrumb-item {
     color: var(--color-text-muted);
     text-decoration: none;
-}
+ }
 
 .unified-navigation a.breadcrumb-item:hover {
     color: var(--primary-color);
     text-decoration: underline;
-}
+ }
 
 .unified-navigation .breadcrumb-active {
     color: var(--text-color);
     font-weight: 500;
-}
+ }
 
 .unified-navigation .breadcrumb-separator {
-    margin: 0 var(--spacing-xs);
     color: var(--border-color);
-}
+    margin: 0 var(--spacing-xs);
+ }
 
 /* ====================================
    STANDALONE BREADCRUMBS
@@ -90,28 +90,28 @@
     grid-auto-columns: max-content;
     grid-auto-flow: column;
     margin-bottom: var(--spacing-md);
-}
+ }
 
 .breadcrumb-item {
     color: var(--text-muted);
     font-size: var(--font-size-small);
     text-decoration: none;
-}
+ }
 
 .breadcrumb-item:not(.active):hover {
     color: var(--primary-color);
     text-decoration: underline;
-}
+ }
 
 .breadcrumb-item.active {
     color: var(--text-color);
     font-weight: 500;
-}
+ }
 
 .breadcrumb-separator {
     color: var(--text-muted);
     font-size: var(--font-size-small);
-}
+ }
 
 /* ====================================
    RESPONSIVE ADJUSTMENTS
@@ -119,12 +119,11 @@
 
 @media (min-width: 768px) {
     .unified-navigation {
-        flex-direction: row;
         align-items: center;
+        flex-direction: row;
         justify-content: space-between;
-    }
-    
+     }
     .unified-navigation .back-link {
         margin-bottom: 0;
-    }
-}
+     }
+ }

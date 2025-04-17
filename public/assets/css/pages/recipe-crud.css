@@ -5,644 +5,670 @@
 /* ====================================
    MAIN FORM CONTAINER
    ==================================== */
+
 .recipe-form {
-    background: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-lg);
-    margin: 0 auto;
-    max-width: 1000px;
-    padding: var(--spacing-md);
+  background: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  margin: 0 auto;
+  max-width: 1000px;
+  padding: var(--spacing-md);
 }
 
 /* ====================================
    PAGE HEADER
    ==================================== */
+
 .recipe-form .page-header {
-    display: grid;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-    position: relative;
-    text-align: center;
-    padding: var(--spacing-lg) var(--spacing-lg);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-lg);
+  position: relative;
+  text-align: center;
 }
 
 .recipe-form .page-header::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: var(--border-radius);
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--border-radius);
+  bottom: 0;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .recipe-form .page-header h1 {
-    color: var(--color-white);
-    font-family: var(--font-secondary);
-    font-size: var(--font-size-xxlarge);
-    font-weight: 700;
-    line-height: 1.2;
-    margin: 0 auto;
-    padding: var(--spacing-sm) var(--spacing-md);
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 
-                 0 0 10px rgba(0, 0, 0, 0.5);
-    letter-spacing: 0.05em;
-    position: relative;
-    z-index: 1;
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: var(--border-radius);
-    display: inline-block;
-    max-width: 80%;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: var(--border-radius);
+  color: var(--color-white);
+  display: inline-block;
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xxlarge);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  margin: 0 auto;
+  max-width: 80%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  position: relative;
+  z-index: 1;
+
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .recipe-form .page-header.with-banner {
-    /* Background image is now set inline with url_for() */
-    position: relative;
+  position: relative;
+
+  /* Background image is now set inline with url_for() */
 }
 
 .recipe-form .page-header.with-recipe-banner {
-    /* This will be overridden by the banner image in PHP */
-    background-image: none;
+  background-image: none;
+
+  /* This will be overridden by the banner image in PHP */
 }
 
 /* Recipe header image styling */
 .recipe-form .recipe-header-image {
-    position: relative;
-    height: 300px;
-    overflow: hidden;
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-    margin: -1rem -1rem 1rem -1rem;
-    width: calc(100% + 2rem);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  height: 300px;
+  margin: -1rem -1rem 1rem -1rem;
+  overflow: hidden;
+  position: relative;
+  width: calc(100% + 2rem);
 }
 
 .recipe-form .recipe-header-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }
 
 .recipe-form .recipe-header-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7));
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.7)
+  );
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 .recipe-form .recipe-header-content {
-    width: 100%;
-    padding: 0 var(--spacing-xl);
-    color: var(--color-white);
-    text-align: center;
+  color: var(--color-white);
+  padding: 0 var(--spacing-xl);
+  text-align: center;
+  width: 100%;
 }
 
 .recipe-form .recipe-header-content .page-header {
-    border: none;
-    background: none;
-    box-shadow: none;
-    color: var(--color-white);
-    margin-bottom: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  color: var(--color-white);
+  margin-bottom: 0;
 }
 
 .recipe-form .recipe-header-content .page-header h1 {
-    color: var(--color-white);
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    font-size: 2.5rem;
+  color: var(--color-white);
+  font-size: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* ====================================
    FORM LAYOUT
    ==================================== */
+
 .recipe-form form {
-    background: var(--color-white);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-sm);
-    display: grid;
-    gap: var(--spacing-xl);
-    padding: var(--spacing-lg);
+  background: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: var(--spacing-xl);
+  padding: var(--spacing-lg);
 }
 
 /* ====================================
    FORM VALIDATION
    ==================================== */
+
 .form-error,
 .recipe-form .invalid-feedback {
-    color: var(--error-color);
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-    flex: 0 0 auto;
+  color: var(--error-color);
+  flex: 0 0 auto;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
 }
 
 .form-control.is-invalid,
 .recipe-form .form-control.is-invalid {
-    border-color: var(--error-color);
-    background-color: rgba(231, 76, 60, 0.05);
+  background-color: rgba(231, 76, 60, 0.05);
+  border-color: var(--error-color);
 }
 
 .recipe-form .invalid-feedback {
-    align-items: center;
-    display: grid;
-    font-weight: 500;
-    gap: var(--spacing-xs);
-    grid-template-columns: auto 1fr;
-    font-size: var(--font-size-base);
+  align-items: center;
+  display: grid;
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  gap: var(--spacing-xs);
+  grid-template-columns: auto 1fr;
 }
 
 .recipe-form .invalid-feedback::before {
-    content: "⚠";
+  content: "⚠";
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-md);
 }
 
 /* ====================================
    FORM SECTIONS - GENERAL STYLING
    ==================================== */
+
 .form-section,
 .ingredients-section,
 .directions-section,
 .media-section {
-    background: var(--color-white);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-md);
-    padding: var(--spacing-md);
+  background: var(--color-white);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-md);
 }
 
-.form-section h4, 
+.form-section h4,
 .form-section .h4,
-.ingredients-section h4, 
+.ingredients-section h4,
 .ingredients-section .h4,
-.directions-section h4, 
+.directions-section h4,
 .directions-section .h4,
-.media-section h4, 
+.media-section h4,
 .media-section .h4,
-.time-section h4, 
+.time-section h4,
 .time-section .h4 {
-    border-bottom: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    font-size: var(--font-size-large);
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.25rem;
+  border-bottom: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  font-size: var(--font-size-large);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.25rem;
 }
 
 /* ====================================
    CATEGORIES SECTION
    ==================================== */
+
 .categories-row,
 .time-row {
-    background-color: var(--background-color);
-    border-radius: var(--border-radius-md);
-    display: grid;
-    gap: 0.5rem;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
+  background-color: var(--background-color);
+  border-radius: var(--border-radius-md);
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 0.75rem;
+  padding: 0.5rem;
 }
 
 .categories-row .form-group {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .categories-row .form-group label {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .categories-row .form-group select {
-    flex: 0 0 auto;
+  flex: 0 0 auto;
 }
 
 /* ====================================
    TIME SECTION
    ==================================== */
+
 .time-section {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    padding: 0.5rem;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 0.5rem;
 }
 
 .time-inputs {
-    display: grid;
-    gap: 0.5rem;
-    grid-template-columns: 1fr 1fr;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 1fr 1fr;
 }
 
 .time-inputs .form-group {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 /* ====================================
    INGREDIENTS SECTION
    ==================================== */
-/* Base styles for ingredient and direction rows */
+
+   /* Base styles for ingredient and direction rows */
 .ingredient-row,
 .direction-row {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-sm);
-    box-shadow: var(--shadow-sm);
-    display: grid;
-    gap: 1rem;
-    position: relative;
-    margin-bottom: var(--spacing-xs);
-    padding: var(--spacing-sm);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 1rem;
+  margin-bottom: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  position: relative;
 }
 
 /* Specific properties for ingredient row */
 .ingredient-row {
-    grid-template-columns: 120px 150px 1fr 40px; /* Increased quantity column width */
-    margin-bottom: 0.5rem;
-    padding: 0.75rem;
-    align-items: start;
+  align-items: start;
+  grid-template-columns: 120px 150px 1fr 40px;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+
+  /* Increased quantity column width */
 }
 
 /* Apply form-group-base styles to all form groups */
 .ingredient-row .form-group,
 .direction-row .form-group {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    margin-bottom: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  margin-bottom: 0;
 }
 
 .ingredient-row .form-group label,
 .direction-row .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .ingredient-row .form-group input,
 .direction-row .form-group textarea {
-    display: block;
+  display: block;
 }
 
 .ingredient-row input,
 .ingredient-row select {
-    height: 48px; 
-    box-sizing: border-box;
-    min-width: 0; 
+  box-sizing: border-box;
+  height: 48px;
+  min-width: 0;
 }
 
 /* Common styles for remove buttons */
 .ingredient-row .remove-ingredient,
 .direction-row .remove-step {
-    font-size: 1.25rem;
-    height: 30px;
-    line-height: 30px;
-    padding: 0;
-    text-align: center;
-    width: 30px;
-    align-self: start;
+  align-self: start;
+  font-size: 1.25rem;
+  height: 30px;
+  line-height: 30px;
+  padding: 0;
+  text-align: center;
+  width: 30px;
 }
 
 /* Specific properties for ingredient remove button */
 .ingredient-row .remove-ingredient {
-    margin-top: 2.1rem; /* Align with the input field, accounting for the label */
+  margin-top: 2.1rem;
+
+  /* Align with the input field, accounting for the label */
 }
 
 /* ====================================
    QUANTITY INPUT GROUP
    ==================================== */
-/* Container for quantity input and fraction helpers */
+
+   /* Container for quantity input and fraction helpers */
 .quantity-input-group {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 .quantity-input-group input {
-    width: 100%;
-    min-width: 80px; /* Ensure enough width for decimal values */
-    font-family: var(--font-primary); /* Use monospace or consistent width font */
-    font-variant-numeric: tabular-nums; /* Ensure numbers align properly */
+  font-family: var(--font-primary);
+  font-variant-numeric: tabular-nums;
+  min-width: 80px;
+  width: 100%;
+
+  /* Ensure enough width for decimal values */
+  /* Use monospace or consistent width font */
+  /* Ensure numbers align properly */
 }
 
 /* Fraction helper buttons container */
 .fraction-helpers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25rem;
-    margin-top: 0.5rem; /* Increased top margin */
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    padding: 0.35rem;
-    background-color: var(--background-color);
-    justify-content: center;
+  background-color: var(--background-color);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+  padding: 0.35rem;
+
+  /* Increased top margin */
 }
 
 /* Individual fraction helper button */
 .fraction-helper {
-    display: inline-block;
-    cursor: pointer;
-    background-color: var(--color-light);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-sm);
-    padding: 0.15rem 0.4rem;
-    font-size: 0.85rem;
-    transition: all 0.2s ease;
-    user-select: none;
+  background-color: var(--color-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.4rem;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
 /* Hover and focus states for fraction helpers */
-.fraction-helper:hover, 
+.fraction-helper:hover,
 .fraction-helper:focus {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: var(--color-white);
-    cursor: pointer;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--color-white);
+  cursor: pointer;
 }
 
 /* Active state for fraction helpers */
 .fraction-helper:active {
-    transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 /* ====================================
    DIRECTIONS SECTION
    ==================================== */
+
 /* Specific grid layout for direction row */
 .direction-row {
-    grid-template-columns: 40px 1fr 40px;
-    margin-bottom: 0.5rem;
-    padding: 0.75rem;
+  grid-template-columns: 40px 1fr 40px;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
 }
 
 .direction-row .step-number {
-    align-self: center;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    color: var(--color-white);
-    display: grid;
-    font-weight: bold;
-    height: 30px;
-    margin-top: 24px;
-    place-items: center;
-    width: 30px;
+  align-self: center;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  color: var(--color-white);
+  display: grid;
+  font-weight: bold;
+  height: 30px;
+  margin-top: 24px;
+  place-items: center;
+  width: 30px;
 }
 
 /* Vertical alignment for direction remove button */
 .direction-row .remove-step {
-    align-self: center;
-    margin-top: 24px;
+  align-self: center;
+  margin-top: 24px;
 }
 
 .direction-row .btn-danger {
-    align-self: center;
+  align-self: center;
 }
 
 /* ====================================
    MEDIA SECTION
    ==================================== */
-/* Current image preview styles */
+
+   /* Current image preview styles */
 .current-image {
-    max-width: 300px;
-    margin-top: 1rem;
+  margin-top: 1rem;
+  max-width: 300px;
 }
 
 .current-image img {
-    max-width: 100%;
-    height: auto;
-    display: block;
+  display: block;
+  height: auto;
+  max-width: 100%;
 }
 
 /* ====================================
    BUTTON STYLES
    ==================================== */
+
 .recipe-form .form-buttons {
-    display: grid;
-    gap: var(--spacing-md);
-    grid-template-columns: auto auto;
-    justify-content: start;
-    margin-top: var(--spacing-lg);
+  display: grid;
+  gap: var(--spacing-md);
+  grid-template-columns: auto auto;
+  justify-content: start;
+  margin-top: var(--spacing-lg);
 }
 
 .btn {
-    border-radius: var(--border-radius-sm);
-    cursor: pointer;
-    display: grid;
-    font-weight: 500;
-    gap: var(--spacing-sm);
-    grid-template-columns: auto 1fr;
-    padding: var(--spacing-sm) var(--spacing-md);
-    place-items: center;
-    text-decoration: none;
-    transition: all 0.2s ease;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: grid;
+  font-weight: 500;
+  gap: var(--spacing-sm);
+  grid-template-columns: auto 1fr;
+  padding: var(--spacing-sm) var(--spacing-md);
+  place-items: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .btn-primary {
-    background: var(--primary-color);
-    color: var(--color-white);
+  background: var(--primary-color);
+  color: var(--color-white);
 }
 
 .btn-primary:hover {
-    background: var(--accent-color-dark);
+  background: var(--accent-color-dark);
 }
 
 .btn-secondary {
-    background: var(--secondary-color);
-    color: white;
+  background: var(--secondary-color);
+  color: var(--color-white);
 }
 
 .btn-secondary:hover {
-    background: var(--error-color);
+  background: var(--error-color);
 }
 
 .btn-outline {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
 }
 
 .btn-outline:hover {
-    background: var(--primary-color);
-    color: white;
+  background: var(--primary-color);
+  color: var(--color-white);
 }
 
 .btn-danger {
-    background-color: var(--danger-color);
-    color: var(--color-white);
+  background-color: var(--danger-color);
+  color: var(--color-white);
 }
 
 .btn-danger:hover {
-    background-color: var(--danger-color-dark);
+  background-color: var(--danger-color-dark);
 }
 
 /* ====================================
    REMOVE BUTTONS
    ==================================== */
+
 .remove-ingredient,
 .remove-step {
-    align-items: center;
-    background: var(--error-color);
-    border: none;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    font-size: 1.5rem;
-    height: 2rem;
-    justify-content: center;
-    line-height: 1;
-    padding: 0;
-    transition: background-color 0.2s ease;
-    width: 2rem;
+  align-items: center;
+  background: var(--error-color);
+  border: none;
+  border-radius: 50%;
+  color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  font-size: 1.5rem;
+  height: 2rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  transition: background-color 0.2s ease;
+  width: 2rem;
 }
 
 .remove-ingredient:hover,
 .remove-step:hover {
-    background: var(--secondary-color);
+  background: var(--secondary-color);
 }
 
 #add-ingredient,
 #add-step {
-    margin-top: 0.5rem;
-    width: 100%;
+  margin-top: 0.5rem;
+  width: 100%;
 }
 
 /* ====================================
    FILE INPUT STYLING
    ==================================== */
-.recipe-form input[type="file"] {
-    background: var(--background-color);
-    border: 2px dashed var(--dark-gray);
-    border-radius: var(--border-radius-md);
-    cursor: pointer;
-    padding: var(--spacing-md);
+
+   .recipe-form input[type="file"] {
+  background: var(--background-color);
+  border: 2px dashed var(--dark-gray);
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  padding: var(--spacing-md);
 }
 
 .recipe-form input[type="file"]:hover {
-    background: var(--background-color);
-    border-color: var(--accent-color);
+  background: var(--background-color);
+  border-color: var(--accent-color);
 }
 
 /* ====================================
    STAR RATING COMPONENT
    ==================================== */
+
 .star-rating {
-    direction: rtl;
-    display: grid;
-    gap: var(--spacing-xs);
-    grid-template-columns: repeat(5, auto);
-    justify-content: start;
+  direction: rtl;
+  display: grid;
+  gap: var(--spacing-xs);
+  grid-template-columns: repeat(5, auto);
+  justify-content: start;
 }
 
 .star-rating input {
-    display: none;
+  display: none;
 }
 
 .star-rating label {
-    color: var(--text-color);
-    cursor: pointer;
-    font-size: var(--font-size-large);
-    padding: 0 var(--spacing-xs);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: var(--font-size-large);
+  padding: 0 var(--spacing-xs);
 }
 
 .star-rating label:hover,
 .star-rating label:hover ~ label,
 .star-rating input:checked ~ label {
-    color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 .star-rating:hover label:hover,
 .star-rating:hover label:hover ~ label {
-    color: var(--accent-color-dark);
+  color: var(--accent-color-dark);
 }
 
 .star-rating input:checked + label,
 .star-rating input:checked ~ label {
-    color: var(--accent-color);
+  color: var(--accent-color);
 }
 
 /* ====================================
    DELETE CONFIRMATION
    ==================================== */
+
 .delete-confirmation {
-    background-color: var(--danger-color-light);
-    border: 2px solid var(--danger-color);
-    border-radius: var(--border-radius-lg);
-    margin: var(--spacing-lg) 0;
-    padding: var(--spacing-xl);
-    text-align: center;
+  background-color: var(--danger-color-light);
+  border: 2px solid var(--danger-color);
+  border-radius: var(--border-radius-lg);
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-xl);
+  text-align: center;
 }
 
 .delete-confirmation p {
-    font-size: var(--font-size-lg);
-    margin: var(--spacing-md) 0;
+  font-size: var(--font-size-lg);
+  margin: var(--spacing-md) 0;
 }
 
 .delete-confirmation .warning {
-    align-items: center;
-    color: var(--danger-color);
-    display: flex;
-    font-weight: 600;
-    gap: var(--spacing-sm);
-    justify-content: center;
+  align-items: center;
+  color: var(--danger-color);
+  display: flex;
+  font-weight: 600;
+  gap: var(--spacing-sm);
+  justify-content: center;
 }
 
 .delete-confirmation .warning i {
-    color: var(--danger-color);
+  color: var(--danger-color);
 }
 
 /* ====================================
    RESPONSIVE STYLES
    ==================================== */
+
 /* Mobile styles (default) */
 @media (max-width: 767px) {
-    .recipe-form {
-        padding: var(--spacing-md);
-    }
-    
-    .ingredient-row {
-        gap: 0.5rem;
-        grid-template-columns: 1fr;
-    }
-    
-    .ingredient-row .remove-ingredient {
-        justify-self: end;
-        margin-top: 0;
-        position: absolute;
-        right: 0.5rem;
-        top: 0.5rem;
-    }
-    
-    .direction-row {
-        gap: 0.5rem;
-        grid-template-columns: 1fr;
-    }
-    
-    .direction-row .step-number {
-        justify-self: start;
-        margin-top: 0;
-    }
-    
-    .direction-row .remove-step {
-        justify-self: end;
-        margin-top: 0;
-        position: absolute;
-        right: 0.5rem;
-        top: 0.5rem;
-    }
-    
-    .form-buttons {
-        grid-template-columns: 1fr;
-    }
-    
-    .form-buttons .btn {
-        width: 100%;
-    }
+  .recipe-form {
+    padding: var(--spacing-md);
+  }
+  .ingredient-row {
+    gap: 0.5rem;
+    grid-template-columns: 1fr;
+  }
+  .ingredient-row .remove-ingredient {
+    justify-self: end;
+    margin-top: 0;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+  .direction-row {
+    gap: 0.5rem;
+    grid-template-columns: 1fr;
+  }
+  .direction-row .step-number {
+    justify-self: start;
+    margin-top: 0;
+  }
+  .direction-row .remove-step {
+    justify-self: end;
+    margin-top: 0;
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+  .form-buttons {
+    grid-template-columns: 1fr;
+  }
+  .form-buttons .btn {
+    width: 100%;
+  }
 }

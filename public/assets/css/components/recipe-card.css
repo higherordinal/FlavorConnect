@@ -8,13 +8,12 @@
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-md);
   display: grid;
-  grid-template-rows: auto 1fr auto;
   gap: var(--spacing-sm);
-  overflow: hidden;
-  transition: transform var(--transition-medium),
-    box-shadow var(--transition-medium);
+  grid-template-rows: auto 1fr auto;
   height: 100%;
+  overflow: hidden;
   position: relative;
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
 }
 
 .recipe-card:hover {
@@ -26,25 +25,27 @@
 .image-link {
   display: block;
   height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
   left: 0;
+  position: absolute;
   text-decoration: none;
+  top: 0;
+  width: 100%;
 }
 
 .title-link {
   color: inherit;
-  text-decoration: none;
   display: block;
+  text-decoration: none;
 }
 
 /* Recipe image container */
 .recipe-image-container {
   overflow: hidden;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 56.25%;
   position: relative;
   width: 100%;
+
+  /* 16:9 aspect ratio */
 }
 
 .recipe-image {
@@ -66,8 +67,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md);
   height: 100%;
+  padding: var(--spacing-md);
 }
 
 /* Recipe card layout */
@@ -77,40 +78,40 @@
 }
 
 .recipe-title {
+  align-items: center;
   color: var(--text-color);
+  display: flex;
   font-size: var(--font-size-large);
   font-weight: 600;
   margin: 0;
-  min-height: var(--line-height-lg, 3.2rem); 
-  display: flex;
-  align-items: center;
+  min-height: var(--line-height-lg, 3.2rem);
 }
 
 /* Recipe meta information */
 .recipe-meta {
+  align-items: center;
   color: var(--text-color);
   display: grid;
   font-size: var(--font-size-small);
+  font-weight: 500;
   gap: var(--spacing-xs);
   grid-auto-flow: column;
   justify-content: start;
   margin-top: var(--spacing-sm);
-  align-items: center;
-  font-weight: 500;
 }
 
 /* Rating component */
 .recipe-meta .rating {
   align-items: center;
-  color: var(--accent-color);
   background-color: var(--primary-color);
   border-radius: var(--border-radius-sm);
-  padding: var(--spacing-xxs, 2px) var(--spacing-xs);
+  color: var(--accent-color);
   display: grid;
   font-size: var(--font-size-medium);
   gap: var(--spacing-xxs, 0.25rem);
   grid-template-columns: auto auto;
   letter-spacing: var(--letter-spacing-medium, 0.1em);
+  padding: var(--spacing-xxs, 2px) var(--spacing-xs);
 }
 
 .recipe-meta .rating .review-count {
@@ -140,55 +141,56 @@
 }
 
 .visually-hidden {
-  position: absolute;
-  width: 1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
   height: 1px;
-  padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  padding: 0;
+  position: absolute;
   white-space: nowrap;
-  border: 0;
+  width: 1px;
 }
 
 .recipe-attributes {
+  align-items: flex-start;
   display: flex;
   flex-wrap: wrap;
-  gap: 0; 
-  min-height: 5.5rem; 
-  height: 5.5rem; 
-  align-items: flex-start; 
-  padding-top: var(--spacing-sm); 
-  padding-bottom: var(--spacing-sm); 
-  width: 100%;
-  justify-content: flex-start; 
+  gap: 0;
+  height: 5.5rem;
+  justify-content: flex-start;
   list-style: none;
-  padding-left: 0;
   margin: 0;
-  overflow: hidden; 
+  min-height: 5.5rem;
+  overflow: hidden;
+  padding-bottom: var(--spacing-sm);
+  padding-left: 0;
+  padding-top: var(--spacing-sm);
+  width: 100%;
+  min-height: 5.5rem;
 }
 
 .recipe-attributes li {
+  display: inline-block;
   margin: 0;
   padding: 0;
-  display: inline-block;
 }
 
 /* Recipe attribute styling */
 .recipe-attribute {
+  align-items: center;
   background-color: var(--primary-color);
   border-radius: var(--border-radius-sm);
   color: var(--color-white);
-  font-size: var(--font-size-small);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  line-height: 1;
   display: inline-flex;
-  align-items: center;
+  font-size: var(--font-size-small);
+  line-height: 1;
+  margin-bottom: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   text-decoration: none;
   transition: background-color var(--transition-medium);
-  margin-right: var(--spacing-xs); 
-  margin-bottom: var(--spacing-xs); 
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .recipe-attribute:hover,
@@ -204,49 +206,21 @@
   display: grid;
   gap: var(--spacing-sm);
   grid-template-columns: 1fr auto;
-  padding: var(--spacing-sm) var(--spacing-md);
-  min-height: 3.5rem;
   height: auto;
+  min-height: 3.5rem;
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .recipe-author {
-  font-size: var(--font-size-small);
   color: var(--text-color);
-  white-space: nowrap;
+  display: flex;
+  flex: 1;
+  font-size: var(--font-size-small);
   font-weight: 500;
   min-width: 0;
-  flex: 1;
-  display: flex;
+  white-space: nowrap;
 }
 
-/* Favorite button */
-.favorite-btn {
-  background: rgba(255, 255, 255, 0.8);
-  border: none;
-  border-radius: 50%;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: var(--font-size-large);
-  height: var(--icon-size-lg, 2.5rem);
-  position: absolute;
-  right: var(--spacing-sm);
-  top: var(--spacing-sm);
-  transition: all var(--transition-fast);
-  width: var(--icon-size-lg, 2.5rem);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.favorite-btn:hover {
-  background: rgba(255, 255, 255, 0.9);
-  transform: scale(1.1);
-}
-
-.favorite-btn.favorited {
-  color: var(--danger-color, #ff4b4b);
-}
 
 /* ==========================================================================
    Responsive Design - Mobile First
@@ -254,8 +228,8 @@
 
 /* Base styles for mobile */
 .recipe-grid {
-  grid-template-columns: 1fr;
   gap: var(--spacing-lg);
+  grid-template-columns: 1fr;
 }
 
 /* Ensure recipe cards maintain proper spacing and alignment in single column */
@@ -283,8 +257,8 @@
 
 /* Keep consistent margins for recipe attributes */
 .recipe-attribute {
-  margin-right: var(--spacing-xs);
   margin-bottom: var(--spacing-xs);
+  margin-right: var(--spacing-xs);
 }
 
 /* Small tablets (480px and up) */
@@ -306,7 +280,6 @@
     gap: var(--spacing-xl);
     grid-template-columns: repeat(3, 1fr);
   }
-  
   .recipe-footer {
     grid-template-columns: repeat(2, 1fr);
   }

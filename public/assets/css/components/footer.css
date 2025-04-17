@@ -3,24 +3,26 @@
    ==================================== */
 
 footer {
-  background: linear-gradient(135deg, 
-    var(--primary-color) 0%, 
-    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 30%,
-    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 50%, 
-    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 70%,
-    var(--primary-color) 85%);
+  box-sizing: border-box;
   color: var(--light-gray);
   display: grid;
   gap: var(--spacing-lg);
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  margin: 0;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 30%,
+    color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 50%,
+    color-mix(in srgb, var(--secondary-color) 10%, var(--primary-color) 90%) 70%,
+    var(--primary-color) 85%
+  );
   grid-template-areas:
     "info links social"
     "copyright copyright copyright";
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto auto;
-  padding: var(--spacing-xl) var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0;
 }
 
 footer .footer-info {
@@ -44,8 +46,8 @@ footer .footer-logo a {
   color: var(--color-white);
   display: inline-grid;
   justify-items: start;
-  text-decoration: none;
   max-width: 200px;
+  text-decoration: none;
 }
 
 footer .footer-logo .logo-the {
@@ -58,10 +60,10 @@ footer .footer-logo .logo-the {
 }
 
 footer .footer-logo .logo-name {
+  color: var(--light-gray);
   font-size: var(--font-size-large);
   line-height: 1;
   margin: 0;
-  color: var(--light-gray);
 }
 
 footer .footer-logo a:hover .logo-the {
@@ -83,10 +85,10 @@ footer .footer-info address {
    ==================================== */
 
 footer .footer-links {
+  align-content: start;
   display: grid;
   gap: var(--spacing-xs);
   grid-area: links;
-  align-content: start;
 }
 
 footer .footer-links h3 {
@@ -95,12 +97,12 @@ footer .footer-links h3 {
 }
 
 footer .footer-links nav ul {
+  align-content: start;
   display: grid;
   gap: var(--spacing-xs);
   list-style: none;
   margin: 0;
   padding: 0;
-  align-content: start;
 }
 
 footer .footer-links a {
@@ -118,10 +120,10 @@ footer .footer-links a:hover {
    ==================================== */
 
 footer .footer-social {
+  align-content: start;
   display: grid;
   gap: var(--spacing-xs);
   grid-area: social;
-  align-content: start;
 }
 
 footer .footer-social h3 {
@@ -130,12 +132,12 @@ footer .footer-social h3 {
 }
 
 footer .footer-social ul {
+  align-content: start;
   display: grid;
   gap: var(--spacing-xs);
   list-style: none;
   margin: 0;
   padding: 0;
-  align-content: start;
 }
 
 footer .footer-social a {
@@ -170,7 +172,6 @@ footer .footer-copyright {
     gap: var(--spacing-lg);
     padding: var(--spacing-xl) var(--spacing-lg);
   }
-  
   footer .footer-logo a {
     max-width: var(--logo-width-sm, 180px);
   }
