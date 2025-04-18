@@ -32,25 +32,6 @@ A recipe sharing and management platform where users can discover, share, and or
 
 ### Using Docker
 
-#### Option 1: Using pre-built Docker images (recommended)
-
-1. Extract the zip file or clone the repository
-2. Import the pre-built Docker images:
-   ```
-   import-docker-images.bat
-   ```
-3. Start the application:
-   ```
-   docker-compose up -d
-   ```
-4. Access the application at:
-   - Website: http://localhost:8080
-   - API: http://localhost:3000
-   - Database: localhost:3306
-   - phpMyAdmin: http://localhost:8081
-
-#### Option 2: Building Docker images from scratch
-
 1. Extract the zip file or clone the repository
 2. Open a terminal/command prompt in the project directory
 3. Run the following command to start the application:
@@ -58,7 +39,7 @@ A recipe sharing and management platform where users can discover, share, and or
    docker-compose up -d
    ```
 4. Wait for all containers to start (this may take a few minutes on first run)
-5. If you need to install ImageMagick manually, use the provided script:
+5. Install ImageMagick using the provided script:
    ```
    docker exec -it flavorconnect-web bash /var/www/html/install-imagemagick-docker.sh
    ```
@@ -132,8 +113,6 @@ Stop the Apache and MySQL services from the XAMPP control panel.
 ### Root Directory
 - `.htaccess` - Apache configuration for URL handling and security
 - `docker-compose.yml` - Docker Compose configuration for multi-container setup
-- `export-docker-images.bat` - Script to export Docker images as ZIP files for distribution
-- `import-docker-images.bat` - Script to import Docker images from ZIP files
 - `install-imagemagick-docker.sh` - Script for installing ImageMagick in Docker environment
 - `install-imagemagick-xampp.sh` - Script for installing ImageMagick in XAMPP environment
 - `README.md` - Project documentation (this file)
@@ -260,7 +239,6 @@ Stop the Apache and MySQL services from the XAMPP control panel.
 ## Additional Documentation
 
 - [Image Processing Setup](README-IMAGE-PROCESSING.md) - Instructions for setting up ImageMagick for recipe image processing
-  - `install-imagemagick-docker.sh` - Script for installing ImageMagick in Docker environment
   - `install-imagemagick-xampp.sh` - Script for installing ImageMagick in XAMPP environment (Linux/macOS)
 - [API Documentation](api/README.md) - Details about the API endpoints and usage
 
@@ -270,21 +248,16 @@ If you encounter any issues:
 
 ### Docker Issues
 1. Make sure Docker Desktop is running
-2. Try using the pre-built Docker images:
-   ```
-   import-docker-images.bat
-   docker-compose up -d
-   ```
-3. If that doesn't work, try rebuilding the containers:
+2. Try rebuilding the containers:
    ```
    docker-compose down
    docker-compose up -d --build
    ```
-4. Check the logs:
+3. Check the logs:
    ```
    docker-compose logs
    ```
-5. If you need to install ImageMagick manually:
+4. Install ImageMagick if needed:
    ```
    docker exec -it flavorconnect-web bash /var/www/html/install-imagemagick-docker.sh
    ```
