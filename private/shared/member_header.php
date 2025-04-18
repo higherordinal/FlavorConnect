@@ -27,12 +27,6 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Utility Scripts are now loaded in footer.php -->
-    <?php 
-    // Add form-validation.js to utility scripts
-    $utility_scripts[] = 'form-validation';
-    ?>
-    
     <!-- JavaScript Detection -->
     <script>
         // Add 'js' class to html element if JavaScript is enabled

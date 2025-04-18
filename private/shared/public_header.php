@@ -81,12 +81,6 @@ $css_version = file_exists($css_path) ? filemtime($css_path) : time();
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Utility Scripts are now loaded in footer.php -->
-    <?php 
-    // Add form-validation.js to utility scripts
-    $utility_scripts[] = 'form-validation';
-    ?>
-    
     <!-- Global Configuration -->
     <script>
         // Initialize FlavorConnect namespace and structure
