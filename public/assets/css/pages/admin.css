@@ -12,15 +12,15 @@
  */
 
 .admin-management {
+  box-sizing: border-box;
   display: grid;
   grid-template-rows: auto 1fr;
   margin: 0 auto;
   max-width: var(--container-width);
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  overflow-x: hidden;
   padding: var(--spacing-md);
   width: 100%;
-  box-sizing: border-box;
-  overflow-x: hidden;
 }
 
 /* Ensure unified navigation has consistent spacing within admin layout */
@@ -36,11 +36,11 @@
   background: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
-  padding: var(--spacing-md);
-  transition: all 0.2s ease;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding: var(--spacing-md);
+  transition: all 0.2s ease;
 }
 
 .admin-module h2 {
@@ -51,8 +51,8 @@
 
 .admin-module p {
   color: var(--text-color);
-  margin-bottom: var(--spacing-md);
   flex-grow: 1;
+  margin-bottom: var(--spacing-md);
 }
 
 /* Admin module action buttons - specifically for dashboard modules */
@@ -65,19 +65,19 @@
 .admin-module .action {
   align-items: center;
   background: var(--primary-color);
+  border: 1px solid transparent;
   border-radius: var(--border-radius-sm);
   color: var(--color-white);
   display: inline-flex;
   font-weight: 500;
   gap: var(--spacing-sm);
+  height: auto;
+  min-height: auto;
+  min-width: auto;
   padding: var(--spacing-sm) var(--spacing-md);
   text-decoration: none;
   transition: all 0.2s ease;
   width: auto;
-  height: auto;
-  min-width: auto;
-  min-height: auto;
-  border: 1px solid transparent;
 }
 
 .admin-module .action:hover {
@@ -92,12 +92,12 @@
 
 /* Admin dashboard layout */
 .admin-dashboard {
-  padding: var(--spacing-md);
-  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  padding: var(--spacing-md);
+  width: 100%;
 }
 
 .admin-modules {
@@ -121,36 +121,37 @@
   border-collapse: collapse;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
-  width: 100%;
+  box-sizing: border-box;
   font-size: clamp(0.875rem, 2.5vw, 1rem);
   table-layout: auto;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 .list th:last-child, 
 .list td:last-child {
-  width: auto;
   min-width: auto;
   text-align: center;
+  width: auto;
 }
 
 .list th {
   color: var(--accent-color);
   font-weight: 600;
+  overflow: visible;
   padding: var(--spacing-md);
   text-align: left;
-  overflow: visible;
   white-space: normal;
 }
 
 .list td {
   border-bottom: 1px solid var(--border-color);
-  padding: var(--spacing-md);
   overflow: visible;
+  padding: var(--spacing-md);
   white-space: normal;
 }
 
 .list thead {
+
   background: linear-gradient(120deg, 
     var(--primary-color) 0%,
     var(--primary-color) 35%, 
@@ -183,9 +184,9 @@
 
 /* Center-align action buttons in tables only */
 table td.actions {
-  white-space: nowrap;
-  text-align: center;
   padding: 0.5rem !important;
+  text-align: center;
+  white-space: nowrap;
 }
 
 table th:last-child {
@@ -194,17 +195,17 @@ table th:last-child {
 
 /* Style for action buttons in tables only */
 table td.actions .action {
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
+  border-radius: 4px;
+  display: inline-flex;
   font-size: 0.85rem;
+  height: 2rem;
+  justify-content: center;
   margin: 0 0.1rem;
+  min-height: 2rem;
+  min-width: 2rem;
   padding: 0;
   width: 2rem;
-  height: 2rem;
-  min-width: 2rem;
-  min-height: 2rem;
-  border-radius: 4px;
 }
 
 table td.actions .action.delete {
@@ -394,14 +395,14 @@ button.action.add:hover {
 }
 
 .admin-header h1 {
+  border-bottom: none;
   color: var(--accent-color);
-  margin: 0;
-  padding: var(--spacing-md);
   font-family: var(--font-secondary);
   font-size: var(--font-size-xlarge);
   line-height: 1;
+  margin: 0;
+  padding: var(--spacing-md);
   text-align: center;
-  border-bottom: none;
 }
 
 .admin-header .username-highlight {
@@ -412,9 +413,9 @@ button.action.add:hover {
    ADMIN CONTENT
    ========================================================================== */
 .admin-content {
-  width: 100%;
-  padding: var(--spacing-md);
   box-sizing: border-box;
+  padding: var(--spacing-md);
+  width: 100%;
 }
 
 /* ==========================================================================
@@ -615,7 +616,9 @@ button.action.add:hover {
 .status-badge.inactive {
   background-color: var(--error-color);
   color: var(--on-error-color);
-  font-weight: 700; /* Bold text for better readability */
+  font-weight: 700;
+
+  /* Bold text for better readability */
 }
 
 /* ==========================================================================
@@ -623,26 +626,26 @@ button.action.add:hover {
    ========================================================================== */
 
 .metadata-sections {
+  box-sizing: border-box;
   display: grid;
   gap: var(--spacing-lg);
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   margin-top: var(--spacing-lg);
-  width: 100%;
   max-width: 100%;
-  box-sizing: border-box;
+  width: 100%;
 }
 
 .metadata-section {
   background: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
+  max-width: 100%;
   padding: var(--spacing-lg);
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
 }
 
 .metadata-section h2 {
@@ -729,21 +732,21 @@ button.action.add:hover {
 }
 
 .admin-header h1 {
+  border-bottom: 2px solid var(--accent-color);
+  border-bottom: none;
+  border-radius: var(--border-radius-sm);
+  color: var(--accent-color);
+  font-family: var(--font-secondary);
+  font-size: var(--font-size-xlarge);
+  line-height: 1;
+  margin: 0;
+  padding: var(--spacing-md);
+  text-align: center;
   background: linear-gradient(135deg, 
     var(--primary-color) 0%,
     var(--primary-color) 50%, 
     color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 70%,
     color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%);
-  border-bottom: 2px solid var(--accent-color);
-  color: var(--accent-color);
-  margin: 0;
-  padding: var(--spacing-md);
-  font-family: var(--font-secondary);
-  font-size: var(--font-size-xlarge);
-  line-height: 1;
-  border-radius: var(--border-radius-sm);
-  text-align: center;
-  border-bottom: none;
 }
 
 .admin-header .username-highlight {
@@ -848,42 +851,41 @@ button.action.add:hover {
   margin: 0;
 }
 
-
 /* ==========================================================================
    ADMIN DASHBOARD
    ========================================================================== */
 
 .admin-dashboard {
+  box-sizing: border-box;
   display: grid;
+  display: flex;
+  flex-direction: column;
   grid-template-rows: auto 1fr;
   margin: 0 auto;
   max-width: var(--container-width);
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 2rem);
   padding: var(--spacing-md);
   width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 2rem);
 }
 
 .admin-modules {
   display: grid;
   gap: var(--spacing-lg);
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  margin-top: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
 }
 
 .admin-module {
   background: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
-  padding: var(--spacing-md);
-  transition: all 0.2s ease;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
+  padding: var(--spacing-md);
+  transition: all 0.2s ease;
 }
 
 .admin-module h2 {
@@ -894,8 +896,8 @@ button.action.add:hover {
 
 .admin-module p {
   color: var(--text-color);
-  margin-bottom: var(--spacing-md);
   flex-grow: 1;
+  margin-bottom: var(--spacing-md);
 }
 
 .admin-module .actions {
@@ -905,21 +907,21 @@ button.action.add:hover {
 }
 
 .admin-module .actions .action {
-  display: inline-flex;
   align-items: center;
   background: var(--primary-color);
+  border: 1px solid transparent;
   border-radius: var(--border-radius-sm);
   color: var(--color-white);
+  display: inline-flex;
   font-weight: 500;
   gap: var(--spacing-sm);
+  height: auto;
+  min-height: auto;
+  min-width: auto;
   padding: var(--spacing-sm) var(--spacing-md);
   text-decoration: none;
   transition: all 0.2s ease;
   width: auto;
-  height: auto;
-  min-width: auto;
-  min-height: auto;
-  border: 1px solid transparent;
 }
 
 .admin-module .actions .action:hover {
@@ -952,187 +954,164 @@ button.action.add:hover {
   desktop, tablet, and mobile devices.
 */
 
-@media (max-width: 1024px) {
-  /* Admin Layout - Base Styles */
+@media (max-width: 1024px) {  
   .admin-management,
   .admin-dashboard {
-    width: 100%;
-    max-width: 100%;
     box-sizing: border-box;
+    max-width: 100%;
     overflow-x: hidden;
     padding: 0;
-  }
-  
+    width: 100%;
+ }
   .admin-modules {
     gap: var(--spacing-md);
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
+ }
 
   .admin-module {
     padding: var(--spacing-sm);
-  }
-  
+ }
   .admin-module .actions .action {
     padding: var(--spacing-xs) var(--spacing-sm);
-  }
+ }
 
   .metadata-sections {
     grid-template-columns: 1fr;
-    width: 100%;
-    padding: 0;
     margin: 0;
-  }
-  
-  .metadata-section {
+    padding: 0;
     width: 100%;
+ }
+  .metadata-section {
+    margin: 0 0 1rem 0;
     max-width: 100%;
     padding: 0.5rem;
-    margin: 0 0 1rem 0;
-  }
-  
+    width: 100%;
+ }
   .actions:not(td) {
     grid-auto-flow: row;
     grid-auto-rows: max-content;
     justify-content: stretch;
-  }
+ }
 
   .action:not(td .action) {
     text-align: center;
-  }
-  
-  /* Tablet-specific styles */
+ }
   @media (max-width: 768px) {
+
     .admin-management,
     .admin-dashboard {
       padding: var(--spacing-md) clamp(0.25rem, 2vw, 0.5rem);
-    }
-  
+   }
     .admin-header {
       gap: var(--spacing-md);
       grid-template-columns: 1fr;
       text-align: center;
-    }
-  
+   }
     .admin-modules {
       grid-template-columns: 1fr;
-    }
-  
+   }
     .breadcrumbs {
       grid-auto-flow: row;
       justify-content: center;
       text-align: center;
-    }
-  
+   }
     .form-buttons {
       grid-auto-flow: row;
       justify-content: stretch;
-    }
-  
+   }
     .form-buttons input[type="submit"],
     .form-buttons .cancel {
       text-align: center;
       width: 100%;
-    }
-  
+   }
     .form-group {
       grid-template-rows: auto auto;
-    }
-  
+   }
     .form-group input[type="text"],
     .form-group input[type="email"],
     .form-group input[type="password"],
     .form-group select,
     .form-group textarea {
-      font-size: 16px; /* Prevent zoom on iOS */
-    }
-  
+      font-size: 16px;
+
+      /* Prevent zoom on iOS */
+   }
     .message {
       padding: var(--spacing-sm);
-    }
-    
+   }
     .metadata-section {
       padding: clamp(0.25rem, 2vw, 0.5rem);
-    }
-    
+   }
     .add-new-button {
       justify-content: center;
-    }
-    
+   }
     .admin-content {
       padding: 0 0.25rem;
-    }
-  }
-  
-  /* Mobile-specific styles */
+   }
+ }
   @media (max-width: 480px) {
+
     .admin-management h1,
     .admin-dashboard h1 {
       font-size: 1.5rem;
-    }
-  
+   }
     .admin-module {
       padding: var(--spacing-md);
-    }
-  
+   }
     .admin-module h2 {
       font-size: 1.25rem;
-    }
-  
+   }
     .form-group label {
       font-size: 0.9rem;
-    }
-  
+   }
     .action {
       font-size: 0.9rem;
       padding: var(--spacing-sm) var(--spacing-sm);
-    }
-    
+   }
     .metadata-section {
-      padding: clamp(0.125rem, 1.5vw, 0.25rem);
       margin-bottom: 0.5rem;
-    }
-    
+      padding: clamp(0.125rem, 1.5vw, 0.25rem);
+   }
     .metadata-section h2 {
       font-size: 1.25rem;
-    }
-    
+   }
     .add-new-button .btn {
-      width: 100%;
       justify-content: center;
-    }
-    
+      width: 100%;
+   }
     .admin-content {
       padding: 0;
-    }
-    
-    /* Small mobile styles */
+   }
     @media (max-width: 390px) {
       .admin-management {
+        max-width: 100%;
         padding: 0.25rem;
         width: 100%;
-        max-width: 100%;
-      }
+     }
 
       .admin-management h1,
       .admin-dashboard h1 {
         font-size: 1.25rem;
-      }
+     }
 
       .admin-module h2,
       .metadata-section h2 {
         font-size: 1.125rem;
-      }
-      
+     }
       .admin-content {
         padding: 0;
-      }
-      
+     }
       .metadata-section {
-        padding: 0.125rem;
         margin-bottom: 0.5rem;
-      }
-    }
-  }
+        padding: 0.125rem;
+     }
+   }
+    /* Small mobile styles */
+ }
+
+  /* Admin Layout - Base Styles */
+  /* Tablet-specific styles */
+  /* Mobile-specific styles */
 }
 
 /* ==========================================================================
@@ -1143,9 +1122,9 @@ button.action.add:hover {
   background: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
   margin-bottom: var(--spacing-lg);
   width: 100%;
-  box-sizing: border-box;
 }
 
 .table {
@@ -1155,6 +1134,7 @@ button.action.add:hover {
 }
 
 .table thead {
+
   background: linear-gradient(120deg, 
     var(--primary-color) 0%,
     var(--primary-color) 35%, 
@@ -1182,9 +1162,9 @@ button.action.add:hover {
   background: var(--surface-color);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
   margin-bottom: var(--spacing-lg);
   width: 100%;
-  box-sizing: border-box;
 }
 
 .list th:nth-child(1) {
@@ -1206,8 +1186,8 @@ button.action.add:hover {
 }
 
 .list th:last-child {
-  width: 10%;
   min-width: 70px;
+  width: 10%;
 }
 
 /* Table-specific responsive styles */
@@ -1215,230 +1195,214 @@ button.action.add:hover {
   .list {
     -webkit-overflow-scrolling: touch;
     display: block;
-    overflow-x: auto;
-    width: 100%;
     font-size: clamp(0.8125rem, 2vw, 0.9375rem);
+    overflow-x: auto;
     table-layout: auto;
-  }
-  
+    width: 100%;
+ }
   .list th,
   .list td {
     padding: clamp(0.5rem, 1.5vw, 0.75rem);
-  }
-  
+ }
   .list tbody {
-    width: 100%;
     display: block;
-  }
+    width: 100%;
+ }
 
   .list thead {
     display: none;
-  }
+ }
 
   .list tbody tr {
+    align-items: center;
     border-bottom: 1px solid var(--border-color);
     display: grid;
     gap: var(--spacing-xs);
     grid-template-columns: 1fr auto;
     padding: clamp(0.5rem, 2vw, 0.75rem);
-    align-items: center;
-  }
+ }
 
   .list tbody td {
+    align-items: center;
     border: none;
     display: grid;
     gap: clamp(0.25rem, 1vw, 0.5rem);
     grid-template-columns: auto 1fr;
     padding: 0;
-    align-items: center;
-  }
+ }
 
   .list tbody td::before {
     color: var(--text-color);
     content: attr(data-label);
-    font-weight: 600;
     font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-  }
+    font-weight: 600;
+ }
 
   table td.actions .action {
-    width: 1.75rem;
     height: 1.75rem;
-    min-width: 1.75rem;
-    min-height: 1.75rem;
     margin: 0;
-  }
-  
+    min-height: 1.75rem;
+    min-width: 1.75rem;
+    width: 1.75rem;
+ }
   .list tbody td.actions {
+    align-items: center;
     display: flex;
     flex-direction: row;
     gap: 0.25rem;
     justify-content: center;
-    align-items: center;
-  }
-  
-  /* Make first cell (usually Name) appear in first row, first column */
+ }
   .list tbody td:first-child {
+    align-items: center;
     grid-column: 1;
     grid-row: 1;
-    align-items: center;
-  }
-  
-  /* Make second cell (usually Recipes) appear in second row, first column */
+ }
   .list tbody td:nth-child(2) {
+    align-items: center;
     grid-column: 1;
     grid-row: 2;
-    align-items: center;
-  }
-  
-  /* Make all other cells except actions appear below */
+ }
   .list tbody td:not(:first-child):not(:nth-child(2)):not(.actions) {
+    align-items: center;
     grid-column: 1;
     grid-row: auto;
-    align-items: center;
-  }
-  
-  /* Position actions cell in the second column spanning all rows */
+ }
   .list tbody td.actions {
-    grid-column: 2;
-    grid-row: 1 / span 3;
     align-self: center;
-    justify-self: end;
     display: flex;
     flex-direction: row;
     gap: clamp(0.25rem, 1vw, 0.5rem);
+    grid-column: 2;
+    grid-row: 1 / span 3;
     height: 100%;
-    width: auto;
+    justify-self: end;
     min-width: auto;
-  }
+    width: auto;
+ }
 
   td.actions {
     display: flex !important;
     gap: clamp(0.25rem, 1vw, 0.5rem) !important;
-  }
+ }
 
   td.actions .action {
     aspect-ratio: 1;
     display: grid;
+    height: clamp(30px, 8vw, 40px);
+    min-height: 30px;
+    min-width: 30px;
     padding: clamp(0.25rem, 1vw, 0.5rem);
     place-items: center;
     width: clamp(30px, 8vw, 40px);
-    height: clamp(30px, 8vw, 40px);
-    min-width: 30px;
-    min-height: 30px;
-  }
+ }
 
   .status-badge {
     display: inline-block;
     text-align: center;
     width: clamp(60px, 15vw, 80px);
-  }
+ }
 
   td[data-label="Status"] {
     min-width: max-content;
-  }
+ }
+
+  /* Make first cell (usually Name) appear in first row, first column */
+  /* Make second cell (usually Recipes) appear in second row, first column */
+  /* Make all other cells except actions appear below */
+  /* Position actions cell in the second column spanning all rows */
 }
 
-@media (max-width: 768px) {
-  /* Further reduce sizes for small screens */
+@media (max-width: 768px) {  
   .list {
     font-size: clamp(0.75rem, 1.5vw, 0.875rem);
-  }
-  
+ }
   .list tbody tr {
     padding: clamp(0.375rem, 1.5vw, 0.5rem);
-  }
-  
+ }
   .list tbody td {
     gap: 0.25rem;
-  }
-  
+ }
   .list tbody td::before {
     font-size: clamp(0.6875rem, 1.5vw, 0.75rem);
-  }
-  
+ }
   td.actions .action {
-    min-width: 28px;
     min-height: 28px;
-  }
-  
+    min-width: 28px;
+ }
   td.actions .action i {
     font-size: 0.6875rem;
-  }
-  
+ }
   .table-responsive {
     margin-bottom: clamp(0.5rem, 3vw, 1rem);
-  }
+ }
+
+  /* Further reduce sizes for small screens */
 }
 
-@media (max-width: 480px) {
-  /* Even smaller sizes for mobile screens */
+@media (max-width: 480px) {  
   .list {
     font-size: clamp(0.6875rem, 3vw, 0.75rem);
-  }
-  
+ }
   .list tbody tr {
-    padding: 0.25rem;
     gap: 0.125rem;
-  }
-  
+    padding: 0.25rem;
+ }
   .list tbody td {
     gap: 0.25rem;
-  }
-  
+ }
   .list tbody td::before {
     font-size: clamp(0.6875rem, 3vw, 0.75rem);
-  }
-  
+ }
   td.actions .action {
-    min-width: 24px;
-    min-height: 24px;
-    width: clamp(24px, 7vw, 30px);
     height: clamp(24px, 7vw, 30px);
+    min-height: 24px;
+    min-width: 24px;
     padding: 0.125rem;
-  }
-  
+    width: clamp(24px, 7vw, 30px);
+ }
   td.actions .action i {
     font-size: 0.75rem;
-  }
-  
+ }
   .status-badge {
-    width: clamp(50px, 12vw, 60px);
     font-size: 0.6875rem;
     padding: 0.125rem 0.25rem;
-  }
-  
+    width: clamp(50px, 12vw, 60px);
+ }
   .table-responsive {
     margin-bottom: 0.5rem;
-  }
+ }
+
+  /* Even smaller sizes for mobile screens */
 }
 
-@media (max-width: 390px) {
-  /* Extreme size reduction for very small screens */
+@media (max-width: 390px) {  
   .list {
     font-size: 0.6875rem;
-  }
-  
+ }
   .list tbody tr {
-    padding: 0.125rem;
     gap: 0.125rem;
-  }
-  
+    padding: 0.125rem;
+ }
   td.actions .action {
-    min-width: 22px;
-    min-height: 22px;
-    width: 22px;
     height: 22px;
+    min-height: 22px;
+    min-width: 22px;
     padding: 0.0625rem;
-  }
-  
+    width: 22px;
+
+min-
+
+height: 22px;
+ }
   td.actions .action i {
     font-size: 0.6875rem;
-  }
-  
+ }
   .table-responsive {
-    margin-bottom: 0.25rem;
     border-radius: 0.25rem;
-  }
+    margin-bottom: 0.25rem;
+ }
+
+  /* Extreme size reduction for very small screens */
 }
 
 /* ==========================================================================
@@ -1448,21 +1412,21 @@ button.action.add:hover {
   background-color: var(--background-color-secondary);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow-sm);
-  padding: var(--spacing-xl);
-  max-width: var(--content-width-sm, 600px);
   margin: var(--spacing-lg) auto;
+  max-width: var(--content-width-sm, 600px);
+  padding: var(--spacing-xl);
   text-align: center;
 }
 
 .confirmation-box .item-name {
-  font-size: var(--font-size-xlarge);
-  font-weight: 600;
-  color: var(--primary-color);
-  margin: var(--spacing-md) 0;
-  padding: var(--spacing-xs);
   background-color: var(--background-color);
   border-radius: var(--border-radius-sm);
+  color: var(--primary-color);
   display: inline-block;
+  font-size: var(--font-size-xlarge);
+  font-weight: 600;
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-xs);
 }
 
 .confirmation-box .warning-text {
@@ -1472,9 +1436,9 @@ button.action.add:hover {
 }
 
 .alert {
-  padding: var(--spacing-md);
   border-radius: var(--border-radius-sm);
   margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md);
 }
 
 .alert.warning {
@@ -1504,9 +1468,9 @@ button.action.add:hover {
    ========================================================================== */
 
 .sort-link {
+  align-items: center;
   color: inherit;
   display: flex;
-  align-items: center;
   justify-content: space-between;
   text-decoration: none;
   width: 100%;
@@ -1523,16 +1487,15 @@ button.action.add:hover {
 }
 
 .sort-link:hover i {
-  opacity: 1;
   color: var(--color-white);
+  opacity: 1;
 }
 
 .sort-link i.fa-sort-up,
 .sort-link i.fa-sort-down {
-  opacity: 1;
   color: var(--color-white);
+  opacity: 1;
 }
-
 
 .list td[data-label="Email"] {
   max-width: 200px;
