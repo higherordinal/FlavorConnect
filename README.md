@@ -139,48 +139,55 @@ Stop the Apache and MySQL services from the XAMPP control panel.
 - `README.md` - Project documentation (this file)
 - `.gitignore` - Git configuration for ignored files
 
-### Public Directory
-- `/public` - Web accessible files
-  - `.htaccess` - Main Apache configuration for URL handling and 404 error handling
-  - `index.php` - Main entry point for the application
-  - `404.php` - Custom 404 error page
-  - `env_test.php` - Environment detection and configuration test utility
-  - `/public/assets` - Static assets
-    - `/public/assets/css` - Stylesheets
-      - `/public/assets/css/pages` - Page-specific styles (recipe-crud.css, etc.)
-      - `/public/assets/css/components` - Component styles (forms.css, navigation.css, etc.)
-    - `/public/assets/js` - JavaScript files
-      - `/public/assets/js/pages` - Page-specific scripts (recipe-form.js, etc.)
-      - `/public/assets/js/components` - Reusable component scripts (pagination.js, etc.)
-      - `/public/assets/js/utils` - Utility JavaScript functions
-    - `/public/assets/images` - Static images, icons, and graphics
-    - `/public/assets/uploads` - User-uploaded content
-      - `/public/assets/uploads/recipes` - Recipe images (original, thumb, medium sizes)
-  - `/public/recipes` - Recipe-related pages
-    - `index.php` - Recipe listing and gallery
-    - `new.php` - Recipe creation form
-    - `edit.php` - Recipe editing form
-    - `show.php` - Recipe detail view
-    - `form_fields.php` - Reusable form components for recipe forms
-  - `/public/admin` - Admin interface
-    - `index.php` - Admin dashboard with navigation to all admin functions
-    - `users/` - User management
-      - `index.php` - List all users with management options
-      - `new.php` - Create new user form
-      - `edit.php` - Edit existing user form
-      - `delete.php` - Handle user deletion
-      - `form_fields.php` - Reusable form components for user forms
-    - `categories/` - Category management for cuisines, diets, etc.
-      - `index.php` - List and manage all categories
-      - `save.php` - Handle category creation and updates
-  - `/public/auth` - Authentication pages
-    - `login.php` - User login
-    - `register.php` - New user registration
-    - `logout.php` - User logout
-  - `/public/users` - User profile and account pages
-    - `show.php` - User profile view
-    - `favorites.php` - User's favorite recipes
-  - `/public/api` - API endpoints for AJAX functionality
+### Public Directory Structure
+
+- `/public` — Web-accessible files and main entry points
+  - `.htaccess` — Main Apache config for URL routing and error handling
+  - `index.php` — Main entry point for the application
+  - `404.php`— Custom 404 error page
+  - `about.php` — About page
+  - `env_test.php` — Environment detection/config test utility
+  - `robots.txt` — Robots exclusion protocol
+
+  - `/assets` — Static assets for the frontend
+    - `/css` — Main stylesheets
+      - `/pages` — Page-specific CSS (e.g., `user-profile.css`, `admin.css`, `home.css`, `recipe-crud.css`, etc.)
+      - `/components` — Reusable component styles (e.g., `forms.css`, `header.css`, `footer.css`, `recipe-card.css`, etc.)
+      - `main.css` — Global site styles
+    - `/js` — JavaScript files
+      - `/pages` — Page-specific scripts (`admin.js`, `auth.js`, `recipe-gallery.js`, `recipe-show.js`, `user-favorites.js`)
+      - `/components` — Reusable JS components (`pagination.js`, `member-header.js`, `recipe-form.js`, `recipe-favorite.js`)
+      - `/utils` — Utility scripts (`form-validation.js`, `common.js`, `back-link.js`, `recipe-scale.js`)
+      - `.htaccess` — JS directory-specific config
+    - `/images` — Static images, icons, and graphics (`hero-img.webp`, `about-hero-img.webp`, `flavorconnect_favicon.ico`, etc.)
+    - `/uploads` — User-uploaded content
+      - `/recipes` — Recipe images (originals, thumbnails, medium sizes)
+
+  - `/recipes` — Recipe-related pages
+    - `index.php` — Recipe listing/gallery
+    - `new.php` — Recipe creation form
+    - `edit.php` — Recipe editing form
+    - `show.php` — Recipe detail view
+    - `form_fields.php` — Reusable form components for recipe forms
+    - `delete.php` — Recipe deletion confirmation
+
+    - `recipe-card.php` — Partial for rendering recipe cards
+
+  - `/auth` — Authentication pages
+    - `login.php` — Login form
+    - `logout.php` — Logout handler
+    - `register.php` — Registration form
+
+  - `/admin` — Admin panel
+    - `index.php` — Admin dashboard
+    - `/categories` — Category management (with subfolders for diet, measurement, style, type)
+    - `/users` — User management (`index.php`, `edit.php`, `delete.php`, `new.php`, `form_fields.php`)
+
+  - `/users` — User profile and favorites
+    - `profile.php` — User profile page
+    - `favorites.php` — User’s favorite recipes
+
+  - `/api` - API endpoints for AJAX functionality
     - `.htaccess` - API-specific Apache configuration with JSON error handling
     - `index.php` - API root endpoint
     - `error.php` - JSON error responses for API 404 errors
