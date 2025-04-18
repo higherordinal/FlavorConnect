@@ -39,9 +39,6 @@ if(is_post_request()) {
 
 include(SHARED_PATH . '/public_header.php');
 ?>
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/header.css'); ?>">
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/footer.css'); ?>">
-<link rel="stylesheet" href="<?php echo url_for('/assets/css/components/forms.css'); ?>">
 
 <div class="content register-form">
     <?php echo display_errors($errors); ?>
