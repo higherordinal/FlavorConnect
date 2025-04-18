@@ -95,38 +95,6 @@
     max-width: max-content;
 }
 
-/* Favorite button styling */
-.favorite-btn {
-    background-color: rgba(255, 255, 255, 0.15);
-    border: none;
-    border-radius: 50%;
-    color: var(--color-white);
-    cursor: pointer;
-    flex-shrink: 0;
-    height: 2.5rem;
-    width: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: var(--font-size-large);
-    transition: all var(--transition-fast);
-    margin-left: auto;
-}
-
-.favorite-btn:hover {
-    background-color: rgba(255, 255, 255, 0.25);
-    transform: scale(1.05);
-}
-
-.favorite-btn i {
-    color: var(--color-white);
-    transition: color var(--transition-fast);
-}
-
-.favorite-btn.favorited i {
-    color: var(--danger-color, #ff4b4b);
-}
-
 /* Meta information section */
 .recipe-meta {
     display: grid;
