@@ -48,13 +48,13 @@ include(SHARED_PATH . '/public_header.php');
         
         <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input class="form-control <?php echo error_class('username', $errors); ?>" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" required data-error-message="Username cannot be blank">
+            <input class="form-control <?php echo error_class('username', $errors); ?>" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" autocomplete="username" required data-error-message="Username cannot be blank">
             <?php echo display_error('username', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="password">Password</label>
-            <input class="form-control <?php echo error_class('password', $errors); ?>" type="password" name="password" id="password" required data-error-message="Password cannot be blank">
+            <input class="form-control <?php echo error_class('password', $errors); ?>" type="password" name="password" id="password" autocomplete="current-password" required data-error-message="Password cannot be blank">
             <?php echo display_error('password', $errors); ?>
         </div>
 

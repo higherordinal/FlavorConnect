@@ -54,7 +54,7 @@ include(SHARED_PATH . '/public_header.php');
 
         <div class="form-group">
             <label class="form-label" for="username">Username</label>
-            <input class="form-control <?php echo error_class('username', $errors); ?>" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" required data-error-message="Username cannot be blank">
+            <input class="form-control <?php echo error_class('username', $errors); ?>" type="text" name="username" id="username" value="<?php echo h($username ?? ''); ?>" autocomplete="username" required data-error-message="Username cannot be blank">
             <?php echo display_error('username', $errors); ?>
         </div>
 
@@ -62,7 +62,7 @@ include(SHARED_PATH . '/public_header.php');
             <div class="form-group">
                 <label class="form-label" for="first_name">First Name</label>
                 <div class="input-container">
-                    <input class="form-control <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" required data-error-message="First name cannot be blank">
+                    <input class="form-control <?php echo error_class('first_name', $errors); ?>" type="text" name="first_name" id="first_name" value="<?php echo h($first_name ?? ''); ?>" autocomplete="given-name" required data-error-message="First name cannot be blank">
                     <?php echo display_error('first_name', $errors); ?>
                 </div>
             </div>
@@ -70,7 +70,7 @@ include(SHARED_PATH . '/public_header.php');
             <div class="form-group">
                 <label class="form-label" for="last_name">Last Name</label>
                 <div class="input-container">
-                    <input class="form-control <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" required data-error-message="Last name cannot be blank">
+                    <input class="form-control <?php echo error_class('last_name', $errors); ?>" type="text" name="last_name" id="last_name" value="<?php echo h($last_name ?? ''); ?>" autocomplete="family-name" required data-error-message="Last name cannot be blank">
                     <?php echo display_error('last_name', $errors); ?>
                 </div>
             </div>
@@ -78,13 +78,13 @@ include(SHARED_PATH . '/public_header.php');
 
         <div class="form-group">
             <label class="form-label" for="email">Email</label>
-            <input class="form-control <?php echo error_class('email', $errors); ?>" type="email" name="email" id="email" value="<?php echo h($email ?? ''); ?>" required data-error-message="Email cannot be blank">
+            <input class="form-control <?php echo error_class('email', $errors); ?>" type="email" name="email" id="email" value="<?php echo h($email ?? ''); ?>" autocomplete="email" required data-error-message="Email cannot be blank">
             <?php echo display_error('email', $errors); ?>
         </div>
 
         <div class="form-group">
             <label class="form-label" for="password">Password</label>
-            <input class="form-control <?php echo error_class('password', $errors); ?>" type="password" name="password" id="password" required data-error-message="Password cannot be blank">
+            <input class="form-control <?php echo error_class('password', $errors); ?>" type="password" name="password" id="password" autocomplete="new-password" required data-error-message="Password cannot be blank">
             <?php echo display_error('password', $errors); ?>
             <div class="password-requirements validation-requirements" id="existing-password-requirements" style="display: none;">
                 <p class="requirement-heading">Password must contain:</p>
@@ -99,7 +99,7 @@ include(SHARED_PATH . '/public_header.php');
 
         <div class="form-group">
             <label class="form-label" for="confirm_password">Confirm Password</label>
-            <input class="form-control <?php echo error_class('confirm_password', $errors); ?>" type="password" name="confirm_password" id="confirm_password" required data-error-message="Please confirm your password">
+            <input class="form-control <?php echo error_class('confirm_password', $errors); ?>" type="password" name="confirm_password" id="confirm_password" autocomplete="new-password" required data-error-message="Please confirm your password">
             <?php echo display_error('confirm_password', $errors); ?>
             <div id="password-match" class="password-match validation-message">Passwords match</div>
         </div>
