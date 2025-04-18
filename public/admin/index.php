@@ -8,7 +8,7 @@ $page_style = 'admin';
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
-$component_scripts = ['member-header'];
+$component_scripts = ['recipe-favorite'];
 $page_scripts = ['admin'];
 
 // Determine the back link based on the ref_page parameter

@@ -7,7 +7,7 @@ $page_style = 'admin';
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
-$component_scripts = ['member-header'];
+$component_scripts = ['recipe-favorite'];
 $page_scripts = ['admin'];
 
 // Get all metadata

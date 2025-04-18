@@ -40,7 +40,7 @@ $component_styles = ['forms'];
 
 // Scripts
 $utility_scripts = ['common', 'form-validation', 'back-link'];
-$component_scripts = ['member-header'];
+$component_scripts = ['recipe-favorite'];
 include(SHARED_PATH . '/member_header.php');
 ?>
 

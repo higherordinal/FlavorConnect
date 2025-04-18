@@ -8,7 +8,7 @@ $component_styles = ['forms'];
 
 // Scripts
 $utility_scripts = ['common', 'form-validation', 'back-link'];
-$component_scripts = ['member-header', 'recipe-form'];
+$component_scripts = ['recipe-form'];
 
 include(SHARED_PATH . '/member_header.php');
 

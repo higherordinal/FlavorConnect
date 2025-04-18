@@ -9,7 +9,7 @@ $component_styles = ['pagination', 'forms'];
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
-$component_scripts = ['member-header'];
+$component_scripts = [];
 $page_scripts = ['admin'];
 
 // Get pagination parameters

@@ -571,7 +571,7 @@ echo display_session_message();
 $utility_scripts = ['common', 'form-validation', 'recipe-scale', 'back-link'];
 
 // Add component scripts
-$component_scripts = ['member-header', 'recipe-favorite'];
+$component_scripts = ['recipe-favorite'];
 
 // Add page scripts
 $page_scripts = ['recipe-show'];

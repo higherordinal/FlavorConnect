@@ -126,20 +126,8 @@ $css_version = file_exists($css_path) ? filemtime($css_path) : time();
         }
     </script>
     
-    <?php 
-    // Add core utility scripts
-    $utility_scripts[] = 'common';
-    $utility_scripts[] = 'back-link';
-    
-    // Add component scripts
-    $component_scripts[] = 'recipe-favorite';
-    $component_scripts[] = 'member-header';
-    
-    // Add page-specific scripts
-    if($page_style === 'recipe-form') {
-        $page_scripts[] = 'recipe-form';
-    }
-    ?>
+    <!-- Always include member-header.js in the head for dropdown functionality -->
+    <script src="<?php echo url_for('/assets/js/components/member-header.js'); ?>?v=<?php echo filemtime(PUBLIC_PATH . '/assets/js/components/member-header.js'); ?>" defer></script>
 </head>
 <body>
     <header class="header" role="banner">

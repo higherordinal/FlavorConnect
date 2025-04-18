@@ -47,7 +47,7 @@ $component_styles = ['pagination']; // Add pagination styles
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
-$component_scripts = ['member-header'];
+$component_scripts = [];
 include(SHARED_PATH . '/member_header.php');
 ?>
 

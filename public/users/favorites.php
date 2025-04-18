@@ -9,7 +9,7 @@ $component_styles = ['recipe-favorite', 'pagination', 'forms'];
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
-$component_scripts = ['member-header', 'recipe-favorite'];
+$component_scripts = [];
 $page_scripts = ['user-favorites'];
 
 // Get current page
