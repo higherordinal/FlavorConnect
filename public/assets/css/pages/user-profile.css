@@ -132,13 +132,13 @@
    RECIPE CARD STYLING
    ========================================================================== */
 .user-recipe-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
   background: var(--color-white);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-md);
   overflow: hidden;
-
-transition: transform var(--transition-medium),
-    box-shadow var(--transition-medium);
+  transition: transform var(--transition-medium), box-shadow var(--transition-medium);
 }
 
 .user-recipe-card:hover {
@@ -215,8 +215,51 @@ transition: transform var(--transition-medium),
 .user-recipe-card .recipe-actions .btn {
   font-size: var(--font-size-small);
   font-weight: 600;
-  padding: var(--spacing-sm);
+  padding: calc(var(--spacing-sm) + 2px) var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: linear-gradient(120deg, var(--color-white) 0%, var(--light-gray) 100%);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
 }
+
+.user-recipe-card .recipe-actions .btn:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px var(--primary-color-light);
+}
+
+.user-recipe-card .recipe-actions .btn-primary {
+  background: linear-gradient(120deg, var(--primary-color) 0%, var(--primary-color-light) 100%);
+  border: 2px solid var(--primary-color);
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.user-recipe-card .recipe-actions .btn-primary:hover,
+.user-recipe-card .recipe-actions .btn-primary:focus {
+  background: linear-gradient(120deg, var(--accent-color-dark) 0%, var(--primary-color) 100%);
+  border-color: var(--accent-color-dark);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
+.user-recipe-card .recipe-actions .btn-secondary {
+  background: linear-gradient(120deg, var(--secondary-color) 0%, var(--secondary-color-light, #a0b4d6) 100%);
+  border: 1px solid var(--secondary-color);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.user-recipe-card .recipe-actions .btn-secondary:hover,
+.user-recipe-card .recipe-actions .btn-secondary:focus {
+  background: linear-gradient(120deg, var(--accent-color-dark) 0%, var(--secondary-color) 100%);
+  border-color: var(--accent-color-dark);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+}
+
 
 /* Improve Edit button contrast */
 .user-recipe-card .recipe-actions .btn-primary {
