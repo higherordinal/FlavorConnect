@@ -33,39 +33,23 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
         document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
     </script>
     
-    <!-- Component Styles -->
+    <!-- Core Scripts and Styles -->
     <?php
-$css_file = '/assets/css/components/header.css';
-$css_path = PUBLIC_PATH . $css_file;
-$css_version = file_exists($css_path) ? filemtime($css_path) : time();
-?>
-<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
-    <?php
-$css_file = '/assets/css/components/member-header.css';
-$css_path = PUBLIC_PATH . $css_file;
-$css_version = file_exists($css_path) ? filemtime($css_path) : time();
-?>
-<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
-    <?php
-$css_file = '/assets/css/components/footer.css';
-$css_path = PUBLIC_PATH . $css_file;
-$css_version = file_exists($css_path) ? filemtime($css_path) : time();
-?>
-<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
-    <?php
-$css_file = '/assets/css/components/recipe-card.css';
-$css_path = PUBLIC_PATH . $css_file;
-$css_version = file_exists($css_path) ? filemtime($css_path) : time();
-?>
-<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
-    <?php
-$css_file = '/assets/css/components/unified-navigation.css';
-$css_path = PUBLIC_PATH . $css_file;
-$css_version = file_exists($css_path) ? filemtime($css_path) : time();
-?>
-<link rel="stylesheet" href="<?php echo url_for($css_file) . '?v=' . $css_version; ?>">
+    // Ensure essential utility scripts are available sitewide
+    // These scripts provide core functionality used across all pages
+    $utility_scripts = array_merge(['common', 'back-link'], $utility_scripts);
     
-    <!-- Component Styles (Dynamically Included) -->
+    // Include essential component styles for the member interface
+    // These styles are required for the basic page structure
+    $component_styles = array_merge([
+        'header',
+        'member-header',
+        'footer',
+        'unified-navigation'
+    ], $component_styles);
+    ?>
+    
+    <!-- Dynamic Component Styles -->
     <?php 
     if(!empty($component_styles)) {
         foreach($component_styles as $component) {

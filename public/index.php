@@ -2,7 +2,7 @@
 require_once('../private/core/initialize.php');
 $page_title = 'Home';
 $page_style = 'home';
-$component_styles = ['recipe-favorite', 'forms'];
+$component_styles = ['recipe-favorite', 'forms', 'recipe-card'];
 
 // Scripts
 $utility_scripts = ['common'];

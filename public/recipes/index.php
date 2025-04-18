@@ -3,7 +3,7 @@ require_once('../../private/core/initialize.php');
 
 $page_title = 'Recipes';
 $page_style = 'recipe-gallery';
-$component_styles = ['recipe-favorite', 'pagination', 'forms'];
+$component_styles = ['recipe-favorite', 'pagination', 'forms', 'recipe-card'];
 
 // Scripts
 $utility_scripts = ['common', 'back-link'];
