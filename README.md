@@ -111,7 +111,6 @@ Stop the Apache and MySQL services from the XAMPP control panel.
 ## Project Structure
 
 ### Root Directory
-- `.htaccess` - Apache configuration for URL handling and security
 - `docker-compose.yml` - Docker Compose configuration for multi-container setup
 - `install-imagemagick-docker.sh` - Script for installing ImageMagick in Docker environment
 - `install-imagemagick-xampp.sh` - Script for installing ImageMagick in XAMPP environment
