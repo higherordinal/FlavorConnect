@@ -394,22 +394,10 @@
 }
 
 /* ==========================================================================
-   BUTTON STYLES - Recipe-specific layout and colors
+   BUTTON STYLES - Recipe-specific layout
    ========================================================================== */
 
-/* Uses button styles from forms.css with recipe-specific layout and colors */
-
-/* Override primary button colors to use primary color instead of secondary */
-.recipe-form .btn-primary {
-  background: var(--primary-color);
-  color: var(--color-white);
-}
-
-.recipe-form .btn-primary:hover {
-  background: var(--color-white);
-  color: var(--primary-color);
-  border: 1px solid var(--primary-color);
-}
+/* Uses button styles from forms.css with recipe-specific layout */
 
 .recipe-form .form-buttons {
   display: grid;
