@@ -224,6 +224,28 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         'text' => $default_text
     ];
     
+    // Define a comprehensive mapping of paths to titles
+    $path_to_title_map = [
+        '/index.php' => 'Home',
+        '/about.php' => 'About Us',
+        '/recipes/index.php' => 'Recipes',
+        '/recipes/show.php' => 'Recipe',
+        '/recipes/new.php' => 'Create Recipe',
+        '/recipes/edit.php' => 'Edit Recipe',
+        '/recipes/delete.php' => 'Delete Recipe',
+        '/users/profile.php' => 'Profile',
+        '/users/favorites.php' => 'Favorites',
+        '/admin/index.php' => 'Admin Dashboard',
+        '/admin/users/index.php' => 'User Management',
+        '/admin/users/edit.php' => 'Edit User',
+        '/admin/users/delete.php' => 'Delete User',
+        '/admin/categories/index.php' => 'Recipe Metadata',
+        '/admin/categories/edit.php' => 'Edit Category',
+'/admin/categories/delete.php' => 'Delete Category',
+        '/login.php' => 'Login',
+        '/register.php' => 'Register'
+    ];
+    
     // First check for ref parameter in query string (highest priority)
     $ref = $_GET['ref'] ?? '';
     if ($ref) {
@@ -254,6 +276,22 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
                 $result['url'] = url_for('/recipes/index.php');
                 $result['text'] = 'Back to Recipes';
                 return $result;
+            case 'about':
+                $result['url'] = url_for('/about.php');
+                $result['text'] = 'Back to About Us';
+                return $result;
+            case 'contact':
+                $result['url'] = url_for('/contact.php');
+                $result['text'] = 'Back to Contact';
+                return $result;
+            case 'settings':
+                $result['url'] = url_for('/users/settings.php');
+                $result['text'] = 'Back to Settings';
+                return $result;
+            case 'admin':
+                $result['url'] = url_for('/admin/index.php');
+                $result['text'] = 'Back to Admin Dashboard';
+                return $result;
             // Add more cases as needed
         }
     }
@@ -276,25 +314,60 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
             if ($path !== $current_path) {
                 $result['url'] = $referer;
                 
-                // Try to determine a better back text based on the path
+                // Extract the script name from the path for more accurate matching
+                $script_name = '';
+                
+                // Handle both development and production paths
+                if (strpos($path, '/FlavorConnect/public') !== false) {
+                    // Development path
+                    $script_name = str_replace('/FlavorConnect/public', '', $path);
+                } else {
+                    // Production path
+                    $script_name = $path;
+                }
+                
+                // Clean up the script name by removing query parameters
+                $script_name = strtok($script_name, '?');
+                
+                // Try to find an exact match in our path mapping
+                if (isset($path_to_title_map[$script_name])) {
+                    $result['text'] = 'Back to ' . $path_to_title_map[$script_name];
+                    return $result;
+                }
+                
+                // If no exact match, use pattern matching as a fallback
                 if (strpos($path, '/admin/users') !== false) {
                     $result['text'] = 'Back to User Management';
                 } else if (strpos($path, '/admin/categories') !== false) {
                     $result['text'] = 'Back to Recipe Metadata';
                 } else if (strpos($path, '/admin') !== false) {
-                    $result['text'] = 'Back to Admin';
+                    $result['text'] = 'Back to Admin Dashboard';
                 } else if (strpos($path, '/recipes/new.php') !== false) {
                     $result['text'] = 'Back to Create Recipe';
                 } else if (strpos($path, '/recipes/edit.php') !== false) {
                     $result['text'] = 'Back to Edit Recipe';
                 } else if (strpos($path, '/recipes/delete.php') !== false) {
                     $result['text'] = 'Back to Delete Recipe';
+                } else if (strpos($path, '/recipes/show.php') !== false) {
+                    $result['text'] = 'Back to Recipe';
                 } else if (strpos($path, '/recipes') !== false) {
                     $result['text'] = 'Back to Recipes';
                 } else if (strpos($path, '/users/profile') !== false) {
                     $result['text'] = 'Back to Profile';
                 } else if (strpos($path, '/users/favorites') !== false) {
                     $result['text'] = 'Back to Favorites';
+                } else if (strpos($path, '/users/settings') !== false) {
+                    $result['text'] = 'Back to Settings';
+                } else if (strpos($path, '/about.php') !== false) {
+                    $result['text'] = 'Back to About Us';
+                } else if (strpos($path, '/contact.php') !== false) {
+                    $result['text'] = 'Back to Contact';
+                } else if (strpos($path, '/login.php') !== false) {
+                    $result['text'] = 'Back to Login';
+                } else if (strpos($path, '/register.php') !== false) {
+                    $result['text'] = 'Back to Register';
+                } else if (strpos($path, '/index.php') !== false || $path == '/' || $path == '') {
+                    $result['text'] = 'Back to Home';
                 }
                 
                 return $result;
@@ -312,7 +385,28 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
     // Try to determine a better text based on the current path
     $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     
-    // Set appropriate back text based on current path
+    // Extract the script name from the path for more accurate matching
+    $script_name = '';
+    
+    // Handle both development and production paths
+    if (strpos($current_path, '/FlavorConnect/public') !== false) {
+        // Development path
+        $script_name = str_replace('/FlavorConnect/public', '', $current_path);
+    } else {
+        // Production path
+        $script_name = $current_path;
+    }
+    
+    // Clean up the script name by removing query parameters
+    $script_name = strtok($script_name, '?');
+    
+    // Try to find an exact match in our path mapping
+    if (isset($path_to_title_map[$script_name])) {
+        $result['text'] = 'Back to ' . $path_to_title_map[$script_name];
+        return $result;
+    }
+    
+    // Set appropriate back text based on current path as a fallback
     if (strpos($current_path, '/recipes/') !== false) {
         $result['text'] = 'Back to Recipes';
     } else if (strpos($current_path, '/users/profile') !== false) {
@@ -320,7 +414,11 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
     } else if (strpos($current_path, '/users/favorites') !== false) {
         $result['text'] = 'Back to Favorites';
     } else if (strpos($current_path, '/admin/') !== false) {
-        $result['text'] = 'Back to Admin';
+        $result['text'] = 'Back to Admin Dashboard';
+    } else if (strpos($current_path, '/about.php') !== false) {
+        $result['text'] = 'Back to About Us';
+    } else if (strpos($current_path, '/contact.php') !== false) {
+        $result['text'] = 'Back to Contact';
     }
     
     // Fallback to default URL and text
