@@ -31,40 +31,31 @@ if (method_exists($recipe, 'diet') && $recipe->diet()) {
 $page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path('optimized'));
 
 // Determine back link based on referrer
-$ref = $_GET['ref'] ?? '';
-$back_text = 'Back to Recipes';
-$back_link = '';
+$back_link_data = get_back_link('/recipes/index.php');
+$back_link = $back_link_data['url'];
+$back_text = $back_link_data['text'];
 
-// Set back link and text based on the ref parameter
-switch ($ref) {
-    case 'home':
-        $back_link = url_for('/index.php');
-        $back_text = 'Back to Home';
-        break;
-    case 'favorites':
-        $back_link = url_for('/users/favorites.php');
-        $back_text = 'Back to Favorites';
-        break;
-    case 'profile':
-        $back_link = url_for('/users/profile.php');
-        $back_text = 'Back to Profile';
-        break;
-    case 'gallery':
-        // Check if we have gallery parameters to preserve pagination and filters
-        if (isset($_GET['gallery_params'])) {
-            $gallery_params = urldecode($_GET['gallery_params']);
-            $back_link = url_for('/recipes/index.php?' . $gallery_params);
-        } else {
-            $back_link = url_for('/recipes/index.php');
+// Check if we have gallery parameters to preserve pagination and filters
+if (isset($_GET['gallery_params']) && isset($_GET['ref_page'])) {
+    // Only handle gallery params for recipes index page
+    if (strpos($_GET['ref_page'], '/recipes/index.php') !== false) {
+        // Make sure we're not double-decoding
+        $gallery_params = $_GET['gallery_params'];
+        // Check if it's already decoded
+        if (strpos($gallery_params, '%') !== false) {
+            $gallery_params = urldecode($gallery_params);
         }
+        $back_link = url_for('/recipes/index.php?' . $gallery_params);
         $back_text = 'Back to Recipes';
-        break;
-    default:
-        // If no ref parameter or unknown value, fall back to the smart back link
-        $back_link_data = get_back_link('/recipes/index.php');
-        $back_link = $back_link_data['url'];
-        $back_text = $back_link_data['text'];
-        break;
+    } elseif (strpos($_GET['ref_page'], '/users/favorites.php') !== false) {
+        // For favorites page, just use the ref_page directly
+        $back_link = url_for($_GET['ref_page']);
+        $back_text = 'Back to Favorites';
+    } elseif (strpos($_GET['ref_page'], '/index.php') !== false) {
+        // For home page, just use the ref_page directly
+        $back_link = url_for($_GET['ref_page']);
+        $back_text = 'Back to Home';
+    }
 }
 
 // Set up breadcrumbs

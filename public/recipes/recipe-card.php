@@ -8,7 +8,7 @@
  * - $recipe: Recipe object
  * 
  * Optional variables:
- * - $ref: Reference page (e.g., 'home', 'gallery', 'favorites') - default is 'gallery'
+ * - $ref_page: Reference page path (e.g., '/index.php', '/recipes/index.php') - default is current page
  * - $gallery_params: URL-encoded query parameters for returning to gallery with filters
  */
 
@@ -17,9 +17,9 @@ if (!isset($recipe) || !is_object($recipe)) {
     return;
 }
 
-// Set default reference if not provided
-if (!isset($ref)) {
-    $ref = 'gallery';
+// Set default reference page if not provided
+if (!isset($ref_page)) {
+    $ref_page = $_SERVER['PHP_SELF'] ?? '/recipes/index.php';
 }
 
 // Get related data
@@ -31,9 +31,19 @@ $total_time = TimeUtility::format_time($recipe->prep_time + $recipe->cook_time);
 $user = User::find_by_id($recipe->user_id);
 
 // Build URL with appropriate parameters
-$url_params = 'id=' . h(u($recipe->recipe_id)) . '&ref=' . h(u($ref));
-if (isset($gallery_params) && $ref === 'gallery') {
-    $url_params .= '&gallery_params=' . h(u($gallery_params));
+$url_params = 'id=' . h(u($recipe->recipe_id));
+
+// Add ref_page parameter
+$url_params .= '&ref_page=' . h(u($ref_page));
+
+// Add gallery parameters if available
+if (isset($gallery_params)) {
+    // Only add gallery params if we're coming from the recipes page
+    if (strpos($ref_page, '/recipes/index.php') !== false) {
+        // Make sure we're not double-encoding
+        $decoded_params = urldecode($gallery_params);
+        $url_params .= '&gallery_params=' . h(u($decoded_params));
+    }
 }
 ?>
 
