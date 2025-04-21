@@ -17,15 +17,18 @@ if($session->is_logged_in()) {
 <main>
     <section class="about-section">
         <?php 
-        // Use the standard unified_navigation function with default parameters
-        // The get_back_link function will handle the ref parameter automatically
+        // Use the standardized get_back_link function for consistent back link handling
+        $back_link_data = get_back_link('/index.php');
+        $back_link = $back_link_data['url'];
+        $back_text = $back_link_data['text'];
+        
         echo unified_navigation(
-            '/index.php',
+            $back_link,
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['label' => 'About Us']
             ],
-            'Back'
+            $back_text
         ); 
         ?>
         <div class="about-hero">

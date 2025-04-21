@@ -19,13 +19,18 @@ if($session->is_logged_in()) {
 
 <div class="container">
     <?php 
+    // Use the standardized get_back_link function for consistent back link handling
+    $back_link_data = get_back_link('/index.php');
+    $back_link = $back_link_data['url'];
+    $back_text = $back_link_data['text'];
+    
     echo unified_navigation(
-        '/index.php',
+        $back_link,
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'Recipes']
         ],
-        'Back to Home'
+        $back_text
     ); 
     ?>
 </div>
@@ -266,7 +271,7 @@ $userData = [
             ?>
                 <?php 
                     // Set variables for the recipe card component
-                    $ref = 'gallery';
+                    $ref_page = '/recipes/index.php';
                     $gallery_params = urlencode(http_build_query($_GET));
                     
                     // Include the recipe card component

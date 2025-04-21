@@ -11,33 +11,10 @@ $utility_scripts = ['common', 'back-link'];
 $component_scripts = ['recipe-favorite'];
 $page_scripts = ['admin'];
 
-// Determine the back link based on the ref_page parameter
-$back_link = '/index.php';
-$back_text = 'Back to Home';
-
-if (isset($_GET['ref_page']) && !empty($_GET['ref_page'])) {
-    $ref_page = $_GET['ref_page'];
-    
-    // Make sure the ref_page is a valid internal URL
-    if (strpos($ref_page, '/') === 0) {
-        // It's a valid internal URL, use it as the back link
-        $back_link = $ref_page;
-        
-        // Set appropriate back text based on the back link
-        if (strpos($back_link, '/recipes/index.php') !== false) {
-            $back_text = 'Back to Recipes';
-        } elseif (strpos($back_link, '/users/favorites.php') !== false) {
-            $back_text = 'Back to Favorites';
-        } elseif (strpos($back_link, '/users/profile.php') !== false) {
-            $back_text = 'Back to Profile';
-        } elseif (strpos($back_link, '/index.php') !== false) {
-            $back_text = 'Back to Home';
-        } else {
-            // Generic back text for other pages
-            $back_text = 'Back';
-        }
-    }
-}
+// Use the standardized get_back_link function for consistent back link handling
+$back_link_data = get_back_link('/index.php');
+$back_link = $back_link_data['url'];
+$back_text = $back_link_data['text'];
 
 include(SHARED_PATH . '/member_header.php');
 ?>

@@ -154,7 +154,13 @@ if(is_post_request()) {
                 
                 if(empty($errors)) {
                     $session->message('Recipe created successfully.');
-                    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+                    
+                    // Build redirect URL with ref_page parameter if it exists
+                    $redirect_url = '/recipes/show.php?id=' . $recipe->recipe_id;
+                    if (isset($_GET['ref_page'])) {
+                        $redirect_url .= '&ref_page=' . urlencode($_GET['ref_page']);
+                    }
+                    redirect_to(url_for($redirect_url));
                 } else {
                     $session->message('Failed to save recipe details. Please try again.', 'error');
                 }
@@ -195,7 +201,14 @@ $back_text = $back_link_data['text'];
     
     <?php echo display_errors($errors); ?>
     
-    <form action="<?php echo url_for('/recipes/new.php'); ?>" method="post" enctype="multipart/form-data">
+    <?php
+    // Preserve ref_page parameter if it exists
+    $form_action = '/recipes/new.php';
+    if (isset($_GET['ref_page'])) {
+        $form_action .= '?ref_page=' . urlencode($_GET['ref_page']);
+    }
+    ?>
+    <form action="<?php echo url_for($form_action); ?>" method="post" enctype="multipart/form-data">
         <?php include('form_fields.php'); ?>
         
         <div class="form-buttons">

@@ -53,13 +53,18 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="profile-container">
     <?php 
+    // Use the standardized get_back_link function for consistent back link handling
+    $back_link_data = get_back_link('/index.php');
+    $back_link = $back_link_data['url'];
+    $back_text = $back_link_data['text'];
+    
     echo unified_navigation(
-        '/index.php',
+        $back_link,
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'Profile']
         ],
-        'Back to Home'
+        $back_text
     ); 
     ?>
     
@@ -77,7 +82,7 @@ include(SHARED_PATH . '/member_header.php');
         <section class="my-recipes">
             <div class="section-header">
                 <h2>My Recipes</h2>
-                <a href="<?php echo url_for('/recipes/new.php?ref=profile'); ?>" class="btn btn-primary" aria-label="Create a new recipe">
+                <a href="<?php echo url_for('/recipes/new.php?ref_page=/users/profile.php'); ?>" class="btn btn-primary" aria-label="Create a new recipe">
                     <i class="fas fa-plus" aria-hidden="true"></i> Create New Recipe
                 </a>
             </div>
@@ -86,7 +91,7 @@ include(SHARED_PATH . '/member_header.php');
                 <div class="empty-state">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
                     <p>You haven't created any recipes yet.</p>
-                    <a href="<?php echo url_for('/recipes/new.php?ref=profile'); ?>" class="btn btn-primary" aria-label="Create your first recipe">Create Your First Recipe</a>
+                    <a href="<?php echo url_for('/recipes/new.php?ref_page=/users/profile.php'); ?>" class="btn btn-primary" aria-label="Create your first recipe">Create Your First Recipe</a>
                 </div>
             <?php } else { ?>
                 <div class="recipe-grid">
@@ -118,11 +123,11 @@ include(SHARED_PATH . '/member_header.php');
                                        class="btn btn-secondary" aria-label="View recipe: <?php echo h($recipe->title); ?>">
                                         <i class="fas fa-eye" aria-hidden="true"></i> View
                                     </a>
-                                    <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id)) . '&ref=profile'); ?>" 
+                                    <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id)) . '&ref_page=/users/profile.php'); ?>" 
                                        class="btn btn-primary" aria-label="Edit recipe: <?php echo h($recipe->title); ?>">
                                         <i class="fas fa-edit" aria-hidden="true"></i> Edit
                                     </a>
-                                    <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id)) . '&ref=profile'); ?>" 
+                                    <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id)) . '&ref_page=/users/profile.php'); ?>" 
                                        class="btn btn-danger"
                                        aria-label="Delete recipe: <?php echo h($recipe->title); ?>">
                                         <i class="fas fa-trash" aria-hidden="true"></i> Delete

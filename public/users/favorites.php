@@ -36,13 +36,18 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="container">
     <?php 
+    // Use the standardized get_back_link function for consistent back link handling
+    $back_link_data = get_back_link('/recipes/index.php');
+    $back_link = $back_link_data['url'];
+    $back_text = $back_link_data['text'];
+    
     echo unified_navigation(
-        '/recipes/index.php',
+        $back_link,
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'My Favorites']
         ],
-        'Back to Recipes'
+        $back_text
     ); 
     ?>
     
@@ -70,7 +75,7 @@ include(SHARED_PATH . '/member_header.php');
                 ?>
                     <?php 
                         // Set variables for the recipe card component
-                        $ref = 'favorites';
+                        $ref_page = '/users/favorites.php'; // This is the current page path
                         
                         // Include the recipe card component
                         include('../recipes/recipe-card.php'); 

@@ -42,27 +42,34 @@ window.FlavorConnect.utils.backLink = (function() {
      * Enhances back links to preserve recipe context
      * 
      * This function adds recipe context to back links when navigating away from recipe pages.
-     * It works alongside the PHP back-link system which uses $_SESSION['from_recipe_id'].
+     * It works alongside the PHP back-link system which uses the ref_page parameter.
      */
     function enhanceBackLinks() {
         const backLinks = document.querySelectorAll('.back-link');
         
         backLinks.forEach(function(link) {
-            link.addEventListener('click', function(e) {
-                // Get the recipe ID from session storage using the standardized name
-                const fromRecipeId = sessionStorage.getItem('fromRecipeId');
-                
-                // If we have a recipe ID and the link doesn't already have recipe context
-                const href = link.getAttribute('href');
-                if (fromRecipeId && href && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
-                    // Modify the link to include the recipe context
-                    e.preventDefault();
+            // Check if the link already has data attributes from PHP
+            const hasRefPage = link.hasAttribute('data-ref-page');
+            const hasRecipeId = link.hasAttribute('data-recipe-id');
+            
+            // Only add event listener if we don't already have data attributes
+            if (!hasRefPage && !hasRecipeId) {
+                link.addEventListener('click', function(e) {
+                    // Get the recipe ID from session storage using the standardized name
+                    const fromRecipeId = sessionStorage.getItem('fromRecipeId');
                     
-                    // Add the recipe_id parameter to the URL
-                    const separator = href.includes('?') ? '&' : '?';
-                    window.location.href = href + separator + 'ref=recipe&recipe_id=' + fromRecipeId;
-                }
-            });
+                    // If we have a recipe ID and the link doesn't already have recipe context
+                    const href = link.getAttribute('href');
+                    if (fromRecipeId && href && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
+                        // Modify the link to include the recipe context
+                        e.preventDefault();
+                        
+                        // Add the recipe_id parameter to the URL
+                        const separator = href.includes('?') ? '&' : '?';
+                        window.location.href = href + separator + 'ref_page=/recipes/show.php&recipe_id=' + fromRecipeId;
+                    }
+                });
+            }
         });
     }
     

@@ -12,8 +12,7 @@ if(!$recipe) {
 
 $id = $recipe->recipe_id;
 
-// Get referrer for back link
-$ref = $_GET['ref'] ?? '';
+// Get back link data using the get_back_link function
 $back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
 $back_link = $back_link_data['url'];
 $back_text = $back_link_data['text'];
