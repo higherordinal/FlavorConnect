@@ -6,8 +6,12 @@
  * 2. Breadcrumbs: Adds active class to current page breadcrumb
  * 3. Unified navigation: Handles both components together
  * 
- * Works in conjunction with the PHP unified_navigation() function for
- * complete progressive enhancement - everything works without JavaScript.
+ * IMPORTANT: Dual Approach to Back Navigation
+ * This JavaScript works in conjunction with PHP server-side navigation:
+ * - PHP: Uses $_SESSION['from_recipe_id'] for server-side back link generation
+ * - JS: Uses sessionStorage.fromRecipeId for client-side link enhancement
+ * 
+ * This dual approach ensures consistent navigation with or without JavaScript.
  * 
  * @author Henry Vaughn
  */
@@ -36,24 +40,27 @@ window.FlavorConnect.utils.backLink = (function() {
     
     /**
      * Enhances back links to preserve recipe context
+     * 
+     * This function adds recipe context to back links when navigating away from recipe pages.
+     * It works alongside the PHP back-link system which uses $_SESSION['from_recipe_id'].
      */
     function enhanceBackLinks() {
         const backLinks = document.querySelectorAll('.back-link');
         
         backLinks.forEach(function(link) {
             link.addEventListener('click', function(e) {
-                // Get the last viewed recipe ID from session storage
-                const lastRecipeId = sessionStorage.getItem('lastViewedRecipeId');
+                // Get the recipe ID from session storage using the standardized name
+                const fromRecipeId = sessionStorage.getItem('fromRecipeId');
                 
                 // If we have a recipe ID and the link doesn't already have recipe context
                 const href = link.getAttribute('href');
-                if (lastRecipeId && href && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
+                if (fromRecipeId && href && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
                     // Modify the link to include the recipe context
                     e.preventDefault();
                     
                     // Add the recipe_id parameter to the URL
                     const separator = href.includes('?') ? '&' : '?';
-                    window.location.href = href + separator + 'ref=recipe&recipe_id=' + lastRecipeId;
+                    window.location.href = href + separator + 'ref=recipe&recipe_id=' + fromRecipeId;
                 }
             });
         });
@@ -61,6 +68,10 @@ window.FlavorConnect.utils.backLink = (function() {
     
     /**
      * Stores the current page URL and context in session storage for better back navigation
+     * 
+     * This function maintains client-side navigation state that complements the server-side
+     * state managed by PHP. The recipe ID is stored with the same naming convention as
+     * the PHP session for consistency.
      */
     function storeCurrentPageForBackNavigation() {
         // Get the current page URL and search params
@@ -79,7 +90,11 @@ window.FlavorConnect.utils.backLink = (function() {
         // Store recipe context if available
         const recipeId = searchParams.get('id');
         if (recipeId && currentUrl.includes('/recipes/show.php')) {
-            sessionStorage.setItem('lastViewedRecipeId', recipeId);
+            // Store in session storage for client-side use
+            // Use fromRecipeId to match PHP's $_SESSION['from_recipe_id'] naming convention
+            sessionStorage.setItem('fromRecipeId', recipeId);
+            // Note: PHP session is updated directly in recipes/show.php when it loads
+            // This ensures synchronization between client and server without AJAX
         }
     }
     
