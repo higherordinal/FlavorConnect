@@ -68,15 +68,18 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-content">
     <?php 
+    // Use get_back_link to determine the appropriate back link
+    $back_link_data = get_back_link('/admin/users/index.php');
+    
     echo unified_navigation(
-        '/admin/users/index.php',
+        $back_link_data['url'],
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/admin/index.php', 'label' => 'Admin'],
             ['url' => '/admin/users/index.php', 'label' => 'User Management'],
             ['label' => 'Delete User']
         ],
-        'Back to User Management'
+        $back_link_data['text']
     ); 
     ?>
     

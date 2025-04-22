@@ -30,15 +30,18 @@ include(SHARED_PATH . '/member_header.php');
 <main class="main-content">
     <div class="admin-content">
         <?php 
+        // Use get_back_link to determine the appropriate back link
+        $back_link_data = get_back_link('/admin/categories/index.php');
+        
         echo unified_navigation(
-            '/admin/categories/index.php',
+            $back_link_data['url'],
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['url' => '/admin/index.php', 'label' => 'Admin'],
                 ['url' => '/admin/categories/index.php', 'label' => 'Recipe Metadata'],
                 ['label' => 'Create Measurement Unit']
             ],
-            'Back to Recipe Metadata'
+            $back_link_data['text']
         ); 
         ?>
 
