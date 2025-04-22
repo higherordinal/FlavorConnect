@@ -52,7 +52,8 @@ if (defined('PRIVATE_PATH')) {
     $page_style = '404';
     
     // Scripts
-    $utility_scripts = ['common'];
+    // Note: 'common' and 'back-link' are already loaded in public_header.php
+    $utility_scripts = [];
     
     // Use member header if user is logged in, otherwise use public header
     if (function_exists('is_logged_in') && is_logged_in()) {

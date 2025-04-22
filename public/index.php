@@ -5,7 +5,8 @@ $page_style = 'home';
 $component_styles = ['recipe-favorite', 'forms', 'recipe-card'];
 
 // Scripts
-$utility_scripts = ['common'];
+// Note: 'common' and 'back-link' are already loaded in public_header.php
+$utility_scripts = [];
 $component_scripts = ['recipe-favorite'];
 $page_scripts = [];
 

@@ -5,7 +5,8 @@ $page_style = 'about';
 $component_styles = ['forms'];
 
 // Scripts
-$utility_scripts = ['common', 'back-link'];
+// Note: 'common' and 'back-link' are already loaded in public_header.php
+$utility_scripts = [];
 
 if($session->is_logged_in()) {
     include(SHARED_PATH . '/member_header.php');

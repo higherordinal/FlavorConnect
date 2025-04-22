@@ -559,7 +559,8 @@ echo display_session_message();
 
 <?php
 // Add utility scripts
-$utility_scripts = ['common', 'form-validation', 'recipe-scale', 'back-link'];
+// Note: 'common' and 'back-link' are already loaded in member_header.php
+$utility_scripts = ['form-validation', 'recipe-scale'];
 
 // Add component scripts
 $component_scripts = ['recipe-favorite'];

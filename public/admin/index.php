@@ -7,7 +7,8 @@ $page_title = 'Admin Dashboard';
 $page_style = 'admin';
 
 // Scripts
-$utility_scripts = ['common', 'back-link'];
+// Note: 'common' and 'back-link' are already loaded in member_header.php
+$utility_scripts = [];
 $component_scripts = ['recipe-favorite'];
 $page_scripts = ['admin'];
 

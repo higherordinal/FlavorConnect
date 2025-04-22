@@ -55,36 +55,30 @@
     // Load utility scripts
     if(!empty($utility_scripts)) {
         foreach($utility_scripts as $script) {
-            $file_path = PUBLIC_PATH . '/assets/js/utils/' . $script . '.js';
-            $file_version = file_exists($file_path) ? filemtime($file_path) : time();
             $js_file = '/assets/js/utils/' . $script . '.js';
-$js_path = PUBLIC_PATH . $js_file;
-$js_version = file_exists($js_path) ? filemtime($js_path) : time();
-echo '<script src="' . url_for($js_file) . '?v=' . $js_version . '" defer></script>';
+            $js_path = PUBLIC_PATH . $js_file;
+            $js_version = file_exists($js_path) ? filemtime($js_path) : time();
+            echo '<script src="' . url_for($js_file) . '?v=' . $js_version . '" defer></script>';
         }
     }
     
     // Load component scripts
     if(!empty($component_scripts)) {
         foreach($component_scripts as $script) {
-            $file_path = PUBLIC_PATH . '/assets/js/components/' . $script . '.js';
-            $file_version = file_exists($file_path) ? filemtime($file_path) : time();
             $js_file = '/assets/js/components/' . $script . '.js';
-$js_path = PUBLIC_PATH . $js_file;
-$js_version = file_exists($js_path) ? filemtime($js_path) : time();
-echo '<script src="' . url_for($js_file) . '?v=' . $js_version . '" defer></script>';
+            $js_path = PUBLIC_PATH . $js_file;
+            $js_version = file_exists($js_path) ? filemtime($js_path) : time();
+            echo '<script src="' . url_for($js_file) . '?v=' . $js_version . '" defer></script>';
         }
     }
     
     // Load page-specific scripts
     if(!empty($page_scripts)) {
         foreach($page_scripts as $script) {
-            $file_path = PUBLIC_PATH . '/assets/js/pages/' . $script . '.js';
-            $file_version = file_exists($file_path) ? filemtime($file_path) : time();
             $js_file = '/assets/js/pages/' . $script . '.js';
-$js_path = PUBLIC_PATH . $js_file;
-$js_version = file_exists($js_path) ? filemtime($js_path) : time();
-echo '<script src="' . url_for($js_file) . '?v=' . $js_version . '" defer></script>';
+            $js_path = PUBLIC_PATH . $js_file;
+            $js_version = file_exists($js_path) ? filemtime($js_path) : time();
+            echo '<script src="' . url_for($js_file) . '?v=' . $js_version . '" defer></script>';
         }
     }
     ?>

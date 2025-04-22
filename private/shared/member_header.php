@@ -54,9 +54,9 @@ if(!isset($utility_scripts)) { $utility_scripts = []; }
     if(!empty($component_styles)) {
         foreach($component_styles as $component) {
             $css_file = '/assets/css/components/' . $component . '.css';
-$css_path = PUBLIC_PATH . $css_file;
-$css_version = file_exists($css_path) ? filemtime($css_path) : time();
-echo '<link rel="stylesheet" href="' . url_for($css_file) . '?v=' . $css_version . '">'; 
+            $css_path = PUBLIC_PATH . $css_file;
+            $css_version = file_exists($css_path) ? filemtime($css_path) : time();
+            echo '<link rel="stylesheet" href="' . url_for($css_file) . '?v=' . $css_version . '">'; 
         }
     }
     ?>

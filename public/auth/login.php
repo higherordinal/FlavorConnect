@@ -6,7 +6,8 @@ $page_style = 'auth';
 $component_styles = ['forms'];
 
 // Scripts
-$utility_scripts = ['common', 'form-validation'];
+// Note: 'common' and 'back-link' are already loaded in public_header.php
+$utility_scripts = ['form-validation'];
 $page_scripts = ['auth'];
 
 $errors = [];

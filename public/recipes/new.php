@@ -7,7 +7,8 @@ $page_style = 'recipe-crud';
 $component_styles = ['forms'];
 
 // Scripts
-$utility_scripts = ['common', 'form-validation', 'back-link'];
+// Note: 'common' and 'back-link' are already loaded in member_header.php
+$utility_scripts = ['form-validation'];
 $component_scripts = ['recipe-form'];
 
 include(SHARED_PATH . '/member_header.php');

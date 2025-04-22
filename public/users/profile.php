@@ -46,7 +46,8 @@ $page_style = 'user-profile';
 $component_styles = ['pagination']; // Add pagination styles
 
 // Scripts
-$utility_scripts = ['common', 'back-link'];
+// Note: 'common' and 'back-link' are already loaded in member_header.php
+$utility_scripts = [];
 $component_scripts = [];
 include(SHARED_PATH . '/member_header.php');
 ?>

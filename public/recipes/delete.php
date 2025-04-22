@@ -37,8 +37,9 @@ $page_title = 'Delete Recipe';
 $page_style = 'recipe-crud';
 $component_styles = ['forms'];
 
-// Scripts
-$utility_scripts = ['common', 'form-validation', 'back-link'];
+// Scripts - only add page-specific scripts
+// Note: 'common' and 'back-link' are already loaded in member_header.php
+$utility_scripts = ['form-validation'];
 $component_scripts = ['recipe-favorite'];
 include(SHARED_PATH . '/member_header.php');
 ?>
