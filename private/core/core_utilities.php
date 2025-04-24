@@ -270,8 +270,26 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         
         // Admin - Categories
         '/admin/categories/index.php' => 'Recipe Metadata',
-        '/admin/categories/edit.php' => 'Edit Category',
-        '/admin/categories/delete.php' => 'Delete Category',
+        
+        // Admin - Diet Categories
+        '/admin/categories/diet/new.php' => 'New Diet Category',
+        '/admin/categories/diet/edit.php' => 'Edit Diet Category',
+        '/admin/categories/diet/delete.php' => 'Delete Diet Category',
+        
+        // Admin - Style Categories
+        '/admin/categories/style/new.php' => 'New Style Category',
+        '/admin/categories/style/edit.php' => 'Edit Style Category',
+        '/admin/categories/style/delete.php' => 'Delete Style Category',
+        
+        // Admin - Type Categories
+        '/admin/categories/type/new.php' => 'New Type Category',
+        '/admin/categories/type/edit.php' => 'Edit Type Category',
+        '/admin/categories/type/delete.php' => 'Delete Type Category',
+        
+        // Admin - Measurement Categories
+        '/admin/categories/measurement/new.php' => 'New Measurement Category',
+        '/admin/categories/measurement/edit.php' => 'Edit Measurement Category',
+        '/admin/categories/measurement/delete.php' => 'Delete Measurement Category',
 
         // Auth pages
         '/auth/login.php' => 'Login',
@@ -537,19 +555,34 @@ function extract_category_info_from_path($path) {
  * @return string The appropriate back link text
  */
 function get_back_text_from_path($path) {
-    // Check for specific category edit/delete pages first (most specific patterns first)
-    if (strpos($path, '/admin/categories/style/edit.php') !== false) {
+    // Check for specific category pages first (most specific patterns first)
+    // Style category pages
+    if (strpos($path, '/admin/categories/style/new.php') !== false) {
+        return 'Back to New Style Category';
+    } elseif (strpos($path, '/admin/categories/style/edit.php') !== false) {
         return 'Back to Edit Style Category';
     } elseif (strpos($path, '/admin/categories/style/delete.php') !== false) {
         return 'Back to Delete Style Category';
+    } 
+    // Diet category pages
+    elseif (strpos($path, '/admin/categories/diet/new.php') !== false) {
+        return 'Back to New Diet Category';
     } elseif (strpos($path, '/admin/categories/diet/edit.php') !== false) {
         return 'Back to Edit Diet Category';
     } elseif (strpos($path, '/admin/categories/diet/delete.php') !== false) {
         return 'Back to Delete Diet Category';
+    } 
+    // Type category pages
+    elseif (strpos($path, '/admin/categories/type/new.php') !== false) {
+        return 'Back to New Type Category';
     } elseif (strpos($path, '/admin/categories/type/edit.php') !== false) {
         return 'Back to Edit Type Category';
     } elseif (strpos($path, '/admin/categories/type/delete.php') !== false) {
         return 'Back to Delete Type Category';
+    } 
+    // Measurement category pages
+    elseif (strpos($path, '/admin/categories/measurement/new.php') !== false) {
+        return 'Back to New Measurement Category';
     } elseif (strpos($path, '/admin/categories/measurement/edit.php') !== false) {
         return 'Back to Edit Measurement Category';
     } elseif (strpos($path, '/admin/categories/measurement/delete.php') !== false) {
