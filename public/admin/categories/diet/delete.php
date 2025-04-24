@@ -4,14 +4,14 @@ require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No diet ID was provided.');
-    redirect_to(url_for('/admin/categories/index.php'));
+    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 }
 
 $id = $_GET['id'];
 $diet = RecipeAttribute::find_one($id, 'diet');
 if(!$diet) {
     $session->message('Diet not found.');
-    redirect_to(url_for('/admin/categories/index.php'));
+    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 }
 
 if(is_post_request()) {
@@ -24,7 +24,7 @@ if(is_post_request()) {
             $session->message('Diet deleted successfully.');
         }
     }
-    redirect_to(url_for('/admin/categories/index.php'));
+    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 }
 
 $page_title = 'Delete Diet';
@@ -77,7 +77,7 @@ include(SHARED_PATH . '/member_header.php');
                 </div>
                 
                 <div class="form-buttons">
-                    <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Back to Metadata</a>
+                    <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter()); ?>" class="action cancel">Back to Metadata</a>
                 </div>
             <?php } else { ?>
                 <p class="warning-text">This action cannot be undone.</p>
@@ -85,7 +85,7 @@ include(SHARED_PATH . '/member_header.php');
                 <form action="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($id))); ?>" method="post" class="form">
                     <div class="form-buttons">
                         <button type="submit" class="action delete">Delete Diet</button>
-                        <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
+                        <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>
                     </div>
                 </form>
             <?php } ?>

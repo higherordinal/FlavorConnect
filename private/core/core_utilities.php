@@ -218,6 +218,24 @@ function format_quantity($value, $precision = 'basic') {
  * @return array Associative array with 'url' and 'text' keys
  */
 function get_back_link($default_url = '/index.php', $allowed_domains = [], $default_text = 'Back') {
+    /**
+     * Navigation Context Coordination
+     * 
+     * This system uses a dual approach to maintain navigation context:
+     * 
+     * 1. Server-side (PHP):
+     *    - Uses $_GET['ref_page'] for back link generation
+     *    - Stores recipe context in $_GET['id'] for recipe pages
+     *    - Stores category context in $_GET['category_id'] and $_GET['category_type']
+     *    - Preserves action context in $_GET['action_type']
+     * 
+     * 2. Client-side (JavaScript):
+     *    - Uses sessionStorage.fromRecipeId to track recipe context
+     *    - Enhances links with ref_page and recipe_id parameters
+     * 
+     * This coordination ensures consistent navigation with or without JavaScript.
+     */
+    
     // Initialize result array with defaults
     $result = [
         'url' => url_for($default_url),
@@ -260,6 +278,11 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         '/auth/register.php' => 'Register'
     ];
     
+    // Check if the default URL is in our path-to-title map and set appropriate text
+    if (isset($path_to_title_map[$default_url])) {
+        $result['text'] = 'Back to ' . $path_to_title_map[$default_url];
+    }
+    
     // First check for ref_page parameter in query string (highest priority)
     $ref_page = $_GET['ref_page'] ?? '';
     if ($ref_page && strpos($ref_page, '/') === 0) {
@@ -271,6 +294,29 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
             // If the ref_page is a recipe show page, append the recipe_id
             if (strpos($ref_page, '/recipes/show.php') !== false) {
                 $result['url'] = url_for('/recipes/show.php?id=' . $_GET['recipe_id']);
+            }
+        }
+        
+        // Check if we have category parameters to handle
+        if (isset($_GET['category_id']) && is_numeric($_GET['category_id']) && isset($_GET['category_type'])) {
+            $category_type = $_GET['category_type'];
+            
+            // Only process valid category types
+            if (in_array($category_type, ['diet', 'style', 'type', 'measurement'])) {
+                // Determine if we're coming from an edit or delete page
+                $action_type = '';
+                if (isset($_GET['action_type']) && in_array($_GET['action_type'], ['edit', 'delete'])) {
+                    $action_type = $_GET['action_type'];
+                }
+                
+                // If we have a specific action type, return to that page
+                if (!empty($action_type)) {
+                    $result['url'] = url_for('/admin/categories/' . $category_type . '/' . $action_type . '.php?id=' . $_GET['category_id']);
+                    $result['text'] = 'Back to ' . ucfirst($action_type) . ' ' . ucfirst($category_type) . ' Category';
+                } else {
+                    // Default back to categories index with appropriate text
+                    $result['text'] = 'Back to ' . ucfirst($category_type) . ' Categories';
+                }
             }
         }
         
@@ -296,55 +342,11 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
             }
         }
         
-        // If no exact match, use pattern matching
+        // If no exact match, use pattern matching with our helper function
         if (!$found_exact_match) {
-            // Admin section pattern matching
-            if (strpos($ref_page, '/admin/categories/style') !== false) {
-                $result['text'] = 'Back to Style Categories';
-            } elseif (strpos($ref_page, '/admin/categories/diet') !== false) {
-                $result['text'] = 'Back to Diet Categories';
-            } elseif (strpos($ref_page, '/admin/categories/type') !== false) {
-                $result['text'] = 'Back to Type Categories';
-            } elseif (strpos($ref_page, '/admin/categories/measurement') !== false) {
-                $result['text'] = 'Back to Measurement Categories';
-            } elseif (strpos($ref_page, '/admin/users') !== false) {
-                $result['text'] = 'Back to User Management';
-            } elseif (strpos($ref_page, '/admin/categories') !== false) {
-                $result['text'] = 'Back to Recipe Metadata';
-            } elseif (strpos($ref_page, '/admin/') !== false) {
-                $result['text'] = 'Back to Admin Dashboard';
-            }
-            // Recipe section pattern matching
-            elseif (strpos($ref_page, '/recipes/index.php') !== false) {
-                $result['text'] = 'Back to Recipes';
-            } elseif (strpos($ref_page, '/recipes/show.php') !== false) {
-                $result['text'] = 'Back to Recipe';
-            } elseif (strpos($ref_page, '/recipes/new.php') !== false) {
-                $result['text'] = 'Back to Create Recipe';
-            } elseif (strpos($ref_page, '/recipes/edit.php') !== false) {
-                $result['text'] = 'Back to Edit Recipe';
-            } elseif (strpos($ref_page, '/recipes/delete.php') !== false) {
-                $result['text'] = 'Back to Delete Recipe';
-            }
-            // User section pattern matching
-            elseif (strpos($ref_page, '/users/favorites.php') !== false) {
-                $result['text'] = 'Back to Favorites';
-            } elseif (strpos($ref_page, '/users/profile.php') !== false) {
-                $result['text'] = 'Back to Profile';
-            }
-            // Other pages pattern matching
-            elseif (strpos($ref_page, '/index.php') !== false) {
-                $result['text'] = 'Back to Home';
-            } elseif (strpos($ref_page, '/about.php') !== false) {
-                $result['text'] = 'Back to About Us';
-            } else {
-                // Try to find a partial match in the path-to-title mapping as a last resort
-                foreach ($path_to_title_map as $path => $title) {
-                    if (strpos($ref_page, $path) !== false) {
-                        $result['text'] = 'Back to ' . $title;
-                        break;
-                    }
-                }
+            $back_text = get_back_text_from_path($ref_page);
+            if ($back_text !== 'Back') { // Only update if we got a meaningful result
+                $result['text'] = $back_text;
             }
         }
         return $result;
@@ -353,37 +355,28 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
     // Check for ref parameter in query string (second priority)
     $ref = $_GET['ref'] ?? '';
     if ($ref) {
-        switch ($ref) {
-            case 'home':
-                $result['url'] = url_for('/index.php');
-                $result['text'] = 'Back to Home';
-                return $result;
-            case 'recipes':
-                $result['url'] = url_for('/recipes/index.php');
-                $result['text'] = 'Back to Recipes';
-                return $result;
-            case 'profile':
-                $result['url'] = url_for('/users/profile.php');
-                $result['text'] = 'Back to Profile';
-                return $result;
-            case 'favorites':
-                $result['url'] = url_for('/users/favorites.php');
-                $result['text'] = 'Back to Favorites';
-                return $result;
-            case 'gallery':
-                $result['url'] = url_for('/recipes/index.php');
-                $result['text'] = 'Back to Recipes';
-                return $result;
-            case 'about':
-                $result['url'] = url_for('/about.php');
-                $result['text'] = 'Back to About Us';
-                return $result;
-            case 'admin':
-                $result['url'] = url_for('/admin/index.php');
-                $result['text'] = 'Back to Admin Dashboard';
-                return $result;
+        // Map of ref values to paths and titles
+        $ref_map = [
+            'home' => ['/index.php', 'Home'],
+            'recipes' => ['/recipes/index.php', 'Recipes'],
+            'profile' => ['/users/profile.php', 'Profile'],
+            'favorites' => ['/users/favorites.php', 'Favorites'],
+            'gallery' => ['/recipes/index.php', 'Recipes'],
+            'about' => ['/about.php', 'About Us'],
+            'admin' => ['/admin/index.php', 'Admin Dashboard'],
+            'contact' => ['/contact.php', 'Contact Us'],
+            'settings' => ['/settings.php', 'Settings']
+        ];
+        
+        // Check if the ref value is in our map
+        if (isset($ref_map[$ref])) {
+            $ref_info = $ref_map[$ref];
+            $result['url'] = url_for($ref_info[0]);
+            $result['text'] = 'Back to ' . $ref_info[1];
+            return $result;
         }
     }
+    
     // Then check HTTP_REFERER
     $referer = $_SERVER['HTTP_REFERER'] ?? '';
     if ($referer) {
@@ -423,54 +416,10 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
                     return $result;
                 }
                 
-                // If no exact match, use pattern matching as a fallback
-                // Admin section pattern matching
-                if (strpos($path, '/admin/categories/style') !== false) {
-                    $result['text'] = 'Back to Style Categories';
-                } else if (strpos($path, '/admin/categories/diet') !== false) {
-                    $result['text'] = 'Back to Diet Categories';
-                } else if (strpos($path, '/admin/categories/type') !== false) {
-                    $result['text'] = 'Back to Type Categories';
-                } else if (strpos($path, '/admin/categories/measurement') !== false) {
-                    $result['text'] = 'Back to Measurement Categories';
-                } else if (strpos($path, '/admin/users') !== false) {
-                    $result['text'] = 'Back to User Management';
-                } else if (strpos($path, '/admin/categories') !== false) {
-                    $result['text'] = 'Back to Recipe Metadata';
-                } else if (strpos($path, '/admin') !== false) {
-                    $result['text'] = 'Back to Admin Dashboard';
-                } 
-                // Recipe section pattern matching
-                else if (strpos($path, '/recipes/new.php') !== false) {
-                    $result['text'] = 'Back to Create Recipe';
-                } else if (strpos($path, '/recipes/edit.php') !== false) {
-                    $result['text'] = 'Back to Edit Recipe';
-                } else if (strpos($path, '/recipes/delete.php') !== false) {
-                    $result['text'] = 'Back to Delete Recipe';
-                } else if (strpos($path, '/recipes/show.php') !== false) {
-                    $result['text'] = 'Back to Recipe';
-                } else if (strpos($path, '/recipes') !== false) {
-                    $result['text'] = 'Back to Recipes';
-                } 
-                // User section pattern matching
-                else if (strpos($path, '/users/profile') !== false) {
-                    $result['text'] = 'Back to Profile';
-                } else if (strpos($path, '/users/favorites') !== false) {
-                    $result['text'] = 'Back to Favorites';
-                } else if (strpos($path, '/users/settings') !== false) {
-                    $result['text'] = 'Back to Settings';
-                } 
-                // Other pages pattern matching
-                else if (strpos($path, '/about.php') !== false) {
-                    $result['text'] = 'Back to About Us';
-                } else if (strpos($path, '/contact.php') !== false) {
-                    $result['text'] = 'Back to Contact';
-                } else if (strpos($path, '/auth/login.php') !== false || strpos($path, '/login.php') !== false) {
-                    $result['text'] = 'Back to Login';
-                } else if (strpos($path, '/auth/register.php') !== false || strpos($path, '/register.php') !== false) {
-                    $result['text'] = 'Back to Register';
-                } else if (strpos($path, '/index.php') !== false || $path == '/' || $path == '') {
-                    $result['text'] = 'Back to Home';
+                // If no exact match, use pattern matching with our helper function
+                $back_text = get_back_text_from_path($path);
+                if ($back_text !== 'Back') { // Only update if we got a meaningful result
+                    $result['text'] = $back_text;
                 }
                 
                 return $result;
@@ -529,6 +478,126 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
 }
 
 /**
+ * Adds context parameters to a reference parameter string
+ * 
+ * @param string $ref_param The current reference parameter string
+ * @param array $params Associative array of parameters to add
+ * @return string The updated reference parameter string
+ */
+function add_context_to_ref_param($ref_param, $params) {
+    foreach ($params as $key => $value) {
+        if (!empty($value)) {
+            if (!empty($ref_param)) {
+                $ref_param .= '&';
+            } else {
+                $ref_param = '?';
+            }
+            $ref_param .= $key . '=' . $value;
+        }
+    }
+    
+    return $ref_param;
+}
+
+/**
+ * Extracts category type and action from a path
+ * 
+ * @param string $path The path to analyze
+ * @return array Associative array with 'category_type' and 'action_type' keys
+ */
+function extract_category_info_from_path($path) {
+    $result = [
+        'category_type' => '',
+        'action_type' => ''
+    ];
+    
+    $path_parts = explode('/', $path);
+    
+    foreach ($path_parts as $index => $part) {
+        if ($part === 'categories' && isset($path_parts[$index + 1])) {
+            $result['category_type'] = $path_parts[$index + 1];
+            
+            if (isset($path_parts[$index + 2])) {
+                $file_name = pathinfo($path_parts[$index + 2], PATHINFO_FILENAME);
+                if (in_array($file_name, ['edit', 'delete', 'new'])) {
+                    $result['action_type'] = $file_name;
+                }
+            }
+            break;
+        }
+    }
+        
+    return $result;
+}
+
+/**
+ * Determines the appropriate back link text based on a path pattern
+ * 
+ * @param string $path The path to analyze
+ * @return string The appropriate back link text
+ */
+function get_back_text_from_path($path) {
+    // Check for specific category edit/delete pages first (most specific patterns first)
+    if (strpos($path, '/admin/categories/style/edit.php') !== false) {
+        return 'Back to Edit Style Category';
+    } elseif (strpos($path, '/admin/categories/style/delete.php') !== false) {
+        return 'Back to Delete Style Category';
+    } elseif (strpos($path, '/admin/categories/diet/edit.php') !== false) {
+        return 'Back to Edit Diet Category';
+    } elseif (strpos($path, '/admin/categories/diet/delete.php') !== false) {
+        return 'Back to Delete Diet Category';
+    } elseif (strpos($path, '/admin/categories/type/edit.php') !== false) {
+        return 'Back to Edit Type Category';
+    } elseif (strpos($path, '/admin/categories/type/delete.php') !== false) {
+        return 'Back to Delete Type Category';
+    } elseif (strpos($path, '/admin/categories/measurement/edit.php') !== false) {
+        return 'Back to Edit Measurement Category';
+    } elseif (strpos($path, '/admin/categories/measurement/delete.php') !== false) {
+        return 'Back to Delete Measurement Category';
+    }
+    // All category types are displayed on the same page (admin/categories/index.php)
+    elseif (strpos($path, '/admin/categories/style') !== false ||
+           strpos($path, '/admin/categories/diet') !== false ||
+           strpos($path, '/admin/categories/type') !== false ||
+           strpos($path, '/admin/categories/measurement') !== false) {
+        return 'Back to Recipe Metadata';
+    } elseif (strpos($path, '/admin/users') !== false) {
+        return 'Back to User Management';
+    } elseif (strpos($path, '/admin/categories') !== false) {
+        return 'Back to Recipe Metadata';
+    } elseif (strpos($path, '/admin/') !== false) {
+        return 'Back to Admin Dashboard';
+    }
+    // Recipe section pattern matching
+    elseif (strpos($path, '/recipes/index.php') !== false) {
+        return 'Back to Recipes';
+    } elseif (strpos($path, '/recipes/show.php') !== false) {
+        return 'Back to Recipe';
+    } elseif (strpos($path, '/recipes/new.php') !== false) {
+        return 'Back to Create Recipe';
+    } elseif (strpos($path, '/recipes/edit.php') !== false) {
+        return 'Back to Edit Recipe';
+    } elseif (strpos($path, '/recipes/delete.php') !== false) {
+        return 'Back to Delete Recipe';
+    }
+    // User section pattern matching
+    elseif (strpos($path, '/users/favorites.php') !== false) {
+        return 'Back to Favorites';
+    } elseif (strpos($path, '/users/profile.php') !== false) {
+        return 'Back to Profile';
+    }
+    // Other pages pattern matching
+    elseif (strpos($path, '/index.php') !== false || $path == '/') {
+        return 'Back to Home';
+    } elseif (strpos($path, '/about.php') !== false) {
+        return 'Back to About Us';
+    }
+    
+    // Default
+    return 'Back';
+}
+
+/**
  * Generates a reference parameter for consistent back navigation
  * 
  * This function determines the current section of the site and returns
@@ -542,13 +611,58 @@ function get_ref_parameter($type = 'ref_page') {
     $current_path = $_SERVER['PHP_SELF'] ?? '';
     $ref_param = '';
     
+    /**
+     * Navigation Context Coordination
+     * 
+     * This system uses a dual approach to maintain navigation context:
+     * 
+     * 1. Server-side (PHP):
+     *    - Uses $_GET['ref_page'] for back link generation
+     *    - Stores recipe context in $_GET['id'] for recipe pages
+     *    - Stores category context in $_GET['category_id'] and $_GET['category_type']
+     *    - Preserves action context in $_GET['action_type']
+     * 
+     * 2. Client-side (JavaScript):
+     *    - Uses sessionStorage.fromRecipeId to track recipe context
+     *    - Enhances links with ref_page and recipe_id parameters
+     * 
+     * This coordination ensures consistent navigation with or without JavaScript.
+     */
+    
     if ($type === 'ref_page') {
         // Use ref_page parameter with full paths
         $ref_param = '?ref_page=' . $current_path;
         
+        // Collect context parameters
+        $context_params = [];
+        
         // Add recipe ID if we're on a recipe page
         if (strpos($current_path, '/recipes/show.php') !== false && isset($_GET['id'])) {
-            $ref_param .= '&id=' . $_GET['id'];
+            $context_params['id'] = $_GET['id'];
+        }
+        
+        // Add category context if we're on an admin category page
+        if (strpos($current_path, '/admin/categories/') !== false && isset($_GET['id'])) {
+            // Extract category information using our helper function
+            $category_info = extract_category_info_from_path($current_path);
+            $category_type = $category_info['category_type'];
+            $action_type = $category_info['action_type'];
+            
+            // Only add category parameters if we found a valid category type
+            if ($category_type && in_array($category_type, ['diet', 'style', 'type', 'measurement'])) {
+                $context_params['category_id'] = $_GET['id'];
+                $context_params['category_type'] = $category_type;
+                
+                // Add action type if available
+                if (!empty($action_type)) {
+                    $context_params['action_type'] = $action_type;
+                }
+            }
+        }
+        
+        // Add all context parameters to the ref_param
+        foreach ($context_params as $key => $value) {
+            $ref_param .= '&' . $key . '=' . $value;
         }
     } else {
         // For backward compatibility, use the old ref parameter approach
@@ -566,15 +680,35 @@ function get_ref_parameter($type = 'ref_page') {
             $ref_param = '?ref=home';
         }
         
+        // Collect context parameters
+        $context_params = [];
+        
+        // Add category context if we're on an admin category page
+        if (strpos($current_path, '/admin/categories/') !== false && isset($_GET['id'])) {
+            // Extract category information using our helper function
+            $category_info = extract_category_info_from_path($current_path);
+            $category_type = $category_info['category_type'];
+            $action_type = $category_info['action_type'];
+            
+            // Only add category parameters if we found a valid category type
+            if ($category_type && in_array($category_type, ['diet', 'style', 'type', 'measurement'])) {
+                $context_params['category_id'] = $_GET['id'];
+                $context_params['category_type'] = $category_type;
+                
+                // Add action type if available
+                if (!empty($action_type)) {
+                    $context_params['action_type'] = $action_type;
+                }
+            }
+        }
+        
         // Add recipe ID if we're on a recipe page
         if (strpos($current_path, '/recipes/show.php') !== false && isset($_GET['id'])) {
-            if (!empty($ref_param)) {
-                $ref_param .= '&';
-            } else {
-                $ref_param = '?';
-            }
-            $ref_param .= 'recipe_id=' . $_GET['id'];
+            $context_params['recipe_id'] = $_GET['id'];
         }
+        
+        // Add all context parameters to the ref_param using our helper function
+        $ref_param = add_context_to_ref_param($ref_param, $context_params);
     }
     
     return $ref_param;

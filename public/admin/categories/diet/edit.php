@@ -20,7 +20,7 @@ if(is_post_request()) {
     $result = $diet->save();
     if($result === true) {
         $session->message('Diet updated successfully.');
-        redirect_to(url_for('/admin/categories/index.php'));
+        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
     } else {
         // Show errors
     }
@@ -71,7 +71,7 @@ include(SHARED_PATH . '/member_header.php');
             
             <div class="form-buttons">
                 <button type="submit" class="action save">Update Diet</button>
-                <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
+                <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
     </div>

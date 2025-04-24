@@ -58,7 +58,7 @@ include(SHARED_PATH . '/member_header.php');
                 </thead>
                 <tbody>
                     <?php foreach($styles as $style) { ?>
-                        <tr>
+                        <tr id="style-<?php echo h($style->id); ?>">
                             <td data-label="Name"><?php echo h($style->name); ?></td>
                             <td data-label="Recipes"><?php echo RecipeAttribute::count_by_attribute_id($style->id, 'style'); ?></td>
                             <td data-label="Actions" class="actions">
@@ -95,7 +95,7 @@ include(SHARED_PATH . '/member_header.php');
                 </thead>
                 <tbody>
                     <?php foreach($diets as $diet) { ?>
-                        <tr>
+                        <tr id="diet-<?php echo h($diet->id); ?>">
                             <td data-label="Name"><?php echo h($diet->name); ?></td>
                             <td data-label="Recipes"><?php echo RecipeAttribute::count_by_attribute_id($diet->id, 'diet'); ?></td>
                             <td data-label="Actions" class="actions">
@@ -132,7 +132,7 @@ include(SHARED_PATH . '/member_header.php');
                 </thead>
                 <tbody>
                     <?php foreach($types as $type) { ?>
-                        <tr>
+                        <tr id="type-<?php echo h($type->id); ?>">
                             <td data-label="Name"><?php echo h($type->name); ?></td>
                             <td data-label="Recipes"><?php echo RecipeAttribute::count_by_attribute_id($type->id, 'type'); ?></td>
                             <td data-label="Actions" class="actions">
@@ -168,7 +168,7 @@ include(SHARED_PATH . '/member_header.php');
                 </thead>
                 <tbody>
                     <?php foreach($measurements as $measurement) { ?>
-                        <tr>
+                        <tr id="measurement-<?php echo h($measurement->measurement_id); ?>">
                             <td data-label="Name"><?php echo h($measurement->name); ?></td>
                             <td data-label="Actions" class="actions">
                                 <a href="<?php echo url_for('/admin/categories/measurement/edit.php?id=' . h(u($measurement->measurement_id))); ?>" class="action edit" title="Edit">
@@ -192,3 +192,38 @@ include(SHARED_PATH . '/member_header.php');
 </div>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if we have a fragment identifier in the URL
+        if (window.location.hash) {
+            // Get the element with the ID matching the fragment
+            const targetElement = document.getElementById(window.location.hash.substring(1));
+            
+            if (targetElement) {
+                // Add a highlight class to the element
+                targetElement.classList.add('highlight-row');
+                
+                // Scroll to the element
+                setTimeout(function() {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    
+                    // Remove the highlight after a few seconds
+                    setTimeout(function() {
+                        targetElement.classList.remove('highlight-row');
+                    }, 3000);
+                }, 300);
+            }
+        }
+    });
+</script>
+
+<style>
+    .highlight-row {
+        background-color: rgba(255, 255, 0, 0.2) !important;
+        transition: background-color 3s;
+    }
+</style>
