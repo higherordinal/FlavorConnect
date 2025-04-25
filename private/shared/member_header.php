@@ -136,7 +136,8 @@ $css_version = file_exists($css_path) ? filemtime($css_path) : time();
                 // Prepare recipe reference parameter if we're on a recipe page
                 $recipe_ref = '';
                 if($is_recipe_show_page && isset($_GET['id'])) {
-                    $recipe_ref = '?ref=recipe&recipe_id=' . $_GET['id'];
+                    // Use the standardized ref_page parameter for recipe context
+                $recipe_context = get_ref_parameter('ref_page');
                 }
                 ?>
                 <?php
@@ -172,7 +173,7 @@ $css_version = file_exists($css_path) ? filemtime($css_path) : time();
                         $is_admin_page = strpos($_SERVER['PHP_SELF'], '/admin/') !== false;
                     ?>
                     <li>
-                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI']) . ($is_recipe_show_page ? '&ref=recipe&recipe_id=' . $_GET['id'] : '')); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
+                        <a href="<?php echo url_for('/admin/index.php' . get_ref_parameter('ref_page')); ?>" <?php echo $is_admin_page ? 'class="active" aria-current="page"' : ''; ?>>
                             <i class="fas fa-cog" aria-hidden="true"></i> Admin
                         </a>
                     </li>
@@ -194,9 +195,9 @@ $css_version = file_exists($css_path) ? filemtime($css_path) : time();
                         <span class="username"><i class="fas fa-user-circle" aria-hidden="true"></i> <?php echo $username; ?></span>
                     </button>
                     <div class="dropdown-menu">
-                        <a href="<?php echo url_for('/users/profile.php' . ($is_recipe_show_page ? $recipe_ref : '')); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
+                        <a href="<?php echo url_for('/users/profile.php' . get_ref_parameter('ref_page')); ?>"><i class="fas fa-user" aria-hidden="true"></i> Profile</a>
                         <?php if($session->is_admin() || $session->is_super_admin()) { ?>
-                        <a href="<?php echo url_for('/admin/index.php?ref_page=' . urlencode($_SERVER['REQUEST_URI']) . ($is_recipe_show_page ? '&ref=recipe&recipe_id=' . $_GET['id'] : '')); ?>" class="dropdown-item">
+                        <a href="<?php echo url_for('/admin/index.php' . get_ref_parameter('ref_page')); ?>" class="dropdown-item">
                             <i class="fas fa-cog" aria-hidden="true"></i>
                             Admin (Dashboard)
                         </a>

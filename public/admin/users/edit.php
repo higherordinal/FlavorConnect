@@ -4,19 +4,19 @@ require_admin();
 
 if(!isset($_GET['user_id'])) {
     $session->message('No user ID was provided.');
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 $user = User::find_by_id($_GET['user_id']);
 if(!$user) {
     $session->message('The user could not be found.');
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 // Regular admins can't edit admin users
 if(!$session->is_super_admin() && ($user->is_admin() || $user->is_super_admin())) {
     $session->message('You do not have permission to edit admin users.');
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 if(is_post_request()) {
@@ -34,7 +34,7 @@ if(is_post_request()) {
     if(($user->is_admin() || $user->is_super_admin()) && $original_is_active && !$new_is_active) {
         if(!has_remaining_active_admin($user->user_id, false)) {
             $session->message('Cannot deactivate the last active admin user.', 'error');
-            redirect_to(url_for('/admin/users/index.php'));
+            redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
         }
     }
     
@@ -42,7 +42,7 @@ if(is_post_request()) {
     $result = $user->save();
     if($result === true) {
         $session->message('The user was updated successfully.');
-        redirect_to(url_for('/admin/users/index.php'));
+        redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
     }
 }
 
@@ -60,18 +60,17 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-content">
     <?php 
-    // Use get_back_link to determine the appropriate back link
-    $back_link_data = get_back_link('/admin/users/index.php');
+    // Use unified_navigation directly, which will call get_back_link internally
+    // Use unified_navigation directly, which will call get_back_link internally
     
     echo unified_navigation(
-        $back_link_data['url'],
+        '/admin/users/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/admin/index.php', 'label' => 'Admin'],
             ['url' => '/admin/users/index.php', 'label' => 'User Management'],
             ['label' => 'Edit User']
-        ],
-        $back_link_data['text']
+        ]
     ); 
     ?>
 
@@ -86,7 +85,7 @@ include(SHARED_PATH . '/member_header.php');
             <?php include('form_fields.php'); ?>
             <div class="form-buttons">
                 <button type="submit" class="action update">Update User</button>
-                <a href="#" class="cancel">Cancel</a>
+                <a href="<?php echo url_for('/admin/users/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
     </div>

@@ -13,7 +13,7 @@ if(is_post_request()) {
     $result = $user->save();
     if($result === true) {
         $session->message('The user was created successfully.');
-        redirect_to(url_for('/admin/users/index.php'));
+        redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
     }
 }
 
@@ -31,18 +31,15 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-content">
     <?php 
-    // Use get_back_link to determine the appropriate back link
-    $back_link_data = get_back_link('/admin/users/index.php');
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link_data['url'],
+        '/admin/users/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/admin/index.php', 'label' => 'Admin'],
             ['url' => '/admin/users/index.php', 'label' => 'User Management'],
             ['label' => 'Create User']
-        ],
-        $back_link_data['text']
+        ]
     ); 
     ?>
 
@@ -53,11 +50,11 @@ include(SHARED_PATH . '/member_header.php');
     <?php echo display_session_message(); ?>
 
     <div class="form-container">
-        <form action="<?php echo url_for('/admin/users/new.php'); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/users/new.php' . get_ref_parameter('ref_page')); ?>" method="post" class="form">
             <?php include('form_fields.php'); ?>
             <div class="form-buttons">
                 <button type="submit" class="action create">Create User</button>
-                <a href="#" class="cancel">Cancel</a>
+                <a href="<?php echo url_for('/admin/users/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
     </div>

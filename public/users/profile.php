@@ -54,18 +54,13 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="profile-container">
     <?php 
-    // Use the standardized get_back_link function for consistent back link handling
-    $back_link_data = get_back_link('/index.php');
-    $back_link = $back_link_data['url'];
-    $back_text = $back_link_data['text'];
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link,
+        '/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'Profile']
-        ],
-        $back_text
+        ]
     ); 
     ?>
     
@@ -83,7 +78,7 @@ include(SHARED_PATH . '/member_header.php');
         <section class="my-recipes">
             <div class="section-header">
                 <h2>My Recipes</h2>
-                <a href="<?php echo url_for('/recipes/new.php?ref_page=/users/profile.php'); ?>" class="btn btn-primary" aria-label="Create a new recipe">
+                <a href="<?php echo url_for('/recipes/new.php' . get_ref_parameter('ref_page', '/users/profile.php')); ?>" class="btn btn-primary" aria-label="Create a new recipe">
                     <i class="fas fa-plus" aria-hidden="true"></i> Create New Recipe
                 </a>
             </div>
@@ -92,7 +87,7 @@ include(SHARED_PATH . '/member_header.php');
                 <div class="empty-state">
                     <i class="fas fa-book-open" aria-hidden="true"></i>
                     <p>You haven't created any recipes yet.</p>
-                    <a href="<?php echo url_for('/recipes/new.php?ref_page=/users/profile.php'); ?>" class="btn btn-primary" aria-label="Create your first recipe">Create Your First Recipe</a>
+                    <a href="<?php echo url_for('/recipes/new.php' . get_ref_parameter('ref_page', '/users/profile.php')); ?>" class="btn btn-primary" aria-label="Create your first recipe">Create Your First Recipe</a>
                 </div>
             <?php } else { ?>
                 <div class="recipe-grid">
@@ -144,12 +139,13 @@ include(SHARED_PATH . '/member_header.php');
                     <?php 
                     // Check if we can use the route_links method with named routes
                     if (function_exists('route')) {
-                        // Use route_links with the 'users.profile' named route
+                        // Use get_ref_parameter to get the standardized reference parameter
+                        $ref_page = get_ref_parameter('ref_page', '/users/profile.php');
                         try {
-                            echo $pagination->route_links('users.profile', [], 'page');
+                            echo $pagination->route_links('users.profile', ['ref_page' => $ref_page], 'page');
                         } catch (Exception $e) {
                             // Fallback to traditional method if route_links fails
-                            $url_pattern = url_for('/users/profile.php') . '?page={page}';
+                            $url_pattern = url_for('/users/profile.php') . '?page={page}' . get_ref_parameter('ref_page', '/users/profile.php');
                             echo $pagination->page_links($url_pattern);
                         }
                     } else {

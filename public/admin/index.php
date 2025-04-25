@@ -12,10 +12,7 @@ $utility_scripts = [];
 $component_scripts = ['recipe-favorite'];
 $page_scripts = ['admin'];
 
-// Use the standardized get_back_link function for consistent back link handling
-$back_link_data = get_back_link('/index.php');
-$back_link = $back_link_data['url'];
-$back_text = $back_link_data['text'];
+// We'll use unified_navigation directly, which will call get_back_link internally
 
 include(SHARED_PATH . '/member_header.php');
 ?>
@@ -23,12 +20,11 @@ include(SHARED_PATH . '/member_header.php');
 <div class="admin-dashboard">
     <?php 
     echo unified_navigation(
-        $back_link,
+        '/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'Admin Dashboard']
-        ],
-        $back_text
+        ]
     ); 
     ?>
     
@@ -41,7 +37,7 @@ include(SHARED_PATH . '/member_header.php');
             <h2>User Management</h2>
             <p>Manage user accounts, roles, and permissions.</p>
             <div class="actions">
-                <a href="<?php echo url_for('/admin/users/index.php'); ?>" class="action">
+                <a href="<?php echo url_for('/admin/users/index.php' . get_ref_parameter('ref_page', '/admin/index.php')); ?>" class="action">
                     <i class="fas fa-users"></i>
                     Manage Users
                 </a>
@@ -52,7 +48,7 @@ include(SHARED_PATH . '/member_header.php');
             <h2>Category Management</h2>
             <p>Manage recipe categories and organization.</p>
             <div class="actions">
-                <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action">
+                <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter('ref_page', '/admin/index.php')); ?>" class="action">
                     <i class="fas fa-tags"></i>
                     Manage Categories
                 </a>

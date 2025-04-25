@@ -22,17 +22,14 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-management metadata">
     <?php 
-    // Use get_back_link to determine the appropriate back link
-    $back_link_data = get_back_link('/admin/index.php');
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link_data['url'],
+        '/admin/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/admin/index.php', 'label' => 'Admin'],
             ['label' => 'Recipe Metadata']
-        ],
-        $back_link_data['text']
+        ]
     ); 
     ?>
 
@@ -74,7 +71,7 @@ include(SHARED_PATH . '/member_header.php');
                 </tbody>
             </table>
             <div class="add-new-button">
-                <a href="<?php echo url_for('/admin/categories/style/new.php'); ?>" class="btn btn-primary">
+                <a href="<?php echo url_for('/admin/categories/style/new.php' . get_ref_parameter('ref_page', '/admin/categories/index.php')); ?>" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Style
                 </a>
             </div>
@@ -111,7 +108,7 @@ include(SHARED_PATH . '/member_header.php');
                 </tbody>
             </table>
             <div class="add-new-button">
-                <a href="<?php echo url_for('/admin/categories/diet/new.php'); ?>" class="btn btn-primary">
+                <a href="<?php echo url_for('/admin/categories/diet/new.php' . get_ref_parameter('ref_page', '/admin/categories/index.php')); ?>" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Diet
                 </a>
             </div>
@@ -148,7 +145,7 @@ include(SHARED_PATH . '/member_header.php');
                 </tbody>
             </table>
             <div class="add-new-button">
-                <a href="<?php echo url_for('/admin/categories/type/new.php'); ?>" class="btn btn-primary">
+                <a href="<?php echo url_for('/admin/categories/type/new.php' . get_ref_parameter('ref_page', '/admin/categories/index.php')); ?>" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Type
                 </a>
             </div>
@@ -183,7 +180,7 @@ include(SHARED_PATH . '/member_header.php');
                 </tbody>
             </table>
             <div class="add-new-button">
-                <a href="<?php echo url_for('/admin/categories/measurement/new.php'); ?>" class="btn btn-primary">
+                <a href="<?php echo url_for('/admin/categories/measurement/new.php' . get_ref_parameter('ref_page', '/admin/categories/index.php')); ?>" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Measurement
                 </a>
             </div>

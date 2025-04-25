@@ -156,11 +156,8 @@ if(is_post_request()) {
                 if(empty($errors)) {
                     $session->message('Recipe created successfully.');
                     
-                    // Build redirect URL with ref_page parameter if it exists
-                    $redirect_url = '/recipes/show.php?id=' . $recipe->recipe_id;
-                    if (isset($_GET['ref_page'])) {
-                        $redirect_url .= '&ref_page=' . urlencode($_GET['ref_page']);
-                    }
+                    // Use get_ref_parameter() for better back link handling with ref_page parameter
+                    $redirect_url = '/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page');
                     redirect_to(url_for($redirect_url));
                 } else {
                     $session->message('Failed to save recipe details. Please try again.', 'error');
@@ -174,23 +171,18 @@ if(is_post_request()) {
     }
 }
 
-$back_link_data = get_back_link('/recipes/index.php');
-// Extract the URL from the back_link_data array
-$back_link = $back_link_data['url'];
-// Get the suggested back text
-$back_text = $back_link_data['text'];
+// We'll use unified_navigation directly, which will call get_back_link internally
 ?>
 
 <div class="container">
     <?php 
     echo unified_navigation(
-        $back_link,
+        '/recipes/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/recipes/index.php', 'label' => 'Recipes'],
             ['label' => 'Create Recipe']
-        ],
-        $back_text
+        ]
     ); 
     ?>
 </div>
@@ -203,11 +195,8 @@ $back_text = $back_link_data['text'];
     <?php echo display_errors($errors); ?>
     
     <?php
-    // Preserve ref_page parameter if it exists
-    $form_action = '/recipes/new.php';
-    if (isset($_GET['ref_page'])) {
-        $form_action .= '?ref_page=' . urlencode($_GET['ref_page']);
-    }
+    // Use get_ref_parameter() for the form action with ref_page parameter
+    $form_action = '/recipes/new.php' . get_ref_parameter('ref_page');
     ?>
     <form action="<?php echo url_for($form_action); ?>" method="post" enctype="multipart/form-data">
         <?php include('form_fields.php'); ?>
@@ -216,7 +205,7 @@ $back_text = $back_link_data['text'];
             <button type="submit" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Create Recipe
             </button>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-secondary">Cancel</a>
+            <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="btn btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

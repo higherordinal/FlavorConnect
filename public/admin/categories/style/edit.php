@@ -41,18 +41,15 @@ include(SHARED_PATH . '/member_header.php');
 <main class="main-content">
     <div class="admin-content">
         <?php 
-        // Use get_back_link to determine the appropriate back link
-        $back_link_data = get_back_link('/admin/categories/index.php');
-        
+        // Use unified_navigation directly, which will call get_back_link internally
         echo unified_navigation(
-            $back_link_data['url'],
+            '/admin/categories/index.php',
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['url' => '/admin/index.php', 'label' => 'Admin'],
                 ['url' => '/admin/categories/index.php', 'label' => 'Recipe Metadata'],
                 ['label' => 'Edit Style']
-            ],
-            $back_link_data['text']
+            ]
         ); 
         ?>
 
@@ -63,7 +60,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($style->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/style/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/style/edit.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="style_name">Style Name</label>
                 <input type="text" id="style_name" name="style[name]" value="<?php echo h($style->name); ?>" class="form-control" required>

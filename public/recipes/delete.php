@@ -12,10 +12,7 @@ if(!$recipe) {
 
 $id = $recipe->recipe_id;
 
-// Get back link data using the get_back_link function
-$back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
-$back_link = $back_link_data['url'];
-$back_text = $back_link_data['text'];
+// We'll use unified_navigation directly, which will call get_back_link internally
 
 // Handle POST request for deletion
 if(is_post_request()) {
@@ -23,7 +20,7 @@ if(is_post_request()) {
         // Delete recipe
         if($recipe->delete()) {
             $session->message('Recipe deleted successfully.');
-            redirect_to(url_for('/recipes/index.php'));
+            redirect_to(url_for('/recipes/index.php' . get_ref_parameter()));
         } else {
             throw new Exception("Failed to delete recipe from database.");
         }
@@ -48,14 +45,13 @@ include(SHARED_PATH . '/member_header.php');
     <div class="container">
         <?php 
         echo unified_navigation(
-            $back_link,
+            '/recipes/show.php?id=' . h(u($id)),
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['url' => '/recipes/index.php', 'label' => 'Recipes'],
                 ['url' => '/recipes/show.php?id=' . h(u($id)), 'label' => h($recipe->title)],
                 ['label' => 'Delete Recipe']
-            ],
-            $back_text
+            ]
         ); 
         ?>
     </div>
@@ -77,13 +73,17 @@ include(SHARED_PATH . '/member_header.php');
             <p class="warning"><i class="fas fa-exclamation-triangle"></i> This action cannot be undone.</p>
         </div>
 
-        <form action="<?php echo url_for('/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
+        <form action="<?php echo url_for('/recipes/delete.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post">
             <div class="form-buttons">
                 <button type="submit" class="btn btn-danger">
                     <i class="fas fa-trash"></i>
                     Delete Recipe
                 </button>
-                <a href="<?php echo $back_link; ?>" class="btn btn-secondary">
+                <?php
+                // Get back link data for the Cancel button
+                $back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
+                ?>
+                <a href="<?php echo $back_link_data['url']; ?>" class="btn btn-secondary">
                     <i class="fas fa-times"></i>
                     Cancel
                 </a>

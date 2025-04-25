@@ -39,9 +39,9 @@ window.FlavorConnect.utils.backLink = (function() {
     }
     
     /**
-     * Enhances back links to preserve recipe context
+     * Enhances back links to preserve recipe and user context
      * 
-     * This function adds recipe context to back links when navigating away from recipe pages.
+     * This function adds context to back links when navigating away from recipe or user pages.
      * It works alongside the PHP back-link system which uses the ref_page parameter.
      */
     function enhanceBackLinks() {
@@ -51,22 +51,63 @@ window.FlavorConnect.utils.backLink = (function() {
             // Check if the link already has data attributes from PHP
             const hasRefPage = link.hasAttribute('data-ref-page');
             const hasRecipeId = link.hasAttribute('data-recipe-id');
+            const hasUserId = link.hasAttribute('data-user-id');
             
             // Only add event listener if we don't already have data attributes
-            if (!hasRefPage && !hasRecipeId) {
+            if (!hasRefPage && !hasRecipeId && !hasUserId) {
                 link.addEventListener('click', function(e) {
-                    // Get the recipe ID from session storage using the standardized name
+                    const href = link.getAttribute('href');
+                    if (!href) return;
+                    
+                    // Get the recipe ID from session storage
                     const fromRecipeId = sessionStorage.getItem('fromRecipeId');
                     
+                    // Get the user ID from session storage
+                    const fromUserId = sessionStorage.getItem('fromUserId');
+                    
                     // If we have a recipe ID and the link doesn't already have recipe context
-                    const href = link.getAttribute('href');
-                    if (fromRecipeId && href && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
+                    if (fromRecipeId && !href.includes('recipe_id=') && !href.includes('/recipes/show.php?id=')) {
                         // Modify the link to include the recipe context
                         e.preventDefault();
                         
                         // Add the recipe_id parameter to the URL
                         const separator = href.includes('?') ? '&' : '?';
                         window.location.href = href + separator + 'ref_page=/recipes/show.php&recipe_id=' + fromRecipeId;
+                        return;
+                    }
+                    
+                    // If we have a user ID and the link doesn't already have user context
+                    if (fromUserId && !href.includes('user_id=') && !href.includes('/admin/users/edit.php?user_id=') && !href.includes('/admin/users/delete.php?user_id=')) {
+                        // Modify the link to include the user context
+                        e.preventDefault();
+                        
+                        // Add the user_id parameter to the URL
+                        const separator = href.includes('?') ? '&' : '?';
+                        const refPage = href.includes('/admin/users/delete.php') ? '/admin/users/delete.php' : '/admin/users/edit.php';
+                        window.location.href = href + separator + 'ref_page=' + refPage + '&user_id=' + fromUserId;
+                        return;
+                    }
+                    
+                    // If we have category context and the link doesn't already have category context
+                    const fromCategoryId = sessionStorage.getItem('fromCategoryId');
+                    const fromCategoryType = sessionStorage.getItem('fromCategoryType');
+                    
+                    if (fromCategoryId && fromCategoryType && 
+                        !href.includes('category_id=') && 
+                        !href.includes('category_type=') && 
+                        !href.includes('/admin/categories/' + fromCategoryType)) {
+                        // Modify the link to include the category context
+                        e.preventDefault();
+                        
+                        // Determine the reference page based on the category type and current URL
+                        const actionType = determineActionType(currentUrl);
+                        const refPage = '/admin/categories/' + fromCategoryType + '/' + actionType + '.php';
+                        
+                        // Add the category parameters to the URL
+                        const separator = href.includes('?') ? '&' : '?';
+                        window.location.href = href + separator + 'ref_page=' + refPage + 
+                                               '&category_id=' + fromCategoryId + 
+                                               '&category_type=' + fromCategoryType;
                     }
                 });
             }
@@ -103,6 +144,23 @@ window.FlavorConnect.utils.backLink = (function() {
             // Note: PHP session is updated directly in recipes/show.php when it loads
             // This ensures synchronization between client and server without AJAX
         }
+        
+        // Store user context if available
+        const userId = searchParams.get('user_id');
+        if (userId && (currentUrl.includes('/admin/users/edit.php') || currentUrl.includes('/admin/users/delete.php'))) {
+            // Store in session storage for client-side use
+            sessionStorage.setItem('fromUserId', userId);
+        }
+        
+        // Store category context if available
+        const categoryId = searchParams.get('id');
+        const categoryType = currentUrl.includes('/admin/categories/') ? extractCategoryTypeFromPath(currentUrl) : null;
+        
+        if (categoryId && categoryType) {
+            // Store both category ID and type in session storage
+            sessionStorage.setItem('fromCategoryId', categoryId);
+            sessionStorage.setItem('fromCategoryType', categoryType);
+        }
     }
     
     /**
@@ -138,10 +196,46 @@ window.FlavorConnect.utils.backLink = (function() {
     // Wait for DOM to be fully loaded
     document.addEventListener('DOMContentLoaded', initialize);
     
+    /**
+     * Extracts the category type from the current path
+     * 
+     * @param {string} path - The current URL path
+     * @return {string|null} - The category type or null if not found
+     */
+    function extractCategoryTypeFromPath(path) {
+        // Check for each category type in the path
+        const categoryTypes = ['diet', 'style', 'type', 'measurement'];
+        
+        for (const type of categoryTypes) {
+            if (path.includes('/admin/categories/' + type + '/')) {
+                return type;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Determines the action type from the current URL
+     * 
+     * @param {string} url - The current URL
+     * @return {string} - The action type (edit, delete, or index)
+     */
+    function determineActionType(url) {
+        if (url.includes('/edit.php')) {
+            return 'edit';
+        } else if (url.includes('/delete.php')) {
+            return 'delete';
+        } else {
+            return 'index';
+        }
+    }
+    
     // Return public API
     return {
         init: initialize,
         highlightBreadcrumbs: highlightCurrentBreadcrumb,
-        storePage: storeCurrentPageForBackNavigation
+        storePage: storeCurrentPageForBackNavigation,
+        extractCategoryType: extractCategoryTypeFromPath
     };
 })();

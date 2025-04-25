@@ -37,18 +37,13 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="container">
     <?php 
-    // Use the standardized get_back_link function for consistent back link handling
-    $back_link_data = get_back_link('/recipes/index.php');
-    $back_link = $back_link_data['url'];
-    $back_text = $back_link_data['text'];
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link,
+        '/recipes/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'My Favorites']
-        ],
-        $back_text
+        ]
     ); 
     ?>
     
@@ -60,7 +55,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php if(empty($favorites)) { ?>
             <div class="no-recipes">
                 <p>You haven't favorited any recipes yet. Browse our recipes and click the heart icon to add them to your favorites!</p>
-                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-primary">Browse Recipes</a>
+                <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="btn btn-primary">Browse Recipes</a>
             </div>
         <?php } else { ?>
             <div class="recipe-grid">
@@ -76,7 +71,8 @@ include(SHARED_PATH . '/member_header.php');
                 ?>
                     <?php 
                         // Set variables for the recipe card component
-                        $ref_page = '/users/favorites.php'; // This is the current page path
+                        // Use get_ref_parameter to get the standardized reference parameter
+                        $ref_page = get_ref_parameter('ref_page', '/users/favorites.php');
                         
                         // Include the recipe card component
                         include('../recipes/recipe-card.php'); 
@@ -94,7 +90,7 @@ include(SHARED_PATH . '/member_header.php');
                         echo $pagination->route_links('users.favorites', [], 'page');
                     } catch (Exception $e) {
                         // Fallback to traditional method if route_links fails
-                        $url_pattern = url_for('/users/favorites.php') . '?page={page}';
+                        $url_pattern = url_for('/users/favorites.php' . get_ref_parameter('ref_page')) . '&page={page}';
                         echo $pagination->page_links($url_pattern);
                     }
                 } else {

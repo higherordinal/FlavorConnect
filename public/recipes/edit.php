@@ -168,7 +168,7 @@ if(is_post_request()) {
             // Save the recipe
             if($recipe->save()) {
                 $session->message('Recipe updated successfully!');
-                redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
+                redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter()));
             } else {
                 // If there were errors during save, add them to the errors array
                 $errors = array_merge($errors, $recipe->errors);
@@ -178,26 +178,22 @@ if(is_post_request()) {
     }
 }
 
-// Get back link data using the get_back_link function
-$back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
+// We'll use unified_navigation directly, which will call get_back_link internally
+// get_back_link will determine the appropriate back text based on the ref_page parameter
 
-// Extract the URL and text from the back_link_data array
-$back_link = $back_link_data['url'];
-$back_text = $back_link_data['text'];
 ?>
 
 <main class="main-content">
     <div class="container">
         <?php 
         echo unified_navigation(
-            $back_link,
+            '/recipes/show.php?id=' . h(u($id)),
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['url' => '/recipes/index.php', 'label' => 'Recipes'],
                 ['url' => '/recipes/show.php?id=' . h(u($id)), 'label' => h($recipe->title)],
                 ['label' => 'Edit Recipe']
-            ],
-            $back_text
+            ]
         ); 
         ?>
     </div>
@@ -213,7 +209,9 @@ $back_text = $back_link_data['text'];
 
         <?php echo display_errors($errors); ?>
         
-        <form action="<?php echo url_for('/recipes/edit.php?id=' . h(u($id))); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo url_for('/recipes/edit.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post" enctype="multipart/form-data" class="recipe-form" id="recipe-form">
+            <!-- Add a hidden field to preserve the recipe ID for back navigation -->
+            <input type="hidden" name="recipe_id" value="<?php echo h($id); ?>">
             <?php include('form_fields.php'); ?>
             
             <div class="form-buttons">
@@ -225,7 +223,11 @@ $back_text = $back_link_data['text'];
                     <i class="fas fa-trash-alt"></i>
                     Delete Recipe
                 </a>
-                <a href="<?php echo $back_link; ?>" class="btn btn-secondary">
+                <?php
+                // Get back link data for the Cancel button
+                $back_link_data = get_back_link('/recipes/show.php?id=' . h(u($id)));
+                ?>
+                <a href="<?php echo $back_link_data['url']; ?>" class="btn btn-secondary">
                     <i class="fas fa-times"></i>
                     Cancel
                 </a>

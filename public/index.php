@@ -23,7 +23,7 @@ if($session->is_logged_in()) {
             <h1>Discover Your Next Favorite Recipe</h1>
             <p class="hero-text">Connect with food enthusiasts, share your culinary creations, and explore a world of flavors.</p>
             <div class="hero-buttons">
-                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn-primary">Browse Recipes</a>
+                <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="btn-primary">Browse Recipes</a>
                 <?php if (!$session->is_logged_in()) { ?>
                     <a href="<?php echo url_for('/auth/register.php'); ?>" class="btn-secondary">Join Community</a>
                 <?php } ?>
@@ -41,14 +41,14 @@ if($session->is_logged_in()) {
         <div class="cta-card">
             <h3>Share Recipes</h3>
             <p>Join our community and share your culinary creations with food enthusiasts worldwide.</p>
-            <a href="<?php echo is_logged_in() ? url_for('/recipes/new.php?ref_page=/index.php') : url_for('/auth/login.php'); ?>" class="btn-text">
+            <a href="<?php echo is_logged_in() ? url_for('/recipes/new.php' . get_ref_parameter('ref_page', '/index.php')) : url_for('/auth/login.php'); ?>" class="btn-text">
                 <?php echo is_logged_in() ? 'Start Sharing' : 'Login to Share'; ?>
             </a>
         </div>
         <div class="cta-card">
             <h3>Find Inspiration</h3>
             <p>Discover new recipes and cooking techniques from talented chefs.</p>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn-text">Explore Now</a>
+            <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="btn-text">Explore Now</a>
         </div>
         <div class="cta-card">
             <?php if (!$session->is_logged_in()) { ?>

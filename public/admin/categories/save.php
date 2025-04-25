@@ -158,9 +158,9 @@ if(is_post_request()) {
     }
     
     // Redirect back to the categories page
-    redirect_to(url_for('/admin/categories/index.php'));
+    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 }
 
 // If not a POST request, redirect to index
-redirect_to(url_for('/admin/categories/index.php'));
+redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 ?>

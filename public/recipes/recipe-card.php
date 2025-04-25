@@ -34,17 +34,20 @@ $user = User::find_by_id($recipe->user_id);
 $url_params = 'id=' . h(u($recipe->recipe_id));
 
 // Add ref_page parameter
-$url_params .= '&ref_page=' . h(u($ref_page));
-
-// Add gallery parameters if available
-if (isset($gallery_params)) {
-    // Only add gallery params if we're coming from the recipes page
-    if (strpos($ref_page, '/recipes/index.php') !== false) {
+$ref_param = '';
+if (isset($ref_page)) {
+    $ref_param = '&ref_page=' . h(u($ref_page));
+    
+    // Add gallery parameters if available
+    if (isset($gallery_params) && strpos($ref_page, '/recipes/index.php') !== false) {
         // Make sure we're not double-encoding
         $decoded_params = urldecode($gallery_params);
-        $url_params .= '&gallery_params=' . h(u($decoded_params));
+        $ref_param .= '&gallery_params=' . h(u($decoded_params));
     }
 }
+
+// Add the ref parameter to the URL
+$url_params .= $ref_param;
 ?>
 
 <article class="recipe-card">
@@ -107,17 +110,17 @@ if (isset($gallery_params)) {
             <ul class="recipe-attributes">
                 <?php if($style) { ?>
                 <li>
-                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id))); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
+                    <a href="<?php echo url_for('/recipes/index.php?style=' . h(u($style->id)) . get_ref_parameter('ref_page')); ?>" class="recipe-attribute"><?php echo h($style->name); ?></a>
                 </li>
                 <?php } ?>
                 <?php if($diet) { ?>
                 <li>
-                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id))); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
+                    <a href="<?php echo url_for('/recipes/index.php?diet=' . h(u($diet->id)) . get_ref_parameter('ref_page')); ?>" class="recipe-attribute"><?php echo h($diet->name); ?></a>
                 </li>
                 <?php } ?>
                 <?php if($type) { ?>
                 <li>
-                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id))); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
+                    <a href="<?php echo url_for('/recipes/index.php?type=' . h(u($type->id)) . get_ref_parameter('ref_page')); ?>" class="recipe-attribute"><?php echo h($type->name); ?></a>
                 </li>
                 <?php } ?>
             </ul>

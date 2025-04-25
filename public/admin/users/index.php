@@ -54,7 +54,7 @@ $users = User::find_by_sql($sql);
 function sort_link($column, $current_sort, $current_order) {
     $new_order = ($current_sort === $column && $current_order === 'ASC') ? 'DESC' : 'ASC';
     $current_page = $_GET['page'] ?? 1;
-    return url_for('/admin/users/index.php') . '?sort=' . $column . '&order=' . $new_order . '&page=' . $current_page;
+    return url_for('/admin/users/index.php' . get_ref_parameter('ref_page')) . '&sort=' . $column . '&order=' . $new_order . '&page=' . $current_page;
 }
 
 // Function to display sort indicator
@@ -71,17 +71,14 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-content">
     <?php 
-    // Use get_back_link to determine the appropriate back link
-    $back_link_data = get_back_link('/admin/index.php');
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link_data['url'],
+        '/admin/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/admin/index.php', 'label' => 'Admin'],
             ['label' => 'User Management']
-        ],
-        $back_link_data['text']
+        ]
     ); 
     ?>
 
@@ -179,7 +176,7 @@ include(SHARED_PATH . '/member_header.php');
     <?php 
     // Generate pagination links
     // Use a base URL without the page parameter, and add sort and order as extra params
-    $url_pattern = url_for('/admin/users/index.php') . '?page={page}';
+    $url_pattern = url_for('/admin/users/index.php' . get_ref_parameter('ref_page')) . '&page={page}';
     $extra_params = ['sort' => $sort_column, 'order' => strtolower($sort_order)];
     echo $pagination->page_links($url_pattern, $extra_params);
     
@@ -189,7 +186,7 @@ include(SHARED_PATH . '/member_header.php');
 </div>
 
 <div class="bottom-actions">
-    <a href="<?php echo url_for('/admin/users/new.php'); ?>" class="action create">
+    <a href="<?php echo url_for('/admin/users/new.php' . get_ref_parameter('ref_page', '/admin/users/index.php')); ?>" class="action create">
         <i class="fas fa-plus"></i> Create New User
     </a>
 </div>

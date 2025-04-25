@@ -30,33 +30,8 @@ if (method_exists($recipe, 'diet') && $recipe->diet()) {
 }
 $page_image = 'http://' . $_SERVER['HTTP_HOST'] . url_for($recipe->get_image_path('optimized'));
 
-// Determine back link based on referrer
-$back_link_data = get_back_link('/recipes/index.php');
-$back_link = $back_link_data['url'];
-$back_text = $back_link_data['text'];
-
-// Check if we have gallery parameters to preserve pagination and filters
-if (isset($_GET['gallery_params']) && isset($_GET['ref_page'])) {
-    // Only handle gallery params for recipes index page
-    if (strpos($_GET['ref_page'], '/recipes/index.php') !== false) {
-        // Make sure we're not double-decoding
-        $gallery_params = $_GET['gallery_params'];
-        // Check if it's already decoded
-        if (strpos($gallery_params, '%') !== false) {
-            $gallery_params = urldecode($gallery_params);
-        }
-        $back_link = url_for('/recipes/index.php?' . $gallery_params);
-        $back_text = 'Back to Recipes';
-    } elseif (strpos($_GET['ref_page'], '/users/favorites.php') !== false) {
-        // For favorites page, just use the ref_page directly
-        $back_link = url_for($_GET['ref_page']);
-        $back_text = 'Back to Favorites';
-    } elseif (strpos($_GET['ref_page'], '/index.php') !== false) {
-        // For home page, just use the ref_page directly
-        $back_link = url_for($_GET['ref_page']);
-        $back_text = 'Back to Home';
-    }
-}
+// We'll use unified_navigation directly, which will call get_back_link internally
+// get_back_link will determine the appropriate back link and text based on the ref_page parameter
 
 // Set up breadcrumbs
 $breadcrumbs = [
@@ -75,7 +50,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset
     // Check if user is admin or super admin
     if (!$session->is_admin() && !$session->is_super_admin()) {
         $session->message('You do not have permission to delete this review.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
     }
     
     $rating_id = $_GET['rating_id'];
@@ -87,7 +62,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset
         $session->message('Failed to delete review.');
     }
     
-    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
 }
 
 // Handle review deletion (user's own reviews)
@@ -104,7 +79,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
     
     if (!$review) {
         $session->message('Review not found or you do not have permission to delete it.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
     }
     
     // Delete the review
@@ -114,7 +89,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
         $session->message('Failed to delete review.');
     }
     
-    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
 }
 
 // Handle new review submission
@@ -153,7 +128,7 @@ if (is_post_request()) {
         $review = new RecipeReview($review_data);
         if ($review->save()) {
             $session->message('Review submitted successfully.');
-            redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
+            redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
         } else {
             $errors[] = 'Failed to save review.';
         }
@@ -194,9 +169,8 @@ echo display_session_message();
     <div class="container recipe-container">
         <?php 
         echo unified_navigation(
-            $back_link, // Pass the already determined back_link instead of default
-            $breadcrumbs,
-            $back_text
+            '/recipes/index.php', // Default URL if no referer
+            $breadcrumbs
         ); 
         ?>
         
@@ -285,10 +259,10 @@ echo display_session_message();
                         </div>
                         <?php if($session->is_logged_in() && ($recipe->user_id == $session->get_user_id() || $session->is_admin())) { ?>
                         <div class="recipe-actions">
-                            <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id)) . '&ref=show'); ?>" class="btn btn-primary">
+                            <a href="<?php echo url_for('/recipes/edit.php?id=' . h(u($recipe->recipe_id)) . '&ref_page=/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-primary">
                                 <i class="fas fa-edit"></i> Edit Recipe
                             </a>
-                            <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id)) . '&ref=show'); ?>" class="btn btn-danger">
+                            <a href="<?php echo url_for('/recipes/delete.php?id=' . h(u($recipe->recipe_id)) . '&ref_page=/recipes/show.php?id=' . h(u($recipe->recipe_id))); ?>" class="btn btn-danger">
                                 <i class="fas fa-trash"></i> Delete Recipe
                             </a>
                         </div>
@@ -499,11 +473,11 @@ echo display_session_message();
                                 <?php echo h(date('M j, Y g:i A', strtotime($review->comment_created_at ?? 'now'))); ?>
                             </span>
                             <?php if($session->is_logged_in() && $session->get_user_id() == $review->user_id) { ?>
-                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=delete_review'); ?>" class="delete-comment" aria-label="Delete your review">
+                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . get_ref_parameter('ref_page') . '&action=delete_review'); ?>" class="delete-comment" aria-label="Delete your review">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             <?php } elseif($session->is_logged_in() && ($session->is_admin() || $session->is_super_admin())) { ?>
-                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment" aria-label="Delete this review (admin)">
+                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . get_ref_parameter('ref_page') . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment" aria-label="Delete this review (admin)">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             <?php } ?>

@@ -4,26 +4,26 @@ require_admin();
 
 if(!isset($_GET['user_id'])) {
     $session->message('No user ID was provided.');
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 $user = User::find_by_id($_GET['user_id']);
 if(!$user) {
     $session->message('The user could not be found.');
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 // Regular admins can't delete admin users
 if(!$session->is_super_admin() && $user->user_level !== 'u') {
     $session->message('You do not have permission to delete admin users.');
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 // Validate the deletion
 $errors = validate_user_deletion($_GET['user_id']);
 if(!empty($errors)) {
     $session->message($errors[0]);
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 if(is_post_request()) {
@@ -51,7 +51,7 @@ if(is_post_request()) {
     } else {
         $session->message('Failed to delete the user.');
     }
-    redirect_to(url_for('/admin/users/index.php'));
+    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
 }
 
 $page_title = 'Delete User';
@@ -69,18 +69,15 @@ include(SHARED_PATH . '/member_header.php');
 
 <div class="admin-content">
     <?php 
-    // Use get_back_link to determine the appropriate back link
-    $back_link_data = get_back_link('/admin/users/index.php');
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link_data['url'],
+        '/admin/users/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['url' => '/admin/index.php', 'label' => 'Admin'],
             ['url' => '/admin/users/index.php', 'label' => 'User Management'],
             ['label' => 'Delete User']
-        ],
-        $back_link_data['text']
+        ]
     ); 
     ?>
     
@@ -118,7 +115,7 @@ include(SHARED_PATH . '/member_header.php');
         <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" method="post">
             <div class="form-buttons" style="justify-content: center;">
                 <button type="submit" class="action delete">Delete User</button>
-                <a href="#" class="cancel">Cancel</a>
+                <a href="<?php echo url_for('/admin/users/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
     </div>

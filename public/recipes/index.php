@@ -20,18 +20,13 @@ if($session->is_logged_in()) {
 
 <div class="container">
     <?php 
-    // Use the standardized get_back_link function for consistent back link handling
-    $back_link_data = get_back_link('/index.php');
-    $back_link = $back_link_data['url'];
-    $back_text = $back_link_data['text'];
-    
+    // Use unified_navigation directly, which will call get_back_link internally
     echo unified_navigation(
-        $back_link,
+        '/index.php',
         [
             ['url' => '/index.php', 'label' => 'Home'],
             ['label' => 'Recipes']
-        ],
-        $back_text
+        ]
     ); 
     ?>
 </div>
@@ -161,7 +156,7 @@ $userData = [
     <div class="gallery-header">
         <h1 class="gallery-title">Recipes</h1>
         
-        <form class="search-form" action="<?php echo url_for('/recipes/index.php'); ?>" method="GET" role="search">
+        <form class="search-form" action="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" method="GET" role="search">
             <div class="search-bar">
                 <input type="text" 
                        name="search" 
@@ -251,7 +246,7 @@ $userData = [
                         Type: <?php echo h($type->name); ?>
                     </span>
                 <?php } ?>
-                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
+                <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="clear-filters">
                     <i class="fas fa-times"></i> Clear Filters
                 </a>
             </div>
@@ -261,7 +256,7 @@ $userData = [
     <?php if(empty($recipes)) { ?>
         <div class="no-results">
             <p>No recipes found matching your criteria.</p>
-            <a href="<?php echo url_for('/recipes/index.php'); ?>" class="btn btn-primary">Clear Filters</a>
+            <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="btn btn-primary">Clear Filters</a>
         </div>
     <?php } else { ?>
         <div class="recipe-grid">
@@ -272,6 +267,7 @@ $userData = [
             ?>
                 <?php 
                     // Set variables for the recipe card component
+                    // Use the current page as the reference page for back navigation
                     $ref_page = '/recipes/index.php';
                     $gallery_params = urlencode(http_build_query($_GET));
                     
@@ -300,7 +296,7 @@ $userData = [
                     echo $pagination->route_links('recipes.index', [], 'page', $extra_params);
                 } catch (Exception $e) {
                     // Fallback to traditional method if route_links fails
-                    $url_pattern = url_for('/recipes/index.php') . '?page={page}';
+                    $url_pattern = url_for('/recipes/index.php' . get_ref_parameter('ref_page')) . '&page={page}';
                     echo $pagination->page_links($url_pattern, $extra_params);
                 }
             } else {

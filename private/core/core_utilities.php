@@ -208,7 +208,7 @@ function format_quantity($value, $precision = 'basic') {
  * Generates a smart back link URL and suggested text
  * 
  * This function determines the most appropriate back link based on:
- * 1. The 'ref' parameter in the query string (highest priority)
+ * 1. The 'ref_page' parameter in the query string (highest priority)
  * 2. The HTTP_REFERER if available
  * 3. A default fallback URL
  * 
@@ -218,6 +218,12 @@ function format_quantity($value, $precision = 'basic') {
  * @return array Associative array with 'url' and 'text' keys
  */
 function get_back_link($default_url = '/index.php', $allowed_domains = [], $default_text = 'Back') {
+    // Debug information for troubleshooting
+    if (defined('DEBUG_MODE') && DEBUG_MODE) {
+        error_log('GET_BACK_LINK CALLED');
+        error_log('DEFAULT_URL: ' . $default_url);
+        error_log('GET PARAMS: ' . print_r($_GET, true));
+    }
     /**
      * Navigation Context Coordination
      * 
@@ -304,15 +310,79 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
     // First check for ref_page parameter in query string (highest priority)
     $ref_page = $_GET['ref_page'] ?? '';
     if ($ref_page && strpos($ref_page, '/') === 0) {
-        // It's a valid internal URL, use it as the back link
-        $result['url'] = url_for($ref_page);
-        
-        // Check if we have a recipe_id parameter to append
-        if (isset($_GET['recipe_id']) && is_numeric($_GET['recipe_id'])) {
-            // If the ref_page is a recipe show page, append the recipe_id
-            if (strpos($ref_page, '/recipes/show.php') !== false) {
-                $result['url'] = url_for('/recipes/show.php?id=' . $_GET['recipe_id']);
+        // Handle the case where ref_page contains a query string (e.g., /recipes/show.php?id=123)
+        $query_pos = strpos($ref_page, '?');
+        if ($query_pos !== false) {
+            // Extract the path and query parts
+            $path = substr($ref_page, 0, $query_pos);
+            $query = substr($ref_page, $query_pos + 1);
+            
+            // Parse the query string into an associative array
+            parse_str($query, $query_params);
+            
+            // Build the URL with the path and query parameters
+            $result['url'] = url_for($path);
+            if (!empty($query_params)) {
+                $result['url'] .= '?' . http_build_query($query_params);
             }
+            
+            // Set the back link text based on the path-to-title map
+            if (isset($path_to_title_map[$path])) {
+                $result['text'] = 'Back to ' . $path_to_title_map[$path];
+            }
+        } else {
+            // It's a simple path without query parameters
+            $result['url'] = url_for($ref_page);
+            
+            // Set the back link text based on the path-to-title map
+            if (isset($path_to_title_map[$ref_page])) {
+                $result['text'] = 'Back to ' . $path_to_title_map[$ref_page];
+            }
+        }
+        
+        // Check if we have recipe_id parameter to handle
+        $recipe_id = null;
+        
+        // Check if recipe_id is in the current request
+        if (isset($_GET['recipe_id']) && is_numeric($_GET['recipe_id'])) {
+            $recipe_id = $_GET['recipe_id'];
+        }
+        
+        // If we found a recipe_id, determine the correct page to link back to
+        if ($recipe_id) {
+            // Default to show page
+            $path = '/recipes/show.php';
+            
+            // Check if the ref_page indicates we should go back to edit or delete page
+            if (strpos($ref_page, '/recipes/edit.php') !== false) {
+                $path = '/recipes/edit.php';
+            } elseif (strpos($ref_page, '/recipes/delete.php') !== false) {
+                $path = '/recipes/delete.php';
+            }
+            
+            $result['url'] = url_for($path . '?id=' . $recipe_id);
+            $result['text'] = 'Back to ' . $path_to_title_map[$path];
+        }
+        
+        // Special handling for profile page
+        if (strpos($ref_page, '/users/profile.php') !== false) {
+            $result['url'] = url_for('/users/profile.php');
+            $result['text'] = 'Back to Profile';
+        }
+        
+        // Check if we have user_id parameter to handle
+        $user_id = null;
+        
+        // Check if user_id is in the current request
+        if (isset($_GET['user_id']) && is_numeric($_GET['user_id'])) {
+            $user_id = $_GET['user_id'];
+        }
+        
+        // If we found a user_id, set the back link to the edit user page
+        if ($user_id) {
+            $path = '/admin/users/edit.php';
+            $result['url'] = url_for($path . '?user_id=' . $user_id);
+            $result['text'] = 'Back to ' . $path_to_title_map[$path];
         }
         
         // Check if we have category parameters to handle
@@ -370,30 +440,7 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         return $result;
     }
     
-    // Check for ref parameter in query string (second priority)
-    $ref = $_GET['ref'] ?? '';
-    if ($ref) {
-        // Map of ref values to paths and titles
-        $ref_map = [
-            'home' => ['/index.php', 'Home'],
-            'recipes' => ['/recipes/index.php', 'Recipes'],
-            'profile' => ['/users/profile.php', 'Profile'],
-            'favorites' => ['/users/favorites.php', 'Favorites'],
-            'gallery' => ['/recipes/index.php', 'Recipes'],
-            'about' => ['/about.php', 'About Us'],
-            'admin' => ['/admin/index.php', 'Admin Dashboard'],
-            'contact' => ['/contact.php', 'Contact Us'],
-            'settings' => ['/settings.php', 'Settings']
-        ];
-        
-        // Check if the ref value is in our map
-        if (isset($ref_map[$ref])) {
-            $ref_info = $ref_map[$ref];
-            $result['url'] = url_for($ref_info[0]);
-            $result['text'] = 'Back to ' . $ref_info[1];
-            return $result;
-        }
-    }
+    // We've standardized on ref_page, so we don't need to check for ref parameter
     
     // Then check HTTP_REFERER
     $referer = $_SERVER['HTTP_REFERER'] ?? '';
@@ -669,9 +716,21 @@ function get_ref_parameter($type = 'ref_page') {
         // Collect context parameters
         $context_params = [];
         
-        // Add recipe ID if we're on a recipe page
-        if (strpos($current_path, '/recipes/show.php') !== false && isset($_GET['id'])) {
-            $context_params['id'] = $_GET['id'];
+        // Add recipe ID if we're on a recipe page (show, edit, or delete)
+        if ((strpos($current_path, '/recipes/show.php') !== false || 
+             strpos($current_path, '/recipes/edit.php') !== false || 
+             strpos($current_path, '/recipes/delete.php') !== false) && 
+            isset($_GET['id'])) {
+            // Add recipe_id as a context parameter
+            $context_params['recipe_id'] = $_GET['id'];
+        }
+        
+        // Add user ID if we're on a user edit or delete page
+        if ((strpos($current_path, '/admin/users/edit.php') !== false || 
+             strpos($current_path, '/admin/users/delete.php') !== false) && 
+            isset($_GET['user_id'])) {
+            // Add user_id as a context parameter
+            $context_params['user_id'] = $_GET['user_id'];
         }
         
         // Add category context if we're on an admin category page
@@ -698,20 +757,9 @@ function get_ref_parameter($type = 'ref_page') {
             $ref_param .= '&' . $key . '=' . $value;
         }
     } else {
-        // For backward compatibility, use the old ref parameter approach
-        if (strpos($current_path, '/recipes/') !== false) {
-            $ref_param = '?ref=recipes';
-        } elseif (strpos($current_path, '/users/profile.php') !== false) {
-            $ref_param = '?ref=profile';
-        } elseif (strpos($current_path, '/users/favorites.php') !== false) {
-            $ref_param = '?ref=favorites';
-        } elseif (strpos($current_path, '/admin/') !== false) {
-            $ref_param = '?ref=admin';
-        } elseif (strpos($current_path, '/about.php') !== false) {
-            $ref_param = '?ref=about';
-        } elseif (strpos($current_path, '/index.php') !== false || $current_path == '/') {
-            $ref_param = '?ref=home';
-        }
+        // For backward compatibility, use the ref_page parameter with the current path
+        // This ensures all navigation uses the standardized format
+        $ref_param = '?ref_page=' . $current_path;
         
         // Collect context parameters
         $context_params = [];
@@ -740,8 +788,21 @@ function get_ref_parameter($type = 'ref_page') {
             $context_params['recipe_id'] = $_GET['id'];
         }
         
+        // Add user ID if we're on a user edit page
+        if (strpos($current_path, '/admin/users/edit.php') !== false && isset($_GET['user_id'])) {
+            $context_params['user_id'] = $_GET['user_id'];
+        }
+        
+        // Add user ID if we're on a user delete page
+        if (strpos($current_path, '/admin/users/delete.php') !== false && isset($_GET['user_id'])) {
+            $context_params['user_id'] = $_GET['user_id'];
+        }
+        
         // Add all context parameters to the ref_param using our helper function
-        $ref_param = add_context_to_ref_param($ref_param, $context_params);
+        // Add all context parameters to the ref_param
+        foreach ($context_params as $key => $value) {
+            $ref_param .= '&' . $key . '=' . $value;
+        }
     }
     
     return $ref_param;

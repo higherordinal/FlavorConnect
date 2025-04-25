@@ -5,14 +5,14 @@ require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No recipe type ID was provided.');
-    redirect_to(url_for('/admin/categories/index.php'));
+    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 }
 
 $id = $_GET['id'];
 $type = RecipeAttribute::find_one($id, 'type');
 if(!$type) {
     $session->message('Recipe type not found.');
-    redirect_to(url_for('/admin/categories/index.php'));
+    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
 }
 
 if(is_post_request()) {
@@ -21,7 +21,7 @@ if(is_post_request()) {
     $result = $type->save();
     if($result === true) {
         $session->message('Type updated successfully.');
-        redirect_to(url_for('/admin/categories/index.php'));
+        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
     } else {
         // Show errors
     }
@@ -42,18 +42,15 @@ include(SHARED_PATH . '/member_header.php');
 <main class="main-content">
     <div class="admin-content">
         <?php 
-        // Use get_back_link to determine the appropriate back link
-        $back_link_data = get_back_link('/admin/categories/index.php');
-        
+        // Use unified_navigation directly, which will call get_back_link internally
         echo unified_navigation(
-            $back_link_data['url'],
+            '/admin/categories/index.php',
             [
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['url' => '/admin/index.php', 'label' => 'Admin'],
                 ['url' => '/admin/categories/index.php', 'label' => 'Recipe Metadata'],
                 ['label' => 'Edit Recipe Type']
-            ],
-            $back_link_data['text']
+            ]
         ); 
         ?>
 
@@ -64,7 +61,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($type->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="type_name">Type Name</label>
                 <input type="text" id="type_name" name="type[name]" value="<?php echo h($type->name); ?>" class="form-control" required>
@@ -72,7 +69,7 @@ include(SHARED_PATH . '/member_header.php');
             
             <div class="form-buttons">
                 <button type="submit" class="action save">Update Type</button>
-                <a href="<?php echo url_for('/admin/categories/index.php'); ?>" class="action cancel">Cancel</a>
+                <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
     </div>
