@@ -4,19 +4,22 @@ require_admin();
 
 if(!isset($_GET['user_id'])) {
     $session->message('No user ID was provided.');
-    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
+    // Redirect to the users index page
+    redirect_to(url_for('/admin/users/index.php'));
 }
 
 $user = User::find_by_id($_GET['user_id']);
 if(!$user) {
     $session->message('The user could not be found.');
-    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
+    // Redirect to the users index page
+    redirect_to(url_for('/admin/users/index.php'));
 }
 
 // Regular admins can't edit admin users
 if(!$session->is_super_admin() && ($user->is_admin() || $user->is_super_admin())) {
     $session->message('You do not have permission to edit admin users.');
-    redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
+    // Redirect to the users index page
+    redirect_to(url_for('/admin/users/index.php'));
 }
 
 if(is_post_request()) {
