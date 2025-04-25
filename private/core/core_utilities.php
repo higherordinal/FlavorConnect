@@ -309,7 +309,18 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
     
     // First check for ref_page parameter in query string (highest priority)
     $ref_page = $_GET['ref_page'] ?? '';
-    if ($ref_page && strpos($ref_page, '/') === 0) {
+    if ($ref_page) {
+        // Normalize the ref_page to ensure it starts with a slash and doesn't contain environment-specific prefixes
+        // This is critical for cross-environment compatibility
+        
+        // Remove any environment-specific prefixes
+        $ref_page = normalize_path($ref_page);
+        
+        // Now ensure it starts with a slash
+        if (strpos($ref_page, '/') !== 0) {
+            $ref_page = '/' . $ref_page;
+        }
+        
         // Handle the case where ref_page contains a query string (e.g., /recipes/show.php?id=123)
         $query_pos = strpos($ref_page, '?');
         if ($query_pos !== false) {
@@ -461,16 +472,7 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
                 $result['url'] = $referer;
                 
                 // Extract the script name from the path for more accurate matching
-                $script_name = '';
-                
-                // Handle both development and production paths
-                if (strpos($path, '/FlavorConnect/public') !== false) {
-                    // Development path
-                    $script_name = str_replace('/FlavorConnect/public', '', $path);
-                } else {
-                    // Production path
-                    $script_name = $path;
-                }
+                $script_name = normalize_path($path);
                 
                 // Clean up the script name by removing query parameters
                 $script_name = strtok($script_name, '?');
@@ -499,46 +501,7 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         return $result;
     }
     
-    // Try to determine a better text based on the current path
-    $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    
-    // Extract the script name from the path for more accurate matching
-    $script_name = '';
-    
-    // Handle both development and production paths
-    if (strpos($current_path, '/FlavorConnect/public') !== false) {
-        // Development path
-        $script_name = str_replace('/FlavorConnect/public', '', $current_path);
-    } else {
-        // Production path
-        $script_name = $current_path;
-    }
-    
-    // Clean up the script name by removing query parameters
-    $script_name = strtok($script_name, '?');
-    
-    // Try to find an exact match in our path mapping
-    if (isset($path_to_title_map[$script_name])) {
-        $result['text'] = 'Back to ' . $path_to_title_map[$script_name];
-        return $result;
-    }
-    
-    // Set appropriate back text based on current path as a fallback
-    if (strpos($current_path, '/recipes/') !== false) {
-        $result['text'] = 'Back to Recipes';
-    } else if (strpos($current_path, '/users/profile') !== false) {
-        $result['text'] = 'Back to Profile';
-    } else if (strpos($current_path, '/users/favorites') !== false) {
-        $result['text'] = 'Back to Favorites';
-    } else if (strpos($current_path, '/admin/') !== false) {
-        $result['text'] = 'Back to Admin Dashboard';
-    } else if (strpos($current_path, '/about.php') !== false) {
-        $result['text'] = 'Back to About Us';
-    } else if (strpos($current_path, '/contact.php') !== false) {
-        $result['text'] = 'Back to Contact';
-    }
-    
-    // Fallback to default URL and text
+    // Return the default if no other options are available
     return $result;
 }
 
@@ -806,6 +769,43 @@ function get_ref_parameter($type = 'ref_page') {
     }
     
     return $ref_param;
+}
+
+/**
+ * Normalizes a path by removing environment-specific prefixes
+ * 
+ * This function ensures paths are consistent across all environments
+ * by removing prefixes like '/FlavorConnect/public'
+ * 
+ * @param string $path The path to normalize
+ * @return string The normalized path
+ */
+function normalize_path($path) {
+    // Remove any environment-specific prefixes
+    $prefixes = [
+        '/FlavorConnect/public',
+        '/flavorconnect/public',
+        '/public'
+    ];
+    
+    foreach ($prefixes as $prefix) {
+        if (strpos($path, $prefix) === 0) {
+            // Remove the prefix from the beginning of the path
+            $path = substr($path, strlen($prefix));
+            break;
+        } else if (strpos($path, $prefix) !== false) {
+            // If the prefix is somewhere in the path (not at the beginning)
+            $path = str_replace($prefix, '', $path);
+            break;
+        }
+    }
+    
+    // Ensure the path starts with a slash
+    if (empty($path) || $path[0] !== '/') {
+        $path = '/' . $path;
+    }
+    
+    return $path;
 }
 
 /**
