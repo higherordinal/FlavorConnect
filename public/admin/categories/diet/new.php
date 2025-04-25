@@ -12,12 +12,12 @@ if(is_post_request()) {
     
     if($diet->save()) {
         $session->message('Diet created successfully.');
-        // Redirect to the categories index page
-        redirect_to(url_for('/admin/categories/index.php'));
+        // Redirect to the categories index page with reference parameter
+        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
     }
 }
 
-$page_title = 'Create Diet';
+$page_title = 'Create Diet Category';
 $page_style = 'admin';
 $component_styles = ['forms'];
 
@@ -39,26 +39,26 @@ include(SHARED_PATH . '/member_header.php');
                 ['url' => '/index.php', 'label' => 'Home'],
                 ['url' => '/admin/index.php', 'label' => 'Admin'],
                 ['url' => '/admin/categories/index.php', 'label' => 'Recipe Metadata'],
-                ['label' => 'Create Diet']
+                ['label' => 'Create Diet Category']
             ]
         ); 
         ?>
 
         <div class="admin-header">
-            <h1>Create Diet</h1>
+            <h1>Create Diet Category</h1>
         </div>
         
         <?php echo display_session_message(); ?>
         <?php echo display_errors($diet->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/diet/new.php'); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/diet/new.php' . get_ref_parameter()); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="diet_name">Diet Name</label>
                 <input type="text" id="diet_name" name="diet[name]" value="<?php echo h($diet->name); ?>" class="form-control" required>
             </div>
             
             <div class="form-buttons">
-                <button type="submit" class="action save">Create Diet</button>
+                <button type="submit" class="action save">Create Diet Category</button>
                 <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter('ref_page')); ?>" class="action cancel">Cancel</a>
             </div>
         </form>
