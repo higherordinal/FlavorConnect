@@ -222,6 +222,10 @@
   border: none;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
 }
 
 .user-recipe-card .recipe-actions .btn:focus {
