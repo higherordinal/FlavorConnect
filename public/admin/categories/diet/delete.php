@@ -82,7 +82,7 @@ include(SHARED_PATH . '/member_header.php');
             <?php } else { ?>
                 <p class="warning-text">This action cannot be undone.</p>
                 
-                <form action="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($id)) . '&' . substr(get_ref_parameter(), 1)); ?>" method="post" class="form">
+                <form action="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($id))); ?>" method="post" class="form">
                     <div class="form-buttons">
                         <button type="submit" class="action delete">Delete Diet Category</button>
                         <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>

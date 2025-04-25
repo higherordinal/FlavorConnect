@@ -63,7 +63,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($diet->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/diet/edit.php?id=' . h(u($id)) . '&' . substr(get_ref_parameter(), 1)); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/diet/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="diet_name">Diet Name</label>
                 <input type="text" id="diet_name" name="diet[name]" value="<?php echo h($diet->name); ?>" class="form-control" required>
