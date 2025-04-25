@@ -96,10 +96,10 @@ include(SHARED_PATH . '/member_header.php');
                             <td data-label="Name"><?php echo h($diet->name); ?></td>
                             <td data-label="Recipes"><?php echo RecipeAttribute::count_by_attribute_id($diet->id, 'diet'); ?></td>
                             <td data-label="Actions" class="actions">
-                                <a href="<?php echo url_for('/admin/categories/diet/edit.php?id=' . h(u($diet->id))); ?>" class="action edit" title="Edit">
+                                <a href="<?php echo url_for('/admin/categories/diet/edit.php?id=' . h(u($diet->id)) . get_ref_parameter('ref_page')); ?>" class="action edit" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($diet->id))); ?>" class="action delete" title="Delete">
+                                <a href="<?php echo url_for('/admin/categories/diet/delete.php?id=' . h(u($diet->id)) . get_ref_parameter('ref_page')); ?>" class="action delete" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>
@@ -133,10 +133,10 @@ include(SHARED_PATH . '/member_header.php');
                             <td data-label="Name"><?php echo h($type->name); ?></td>
                             <td data-label="Recipes"><?php echo RecipeAttribute::count_by_attribute_id($type->id, 'type'); ?></td>
                             <td data-label="Actions" class="actions">
-                                <a href="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($type->id))); ?>" class="action edit" title="Edit">
+                                <a href="<?php echo url_for('/admin/categories/type/edit.php?id=' . h(u($type->id)) . get_ref_parameter('ref_page')); ?>" class="action edit" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <a href="<?php echo url_for('/admin/categories/type/delete.php?id=' . h(u($type->id))); ?>" class="action delete" title="Delete">
+                                <a href="<?php echo url_for('/admin/categories/type/delete.php?id=' . h(u($type->id)) . get_ref_parameter('ref_page')); ?>" class="action delete" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </a>
                             </td>

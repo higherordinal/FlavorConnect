@@ -34,7 +34,8 @@ if(is_post_request()) {
     if(($user->is_admin() || $user->is_super_admin()) && $original_is_active && !$new_is_active) {
         if(!has_remaining_active_admin($user->user_id, false)) {
             $session->message('Cannot deactivate the last active admin user.', 'error');
-            redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
+            // Redirect to the users index page
+        redirect_to(url_for('/admin/users/index.php'));
         }
     }
     
@@ -42,7 +43,8 @@ if(is_post_request()) {
     $result = $user->save();
     if($result === true) {
         $session->message('The user was updated successfully.');
-        redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
+        // Redirect to the users index page
+        redirect_to(url_for('/admin/users/index.php'));
     }
 }
 

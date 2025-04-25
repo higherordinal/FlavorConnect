@@ -150,7 +150,7 @@ include(SHARED_PATH . '/member_header.php');
                         }
                     } else {
                         // Fallback to traditional method
-                        $url_pattern = url_for('/users/profile.php') . '?page={page}';
+                        $url_pattern = url_for('/users/profile.php' . get_ref_parameter('ref_page', '/users/profile.php')) . '&page={page}';
                         echo $pagination->page_links($url_pattern);
                     }
                     

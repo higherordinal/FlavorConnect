@@ -10,7 +10,8 @@ if(is_post_request()) {
     
     if($style->save()) {
         $session->message('Style created successfully.');
-        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter('ref_page')));
+        // Redirect to the categories index page
+        redirect_to(url_for('/admin/categories/index.php'));
     }
     // Error handling is preserved in the form display below
 }
@@ -49,7 +50,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($style->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/style/new.php' . get_ref_parameter('ref_page')); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/style/new.php'); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="style_name">Style Name</label>
                 <input type="text" id="style_name" name="style[name]" value="<?php echo h($style->name); ?>" class="form-control" required>

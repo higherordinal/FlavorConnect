@@ -4,14 +4,16 @@ require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No style ID was provided.');
-    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
+    // Redirect to the categories index page
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 $id = $_GET['id'];
 $style = RecipeAttribute::find_one($id, 'style');
 if(!$style) {
     $session->message('Style not found.');
-    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
+    // Redirect to the categories index page
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 if(is_post_request()) {
@@ -20,7 +22,8 @@ if(is_post_request()) {
     $result = $style->save();
     if($result === true) {
         $session->message('Style updated successfully.');
-        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
+        // Redirect to the categories index page
+    redirect_to(url_for('/admin/categories/index.php'));
     } else {
         // Show errors
     }
@@ -60,7 +63,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($style->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/style/edit.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/style/edit.php?id=' . h(u($id))); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="style_name">Style Name</label>
                 <input type="text" id="style_name" name="style[name]" value="<?php echo h($style->name); ?>" class="form-control" required>

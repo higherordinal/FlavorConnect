@@ -20,7 +20,8 @@ if(is_post_request()) {
         // Delete recipe
         if($recipe->delete()) {
             $session->message('Recipe deleted successfully.');
-            redirect_to(url_for('/recipes/index.php' . get_ref_parameter()));
+            // Redirect to the recipes index page
+            redirect_to(url_for('/recipes/index.php'));
         } else {
             throw new Exception("Failed to delete recipe from database.");
         }
@@ -73,7 +74,7 @@ include(SHARED_PATH . '/member_header.php');
             <p class="warning"><i class="fas fa-exclamation-triangle"></i> This action cannot be undone.</p>
         </div>
 
-        <form action="<?php echo url_for('/recipes/delete.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post">
+        <form action="<?php echo url_for('/recipes/delete.php?id=' . h(u($id))); ?>" method="post">
             <div class="form-buttons">
                 <button type="submit" class="btn btn-danger">
                     <i class="fas fa-trash"></i>

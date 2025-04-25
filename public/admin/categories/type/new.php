@@ -12,7 +12,8 @@ if(is_post_request()) {
     
     if($type->save()) {
         $session->message('Recipe type created successfully.');
-        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter('ref_page')));
+        // Redirect to the categories index page
+        redirect_to(url_for('/admin/categories/index.php'));
     }
 }
 
@@ -50,7 +51,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($type->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/type/new.php' . get_ref_parameter('ref_page')); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/type/new.php'); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="type_name">Type Name</label>
                 <input type="text" id="type_name" name="type[name]" value="<?php echo h($type->name); ?>" class="form-control" required>

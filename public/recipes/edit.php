@@ -168,7 +168,8 @@ if(is_post_request()) {
             // Save the recipe
             if($recipe->save()) {
                 $session->message('Recipe updated successfully!');
-                redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter()));
+                // Redirect to the show page with the recipe ID
+                redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id));
             } else {
                 // If there were errors during save, add them to the errors array
                 $errors = array_merge($errors, $recipe->errors);
@@ -209,7 +210,7 @@ if(is_post_request()) {
 
         <?php echo display_errors($errors); ?>
         
-        <form action="<?php echo url_for('/recipes/edit.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post" enctype="multipart/form-data" class="recipe-form" id="recipe-form">
+        <form action="<?php echo url_for('/recipes/edit.php?id=' . h(u($id))); ?>" method="post" enctype="multipart/form-data" class="recipe-form" id="recipe-form">
             <!-- Add a hidden field to preserve the recipe ID for back navigation -->
             <input type="hidden" name="recipe_id" value="<?php echo h($id); ?>">
             <?php include('form_fields.php'); ?>

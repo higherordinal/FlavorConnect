@@ -156,8 +156,8 @@ if(is_post_request()) {
                 if(empty($errors)) {
                     $session->message('Recipe created successfully.');
                     
-                    // Use get_ref_parameter() for better back link handling with ref_page parameter
-                    $redirect_url = '/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page');
+                    // Redirect directly to the show page without reference parameters
+                    $redirect_url = '/recipes/show.php?id=' . $recipe->recipe_id;
                     redirect_to(url_for($redirect_url));
                 } else {
                     $session->message('Failed to save recipe details. Please try again.', 'error');
@@ -195,8 +195,8 @@ if(is_post_request()) {
     <?php echo display_errors($errors); ?>
     
     <?php
-    // Use get_ref_parameter() for the form action with ref_page parameter
-    $form_action = '/recipes/new.php' . get_ref_parameter('ref_page');
+    // Form action should not include reference parameters
+    $form_action = '/recipes/new.php';
     ?>
     <form action="<?php echo url_for($form_action); ?>" method="post" enctype="multipart/form-data">
         <?php include('form_fields.php'); ?>

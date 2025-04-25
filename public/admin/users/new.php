@@ -13,7 +13,8 @@ if(is_post_request()) {
     $result = $user->save();
     if($result === true) {
         $session->message('The user was created successfully.');
-        redirect_to(url_for('/admin/users/index.php' . get_ref_parameter()));
+        // Redirect to the users index page
+        redirect_to(url_for('/admin/users/index.php'));
     }
 }
 
@@ -50,7 +51,7 @@ include(SHARED_PATH . '/member_header.php');
     <?php echo display_session_message(); ?>
 
     <div class="form-container">
-        <form action="<?php echo url_for('/admin/users/new.php' . get_ref_parameter('ref_page')); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/users/new.php'); ?>" method="post" class="form">
             <?php include('form_fields.php'); ?>
             <div class="form-buttons">
                 <button type="submit" class="action create">Create User</button>

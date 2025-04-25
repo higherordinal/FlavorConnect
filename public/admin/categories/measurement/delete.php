@@ -4,21 +4,24 @@ require_admin();
 
 if(!isset($_GET['id'])) {
     $session->message('No measurement ID was provided.');
-    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
+    // Redirect to the categories index page
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 $id = $_GET['id'];
 $measurement = Measurement::find_by_id($id);
 if(!$measurement) {
     $session->message('Measurement not found.');
-    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
+    // Redirect to the categories index page
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 if(is_post_request()) {
     if($measurement->delete()) {
         $session->message('Measurement unit deleted successfully.');
     }
-    redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter()));
+    // Redirect to the categories index page
+    redirect_to(url_for('/admin/categories/index.php'));
 }
 
 $page_title = 'Delete Measurement Unit';
@@ -60,7 +63,7 @@ include(SHARED_PATH . '/member_header.php');
             
             <p class="warning-text">This action cannot be undone.</p>
             
-            <form action="<?php echo url_for('/admin/categories/measurement/delete.php?id=' . h(u($id)) . get_ref_parameter('ref_page')); ?>" method="post" class="form">
+            <form action="<?php echo url_for('/admin/categories/measurement/delete.php?id=' . h(u($id))); ?>" method="post" class="form">
                 <div class="form-buttons">
                     <button type="submit" class="action delete">Delete Measurement</button>
                     <a href="<?php echo url_for('/admin/categories/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>

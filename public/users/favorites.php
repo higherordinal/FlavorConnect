@@ -95,7 +95,7 @@ include(SHARED_PATH . '/member_header.php');
                     }
                 } else {
                     // Fallback to traditional method
-                    $url_pattern = url_for('/users/favorites.php') . '?page={page}';
+                    $url_pattern = url_for('/users/favorites.php' . get_ref_parameter('ref_page')) . '&page={page}';
                     echo $pagination->page_links($url_pattern);
                 }
                 

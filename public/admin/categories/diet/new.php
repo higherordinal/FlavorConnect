@@ -12,7 +12,8 @@ if(is_post_request()) {
     
     if($diet->save()) {
         $session->message('Diet created successfully.');
-        redirect_to(url_for('/admin/categories/index.php' . get_ref_parameter('ref_page')));
+        // Redirect to the categories index page
+        redirect_to(url_for('/admin/categories/index.php'));
     }
 }
 
@@ -50,7 +51,7 @@ include(SHARED_PATH . '/member_header.php');
         <?php echo display_session_message(); ?>
         <?php echo display_errors($diet->errors); ?>
         
-        <form action="<?php echo url_for('/admin/categories/diet/new.php' . get_ref_parameter('ref_page')); ?>" method="post" class="form">
+        <form action="<?php echo url_for('/admin/categories/diet/new.php'); ?>" method="post" class="form">
             <div class="form-group">
                 <label for="diet_name">Diet Name</label>
                 <input type="text" id="diet_name" name="diet[name]" value="<?php echo h($diet->name); ?>" class="form-control" required>
