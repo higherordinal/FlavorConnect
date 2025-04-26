@@ -18,12 +18,18 @@ require_once('../../private/core/initialize.php');
 // Set content type to JSON
 header('Content-Type: application/json');
 
-// Log all requests to this endpoint for debugging
-error_log("toggle_favorite.php called with method: " . $_SERVER['REQUEST_METHOD']);
+// Enhanced debugging for the toggle_favorite.php endpoint
+error_log("========== TOGGLE FAVORITE API CALL ==========");
+error_log("Request Method: " . $_SERVER['REQUEST_METHOD']);
 error_log("GET data: " . print_r($_GET, true));
 error_log("POST data: " . print_r($_POST, true));
 $raw_input = file_get_contents('php://input');
 error_log("Raw input: " . $raw_input);
+error_log("HTTP_REFERER: " . (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'Not set'));
+error_log("REQUEST_URI: " . $_SERVER['REQUEST_URI']);
+error_log("User ID: " . ($session->is_logged_in() ? $session->get_user_id() : 'Not logged in'));
+error_log("Content-Type: " . (isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : 'Not set'));
+error_log("============================================");
 
 try {
     // Ensure user is logged in for all operations
@@ -91,10 +97,20 @@ try {
         $recipe_id = (int)$data['recipe_id'];
         
         // Check if the request is coming from the favorites page
+        // Make this more resilient to URL changes by checking for the base path
         $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-        $is_from_favorites_page = strpos($referer, 'favorites.php') !== false;
+        
+        // Extract the path from the referer URL
+        $referer_path = parse_url($referer, PHP_URL_PATH) ?? '';
+        
+        // Normalize the path to handle both development and production environments
+        $normalized_path = normalize_path($referer_path);
+        
+        // Check if this is from the favorites page (more resilient check)
+        $is_from_favorites_page = (strpos($normalized_path, '/users/favorites.php') !== false);
         
         error_log("Referer: " . $referer);
+        error_log("Normalized path: " . $normalized_path);
         error_log("Is from favorites page: " . ($is_from_favorites_page ? 'true' : 'false'));
         
         // If the request is from the favorites page, always remove the favorite
@@ -130,6 +146,11 @@ try {
         header('Cache-Control: no-cache, no-store, must-revalidate');
         header('Pragma: no-cache');
         header('Expires: 0');
+        
+        // Add more debugging before returning the response
+        error_log("========== TOGGLE FAVORITE RESPONSE ==========");
+        error_log("Response: " . print_r($result, true));
+        error_log("============================================");
         
         // Return success response
         ob_end_clean();

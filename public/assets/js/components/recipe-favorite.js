@@ -94,159 +94,199 @@ window.FlavorConnect.favorites = (function() {
             try {
                 if (!config.isLoggedIn) return false;
                 
-                // Use the toggle_favorite.php endpoint with GET method
-                const url = config.baseUrl.endsWith('/') ? config.baseUrl.slice(0, -1) : config.baseUrl;
-                const fullUrl = `${url}/api/toggle_favorite.php?recipe_id=${recipeId}`;
-
-            
-            // Add cache-busting parameter to prevent caching
-            const cacheBuster = new Date().getTime();
-            const finalUrl = `${fullUrl}&_=${cacheBuster}`;
-            
-            const response = await fetch(finalUrl, {
-                headers: {
-                    'Accept': 'application/json',
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                }
-            });
-            
-
-            
-            // Handle unauthorized response (user not logged in)
-            if (response.status === 401) {
-
-                return false;
-            }
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-
-                return false;
-            }
-            
-            const data = await response.json();
-
-            return data.is_favorited === true;
-        } catch (error) {
-
-            return false;
-        }
-    },
-
-    /**
-     * Toggle the favorite status of a recipe
-     * @param {number} recipeId - The ID of the recipe to toggle
-     * @returns {Promise<Object>} - Object with success and isFavorited properties
-     */
-    toggle: async function(recipeId) {
-        try {
-            if (!window.FlavorConnect.config.isLoggedIn) {
-                window.location.href = `${window.FlavorConnect.config.baseUrl}login.php`;
-                return { success: false, error: 'User not logged in' };
-            }
-
-            // Use the toggle_favorite.php endpoint with POST method
-            const url = config.baseUrl.endsWith('/') ? config.baseUrl.slice(0, -1) : config.baseUrl;
-            const fullUrl = `${url}/api/toggle_favorite.php`;
-
-
-            // Add cache-busting parameter to prevent caching
-            const cacheBuster = new Date().getTime();
-            const finalUrl = `${fullUrl}?_=${cacheBuster}`;
-
-            // Create a simple JSON payload instead of URLSearchParams
-            const payload = JSON.stringify({ recipe_id: recipeId });
-
-            const response = await fetch(finalUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Cache-Control': 'no-cache, no-store, must-revalidate',
-                    'Pragma': 'no-cache',
-                    'Expires': '0'
-                },
-                body: payload
-            });
-
-
-            
-            // Handle unauthorized response (user not logged in)
-            if (response.status === 401) {
-
-                window.location.href = `${window.FlavorConnect.config.baseUrl}login.php`;
-                return { success: false, error: 'User not logged in' };
-            }
-            
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
-            // Check if the response is JSON
-            const contentType = response.headers.get('content-type');
-            if (!contentType || !contentType.includes('application/json')) {
-                const text = await response.text();
-
+                // Use the same robust URL construction as the toggle function
+                let apiUrl;
                 
-                // Try to extract error message from HTML
-                let errorMessage = 'Invalid response format';
-                try {
-                    // Look for PHP error message in the HTML
-                    const errorMatch = text.match(/<b>([^<]+)<\/b>/);
-                    if (errorMatch && errorMatch[1]) {
-                        errorMessage = errorMatch[1];
+                // Get the base URL from the config if available
+                if (window.FlavorConnect && window.FlavorConnect.config && window.FlavorConnect.config.baseUrl) {
+                    apiUrl = window.FlavorConnect.config.baseUrl;
+                    // Remove trailing slash if present
+                    if (apiUrl.endsWith('/')) {
+                        apiUrl = apiUrl.slice(0, -1);
                     }
-                } catch (e) {
-                    // Silent catch - we'll use the default error message
-                }
-                
-                return { 
-                    success: false, 
-                    error: errorMessage,
-                    html_response: true
-                };
-            }
-
-            try {
-                const data = await response.json();
-                
-                // Check if we're on the favorites page and need to remove the card
-                if (data.success === true && data.is_favorited === false) {
-                    // If we're on the favorites page, check if we need to remove the recipe card
-                    const currentPath = window.location.pathname;
-                    if (currentPath.includes('/users/favorites.php')) {
-                        // Find the recipe card for this recipe
-                        const button = document.querySelector(`.favorite-btn[data-recipe-id="${recipeId}"]`);
-                        if (button && window.FlavorConnect.favoritesPage) {
-                            // Use the favoritesPage.removeRecipeCard method to remove it with animation
-                            window.FlavorConnect.favoritesPage.removeRecipeCard(button);
+                } else {
+                    // Fallback to constructing the URL manually
+                    const protocol = window.location.protocol;
+                    const host = window.location.host;
+                    apiUrl = `${protocol}//${host}`;
+                    
+                    // For XAMPP, we need to include the project folder in the path
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        // Extract the project folder from the current path
+                        const pathParts = window.location.pathname.split('/');
+                        if (pathParts.length > 1 && pathParts[1]) {
+                            apiUrl += `/${pathParts[1]}`;
                         }
                     }
                 }
                 
-                return {
-                    success: data.success === true,
-                    isFavorited: data.is_favorited === true
-                };
-            } catch (jsonError) {
-
-                return { 
-                    success: false, 
-                    error: 'Failed to parse JSON response' 
-                };
+                // Construct the full API URL with the recipe_id parameter
+                const fullUrl = `${apiUrl}/api/toggle_favorite.php?recipe_id=${recipeId}`;
+            
+                // Add cache-busting parameter to prevent caching
+                const cacheBuster = new Date().getTime();
+                const finalUrl = `${fullUrl}&_=${cacheBuster}`;
+                
+                const response = await fetch(finalUrl, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Cache-Control': 'no-cache, no-store, must-revalidate',
+                        'Pragma': 'no-cache',
+                        'Expires': '0'
+                    },
+                    // Ensure credentials are included for proper session handling
+                    credentials: 'same-origin',
+                    // Add cache control to prevent caching issues
+                    cache: 'no-store'
+                });
+                
+                // Handle unauthorized response (user not logged in)
+                if (response.status === 401) {
+                    return false;
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    return false;
+                }
+                
+                const data = await response.json();
+                return data.is_favorited === true;
+            } catch (error) {
+                return false;
             }
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    },
-    
+        },
+        
+        /**
+         * Toggle the favorite status of a recipe
+         * @param {number} recipeId - The ID of the recipe to toggle
+         * @returns {Promise<Object>} - Object with success and isFavorited properties
+         */
+        toggle: async function(recipeId) {
+            try {
+                if (!window.FlavorConnect.config.isLoggedIn) {
+                    window.location.href = `${window.FlavorConnect.config.baseUrl}login.php`;
+                    return { success: false, error: 'User not logged in' };
+                }
+                
+                // Ensure we're using a clean URL without any navigation parameters
+                let apiUrl;
+                
+                // Get the base URL from the config if available
+                if (window.FlavorConnect && window.FlavorConnect.config && window.FlavorConnect.config.baseUrl) {
+                    apiUrl = window.FlavorConnect.config.baseUrl;
+                    // Remove trailing slash if present
+                    if (apiUrl.endsWith('/')) {
+                        apiUrl = apiUrl.slice(0, -1);
+                    }
+                } else {
+                    // Fallback to constructing the URL manually
+                    const protocol = window.location.protocol;
+                    const host = window.location.host;
+                    apiUrl = `${protocol}//${host}`;
+                    
+                    // For XAMPP, we need to include the project folder in the path
+                    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                        // Extract the project folder from the current path
+                        const pathParts = window.location.pathname.split('/');
+                        if (pathParts.length > 1 && pathParts[1]) {
+                            apiUrl += `/${pathParts[1]}`;
+                        }
+                    }
+                }
+                
+                // Construct the full API URL - the API is directly in the /api directory
+                const fullApiUrl = `${apiUrl}/api/toggle_favorite.php`;
+                
+                const response = await fetch(fullApiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    // Add cache control to prevent caching issues
+                    cache: 'no-store',
+                    // Include credentials to ensure cookies are sent
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        recipe_id: recipeId
+                    })
+                });
+                
+                // Handle unauthorized response (user not logged in)
+                if (response.status === 401) {
+                    window.location.href = `${window.FlavorConnect.config.baseUrl}login.php`;
+                    return { success: false, error: 'User not logged in' };
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                // Check if the response is JSON
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await response.text();
+                    
+                    // Try to extract error message from HTML
+                    let errorMessage = 'Invalid response format';
+                    try {
+                        // Look for PHP error message in the HTML
+                        const errorMatch = text.match(/\<b\>([^\<]+)\<\/b\>/);
+                        if (errorMatch && errorMatch[1]) {
+                            errorMessage = errorMatch[1];
+                        }
+                    } catch (e) {
+                        // Silent catch - we'll use the default error message
+                    }
+                    
+                    return { 
+                        success: false, 
+                        error: errorMessage,
+                        html_response: true
+                    };
+                }
+                
+                try {
+                    const data = await response.json();
+                    
+                    // Check if we're on the favorites page and need to remove the card
+                    if (data.success === true && data.is_favorited === false) {
+                        // If we're on the favorites page, check if we need to remove the recipe card
+                        const currentPath = window.location.pathname;
+                        // More robust check for favorites page that works in both development and production
+                        if (currentPath.includes('/users/favorites.php') || currentPath.endsWith('/favorites.php')) {
+                            // Find the recipe card for this recipe
+                            const button = document.querySelector(`.favorite-btn[data-recipe-id="${recipeId}"]`);
+                            if (button && window.FlavorConnect.favoritesPage) {
+                                // Use the favoritesPage.removeRecipeCard method to remove it with animation
+                                window.FlavorConnect.favoritesPage.removeRecipeCard(button);
+                            }
+                        }
+                    }
+                    
+                    return {
+                        success: data.success === true,
+                        isFavorited: data.is_favorited === true
+                    };
+                } catch (jsonError) {
+                    return { 
+                        success: false, 
+                        error: 'Failed to parse JSON response' 
+                    };
+                }
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        },
+        
         /**
          * Get all favorite recipes for the current user
          * @param {string} sortBy - Sort parameter (date, name, etc.)
@@ -256,36 +296,33 @@ window.FlavorConnect.favorites = (function() {
             try {
                 if (!config.isLoggedIn) return [];
             
-            // In this implementation, we're relying on the server-side rendering
-            // to provide the favorites data directly in the DOM
-
-            
-            // Get recipe IDs from the DOM
-            const favoriteButtons = document.querySelectorAll('.favorite-btn.favorited, .unfavorite-btn');
-            const favorites = Array.from(favoriteButtons).map(button => {
-                const recipeCard = button.closest('.recipe-card');
-                if (!recipeCard) return null;
+                // In this implementation, we're relying on the server-side rendering
+                // to provide the favorites data directly in the DOM
                 
-                const recipeId = button.dataset.recipeId;
-                const titleEl = recipeCard.querySelector('.recipe-title');
-                const imageEl = recipeCard.querySelector('.recipe-image');
+                // Get recipe IDs from the DOM
+                const favoriteButtons = document.querySelectorAll('.favorite-btn.favorited, .unfavorite-btn');
+                const favorites = Array.from(favoriteButtons).map(button => {
+                    const recipeCard = button.closest('.recipe-card');
+                    if (!recipeCard) return null;
+                    
+                    const recipeId = button.dataset.recipeId;
+                    const titleEl = recipeCard.querySelector('.recipe-title');
+                    const imageEl = recipeCard.querySelector('.recipe-image');
+                    
+                    return {
+                        recipe_id: recipeId,
+                        title: titleEl ? titleEl.textContent : '',
+                        img_file_path: imageEl ? imageEl.src : '',
+                        is_favorited: true
+                    };
+                }).filter(f => f !== null);
                 
-                return {
-                    recipe_id: recipeId,
-                    title: titleEl ? titleEl.textContent : '',
-                    img_file_path: imageEl ? imageEl.src : '',
-                    is_favorited: true
-                };
-            }).filter(f => f !== null);
-            
-
-            return favorites;
-        } catch (error) {
-
-            return [];
-        }
-    },
-    
+                return favorites;
+            } catch (error) {
+                return [];
+            }
+        },
+        
         /**
          * Create empty state HTML for favorites page
          * @returns {string} HTML for empty state
