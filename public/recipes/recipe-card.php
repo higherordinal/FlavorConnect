@@ -44,6 +44,11 @@ if (isset($ref_page)) {
         $decoded_params = urldecode($gallery_params);
         $ref_param .= '&gallery_params=' . h(u($decoded_params));
     }
+    
+    // Add pagination context for any gallery page
+    if (isset($_GET['page'])) {
+        $ref_param .= '&page=' . h(u($_GET['page']));
+    }
 }
 
 // Add the ref parameter to the URL

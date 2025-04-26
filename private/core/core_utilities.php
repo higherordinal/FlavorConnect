@@ -430,6 +430,44 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
             $result['url'] = url_for('/recipes/index.php?' . $gallery_params);
         }
         
+        // Special handling for favorites page
+        if (strpos($ref_page, '/users/favorites.php') !== false) {
+            $result['url'] = url_for('/users/favorites.php');
+            $result['text'] = 'Back to Favorites';
+            
+            // Add page parameter if it exists
+            if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+                $result['url'] .= '?page=' . $_GET['page'];
+            }
+            
+            return $result;
+        }
+        
+        // Handle pagination for other gallery pages
+        if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+            // Only add page parameter if the URL doesn't already have it
+            $url_has_page = false;
+            
+            // Check if the URL already has a query string
+            if (strpos($result['url'], '?') !== false) {
+                // Extract existing query parameters
+                $url_parts = parse_url($result['url']);
+                if (isset($url_parts['query'])) {
+                    parse_str($url_parts['query'], $query_params);
+                    // Check if page parameter already exists
+                    $url_has_page = isset($query_params['page']);
+                }
+                
+                // Add page parameter if it doesn't exist
+                if (!$url_has_page) {
+                    $result['url'] .= '&page=' . $_GET['page'];
+                }
+            } else {
+                // No query string, add page parameter
+                $result['url'] .= '?page=' . $_GET['page'];
+            }
+        }
+        
         // Set appropriate back text based on the back link
         // First, try to find an exact match in the path-to-title mapping
         $found_exact_match = false;
@@ -604,6 +642,14 @@ function get_back_text_from_path($path) {
            strpos($path, '/admin/categories/type') !== false ||
            strpos($path, '/admin/categories/measurement') !== false) {
         return 'Back to Recipe Metadata';
+    } 
+    // User management pages
+    elseif (strpos($path, '/admin/users/edit.php') !== false) {
+        return 'Back to Edit User';
+    } elseif (strpos($path, '/admin/users/delete.php') !== false) {
+        return 'Back to Delete User';
+    } elseif (strpos($path, '/admin/users/new.php') !== false) {
+        return 'Back to New User';
     } elseif (strpos($path, '/admin/users') !== false) {
         return 'Back to User Management';
     } elseif (strpos($path, '/admin/categories') !== false) {
