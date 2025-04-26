@@ -389,11 +389,18 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
             $user_id = $_GET['user_id'];
         }
         
-        // If we found a user_id, set the back link to the edit user page
+        // If we found a user_id, determine the correct page to link back to
         if ($user_id) {
+            // Default to edit page
             $path = '/admin/users/edit.php';
+            
+            // Check if the ref_page indicates we should go back to delete page
+            if (strpos($ref_page, '/admin/users/delete.php') !== false) {
+                $path = '/admin/users/delete.php';
+            }
+            
             $result['url'] = url_for($path . '?user_id=' . $user_id);
-            $result['text'] = 'Back to ' . $path_to_title_map[$path];
+            $result['text'] = 'Back to ' . ($path_to_title_map[$path] ?? 'User Management');
         }
         
         // Check if we have category parameters to handle
