@@ -50,7 +50,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset
     // Check if user is admin or super admin
     if (!$session->is_admin() && !$session->is_super_admin()) {
         $session->message('You do not have permission to delete this review.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
+        
+        // Simple redirect back to the recipe page with reviews anchor
+        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
     }
     
     $rating_id = $_GET['rating_id'];
@@ -62,7 +64,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'admin_delete_review' && isset
         $session->message('Failed to delete review.');
     }
     
-    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
+    // Simple redirect back to the recipe page with reviews anchor
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
 }
 
 // Handle review deletion (user's own reviews)
@@ -79,7 +82,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
     
     if (!$review) {
         $session->message('Review not found or you do not have permission to delete it.');
-        redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
+        // Simple redirect back to the recipe page with reviews anchor
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
     }
     
     // Delete the review
@@ -89,7 +93,8 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete_review') {
         $session->message('Failed to delete review.');
     }
     
-    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
+    // Simple redirect back to the recipe page with reviews anchor
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
 }
 
 // Handle new review submission
@@ -128,7 +133,8 @@ if (is_post_request()) {
         $review = new RecipeReview($review_data);
         if ($review->save()) {
             $session->message('Review submitted successfully.');
-            redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . get_ref_parameter('ref_page') . '#reviews'));
+            // Simple redirect back to the recipe page with reviews anchor
+    redirect_to(url_for('/recipes/show.php?id=' . $recipe->recipe_id . '#reviews'));
         } else {
             $errors[] = 'Failed to save review.';
         }
@@ -410,15 +416,19 @@ echo display_session_message();
                                 <fieldset>
                                     <legend>Rating:</legend>
                                     <div class="star-rating">
-                                        <input type="radio" id="star5" name="review[rating]" value="5" required>
+                                        <!-- Fix for 'not focusable' error by removing required from individual inputs -->
+                                        <!-- and adding a hidden input that's always valid when any star is selected -->
+                                        <input type="hidden" name="review[rating]" id="rating-value" value="" required>
+                                        
+                                        <input type="radio" id="star5" name="review[rating]" value="5" class="star-input">
                                         <label for="star5"><i class="fas fa-star"></i><span class="visually-hidden">5 stars</span></label>
-                                        <input type="radio" id="star4" name="review[rating]" value="4">
+                                        <input type="radio" id="star4" name="review[rating]" value="4" class="star-input">
                                         <label for="star4"><i class="fas fa-star"></i><span class="visually-hidden">4 stars</span></label>
-                                        <input type="radio" id="star3" name="review[rating]" value="3">
+                                        <input type="radio" id="star3" name="review[rating]" value="3" class="star-input">
                                         <label for="star3"><i class="fas fa-star"></i><span class="visually-hidden">3 stars</span></label>
-                                        <input type="radio" id="star2" name="review[rating]" value="2">
+                                        <input type="radio" id="star2" name="review[rating]" value="2" class="star-input">
                                         <label for="star2"><i class="fas fa-star"></i><span class="visually-hidden">2 stars</span></label>
-                                        <input type="radio" id="star1" name="review[rating]" value="1">
+                                        <input type="radio" id="star1" name="review[rating]" value="1" class="star-input">
                                         <label for="star1"><i class="fas fa-star"></i><span class="visually-hidden">1 star</span></label>
                                     </div>
                                 </fieldset>
@@ -473,11 +483,11 @@ echo display_session_message();
                                 <?php echo h(date('M j, Y g:i A', strtotime($review->comment_created_at ?? 'now'))); ?>
                             </span>
                             <?php if($session->is_logged_in() && $session->get_user_id() == $review->user_id) { ?>
-                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . get_ref_parameter('ref_page') . '&action=delete_review'); ?>" class="delete-comment" aria-label="Delete your review">
+                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=delete_review'); ?>" class="delete-comment" aria-label="Delete your review">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             <?php } elseif($session->is_logged_in() && ($session->is_admin() || $session->is_super_admin())) { ?>
-                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . get_ref_parameter('ref_page') . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment" aria-label="Delete this review (admin)">
+                                <a href="<?php echo url_for('/recipes/show.php?id=' . h(u($recipe->recipe_id)) . '&action=admin_delete_review&rating_id=' . h(u($review->rating_id))); ?>" class="delete-comment" aria-label="Delete this review (admin)">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             <?php } ?>

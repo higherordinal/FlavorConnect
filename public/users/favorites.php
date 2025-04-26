@@ -71,8 +71,11 @@ include(SHARED_PATH . '/member_header.php');
                 ?>
                     <?php 
                         // Set variables for the recipe card component
-                        // Use get_ref_parameter to get the standardized reference parameter
-                        $ref_page = get_ref_parameter('ref_page', '/users/favorites.php');
+                        $ref_page = '/users/favorites.php';
+                        
+                        // Create gallery_params to preserve pagination context
+                        // This is similar to how recipes/index.php handles it
+                        $gallery_params = urlencode(http_build_query($_GET));
                         
                         // Include the recipe card component
                         include('../recipes/recipe-card.php'); 

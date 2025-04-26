@@ -39,7 +39,7 @@ if (isset($ref_page)) {
     $ref_param = '&ref_page=' . h(u($ref_page));
     
     // Add gallery parameters if available
-    if (isset($gallery_params) && strpos($ref_page, '/recipes/index.php') !== false) {
+    if (isset($gallery_params) && (strpos($ref_page, '/recipes/index.php') !== false || strpos($ref_page, '/users/favorites.php') !== false)) {
         // Make sure we're not double-encoding
         $decoded_params = urldecode($gallery_params);
         $ref_param .= '&gallery_params=' . h(u($decoded_params));

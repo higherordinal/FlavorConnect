@@ -420,24 +420,44 @@ function get_back_link($default_url = '/index.php', $allowed_domains = [], $defa
         }
         
         // Check if we have gallery parameters to preserve pagination and filters
-        if (isset($_GET['gallery_params']) && strpos($ref_page, '/recipes/index.php') !== false) {
+        if (isset($_GET['gallery_params'])) {
             // Make sure we're not double-decoding
             $gallery_params = $_GET['gallery_params'];
             // Check if it's already decoded
             if (strpos($gallery_params, '%') !== false) {
                 $gallery_params = urldecode($gallery_params);
             }
-            $result['url'] = url_for('/recipes/index.php?' . $gallery_params);
+            
+            // Determine the correct page to return to based on ref_page
+            if (strpos($ref_page, '/recipes/index.php') !== false) {
+                $result['url'] = url_for('/recipes/index.php?' . $gallery_params);
+            } elseif (strpos($ref_page, '/users/favorites.php') !== false) {
+                $result['url'] = url_for('/users/favorites.php?' . $gallery_params);
+                $result['text'] = 'Back to Favorites';
+            }
         }
         
-        // Special handling for favorites page
-        if (strpos($ref_page, '/users/favorites.php') !== false) {
+        // Special handling for favorites page (when no gallery_params)
+        if (strpos($ref_page, '/users/favorites.php') !== false && !isset($_GET['gallery_params'])) {
             $result['url'] = url_for('/users/favorites.php');
             $result['text'] = 'Back to Favorites';
             
-            // Add page parameter if it exists
-            if (isset($_GET['page']) && is_numeric($_GET['page'])) {
-                $result['url'] .= '?page=' . $_GET['page'];
+            // Check if the ref_page contains a page parameter
+            $page_param = null;
+            if (strpos($ref_page, 'page=') !== false) {
+                // Extract the page parameter from ref_page
+                preg_match('/page=(\d+)/', $ref_page, $matches);
+                if (isset($matches[1]) && is_numeric($matches[1])) {
+                    $page_param = $matches[1];
+                }
+            }
+            
+            // Only preserve pagination context when coming from a recipe show page
+            // This ensures we only add the page parameter when using the back button from a recipe
+            $coming_from_recipe_show = strpos($_SERVER['PHP_SELF'], '/recipes/show.php') !== false;
+            
+            if ($coming_from_recipe_show && $page_param) {
+                $result['url'] .= '?page=' . $page_param;
             }
             
             return $result;
@@ -718,100 +738,51 @@ function get_ref_parameter($type = 'ref_page') {
      * This coordination ensures consistent navigation with or without JavaScript.
      */
     
-    if ($type === 'ref_page') {
-        // Use ref_page parameter with full paths
-        $ref_param = '?ref_page=' . $current_path;
+    // Set the base reference parameter based on type
+    $ref_param = '?ref_page=' . $current_path;
+    
+    // Collect context parameters
+    $context_params = [];
+    
+    // Add recipe ID if we're on a recipe page (show, edit, or delete)
+    if ((strpos($current_path, '/recipes/show.php') !== false || 
+         strpos($current_path, '/recipes/edit.php') !== false || 
+         strpos($current_path, '/recipes/delete.php') !== false) && 
+        isset($_GET['id'])) {
+        // Add recipe_id as a context parameter
+        $context_params['recipe_id'] = $_GET['id'];
+    }
+    
+    // Add user ID if we're on a user edit or delete page
+    if ((strpos($current_path, '/admin/users/edit.php') !== false || 
+         strpos($current_path, '/admin/users/delete.php') !== false) && 
+        isset($_GET['user_id'])) {
+        // Add user_id as a context parameter
+        $context_params['user_id'] = $_GET['user_id'];
+    }
+    
+    // Add category context if we're on an admin category page
+    if (strpos($current_path, '/admin/categories/') !== false && isset($_GET['id'])) {
+        // Extract category information using our helper function
+        $category_info = extract_category_info_from_path($current_path);
+        $category_type = $category_info['category_type'];
+        $action_type = $category_info['action_type'];
         
-        // Collect context parameters
-        $context_params = [];
-        
-        // Add recipe ID if we're on a recipe page (show, edit, or delete)
-        if ((strpos($current_path, '/recipes/show.php') !== false || 
-             strpos($current_path, '/recipes/edit.php') !== false || 
-             strpos($current_path, '/recipes/delete.php') !== false) && 
-            isset($_GET['id'])) {
-            // Add recipe_id as a context parameter
-            $context_params['recipe_id'] = $_GET['id'];
-        }
-        
-        // Add user ID if we're on a user edit or delete page
-        if ((strpos($current_path, '/admin/users/edit.php') !== false || 
-             strpos($current_path, '/admin/users/delete.php') !== false) && 
-            isset($_GET['user_id'])) {
-            // Add user_id as a context parameter
-            $context_params['user_id'] = $_GET['user_id'];
-        }
-        
-        // Add category context if we're on an admin category page
-        if (strpos($current_path, '/admin/categories/') !== false && isset($_GET['id'])) {
-            // Extract category information using our helper function
-            $category_info = extract_category_info_from_path($current_path);
-            $category_type = $category_info['category_type'];
-            $action_type = $category_info['action_type'];
+        // Only add category parameters if we found a valid category type
+        if ($category_type && in_array($category_type, ['diet', 'style', 'type', 'measurement'])) {
+            $context_params['category_id'] = $_GET['id'];
+            $context_params['category_type'] = $category_type;
             
-            // Only add category parameters if we found a valid category type
-            if ($category_type && in_array($category_type, ['diet', 'style', 'type', 'measurement'])) {
-                $context_params['category_id'] = $_GET['id'];
-                $context_params['category_type'] = $category_type;
-                
-                // Add action type if available
-                if (!empty($action_type)) {
-                    $context_params['action_type'] = $action_type;
-                }
+            // Add action type if available
+            if (!empty($action_type)) {
+                $context_params['action_type'] = $action_type;
             }
         }
-        
-        // Add all context parameters to the ref_param
-        foreach ($context_params as $key => $value) {
-            $ref_param .= '&' . $key . '=' . $value;
-        }
-    } else {
-        // For backward compatibility, use the ref_page parameter with the current path
-        // This ensures all navigation uses the standardized format
-        $ref_param = '?ref_page=' . $current_path;
-        
-        // Collect context parameters
-        $context_params = [];
-        
-        // Add category context if we're on an admin category page
-        if (strpos($current_path, '/admin/categories/') !== false && isset($_GET['id'])) {
-            // Extract category information using our helper function
-            $category_info = extract_category_info_from_path($current_path);
-            $category_type = $category_info['category_type'];
-            $action_type = $category_info['action_type'];
-            
-            // Only add category parameters if we found a valid category type
-            if ($category_type && in_array($category_type, ['diet', 'style', 'type', 'measurement'])) {
-                $context_params['category_id'] = $_GET['id'];
-                $context_params['category_type'] = $category_type;
-                
-                // Add action type if available
-                if (!empty($action_type)) {
-                    $context_params['action_type'] = $action_type;
-                }
-            }
-        }
-        
-        // Add recipe ID if we're on a recipe page
-        if (strpos($current_path, '/recipes/show.php') !== false && isset($_GET['id'])) {
-            $context_params['recipe_id'] = $_GET['id'];
-        }
-        
-        // Add user ID if we're on a user edit page
-        if (strpos($current_path, '/admin/users/edit.php') !== false && isset($_GET['user_id'])) {
-            $context_params['user_id'] = $_GET['user_id'];
-        }
-        
-        // Add user ID if we're on a user delete page
-        if (strpos($current_path, '/admin/users/delete.php') !== false && isset($_GET['user_id'])) {
-            $context_params['user_id'] = $_GET['user_id'];
-        }
-        
-        // Add all context parameters to the ref_param using our helper function
-        // Add all context parameters to the ref_param
-        foreach ($context_params as $key => $value) {
-            $ref_param .= '&' . $key . '=' . $value;
-        }
+    }
+    
+    // Add all context parameters to the ref_param
+    foreach ($context_params as $key => $value) {
+        $ref_param .= '&' . $key . '=' . $value;
     }
     
     return $ref_param;
