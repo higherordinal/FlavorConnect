@@ -350,6 +350,12 @@ window.FlavorConnect.components.pagination = (function() {
                     
                     // Fade content back in
                     contentContainer.style.opacity = '1';
+                    
+                    // Reinitialize favorite buttons after content update
+                    if (window.FlavorConnect && window.FlavorConnect.favorites) {
+                        log('Reinitializing favorite buttons after pagination');
+                        window.FlavorConnect.favorites.initButtons();
+                    }
                 }, 50);
                 
                 // After the content is updated, preserve filter selections
@@ -384,6 +390,12 @@ window.FlavorConnect.components.pagination = (function() {
             } else {
                 // Standard content update for other pages
                 contentContainer.innerHTML = newContent.innerHTML;
+                
+                // Reinitialize favorite buttons for non-recipe gallery pages too
+                if (window.FlavorConnect && window.FlavorConnect.favorites) {
+                    log('Reinitializing favorite buttons after standard content update');
+                    window.FlavorConnect.favorites.initButtons();
+                }
             }
             
             // Update browser history
@@ -392,11 +404,17 @@ window.FlavorConnect.components.pagination = (function() {
             // Re-initialize pagination for the new content
             initPagination();
             
-            // Re-initialize favorites functionality
-            if (window.FlavorConnect && window.FlavorConnect.favorites) {
-                window.FlavorConnect.favorites.initButtons();
+            // Re-initialize tooltips if available
+            if (window.FlavorConnect && window.FlavorConnect.tooltips) {
+                log('Reinitializing tooltips');
+                window.FlavorConnect.tooltips.init();
             }
             
+            // Dispatch a custom event to notify other components that content has been updated
+            const contentUpdatedEvent = new CustomEvent('flavorconnect:content-updated', {
+                detail: { url: url }
+            });
+            document.dispatchEvent(contentUpdatedEvent);
             // Re-initialize favorites page functionality if on favorites page
             if (window.FlavorConnect && window.FlavorConnect.favoritesPage) {
                 window.FlavorConnect.favoritesPage.setupEventListeners();
