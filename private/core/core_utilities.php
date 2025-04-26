@@ -935,39 +935,4 @@ function unified_navigation($default_back_url = '/index.php', $breadcrumbs = [],
     return $html;
 }
 
-/**
- * Include the recipe card component with environment-specific path handling
- * 
- * @param string $ref Reference page (e.g., 'home', 'gallery', 'favorites')
- * @param array $params Additional parameters to pass to the recipe card
- * @return void
- */
-function include_recipe_card($ref, $params = []) {
-    // Make sure $ref is passed through to the recipe card template
-    // Do not override if already in $params
-    if (!isset($params['ref'])) {
-        $params['ref'] = $ref;
-    }
-    
-    // Extract any additional parameters passed to the function
-    extract($params);
-    
-    // Use absolute path in production, relative path in development
-    if (defined('ENVIRONMENT') && ENVIRONMENT === 'production') {
-        include(PUBLIC_PATH . '/recipes/recipe-card.php');
-    } else {
-        // In development, use relative path based on the current directory
-        $current_dir = basename(dirname($_SERVER['SCRIPT_FILENAME']));
-        
-        if ($current_dir === 'recipes') {
-            include('recipe-card.php');
-        } else if ($current_dir === 'users') {
-            include('../recipes/recipe-card.php');
-        } else {
-            // For home page or other locations
-            include('recipes/recipe-card.php');
-        }
-    }
-}
-
 ?>
