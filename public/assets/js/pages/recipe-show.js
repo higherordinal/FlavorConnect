@@ -21,10 +21,11 @@ window.FlavorConnect.pages.recipeShow = (function() {
     // Configuration
     const config = {
         selectors: {
-            starRating: '.star-rating input[type="radio"]',
+            starRating: '.star-rating input.star-input',
             starLabels: '.star-rating label',
             commentForm: 'form',
-            printButton: '#printRecipeBtn'
+            printButton: '#printRecipeBtn',
+            hiddenRatingInput: '#rating-value'
         },
         classes: {
             active: 'active'
@@ -86,11 +87,17 @@ window.FlavorConnect.pages.recipeShow = (function() {
      * @private
      */
     function handleRatingClick(event) {
-        const starInput = event.target.closest('input[type="radio"]');
+        const starInput = event.target.closest('input.star-input');
         if (!starInput) return;
         
         // Update the current rating in our state
         state.currentRating = parseInt(starInput.value, 10);
+        
+        // Update the hidden input value to make form validation work
+        const hiddenInput = document.querySelector(config.selectors.hiddenRatingInput);
+        if (hiddenInput) {
+            hiddenInput.value = state.currentRating;
+        }
         
         // Update the visual state of all stars
         updateStarRating();

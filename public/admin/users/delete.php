@@ -55,8 +55,12 @@ if(is_post_request()) {
     } else {
         $session->message('Failed to delete the user.');
     }
-    // Redirect to the users index page
-    redirect_to(url_for('/admin/users/index.php'));
+    // Redirect to the users index page, preserving ref_page parameter if it exists
+    $redirect_url = '/admin/users/index.php';
+    if(isset($_GET['ref_page'])) {
+        $redirect_url .= '?ref_page=' . urlencode($_GET['ref_page']);
+    }
+    redirect_to(url_for($redirect_url));
 }
 
 $page_title = 'Delete User';
@@ -117,7 +121,7 @@ include(SHARED_PATH . '/member_header.php');
             <p><strong>Status:</strong> <?php echo $user->is_active ? 'Active' : 'Inactive'; ?></p>
         </div>
 
-        <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" method="post">
+        <form action="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id)) . (isset($_GET['ref_page']) ? '&ref_page=' . h(u($_GET['ref_page'])) : '')); ?>" method="post">
             <div class="form-buttons" style="justify-content: center;">
                 <button type="submit" class="action delete">Delete User</button>
                 <a href="<?php echo url_for('/admin/users/index.php' . get_ref_parameter()); ?>" class="action cancel">Cancel</a>

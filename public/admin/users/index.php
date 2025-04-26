@@ -154,12 +154,12 @@ include(SHARED_PATH . '/member_header.php');
                             ?>
                         </td>
                         <td data-label="Actions" class="actions">
-                            <a href="<?php echo url_for('/admin/users/edit.php?user_id=' . h(u($user->user_id))); ?>" 
+                            <a href="<?php echo url_for('/admin/users/edit.php?user_id=' . h(u($user->user_id))) . '&ref_page=/admin/users/index.php'; ?>" 
                                class="action" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <?php if($user->user_level !== 's') { ?>
-                                <a href="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))); ?>" 
+                                <a href="<?php echo url_for('/admin/users/delete.php?user_id=' . h(u($user->user_id))) . '&ref_page=/admin/users/index.php'; ?>" 
                                    class="action delete" 
                                    title="Delete">
                                     <i class="fas fa-trash"></i>

@@ -46,6 +46,7 @@ window.FlavorConnect.utils.backLink = (function() {
      */
     function enhanceBackLinks() {
         const backLinks = document.querySelectorAll('.back-link');
+        const currentUrl = window.location.href; // Define currentUrl here
         
         backLinks.forEach(function(link) {
             // Check if the link already has data attributes from PHP
