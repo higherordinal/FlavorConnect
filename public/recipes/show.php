@@ -508,9 +508,10 @@ echo display_session_message();
 </div>
 
 <script>
-    window.initialConfig = {
-        baseUrl: '<?php echo 'http://' . $_SERVER['HTTP_HOST'] . url_for('/api/recipes/'); ?>'
-    };
+    // Update the existing FlavorConnect config with recipe-specific data
+    if (window.FlavorConnect && window.FlavorConnect.config) {
+        window.FlavorConnect.config.isFavorited = <?php echo $is_favorited ? 'true' : 'false'; ?>;
+    }
     
     window.initialUserData = <?php echo json_encode([
         'isLoggedIn' => $session->is_logged_in(),

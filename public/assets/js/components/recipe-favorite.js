@@ -59,19 +59,25 @@ window.FlavorConnect.favorites = (function() {
                 const recipeId = button.dataset.recipeId;
                 if (!recipeId) return;
                 
-                // Check initial favorite status
-                this.checkStatus(recipeId)
-                    .then(isFavorited => {
-                        // Update button state based on favorite status
-                        updateButtonState(button, isFavorited);
-                    })
-                    .catch(error => {/* Error silently handled */});
+                // Check if we already have the favorite status in the config
+                if (window.FlavorConnect && window.FlavorConnect.config && typeof window.FlavorConnect.config.isFavorited !== 'undefined') {
+                    // Use the value from the config directly
+                    updateButtonState(button, window.FlavorConnect.config.isFavorited);
+                } else {
+                    // Fall back to checking status via API
+                    this.checkStatus(recipeId)
+                        .then(isFavorited => {
+                            // Update button state based on favorite status
+                            updateButtonState(button, isFavorited);
+                        })
+                        .catch(error => {/* Silent error handling */});
+                }
                 
                 // Mark as initialized
                 button.dataset.initialized = 'true';
                 
                 // Add click handler with debouncing
-                button.addEventListener('click', async (e) => {
+                button._clickHandler = async (e) => {
                     e.preventDefault();
                     
                     // Prevent rapid successive clicks
@@ -85,24 +91,33 @@ window.FlavorConnect.favorites = (function() {
                     // Add visual feedback
                     button.classList.add('processing');
                     
+                    // Optimistically update the UI immediately
+                    const currentState = button.classList.contains('favorited');
+                    updateButtonState(button, !currentState);
+                    
                     try {
                         const result = await this.toggle(recipeId);
                         
                         if (result.success) {
                             // Update button state using the shared function
                             updateButtonState(button, result.isFavorited);
+                        } else {
+                            // Revert to original state if there was an error
+                            updateButtonState(button, currentState);
                         }
                     } catch (error) {
-                        console.error('Error toggling favorite:', error);
+                        // Revert to original state if there was an error
+                        updateButtonState(button, currentState);
                     } finally {
-                        // Remove processing state after a short delay
-                        // This prevents immediate re-clicking
+                        // Remove processing state after a shorter delay
                         setTimeout(() => {
                             processingButtons.set(recipeId, false);
                             button.classList.remove('processing');
-                        }, 500);
+                        }, 250);
                     }
-                });
+                };
+                
+                button.addEventListener('click', button._clickHandler);
             });
         },
     
