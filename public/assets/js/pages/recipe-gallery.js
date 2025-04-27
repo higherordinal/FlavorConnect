@@ -95,7 +95,7 @@ function setupEventListeners() {
     });
 
     // Sort field listener
-    const sortSelect = document.querySelector('#sort');
+    const sortSelect = document.querySelector('#sort-filter');
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
             // Build the URL with the updated sort parameter

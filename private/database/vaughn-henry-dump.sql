@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 30, 2025 at 04:15 PM
--- Server version: 8.0.41-32
--- PHP Version: 8.3.19
+-- Host: 127.0.0.1:3308
+-- Generation Time: Apr 26, 2025 at 11:43 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -26,6 +26,7 @@ DROP DATABASE IF EXISTS `flavorconnect`;
 CREATE DATABASE IF NOT EXISTS `flavorconnect` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE `flavorconnect`;
 
+-- --------------------------------------------------------
 -- Create user and grant privileges
 CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY '@connect4Establish';
 GRANT ALL PRIVILEGES ON flavorconnect.* TO 'user'@'%';
@@ -38,9 +39,9 @@ FLUSH PRIVILEGES;
 --
 
 CREATE TABLE `ingredient` (
-  `ingredient_id` int UNSIGNED NOT NULL,
-  `recipe_id` int UNSIGNED NOT NULL,
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `ingredient_id` int(10) UNSIGNED NOT NULL,
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -48,6 +49,9 @@ CREATE TABLE `ingredient` (
 --
 
 INSERT INTO `ingredient` (`ingredient_id`, `recipe_id`, `name`) VALUES
+(531, 0, 'lemon juiceadfadfa'),
+(530, 0, 'tomato saucefdaadf'),
+(529, 0, 'veal shanksadfaf'),
 (5, 1, 'black pepper'),
 (2, 1, 'eggs'),
 (4, 1, 'pancetta'),
@@ -566,7 +570,22 @@ INSERT INTO `ingredient` (`ingredient_id`, `recipe_id`, `name`) VALUES
 (516, 149, 'dddd'),
 (519, 151, 'adfasdfafasdf'),
 (518, 151, 'adfasfasdfasdf'),
-(517, 151, 'dfafasdfafda');
+(517, 151, 'dfafasdfafda'),
+(522, 152, 'dfadfadf'),
+(520, 152, 'rfqrqerq'),
+(521, 152, 'rqefafaf'),
+(524, 153, 'afgsfgfgsgfs'),
+(523, 153, 'fgsfgshshgshg'),
+(525, 153, 'gadagfgf'),
+(528, 154, 'adgagafaf'),
+(527, 154, 'adgaggadfaf'),
+(526, 154, 'afadfadsfadf'),
+(534, 157, 'adfadfadfaffadf'),
+(533, 157, 'adfafafadfadfafd'),
+(532, 157, 'dafdfafadfaf'),
+(535, 158, 'fjladsfjklarjpf'),
+(536, 158, 'jadl;fkjal;jflk'),
+(537, 158, 'jajlkjflkajflaj;');
 
 -- --------------------------------------------------------
 
@@ -575,8 +594,8 @@ INSERT INTO `ingredient` (`ingredient_id`, `recipe_id`, `name`) VALUES
 --
 
 CREATE TABLE `measurement` (
-  `measurement_id` int UNSIGNED NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `measurement_id` int(10) UNSIGNED NOT NULL,
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -610,21 +629,21 @@ INSERT INTO `measurement` (`measurement_id`, `name`) VALUES
 --
 
 CREATE TABLE `recipe` (
-  `recipe_id` int UNSIGNED NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  `type_id` int UNSIGNED DEFAULT NULL,
-  `style_id` int UNSIGNED DEFAULT NULL,
-  `diet_id` int UNSIGNED DEFAULT NULL,
-  `prep_time` int DEFAULT '0',
-  `cook_time` int DEFAULT '0',
-  `video_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `img_file_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `alt_text` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `is_featured` tinyint(1) DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `type_id` int(10) UNSIGNED DEFAULT NULL,
+  `style_id` int(10) UNSIGNED DEFAULT NULL,
+  `diet_id` int(10) UNSIGNED DEFAULT NULL,
+  `prep_time` int(11) DEFAULT 0,
+  `cook_time` int(11) DEFAULT 0,
+  `video_url` varchar(255) DEFAULT NULL,
+  `img_file_path` varchar(255) DEFAULT NULL,
+  `alt_text` varchar(255) DEFAULT NULL,
+  `is_featured` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -646,12 +665,11 @@ INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`,
 (12, 3, 'Spicy Black Bean Tacos', 'Delicious and spicy black bean tacos topped with fresh ingredients.', 10, 3, 1, 1200, 600, 'https://www.youtube.com/watch?v=rd9cxZ1HQxY', 'recipe_67da2d68b9a80', 'Spicy Black Bean Tacos', 1, '2025-02-27 15:10:03', '2025-03-22 23:51:10'),
 (13, 5, 'Thai Green Curry', 'A fragrant and spicy Thai green curry with vegetables and tofu.', 10, 7, 2, 1800, 2400, 'https://www.youtube.com/watch?v=rTK8MWYYLko', 'recipe_67da247cd70b1.jpg', 'Thai Green Curry', 1, '2025-02-27 15:10:17', '2025-03-23 00:26:35'),
 (14, 2, 'Blueberry Pancakes', 'Fluffy pancakes with fresh blueberries and maple syrup.', 1, 1, 12, 900, 1200, 'https://www.youtube.com/watch?v=jYgVg6_1rHs', 'recipe_67da2f7a10375', 'Blueberry Pancakes', 0, '2025-02-27 15:10:17', '2025-03-22 23:55:16'),
-(15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 1, 9, 900, 600, 'https://www.youtube.com/watch?v=JS12i22tk7A', 'recipe_67da2f5e549a0', 'Spicy Garlic Butter Shrimp', 1, '2025-02-27 15:10:49', '2025-03-22 23:50:11'),
+(15, 3, 'Garlic Butter Shrimp', 'Juicy shrimp sautéed in a garlic butter sauce with lemon.', 10, 20, 9, 900, 600, 'https://www.youtube.com/watch?v=JS12i22tk7A', 'recipe_67da2f5e549a0', 'Spicy Garlic Butter Shrimp', 1, '2025-02-27 15:10:49', '2025-04-13 15:26:47'),
 (16, 5, 'Chocolate Chip Cookies', 'Classic soft and chewy chocolate chip cookies.', 5, 1, 12, 900, 1200, 'https://www.youtube.com/watch?v=loqCY9b7aec', 'recipe_67da2fcd7da67', 'Chocolate Chip Cookies', 0, '2025-02-27 15:10:49', '2025-03-22 23:34:48'),
 (84, 11, 'Sunrise Bacon', 'Make this delicious and crispy bacon in the oven with virtually zero clean up!', 1, 1, 8, 600, 1200, '', 'recipe_67da2f3fb7eee', 'Sunrise Bacon', 0, '2025-03-07 18:45:26', '2025-03-18 22:43:13'),
 (85, 12, 'Hearty Weekend Stew', 'A hearty and healthy weekend stew 🍲', 8, 1, 12, 1800, 12600, '', 'recipe_67da2f1d75b9c', 'Hearty Weekend Stew', 0, '2025-03-08 02:11:09', '2025-03-24 22:56:00'),
 (86, 10, 'Keto Sausage Balls', 'Keto recipe for easy breakfast or snack', 1, 1, 5, 1800, 900, 'https://www.youtube.com/watch?v=PYOk51JcrqA', 'recipe_67da2faea945e', 'Keto Sausage Balls', 0, '2025-03-08 17:37:51', '2025-03-23 00:31:13'),
-(87, 14, 'Knuckle Sandwich', 'Let\'s dish out some justice. ', 15, 1, 12, 300, 0, '', 'recipe_67da2f006099c', 'Knuckle Sandwich', 0, '2025-03-09 03:20:34', '2025-03-18 22:56:10'),
 (88, 15, 'Black Bean Brownies', 'These are decadent and gluten-free fudgy brownies. These brownies are perfect for a less guilty dessert', 5, 1, 3, 600, 2700, 'https://www.youtube.com/watch?v=PeEQPGYKcGE', 'recipe_67da2ee17782c', 'Black Bean Brownies', 0, '2025-03-09 05:10:46', '2025-03-23 00:30:19'),
 (105, 8, 'Beef Stroganoff', 'A creamy Russian dish with sautéed beef, mushrooms, and sour cream sauce.', 10, 14, 12, 900, 1800, 'https://www.youtube.com/watch?v=7r3dlmYUf4s', 'recipe_67da2d412b3eb', 'Beef Stroganoff', 0, '2025-03-17 18:28:57', '2025-03-23 00:24:10'),
 (108, 4, 'Spicy Vegan Chili', 'A delicious and hearty plant-based chili with a spicy kick.', 2, 1, 2, 900, 3600, 'https://www.youtube.com/watch?v=0DCajeyEzAI', 'recipe_67da2e993bafb', 'Spicy Vegan Chili', 0, '2025-03-17 21:27:36', '2025-03-23 00:27:31'),
@@ -663,7 +681,7 @@ INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`,
 (115, 18, 'Refreshing Greek Frappe', 'A frothy, iced Greek coffee made with instant coffee, sugar, and milk or water, perfect for a hot day.', 7, 13, 12, 300, 0, 'https://www.youtube.com/watch?v=MsL8n-u4CSc', 'recipe_67da2c86a673f', 'Refreshing Greek Frappe', 0, '2025-03-17 21:54:23', '2025-03-23 00:28:29'),
 (116, 24, 'Ethiopian Spiced Tea', 'A warm and aromatic Ethiopian tea infused with cinnamon, cloves, and cardamom, perfect for relaxation.', 7, 12, 12, 300, 600, '', 'recipe_67da2cbd27a2e', 'Ethiopian Spiced Tea', 0, '2025-03-17 21:57:18', '2025-03-18 22:32:30'),
 (117, 3, 'Chinese Scallion Pancakes', 'Crispy and savory Chinese scallion pancakes made with simple dough and fresh green onions.', 4, 4, 6, 900, 1200, 'https://www.youtube.com/watch?v=uxbS6j1B1Ps', 'recipe_67da2e77754fd', 'Chinese Scallion Pancakes', 0, '2025-03-17 21:59:29', '2025-03-24 03:19:36'),
-(121, 4, 'Chilaquiles', 'A traditional Mexican breakfast dish made with crispy tortilla chips simmered in a flavorful salsa and topped with eggs and cheese.', 1, 3, 9, 900, 1200, 'https://www.youtube.com/watch?v=JlmfX8Zv9FA', 'recipe_67da2c3b23634', 'Chilaquiles', 1, '2025-03-17 22:06:52', '2025-03-23 00:09:18'),
+(121, 4, 'Chilaquiles', 'A traditional Mexican breakfast dish made with crispy tortilla chips simmered in a flavorful salsa and topped with eggs and cheese.', 1, 3, 12, 900, 1200, 'https://www.youtube.com/watch?v=JlmfX8Zv9FA', 'recipe_67da2c3b23634', 'Chilaquiles', 1, '2025-03-17 22:06:52', '2025-04-15 03:36:30'),
 (122, 18, 'Masala Chai', 'A traditional Indian spiced tea brewed with black tea, milk, and aromatic spices for a rich and comforting flavor.', 7, 5, 12, 300, 600, 'https://www.youtube.com/watch?v=8fQAxZahx_U', 'recipe_67da2c1ba473f', 'Masala Chai', 0, '2025-03-17 22:14:38', '2025-03-23 00:17:04'),
 (123, 10, 'Mango Lassi', 'A creamy and refreshing Indian yogurt-based mango drink, perfect for cooling down on a hot day.', 7, 5, 12, 600, 0, 'https://www.youtube.com/watch?v=pByZ9WBCCHc', 'recipe_67da2bf8f1d0c', 'Mango Lassi', 0, '2025-03-17 22:17:50', '2025-03-23 00:21:46'),
 (124, 18, 'BBQ Spare Ribs', 'Tender and flavorful pork spare ribs slow-cooked in a smoky, tangy BBQ sauce.', 10, 1, 19, 900, 14400, '', 'recipe_67da2bd82fbe7', 'BBQ Spare Ribs', 0, '2025-03-17 22:19:07', '2025-03-18 22:28:43'),
@@ -689,11 +707,11 @@ INSERT INTO `recipe` (`recipe_id`, `user_id`, `title`, `description`, `type_id`,
 --
 
 CREATE TABLE `recipe_comment` (
-  `comment_id` int UNSIGNED NOT NULL,
-  `recipe_id` int UNSIGNED NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `comment_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `comment_id` int(10) UNSIGNED NOT NULL,
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `comment_text` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -800,8 +818,8 @@ INSERT INTO `recipe_comment` (`comment_id`, `recipe_id`, `user_id`, `comment_tex
 --
 
 CREATE TABLE `recipe_diet` (
-  `diet_id` int NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `diet_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -809,6 +827,7 @@ CREATE TABLE `recipe_diet` (
 --
 
 INSERT INTO `recipe_diet` (`diet_id`, `name`) VALUES
+(12, 'All Diets'),
 (19, 'Carnivore'),
 (4, 'Dairy-Free'),
 (3, 'Gluten-Free'),
@@ -818,10 +837,8 @@ INSERT INTO `recipe_diet` (`diet_id`, `name`) VALUES
 (22, 'Kosher'),
 (7, 'Low-Carb'),
 (8, 'Low-Fat'),
-(12, 'Non-Specific'),
 (6, 'Paleo'),
 (9, 'Pescatarian'),
-(23, 'Vampire'),
 (2, 'Vegan'),
 (1, 'Vegetarian');
 
@@ -832,10 +849,10 @@ INSERT INTO `recipe_diet` (`diet_id`, `name`) VALUES
 --
 
 CREATE TABLE `recipe_ingredient` (
-  `recipe_ingredient_id` int UNSIGNED NOT NULL,
-  `recipe_id` int UNSIGNED NOT NULL,
-  `ingredient_id` int UNSIGNED NOT NULL,
-  `measurement_id` int UNSIGNED NOT NULL,
+  `recipe_ingredient_id` int(10) UNSIGNED NOT NULL,
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `ingredient_id` int(10) UNSIGNED NOT NULL,
+  `measurement_id` int(10) UNSIGNED NOT NULL,
   `quantity` decimal(10,2) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1273,10 +1290,6 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 (1887, 129, 53, 17, 3.00),
 (1888, 129, 110, 16, 1.00),
 (1889, 129, 76, 3, 2.00),
-(1894, 15, 136, 1, 1.00),
-(1895, 15, 76, 1, 0.25),
-(1896, 15, 53, 2, 2.00),
-(1897, 15, 21, 1, 1.00),
 (1898, 12, 9, 1, 1.50),
 (1899, 12, 105, 1, 6.00),
 (1900, 12, 28, 1, 0.50),
@@ -1364,11 +1377,6 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 (1982, 7, 44, 3, 2.00),
 (1983, 7, 6, 2, 2.00),
 (1984, 7, 5, 2, 1.00),
-(1985, 121, 461, 1, 2.00),
-(1986, 121, 462, 1, 1.00),
-(1987, 121, 2, 16, 2.00),
-(1988, 121, 463, 3, 2.00),
-(1989, 121, 426, 3, 2.00),
 (2000, 8, 67, 1, 1.00),
 (2001, 8, 21, 1, 0.50),
 (2002, 8, 22, 1, 0.25),
@@ -1502,7 +1510,37 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 (2165, 150, 516, 17, 2.00),
 (2166, 151, 517, 1, 1.00),
 (2167, 151, 518, 7, 1.00),
-(2168, 151, 519, 8, 1.00);
+(2168, 151, 519, 8, 1.00),
+(2175, 152, 520, 20, 1.00),
+(2176, 152, 521, 3, 1.00),
+(2177, 152, 522, 16, 1.00),
+(2178, 153, 523, 21, 1.00),
+(2179, 153, 524, 18, 2.00),
+(2180, 153, 525, 7, 6.00),
+(2181, 154, 526, 8, 1.00),
+(2182, 154, 527, 16, 3.00),
+(2183, 154, 528, 15, 3.00),
+(2199, 155, 17, 18, 0.67),
+(2200, 155, 53, 18, 0.20),
+(2201, 155, 76, 20, 0.67),
+(2202, 156, 529, 3, 0.25),
+(2203, 156, 530, 8, 0.75),
+(2204, 156, 531, 3, 0.88),
+(2213, 15, 136, 1, 1.00),
+(2214, 15, 76, 1, 0.25),
+(2215, 15, 53, 2, 2.00),
+(2216, 15, 21, 1, 1.00),
+(2217, 157, 532, 17, 1.00),
+(2218, 157, 533, 1, 0.25),
+(2219, 157, 534, 21, 0.33),
+(2220, 121, 461, 1, 2.00),
+(2221, 121, 462, 1, 1.00),
+(2222, 121, 2, 16, 2.00),
+(2223, 121, 463, 3, 2.00),
+(2224, 121, 426, 3, 2.00),
+(2225, 158, 535, 16, 0.25),
+(2226, 158, 536, 18, 0.33),
+(2227, 158, 537, 18, 0.67);
 
 -- --------------------------------------------------------
 
@@ -1511,11 +1549,11 @@ INSERT INTO `recipe_ingredient` (`recipe_ingredient_id`, `recipe_id`, `ingredien
 --
 
 CREATE TABLE `recipe_rating` (
-  `rating_id` int NOT NULL,
-  `recipe_id` int UNSIGNED NOT NULL,
-  `user_id` int UNSIGNED NOT NULL,
-  `rating_value` tinyint NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+  `rating_id` int(11) NOT NULL,
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `rating_value` tinyint(4) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1643,7 +1681,11 @@ INSERT INTO `recipe_rating` (`rating_id`, `recipe_id`, `user_id`, `rating_value`
 (141, 15, 34, 5, '2025-03-23 09:07:13'),
 (142, 135, 31, 5, '2025-03-23 20:04:45'),
 (143, 2, 36, 4, '2025-03-24 10:37:10'),
-(144, 10, 12, 5, '2025-03-24 15:08:55');
+(144, 10, 12, 5, '2025-03-24 15:08:55'),
+(148, 138, 6, 4, '2025-04-09 15:11:08'),
+(149, 136, 6, 2, '2025-04-09 21:45:58'),
+(152, 124, 42, 4, '2025-04-25 21:24:44'),
+(154, 105, 42, 4, '2025-04-26 14:48:46');
 
 -- --------------------------------------------------------
 
@@ -1652,10 +1694,10 @@ INSERT INTO `recipe_rating` (`rating_id`, `recipe_id`, `user_id`, `rating_value`
 --
 
 CREATE TABLE `recipe_step` (
-  `step_id` int UNSIGNED NOT NULL,
-  `recipe_id` int UNSIGNED NOT NULL,
-  `step_number` int NOT NULL,
-  `instruction` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `step_id` int(10) UNSIGNED NOT NULL,
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `step_number` int(11) NOT NULL,
+  `instruction` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -1945,11 +1987,6 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 (1583, 129, 4, 'Divide the dough into small portions and roll into flat circles.'),
 (1584, 129, 5, 'Cook each naan on a hot skillet until bubbles form and golden brown spots appear.'),
 (1585, 129, 6, 'Brush with melted butter and serve hot.'),
-(1592, 15, 1, 'Melt butter in a pan over medium heat.'),
-(1593, 15, 2, 'Add minced garlic and cook until fragrant.'),
-(1594, 15, 3, 'Add shrimp, salt, and black pepper, and cook until pink.'),
-(1595, 15, 4, 'Drizzle with lemon juice and garnish with parsley.'),
-(1596, 15, 5, 'Serve warm.'),
 (1597, 12, 1, 'Heat olive oil in a pan over medium heat.'),
 (1598, 12, 2, 'Add chopped red onion, garlic, and jalapeño, and sauté until fragrant.'),
 (1599, 12, 3, 'Stir in black beans, cumin, chili powder, and salt. Cook for 5 minutes.'),
@@ -2029,11 +2066,6 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 (1673, 7, 5, 'Toast the burger buns.'),
 (1674, 7, 6, 'Assemble the sandwich by placing BBQ pork on buns, topping with onion slices and pickles.'),
 (1675, 7, 7, 'Serve warm and enjoy.'),
-(1676, 121, 1, 'Heat salsa in a pan over medium heat until simmering.'),
-(1677, 121, 2, 'Add tortilla chips to the salsa and stir gently to coat.'),
-(1678, 121, 3, 'In a separate pan, fry eggs to desired doneness.'),
-(1679, 121, 4, 'Plate the chilaquiles and top with fried eggs.'),
-(1680, 121, 5, 'Sprinkle with cotija cheese and drizzle with sour cream before serving.'),
 (1691, 8, 1, 'Preheat oven to 375°F (190°C).'),
 (1692, 8, 2, 'Pat dry the chicken with paper towels.'),
 (1693, 8, 3, 'Rub the chicken with lemon juice and olive oil.'),
@@ -2156,7 +2188,31 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 (1849, 85, 8, 'Cover pot and reduce heat to low medium. Stir every 30 minutes and use scissors to shred chicken further as needed. Salt and add bay leaf on 2nd hour. '),
 (1850, 85, 9, 'Remove from heat on 3.5 hours and enjoy. Apples and onions should be fully dissolved leaving only shredded chicken and carrots and garlic cloves as meat. Broth should be sweet and spicy.'),
 (1851, 151, 1, 'adadfadfasdf'),
-(1852, 151, 2, 'adfadfasdfsdaf');
+(1852, 151, 2, 'adfadfasdfsdaf'),
+(1857, 152, 1, 'adfadfadfa'),
+(1858, 152, 2, 'adfadfadfaf'),
+(1859, 153, 1, 'afgfgsfg'),
+(1860, 153, 2, 'afgaafgaf'),
+(1861, 154, 1, 'afadfafaf'),
+(1862, 154, 2, 'dsafdafa'),
+(1875, 155, 1, 'zdfsfgsfdgsdfdgsfd'),
+(1876, 155, 2, 'agfafgsfgagafdgagfa'),
+(1877, 156, 1, 'zdfsfgsfdgsdfdgsfdadfadfadf'),
+(1878, 156, 2, 'agfafgsfgagafdgagfadafdfaf'),
+(1889, 15, 1, 'Melt butter in a pan over medium heat.'),
+(1890, 15, 2, 'Add minced garlic and cook until fragrant.'),
+(1891, 15, 3, 'Add shrimp, salt, and black pepper, and cook until pink.'),
+(1892, 15, 4, 'Drizzle with lemon juice and garnish with parsley.'),
+(1893, 15, 5, 'Serve warm.'),
+(1894, 157, 1, 'afiodj;ajf;lajdlkfj'),
+(1895, 157, 2, 'iojfl;ka;lfjal;fjlkaj'),
+(1896, 121, 1, 'Heat salsa in a pan over medium heat until simmering.'),
+(1897, 121, 2, 'Add tortilla chips to the salsa and stir gently to coat.'),
+(1898, 121, 3, 'In a separate pan, fry eggs to desired doneness.'),
+(1899, 121, 4, 'Plate the chilaquiles and top with fried eggs.'),
+(1900, 121, 5, 'Sprinkle with cotija cheese and drizzle with sour cream before serving.'),
+(1901, 158, 1, 'kds;fjl;akdjfl;kajfl;kja'),
+(1902, 158, 2, 'al;kjdfkl;ajf;lkajfl;kj');
 
 -- --------------------------------------------------------
 
@@ -2165,8 +2221,8 @@ INSERT INTO `recipe_step` (`step_id`, `recipe_id`, `step_number`, `instruction`)
 --
 
 CREATE TABLE `recipe_style` (
-  `style_id` int NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `style_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -2176,7 +2232,6 @@ CREATE TABLE `recipe_style` (
 INSERT INTO `recipe_style` (`style_id`, `name`) VALUES
 (1, 'American'),
 (11, 'Asian'),
-(21, 'Bassin'),
 (16, 'Brazilian'),
 (4, 'Chinese'),
 (18, 'Cuban'),
@@ -2202,8 +2257,8 @@ INSERT INTO `recipe_style` (`style_id`, `name`) VALUES
 --
 
 CREATE TABLE `recipe_type` (
-  `type_id` int NOT NULL,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+  `type_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -2232,16 +2287,16 @@ INSERT INTO `recipe_type` (`type_id`, `name`) VALUES
 --
 
 CREATE TABLE `user_account` (
-  `user_id` int UNSIGNED NOT NULL,
-  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `first_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `last_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `user_level` enum('s','a','u') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'u',
-  `is_active` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `username` varchar(50) NOT NULL,
+  `first_name` varchar(50) NOT NULL,
+  `last_name` varchar(50) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `user_level` enum('s','a','u') NOT NULL DEFAULT 'u',
+  `is_active` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -2252,7 +2307,7 @@ INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `e
 (1, 'hcvaughn', 'Henry', 'Vaughn', 'henrycvaughn@students.abtech.edu', 'Divided4union', 'u', 1, '2025-03-04 15:46:35', '2025-03-08 22:29:17'),
 (2, 'admin_chef', 'Michael', 'Brown', 'michael@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'a', 1, '2025-03-04 15:46:35', NULL),
 (3, 'chef_maria', 'Maria', 'Garcia', 'maria@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', NULL),
-(4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', NULL),
+(4, 'home_cook', 'David', 'Wilson', 'david@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', '2025-04-25 21:45:22'),
 (5, 'foodie_jane', 'Jane', 'Smith', 'jane@example.com', '$2y$10$8sA2N5Sx/1zMG6RN2ZC1Y.oqhPE0U6Y3MxEJdA9WwR8wMYsDAF.Ym', 'u', 1, '2025-03-04 15:46:35', '2025-03-05 16:34:15'),
 (6, 'super_admin', 'Super', 'Admin', 'super@admin.com', '$2y$10$wcCE89SUfrazauK1wxuc8uidXkEpa.qy094gy9b4SyMBEJmd0mL4K', 's', 1, '2025-03-04 15:46:35', '2025-03-08 22:34:06'),
 (7, 'registertest', 'Register', 'Tester', 'register@test.com', '$2y$10$.xg8TwkVQ0H79jzws1xnlusfrEylzXiVH5bTU/E7EH.fIB0L.4szO', 'a', 0, '2025-03-04 15:52:53', '2025-03-08 22:32:57'),
@@ -2283,7 +2338,10 @@ INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `e
 (35, 'gZKtqNVzmBUs', 'xdIJRfliRGLg', 'bTQKKcQDYesICK', 'aabraxasay22chime96@gmail.com', '$2y$10$bQPI/FjmmW9vUZ8BJq1tquEGaQAzC0UiDDPT4KpeDSB9I7TPK1YD6', 'u', 1, '2025-03-24 12:48:44', NULL),
 (36, 'algol666', 'Pendaran', 'Roberts', 'pendaran@mac.com', '$2y$10$bz5ynBFKHArCZCQxIQQrHerkjU7SqmEgXp5v9R0GcaOaPsmcBPfg6', 'u', 1, '2025-03-24 15:28:22', NULL),
 (37, 'pFBsBTtxaZRnaKf', 'stgyeorlprhTs', 'nLNrzmJf', 'pooledjolitp44@gmail.com', '$2y$10$jO6VhhylkddGS4C9zgN4g.cI6UqjhWGxW5um0O0MVXdcTK6Zyrcl2', 'u', 1, '2025-03-29 23:49:11', NULL),
-(38, 'mODvbjqAWLujeFk', 'snpakFVKjOvoQi', 'GWXEbfug', 'ssuarezq37@gmail.com', '$2y$10$ZYO9nR5xSq3NsO0hECyJr.nqxITSnR/wFbGYEFCMXv.jNY4fWipp6', 'u', 1, '2025-03-29 23:54:51', NULL);
+(38, 'mODvbjqAWLujeFk', 'snpakFVKjOvoQi', 'GWXEbfug', 'ssuarezq37@gmail.com', '$2y$10$ZYO9nR5xSq3NsO0hECyJr.nqxITSnR/wFbGYEFCMXv.jNY4fWipp6', 'u', 1, '2025-03-29 23:54:51', NULL),
+(39, 'fadafafad', 'adadfadfad', 'afadfadaf', 'hcvaughn@unca.edu', '$2y$10$83fHLryPcquJQI.P.dDiOOMvzKcLtQFOJbHpyU39v53Ct2IjPX3kO', 'u', 1, '2025-04-09 14:59:02', NULL),
+(41, 'reg_user', 'Regular', 'User', 'regular@user.net', '$2y$10$a5y0zH8f24/X46tDcB/oqOK1fFhQAGZZhneGz1D8Wl4D1eDXITNJa', 'u', 1, '2025-04-25 21:34:19', NULL),
+(42, 'prof_admin', 'Professors', 'Admin', 'profs@admin.net', '$2y$10$lVDD9x3uvXl4eOzDSKaJsuLQMmLhfDhqoOz8/4.hLWykKBB6hsFLe', 'a', 1, '2025-04-25 21:36:55', NULL);
 
 -- --------------------------------------------------------
 
@@ -2292,9 +2350,9 @@ INSERT INTO `user_account` (`user_id`, `username`, `first_name`, `last_name`, `e
 --
 
 CREATE TABLE `user_favorite` (
-  `user_id` int UNSIGNED NOT NULL,
-  `recipe_id` int UNSIGNED NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `recipe_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -2302,16 +2360,16 @@ CREATE TABLE `user_favorite` (
 --
 
 INSERT INTO `user_favorite` (`user_id`, `recipe_id`, `created_at`) VALUES
-(6, 6, '2025-03-07 00:30:12'),
 (6, 7, '2025-03-07 03:09:51'),
-(6, 10, '2025-03-06 23:09:43'),
 (6, 11, '2025-03-07 02:59:02'),
-(6, 12, '2025-03-06 23:26:16'),
+(6, 12, '2025-04-15 15:27:57'),
 (6, 13, '2025-03-06 23:11:53'),
 (6, 16, '2025-03-07 03:05:01'),
-(6, 135, '2025-03-20 21:38:22'),
-(6, 136, '2025-03-21 01:57:12'),
-(6, 140, '2025-03-18 23:43:15'),
+(6, 127, '2025-04-05 03:52:17'),
+(6, 133, '2025-04-11 03:09:24'),
+(6, 138, '2025-04-15 15:09:03'),
+(6, 139, '2025-04-15 03:22:06'),
+(6, 140, '2025-04-11 03:08:52'),
 (10, 10, '2025-03-07 00:13:53'),
 (10, 15, '2025-03-08 15:01:43'),
 (11, 15, '2025-03-07 16:35:20'),
@@ -2326,7 +2384,23 @@ INSERT INTO `user_favorite` (`user_id`, `recipe_id`, `created_at`) VALUES
 (31, 140, '2025-03-21 22:28:58'),
 (32, 12, '2025-03-21 23:42:24'),
 (34, 15, '2025-03-23 17:07:57'),
-(36, 2, '2025-03-24 18:37:55');
+(36, 2, '2025-03-24 18:37:55'),
+(42, 10, '2025-04-26 15:01:00'),
+(42, 12, '2025-04-26 15:01:01'),
+(42, 13, '2025-04-26 15:01:03'),
+(42, 15, '2025-04-26 20:48:48'),
+(42, 105, '2025-04-26 15:07:10'),
+(42, 108, '2025-04-26 15:08:32'),
+(42, 111, '2025-04-26 15:07:14'),
+(42, 121, '2025-04-26 15:00:59'),
+(42, 123, '2025-04-26 15:02:26'),
+(42, 124, '2025-04-26 15:07:04'),
+(42, 127, '2025-04-26 15:01:04'),
+(42, 132, '2025-04-26 19:10:13'),
+(42, 136, '2025-04-26 15:01:42'),
+(42, 138, '2025-04-26 15:00:46'),
+(42, 139, '2025-04-26 15:02:33'),
+(42, 140, '2025-04-26 21:03:00');
 
 --
 -- Indexes for dumped tables
@@ -2445,67 +2519,67 @@ ALTER TABLE `user_favorite`
 -- AUTO_INCREMENT for table `ingredient`
 --
 ALTER TABLE `ingredient`
-  MODIFY `ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=520;
+  MODIFY `ingredient_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=538;
 
 --
 -- AUTO_INCREMENT for table `measurement`
 --
 ALTER TABLE `measurement`
-  MODIFY `measurement_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `measurement_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `recipe`
 --
 ALTER TABLE `recipe`
-  MODIFY `recipe_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=152;
+  MODIFY `recipe_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=159;
 
 --
 -- AUTO_INCREMENT for table `recipe_comment`
 --
 ALTER TABLE `recipe_comment`
-  MODIFY `comment_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `comment_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `recipe_diet`
 --
 ALTER TABLE `recipe_diet`
-  MODIFY `diet_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `diet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `recipe_ingredient`
 --
 ALTER TABLE `recipe_ingredient`
-  MODIFY `recipe_ingredient_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2169;
+  MODIFY `recipe_ingredient_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2228;
 
 --
 -- AUTO_INCREMENT for table `recipe_rating`
 --
 ALTER TABLE `recipe_rating`
-  MODIFY `rating_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=145;
+  MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 
 --
 -- AUTO_INCREMENT for table `recipe_step`
 --
 ALTER TABLE `recipe_step`
-  MODIFY `step_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1853;
+  MODIFY `step_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1903;
 
 --
 -- AUTO_INCREMENT for table `recipe_style`
 --
 ALTER TABLE `recipe_style`
-  MODIFY `style_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `style_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `recipe_type`
 --
 ALTER TABLE `recipe_type`
-  MODIFY `type_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `type_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_account`
 --
 ALTER TABLE `user_account`
-  MODIFY `user_id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `user_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
