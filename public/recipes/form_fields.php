@@ -287,4 +287,3 @@ HTML;
     <?php echo display_error('video_url', $errors); ?>
     <small class="form-text text-muted">Add a link to your recipe video if you have one</small>
 </div>
-

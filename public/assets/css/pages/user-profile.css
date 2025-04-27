@@ -135,16 +135,19 @@
 .user-recipe-card {
   background: var(--color-white);
   border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
   overflow: hidden;
   transition: transform var(--transition-medium), box-shadow var(--transition-medium);
   height: 100%;
   max-width: 100%;
+  position: relative;
 }
 
 .user-recipe-card:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   transform: translateY(-4px);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 /* ==========================================================================
@@ -172,12 +175,15 @@
    ========================================================================== */
 .user-recipe-card .recipe-content {
   padding: var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .user-recipe-card .recipe-content h3 {
   color: var(--text-color);
   font-size: var(--font-size-large);
   margin: 0 0 var(--spacing-sm);
+  font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 /* ==========================================================================
@@ -213,12 +219,14 @@
    ========================================================================== */
 .user-recipe-card .recipe-actions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: space-between;
   gap: var(--spacing-xs);
   width: 100%;
   box-sizing: border-box;
   max-width: 100%;
+  padding: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .user-recipe-card .recipe-actions .btn {
@@ -226,9 +234,9 @@
   font-weight: 600;
   padding: calc(var(--spacing-xs) + 2px) var(--spacing-xs);
   border-radius: var(--border-radius-md);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   background: linear-gradient(120deg, var(--color-white) 0%, var(--light-gray) 100%);
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
   display: flex;
@@ -241,6 +249,7 @@
   flex: 1;
   min-width: 0;
   max-width: 32%;
+  width: 32%;
 }
 
 .user-recipe-card .recipe-actions .btn:focus {
