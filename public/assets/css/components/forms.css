@@ -130,13 +130,6 @@ textarea.error {
   border-color: var(--error-color);
 }
 
-/* Error message icon */
-.form-error::before {
-  content: "⚠️";
-  display: inline-block;
-  font-size: var(--font-size-small);
-  margin-right: var(--spacing-xs);
-}
 
 /* ==========================================================================
    Button Variations
