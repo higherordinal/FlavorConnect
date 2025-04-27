@@ -105,8 +105,15 @@ $pagination = new Pagination($current_page, $per_page, $total_recipes);
 $recipes = $recipe_filter->apply();
 
 // Ensure current page is not greater than total pages
-if ($current_page > $pagination->total_pages()) {
-    redirect_to('/recipes/index.php');
+if ($total_recipes > 0 && $current_page > $pagination->total_pages()) {
+    // Only redirect if there are recipes but we're on a page that's too high
+    redirect_to('/recipes/index.php?' . http_build_query(array_filter([
+        'search' => $search,
+        'style' => $style_id,
+        'diet' => $diet_id,
+        'type' => $type_id,
+        'sort' => $sort
+    ])));
 }
 
 // Prepare data for JavaScript
@@ -231,22 +238,40 @@ $userData = [
                         Search: <?php echo h($search); ?>
                     </span>
                 <?php } ?>
-                <?php if($style_id && ($style = RecipeAttribute::find_one($style_id, 'style'))) { ?>
-                    <span class="filter-tag">
-                        Style: <?php echo h($style->name); ?>
-                    </span>
-                <?php } ?>
-                <?php if($diet_id && ($diet = RecipeAttribute::find_one($diet_id, 'diet'))) { ?>
-                    <span class="filter-tag">
-                        Diet: <?php echo h($diet->name); ?>
-                    </span>
-                <?php } ?>
-                <?php if($type_id && ($type = RecipeAttribute::find_one($type_id, 'type'))) { ?>
-                    <span class="filter-tag">
-                        Type: <?php echo h($type->name); ?>
-                    </span>
-                <?php } ?>
-                <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="clear-filters">
+                <?php if($style_id) { 
+                    $style_obj = RecipeAttribute::find_one($style_id, 'style');
+                    if ($style_obj) { ?>
+                        <span class="filter-tag">
+                            Style: <?php echo h($style_obj->name); ?>
+                        </span>
+                    <?php } else { ?>
+                        <!-- Style filter applied but category doesn't exist -->
+                        <span class="filter-tag">Style filter applied</span>
+                    <?php }
+                } ?>
+                <?php if($diet_id) { 
+                    $diet_obj = RecipeAttribute::find_one($diet_id, 'diet');
+                    if ($diet_obj) { ?>
+                        <span class="filter-tag">
+                            Diet: <?php echo h($diet_obj->name); ?>
+                        </span>
+                    <?php } else { ?>
+                        <!-- Diet filter applied but category doesn't exist -->
+                        <span class="filter-tag">Diet filter applied</span>
+                    <?php }
+                } ?>
+                <?php if($type_id) { 
+                    $type_obj = RecipeAttribute::find_one($type_id, 'type');
+                    if ($type_obj) { ?>
+                        <span class="filter-tag">
+                            Type: <?php echo h($type_obj->name); ?>
+                        </span>
+                    <?php } else { ?>
+                        <!-- Type filter applied but category doesn't exist -->
+                        <span class="filter-tag">Type filter applied</span>
+                    <?php }
+                } ?>
+                <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-filters">
                     <i class="fas fa-times"></i> Clear Filters
                 </a>
             </div>
@@ -254,9 +279,11 @@ $userData = [
     </div>
 
     <?php if(empty($recipes)) { ?>
-        <div class="no-results">
-            <p>No recipes found matching your criteria.</p>
-            <a href="<?php echo url_for('/recipes/index.php' . get_ref_parameter('ref_page')); ?>" class="btn btn-primary">Clear Filters</a>
+        <div class="no-results-container">
+            <div class="no-results">
+                <p><i class="fas fa-search"></i> No recipes found matching your criteria.</p>
+                <p>Try adjusting your filters or <a href="<?php echo url_for('/recipes/index.php'); ?>" class="clear-link">clear all filters</a> to see more recipes.</p>
+            </div>
         </div>
     <?php } else { ?>
         <div class="recipe-grid">
@@ -276,6 +303,7 @@ $userData = [
                 ?>
             <?php } ?>
         </div>
+    <?php } ?>
 
         <?php if($pagination->total_pages() > 1) { ?>
             <!-- Pagination Controls -->
@@ -309,7 +337,6 @@ $userData = [
             echo '<div class="records-info">Showing ' . count($recipes) . ' of ' . $total_recipes . ' total recipes</div>';
             ?>
         <?php } ?>
-    <?php } ?>
 </div>
 
 <?php include(SHARED_PATH . '/footer.php'); ?>
