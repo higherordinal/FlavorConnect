@@ -16,6 +16,13 @@
 window.FlavorConnect = window.FlavorConnect || {};
 window.FlavorConnect.components = window.FlavorConnect.components || {};
 
+// Global helper function for removing buttons visibility
+function updateRemoveButtons(buttonSelector = '.remove-ingredient') {
+    const removeButtons = document.querySelectorAll(buttonSelector);
+    const showButtons = removeButtons.length > 1;
+    removeButtons.forEach(button => button.style.display = showButtons ? 'flex' : 'none');
+}
+
 // Recipe Form component
 window.FlavorConnect.components.recipeForm = (function() {
     'use strict';
@@ -47,6 +54,8 @@ window.FlavorConnect.components.recipeForm = (function() {
     
     // Initialize when DOM is ready
     document.addEventListener('DOMContentLoaded', initialize);
+
+    // updateRemoveButtons function is now defined globally
 
     /**
      * Initializes image preview functionality for the recipe image upload
@@ -394,17 +403,6 @@ window.FlavorConnect.components.recipeForm = (function() {
             }
         }
     }
-    
-    /**
-     * Updates the visibility of remove buttons based on the number of elements
-     * Hides remove buttons if there's only one element
-     * @param {string} buttonSelector - CSS selector for the remove buttons
-     */
-    function updateRemoveButtons(buttonSelector = '.remove-ingredient') {
-        const removeButtons = document.querySelectorAll(buttonSelector);
-        const showButtons = removeButtons.length > 1;
-        removeButtons.forEach(button => button.style.display = showButtons ? 'flex' : 'none');
-    }
 }
 
     /**
@@ -449,7 +447,11 @@ window.FlavorConnect.components.recipeForm = (function() {
         steps.forEach((step, index) => {
             const stepNumber = index + 1;
             step.querySelector('.step-number').textContent = stepNumber;
-            step.querySelector('input[type="hidden"]').value = stepNumber;
+            
+            // Update the hidden input field for step_number
+            const hiddenInput = step.querySelector('input[type="hidden"]');
+            hiddenInput.name = `steps[${index}][step_number]`;
+            hiddenInput.value = stepNumber;
             
             const textarea = step.querySelector('textarea');
             textarea.name = `steps[${index}][instruction]`;
@@ -467,7 +469,7 @@ window.FlavorConnect.components.recipeForm = (function() {
             const currentStepCount = directionsContainer.querySelectorAll('.direction-row').length;
             const newRow = createDirectionRow(currentStepCount);
             directionsContainer.appendChild(newRow);
-            updateRemoveStepButtons();
+            updateRemoveButtons('.remove-step');
         });
 
         // Remove step
@@ -476,17 +478,9 @@ window.FlavorConnect.components.recipeForm = (function() {
             if (removeButton && directionsContainer.querySelectorAll('.direction-row').length > 1) {
                 removeButton.closest('.direction-row').remove();
                 updateStepNumbers();
-                updateRemoveStepButtons();
+                updateRemoveButtons('.remove-step');
             }
         });
-    }
-
-    /**
-     * Updates the visibility of remove buttons for direction steps
-     * Uses the generic updateRemoveButtons function with a specific selector
-     */
-    function updateRemoveStepButtons() {
-        updateRemoveButtons('.remove-step');
     }
 }
 

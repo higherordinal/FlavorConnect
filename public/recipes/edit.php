@@ -55,6 +55,44 @@ if (!empty($steps)) {
 $errors = [];
 
 if(is_post_request()) {
+    // Populate recipe object with form data to make fields sticky
+    $recipe->title = $_POST['title'] ?? $recipe->title;
+    $recipe->description = $_POST['description'] ?? $recipe->description;
+    $recipe->style_id = $_POST['style_id'] ?? $recipe->style_id;
+    $recipe->diet_id = $_POST['diet_id'] ?? $recipe->diet_id;
+    $recipe->type_id = $_POST['type_id'] ?? $recipe->type_id;
+    $recipe->video_url = $_POST['video_url'] ?? $recipe->video_url;
+    $recipe->alt_text = $_POST['alt_text'] ?? $recipe->alt_text;
+    
+    // Initialize new arrays for ingredients and steps from form data
+    $ingredients = [];
+    $steps = [];
+    
+    // Preserve ingredients data
+    if(isset($_POST['ingredients']) && is_array($_POST['ingredients'])) {
+        foreach($_POST['ingredients'] as $index => $ingredient_data) {
+            $ingredients[$index] = new RecipeIngredient([
+                'ingredient_id' => $ingredient_data['ingredient_id'] ?? null,
+                'recipe_id' => $recipe->recipe_id,
+                'name' => $ingredient_data['name'] ?? '',
+                'measurement_id' => $ingredient_data['measurement_id'] ?? '',
+                'quantity' => $ingredient_data['quantity'] ?? ''
+            ]);
+        }
+    }
+    
+    // Preserve steps data
+    if(isset($_POST['steps']) && is_array($_POST['steps'])) {
+        foreach($_POST['steps'] as $index => $step_data) {
+            $steps[$index] = new RecipeStep([
+                'step_id' => $step_data['step_id'] ?? null,
+                'recipe_id' => $recipe->recipe_id,
+                'step_number' => $step_data['step_number'] ?? ($index + 1),
+                'instruction' => $step_data['instruction'] ?? ''
+            ]);
+        }
+    }
+    
     // Validate recipe data
     $errors = validate_recipe($_POST);
     
