@@ -18,6 +18,9 @@ window.FlavorConnect.favorites = (function() {
         isLoggedIn: window.FlavorConnect.config ? window.FlavorConnect.config.isLoggedIn : false
     };
     
+    // Track button processing state to prevent multiple rapid clicks
+    const processingButtons = new Map();
+    
     /**
      * Update button appearance based on favorite status
      * @param {HTMLElement} button - The button to update
@@ -67,9 +70,20 @@ window.FlavorConnect.favorites = (function() {
                 // Mark as initialized
                 button.dataset.initialized = 'true';
                 
-                // Add click handler
+                // Add click handler with debouncing
                 button.addEventListener('click', async (e) => {
                     e.preventDefault();
+                    
+                    // Prevent rapid successive clicks
+                    if (processingButtons.get(recipeId)) {
+                        return; // Ignore clicks while processing
+                    }
+                    
+                    // Mark this button as processing
+                    processingButtons.set(recipeId, true);
+                    
+                    // Add visual feedback
+                    button.classList.add('processing');
                     
                     try {
                         const result = await this.toggle(recipeId);
@@ -79,7 +93,14 @@ window.FlavorConnect.favorites = (function() {
                             updateButtonState(button, result.isFavorited);
                         }
                     } catch (error) {
-                        // Silent error handling
+                        console.error('Error toggling favorite:', error);
+                    } finally {
+                        // Remove processing state after a short delay
+                        // This prevents immediate re-clicking
+                        setTimeout(() => {
+                            processingButtons.set(recipeId, false);
+                            button.classList.remove('processing');
+                        }, 500);
                     }
                 });
             });
@@ -359,6 +380,18 @@ window.toggleFavorite = async function(recipeId) {
 // Initialize buttons when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     if (window.FlavorConnect && window.FlavorConnect.favorites) {
+        window.FlavorConnect.favorites.initButtons();
+    }
+});
+
+// Also listen for custom event that can be triggered after AJAX content loads
+document.addEventListener('flavorconnect:content-updated', function(event) {
+    if (window.FlavorConnect && window.FlavorConnect.favorites) {
+        // Clear initialization flags
+        document.querySelectorAll('.favorite-btn[data-initialized]').forEach(btn => {
+            delete btn.dataset.initialized;
+        });
+        // Reinitialize
         window.FlavorConnect.favorites.initButtons();
     }
 });

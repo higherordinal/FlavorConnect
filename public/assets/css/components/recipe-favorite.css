@@ -57,3 +57,18 @@
  transform: scale(1);
 }
 }
+
+/* Processing state to prevent rapid clicks */
+.favorite-btn.processing, .unfavorite-btn.processing {
+  pointer-events: none; /* Disable further clicks */
+  opacity: 0.7; /* Visual feedback */
+}
+
+.favorite-btn.processing i, .unfavorite-btn.processing i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
