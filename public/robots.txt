@@ -1,9 +1,20 @@
 # robots.txt for FlavorConnect
 User-agent: *
 Allow: /
+
+# Allow favorites page specifically
+Allow: /users/favorites.php
+
+# Disallow sensitive directories
 Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
 Disallow: /auth/
-Disallow: /users/
+
+# Disallow user-specific pages except favorites
+Disallow: /users/profile.php
+Disallow: /users/account.php
+Disallow: /users/login.php
+Disallow: /users/register.php
+
 Crawl-delay: 10
