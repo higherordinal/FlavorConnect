@@ -3,23 +3,23 @@
    ========================================================================== */
 
 .favorite-btn, .unfavorite-btn {
+  align-items: center;
   background: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: var(--font-size-large);
   height: var(--icon-size-lg, 2.5rem);
-  width: var(--icon-size-lg, 2.5rem);
+  justify-content: center;
   position: absolute;
   right: var(--spacing-sm);
   top: var(--spacing-sm);
   transition: all var(--transition-fast);
+  width: var(--icon-size-lg, 2.5rem);
   z-index: 2;
-  color: var(--text-muted);
 }
 
 .favorite-btn.favorited {
@@ -60,8 +60,11 @@
 
 /* Processing state to prevent rapid clicks */
 .favorite-btn.processing, .unfavorite-btn.processing {
-  pointer-events: none; /* Disable further clicks */
-  opacity: 0.7; /* Visual feedback */
+  opacity: 0.7;
+  pointer-events: none;
+
+  /* Disable further clicks */
+  /* Visual feedback */
 }
 
 .favorite-btn.processing i, .unfavorite-btn.processing i {
@@ -69,6 +72,10 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+ transform: rotate(0deg);
+}
+  100% {
+ transform: rotate(360deg);
+}
 }

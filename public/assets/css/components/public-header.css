@@ -50,14 +50,14 @@
 @media (max-width: 768px) {
   .auth-links {
     gap: var(--spacing-sm);
- }
+  }
 }
 
 @media (max-width: 480px) {
   .auth-links a {
     padding: var(--spacing-xs);
- }
+  }
   .auth-links .sign-up {
     padding: var(--spacing-xs) var(--spacing-sm);
- }
+  }
 }
