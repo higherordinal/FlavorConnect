@@ -336,20 +336,20 @@
 @media (max-width: 768px) {
   .profile-container {
     padding: var(--spacing-md);
- }
+  }
 
   .profile-stats {
     flex-direction: column;
     gap: var(--spacing-sm);
- }
+  }
 
   .section-header {
     flex-direction: column;
     gap: var(--spacing-md);
     text-align: center;
- }
+  }
 
   .recipe-grid {
     grid-template-columns: 1fr;
- }
+  }
 }

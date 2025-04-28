@@ -1315,26 +1315,26 @@ button.action.add:hover {
 @media (max-width: 768px) {  
   .list {
     font-size: clamp(0.75rem, 1.5vw, 0.875rem);
- }
+  }
   .list tbody tr {
     padding: clamp(0.375rem, 1.5vw, 0.5rem);
- }
+  }
   .list tbody td {
     gap: 0.25rem;
- }
+  }
   .list tbody td::before {
     font-size: clamp(0.6875rem, 1.5vw, 0.75rem);
- }
+  }
   td.actions .action {
     min-height: 28px;
     min-width: 28px;
- }
+  }
   td.actions .action i {
     font-size: 0.6875rem;
- }
+  }
   .table-responsive {
     margin-bottom: clamp(0.5rem, 3vw, 1rem);
- }
+  }
 
   /* Further reduce sizes for small screens */
 }
@@ -1377,10 +1377,12 @@ button.action.add:hover {
   .list {
     font-size: 0.6875rem;
   }
+
   .list tbody tr {
     gap: 0.125rem;
     padding: 0.125rem;
   }
+
   td.actions .action {
     height: 22px;
     min-height: 22px;
@@ -1388,9 +1390,11 @@ button.action.add:hover {
     padding: 0.0625rem;
     width: 22px;
   }
+
   td.actions .action i {
     font-size: 0.6875rem;
   }
+  
   .table-responsive {
     border-radius: 0.25rem;
     margin-bottom: 0.25rem;

@@ -139,8 +139,7 @@ form > div {
     var(--primary-color) 0%,
     var(--primary-color) 35%,
     color-mix(in srgb, var(--secondary-color) 20%, var(--primary-color) 80%) 60%,
-    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%)
-      100%
+    color-mix(in srgb, var(--secondary-color) 40%, var(--primary-color) 60%) 100%
   );
 }
 
