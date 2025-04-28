@@ -271,11 +271,14 @@ window.FlavorConnect.components.recipeForm = (function() {
                 <div class="quantity-input-group">
                     <input type="number" name="ingredients[${index}][quantity]" id="quantity_${index}" class="form-control" step="0.001" min="0" required>
                     <div class="fraction-helpers">
+                        <span class="fraction-helper" data-value="0.125">⅛</span>
+                        <span class="fraction-helper" data-value="0.2">⅕</span>
                         <span class="fraction-helper" data-value="0.25">¼</span>
                         <span class="fraction-helper" data-value="0.33">⅓</span>
                         <span class="fraction-helper" data-value="0.5">½</span>
                         <span class="fraction-helper" data-value="0.67">⅔</span>
                         <span class="fraction-helper" data-value="0.75">¾</span>
+                        <span class="fraction-helper" data-value="0.875">⅞</span>
                     </div>
                 </div>
                 <div class="form-error" style="display: none;"></div>
@@ -319,6 +322,9 @@ window.FlavorConnect.components.recipeForm = (function() {
             
             // Add event listeners for quantity changes
             setupQuantityChangeListeners(newRow, originalMeasurementOptions);
+            
+            // Initialize fraction helpers for the new row
+            initializeFractionHelpers();
         });
 
         // Remove ingredient
