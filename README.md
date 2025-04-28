@@ -79,7 +79,7 @@ FlavorConnect is designed to work in two development environments:
 
 **Note:** The codebase has been optimized specifically for Docker and XAMPP environments. For production deployment, a separate version is available in the `production` folder that's specifically optimized for production environments.
 
-For deployment details, see the [DEPLOYMENT_GUIDE.md](production/DEPLOYMENT_GUIDE.md) file in the production folder.
+For deployment details, see the [DEPLOYMENT_GUIDE.md](production/DEPLOYMENT_GUIDE.md) file in the production folder. While the production deployment files and documentation are incomplete, they still provide helpful guidance for setting up a production environment.
 
 ## Database Configuration
 
@@ -231,7 +231,7 @@ Stop the Apache and MySQL services from the XAMPP control panel.
   - `deploy_bluehost.php` - PHP deployment script for Bluehost
   - `deploy_bluehost.bat` - Windows batch script for deployment
   - `deploy_bluehost.sh` - Linux/macOS shell script for deployment
-  - `DEPLOYMENT_GUIDE.md` - Comprehensive but not yet completed deployment instructions
+  - `DEPLOYMENT_GUIDE.md` - Deployment instructions (note: incomplete but provides useful guidance)
   
 **Note:** The production environment uses a simplified configuration approach where the public folder contents are placed directly in the document root.
 
