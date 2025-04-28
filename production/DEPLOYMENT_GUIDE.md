@@ -236,15 +236,6 @@ The deployment script addresses image upload and display issues on Bluehost:
    ```
    - This ensures that image paths are correctly formed in the production environment using the domain specified in WWW_ROOT
 
-### Troubleshooting Image Issues
-
-If you encounter image upload or display issues after deployment:
-
-1. Check the error logs in `private/logs/`
-2. Verify that the image directories exist and have the correct permissions
-3. Confirm that the WWW_ROOT constant is set correctly in the configuration
-4. Test the image upload functionality using the diagnostic script: `upload_test.php`
-
 ## 7. Heroku API Integration
 
 ### Heroku API Configuration
@@ -496,8 +487,8 @@ foreach ($required_extensions as $ext) {
 ## 9. Deployment Checklist
 
 - [ ] Run the comprehensive deployment script (`deploy_bluehost.php`) which handles:
-  - [ ] Updating all relative paths to absolute paths
-  - [ ] Replacing config files with Bluehost-optimized versions
+ [ ] Updating all relative paths to absolute paths
+- [ ] Replacing config files with Bluehost-optimized versions
   - [ ] Updating the url_for() function to use WWW_ROOT in production mode
   - [ ] Replacing RecipeImageProcessor and Recipe classes with Bluehost-optimized versions
   - [ ] Updating .htaccess files to work with the router implementation

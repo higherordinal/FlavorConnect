@@ -13,7 +13,6 @@ Disallow: /auth/
 
 # Disallow user-specific pages except favorites
 Disallow: /users/profile.php
-Disallow: /users/account.php
 Disallow: /users/login.php
 Disallow: /users/register.php
 

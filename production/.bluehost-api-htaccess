@@ -14,15 +14,41 @@ RewriteRule .* /api/error.php [L]
 # Fallback ErrorDocument directive
 ErrorDocument 404 /api/error.php
 
-# Set JSON content type for API responses
-Header set Content-Type application/json
+# Set JSON content type for API responses - but only for actual JSON responses
+<FilesMatch "\.(json)$">
+    Header set Content-Type application/json
+</FilesMatch>
+
+# Let PHP scripts set their own content type
+<FilesMatch "\.(php)$">
+    # PHP will set the appropriate content type
+</FilesMatch>
 
 # Enable CORS for API requests
 Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
-Header set Access-Control-Allow-Headers "Content-Type"
+Header set Access-Control-Allow-Headers "Content-Type, X-Requested-With, Accept"
+
+# Ensure Referer information is passed
+Header unset Referrer-Policy
+Header set Referrer-Policy "no-referrer-when-downgrade"
+
+# Disable caching for API responses
+Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+Header set Pragma "no-cache"
+Header set Expires "0"
 
 # Additional security for production
 <IfModule mod_headers.c>
     Header set X-Content-Type-Options "nosniff"
+    
+    # Relax security for toggle_favorite.php specifically
+    <FilesMatch "toggle_favorite\.php$">
+        # Allow all referrers
+        Header unset Referrer-Policy
+        # Ensure proper content negotiation
+        Header unset X-Content-Type-Options
+        # Allow credentials
+        Header set Access-Control-Allow-Credentials "true"
+    </FilesMatch>
 </IfModule>

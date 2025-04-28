@@ -27,6 +27,22 @@ Options -Indexes
     Deny from all
 </FilesMatch>
 
+# Special rules for API endpoints
+<FilesMatch "^\/api\/.*\.php$">
+    # Allow CORS for API endpoints
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type, X-Requested-With"
+    
+    # Ensure Referer information is passed
+    Header unset Referrer-Policy
+    
+    # Disable caching for API responses
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+</FilesMatch>
+
 # Security headers
 <IfModule mod_headers.c>
     # Basic security headers
@@ -34,14 +50,19 @@ Options -Indexes
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
     
-    # Content Security Policy (CSP) to prevent XSS attacks
-    Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com https://s.ytimg.com https://*.doubleclick.net https://*.googlesyndication.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://*.doubleclick.net https://*.google-analytics.com; frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://*.doubleclick.net; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'"
+    # Exclude API directory from some security headers
+    <FilesMatch "^(?!.*\/api\/).*$">
+        # Content Security Policy (CSP) to prevent XSS attacks - not applied to API directory
+        Header set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.youtube.com https://www.youtube-nocookie.com https://s.ytimg.com https://*.doubleclick.net https://*.googlesyndication.com https://*.google-analytics.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.doubleclick.net https://*.google-analytics.com; frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://*.doubleclick.net; frame-ancestors 'self'; form-action 'self'; base-uri 'self'; object-src 'none'"
+    </FilesMatch>
     
     # HTTP Strict Transport Security (HSTS)
     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
     
-    # Cross-Origin Opener Policy (COOP) for origin isolation
-    Header always set Cross-Origin-Opener-Policy "same-origin"
+    # Cross-Origin Opener Policy (COOP) for origin isolation - relaxed for API
+    <FilesMatch "^(?!.*\/api\/).*$">
+        Header always set Cross-Origin-Opener-Policy "same-origin"
+    </FilesMatch>
     
     # Additional cross-origin policies for better security
     # Using cross-origin to allow YouTube embeds
@@ -49,8 +70,13 @@ Options -Indexes
     # Using unsafe-none to allow YouTube embeds without restrictions
     Header always set Cross-Origin-Embedder-Policy "unsafe-none"
     
-    # Referrer Policy
-    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    # Referrer Policy - more permissive for API endpoints
+    <FilesMatch "^(?!.*\/api\/).*$">
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    </FilesMatch>
+    <FilesMatch "^\/api\/.*\.php$">
+        Header always set Referrer-Policy "no-referrer-when-downgrade"
+    </FilesMatch>
     
     # Permissions Policy (formerly Feature Policy)
     Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
