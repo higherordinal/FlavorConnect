@@ -1,6 +1,7 @@
 /* ====================================
    RECIPE CONTAINER LAYOUT
    ==================================== */
+
 .recipe-container {
     box-sizing: border-box;
     display: grid;
@@ -15,6 +16,7 @@
 /* ====================================
    RECIPE HEADER STYLING
    ==================================== */
+
 .recipe-header-image {
     aspect-ratio: 16/9;
     border-radius: var(--border-radius-lg);
@@ -447,6 +449,7 @@
 /* ====================================
    INGREDIENTS SECTION
    ==================================== */
+
 .ingredients-section {
     display: grid;
     gap: var(--grid-gap);
@@ -460,6 +463,7 @@
 /* ====================================
    INSTRUCTIONS SECTION
    ==================================== */
+
 .instructions-section {
     display: grid;
     gap: var(--grid-gap);
@@ -493,6 +497,7 @@
 /* ====================================
    COMMENTS SECTION
    ==================================== */
+
 .comments-section {
     display: grid;
     gap: var(--grid-gap);
@@ -1272,6 +1277,7 @@
 /* ====================================
    PRINT STYLES
    ==================================== */
+
 @media print {
     /* General print layout */
     html, body {
