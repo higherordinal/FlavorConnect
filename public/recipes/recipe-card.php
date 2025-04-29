@@ -72,7 +72,7 @@ $url_params .= $ref_param;
                      alt="<?php echo h($recipe->alt_text ?: $recipe->title); ?>" 
                      class="recipe-image">
             <?php } else { ?>
-                <img src="<?php echo url_for('/assets/images/recipe-placeholder.png'); ?>" 
+                <img src="<?php echo url_for('/assets/images/recipe-placeholder.webp'); ?>" 
                      alt="Recipe placeholder image" 
                      class="recipe-image">
             <?php } ?>

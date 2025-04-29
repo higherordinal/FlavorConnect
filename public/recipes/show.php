@@ -185,7 +185,7 @@ echo display_session_message();
                 <img src="<?php echo url_for($recipe->get_image_path('optimized')); ?>" 
                      alt="<?php echo h($recipe->alt_text ?? $recipe->title); ?>">
             <?php else: ?>
-                <img src="<?php echo url_for('/assets/images/recipe-placeholder.jpg'); ?>" 
+                <img src="<?php echo url_for('/assets/images/recipe-placeholder.webp'); ?>" 
                      alt="<?php echo h($recipe->title); ?>">
             <?php endif; ?>
             

@@ -61,6 +61,8 @@ include(SHARED_PATH . '/member_header.php');
         <header class="page-header with-recipe-banner" id="recipe-header" <?php 
             if($recipe->img_file_path) {
                 echo 'style="background-image: url(\'' . url_for($recipe->get_image_path('banner')) . '\');"';
+            } else {
+                echo 'style="background-image: url(\'' . url_for('/assets/images/recipe-placeholder.webp') . '\');"';
             }
         ?>>
             <h1>Delete Recipe: <?php echo h($recipe->title); ?></h1>
